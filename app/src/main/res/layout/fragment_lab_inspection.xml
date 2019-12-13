@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.base_fragment.LabInspectionFragment">
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_sampling_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="@dimen/material_component_cards_left_and_right_padding"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_sampling_date_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/item_left_margin"
+                    android:text="@string/sampling_date"
+                    android:textColor="@color/primary_text"
+                    android:textSize="@dimen/material_typography_subheading"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_sampling_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/item_left_margin"
+                    android:text="@string/input_visit_time"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/material_component_cards_left_and_right_padding"
+                android:layout_marginTop="@dimen/material_component_bottom_sheet_edge_top_bottom_margins"
+                android:text="@string/blood_routine"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/material_typography_title" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_blood_routine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/material_component_cards_left_and_right_padding"
+                android:layout_marginTop="@dimen/material_component_bottom_sheet_edge_top_bottom_margins"
+                android:text="@string/urine_routine"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/material_typography_title" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_urine_routine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/material_component_cards_left_and_right_padding"
+                android:layout_marginTop="@dimen/material_component_bottom_sheet_edge_top_bottom_margins"
+                android:text="@string/blood_biochemistry"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/material_typography_title" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_blood_biochemistry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/material_component_cards_left_and_right_padding"
+                android:layout_marginTop="@dimen/material_component_bottom_sheet_edge_top_bottom_margins"
+                android:text="@string/tumor_marker"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/material_typography_title" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_tumor_marker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_save_lab_inspection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_save_white_24dp"
+        android:layout_margin="@dimen/material_component_floating_action_button_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

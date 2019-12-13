@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_checkbox_list"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <CheckBox
+        android:id="@+id/cb_popup_checkbox"
+        android:layout_marginStart="@dimen/material_component_cards_left_and_right_padding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+    <TextView
+        android:id="@+id/tv_popup_checkbox"
+        android:textColor="@color/_xpopup_title_color"
+        android:paddingTop="14dp"
+        android:paddingLeft="18dp"
+        android:paddingBottom="14dp"
+        android:paddingRight="18dp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textSize="16sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
