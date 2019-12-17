@@ -2,8 +2,7 @@ package com.ksballetba.rayplus.data.source.remote
 
 import androidx.lifecycle.MutableLiveData
 import com.apkfuns.logutils.LogUtils
-import com.ksballetba.rayplus.data.bean.ResearchCenterBean
-import com.ksballetba.rayplus.data.bean.SampleListBean
+import com.ksballetba.rayplus.data.bean.*
 import com.ksballetba.rayplus.network.ApiService
 import com.ksballetba.rayplus.network.NetworkState
 import com.ksballetba.rayplus.network.RetrofitClient
@@ -19,11 +18,11 @@ class  SampleDataSource{
     var mLoadStatus = MutableLiveData<NetworkState>()
     var mNextPageKey = 10
 
-    fun loadInitial(callBack: (MutableList<SampleListBean.Data>) -> Unit) {
+    fun loadInitial(token:String?,callBack: (MutableList<SampleListBean.Data>) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .getSampleList(1, DEF_PAGE_SIZE)
+            .getSampleList(token,1, DEF_PAGE_SIZE)
             .subscribeOn(io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -43,11 +42,11 @@ class  SampleDataSource{
     }
 
 
-    fun loadAfter(callBack: (MutableList<SampleListBean.Data>) -> Unit) {
+    fun loadAfter(token:String?,callBack: (MutableList<SampleListBean.Data>) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .getSampleList(mNextPageKey, DEF_PAGE_SIZE)
+            .getSampleList(token,mNextPageKey, DEF_PAGE_SIZE)
             .subscribeOn(io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -82,6 +81,44 @@ class  SampleDataSource{
                 },
                 onError = {
                     LogUtils.d(it.message)
+                }
+            )
+    }
+
+    fun addSample(token:String?,sampleAddBodyBean: SampleAddBodyBean,callBack: (BaseResponseBean) -> Unit) {
+        RetrofitClient.instance
+            .create(ApiService::class.java)
+            .addSample(token,sampleAddBodyBean)
+            .subscribeOn(io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                },
+                onError = {
+                    LogUtils.tag(TAG).d(it.message)
+                }
+            )
+    }
+
+    fun submitSample(token:String?,sampleSubmitBodyBean: SampleSubmitBodyBean,callBack: (BaseResponseBean) -> Unit) {
+        RetrofitClient.instance
+            .create(ApiService::class.java)
+            .submitSample(token,sampleSubmitBodyBean)
+            .subscribeOn(io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                },
+                onError = {
+                    LogUtils.tag(TAG).d(it.message)
                 }
             )
     }

@@ -1,11 +1,8 @@
 package com.ksballetba.rayplus.network
 
-import com.ksballetba.rayplus.data.bean.ProjectListBean
-import com.ksballetba.rayplus.data.bean.ResearchCenterBean
-import com.ksballetba.rayplus.data.bean.SampleListBean
+import com.ksballetba.rayplus.data.bean.*
 import io.reactivex.Observable
-import retrofit2.http.GET
-import retrofit2.http.Query
+import retrofit2.http.*
 
 //http://10.14.219.68:80/
 //http://localhost:80/project?page=1&limit=10  实验项目
@@ -18,11 +15,23 @@ import retrofit2.http.Query
 
 interface ApiService {
 
+    @Headers("Content-Type:application/json")
+    @POST("/login")
+    fun login(@Body loginBodyBean: LoginBodyBean):Observable<LoginResponseBean>
+
     @GET("/project")
     fun getProjectList(@Query("page") page:Int,@Query("limit") limit:Int):Observable<ProjectListBean>
 
     @GET("/sample")
-    fun getSampleList(@Query("page") page:Int,@Query("limit") limit:Int):Observable<SampleListBean>
+    fun getSampleList(@Header("Authorization") token:String?, @Query("page") page:Int, @Query("limit") limit:Int):Observable<SampleListBean>
+
+    @Headers("Content-Type:application/json")
+    @POST("/sample")
+    fun addSample(@Header("Authorization") token:String?,@Body sampleAddBodyBean: SampleAddBodyBean):Observable<BaseResponseBean>
+
+    @Headers("Content-Type:application/json")
+    @POST("/submit_sample")
+    fun submitSample(@Header("Authorization") token:String?,@Body sampleSubmitBodyBean: SampleSubmitBodyBean):Observable<BaseResponseBean>
 
     @GET("/research_center_all")
     fun getAllResearchCenterList():Observable<List<ResearchCenterBean>>

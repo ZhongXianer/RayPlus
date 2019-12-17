@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
 
 class RetrofitClient{
     private val DEFAULT_TIMEOUT:Long = 30
-    private val BASE_URL = "http://10.14.219.68:80/"
+    private val BASE_URL = "http://10.14.219.61:80/"
     var mOkHttpClient:OkHttpClient? = null
     var mRetrofit:Retrofit? = null
 

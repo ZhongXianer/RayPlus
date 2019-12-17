@@ -1,13 +1,11 @@
 package com.ksballetba.rayplus.ui.activity
 
+import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.MenuItem
-import android.view.View.*
-import android.view.WindowManager
-import android.widget.SeekBar
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +15,8 @@ import com.gyf.immersionbar.ImmersionBar
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.ProjectListBean
 import com.ksballetba.rayplus.network.Status
+import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.LOGIN_TOKEN
+import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.SHARED_PREFERENCE_NAME
 import com.ksballetba.rayplus.ui.adapter.ProjectsAdapter
 import com.ksballetba.rayplus.util.getProjectsViewModel
 import com.ksballetba.rayplus.viewmodel.ProjectsViewModel
@@ -27,10 +27,12 @@ class MainActivity : AppCompatActivity() {
 
     companion object{
         const val TAG = "MainActivity"
+        const val EXIT_APP_ACTION = "EXIT_APP_ACTION"
     }
 
     private lateinit var mViewModel:ProjectsViewModel
     private lateinit var mProjectsAdapter: ProjectsAdapter
+    var mBackDownTime = 0.toLong()
     var mProjectList = mutableListOf<ProjectListBean.Data>()
 
 
@@ -49,6 +51,21 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            if(System.currentTimeMillis() - mBackDownTime<1000&&mBackDownTime!=0.toLong()){
+                val intent = Intent(this,LoginActivity::class.java)
+                intent.action = EXIT_APP_ACTION
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                startActivity(intent)
+            }else{
+                mBackDownTime = System.currentTimeMillis()
+                toast("再按一次返回键退出")
+            }
+        }
+        return false
     }
 
     private fun initUI(){
@@ -104,7 +121,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun logOut(){
-        startActivity(Intent(this,CRFActivity::class.java))
+        deleteLoginToken()
+        val intent = Intent(this,LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        startActivity(intent)
     }
 
     private fun initRefresh() {
@@ -119,5 +139,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun navigateToSamplePage(){
         startActivity(Intent(this,SampleActivity::class.java))
+    }
+
+    private fun deleteLoginToken(){
+        val sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.remove(LOGIN_TOKEN)
+        editor.apply()
     }
 }

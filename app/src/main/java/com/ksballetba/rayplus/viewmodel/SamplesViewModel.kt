@@ -3,22 +3,21 @@ package com.ksballetba.rayplus.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.ksballetba.rayplus.data.bean.ResearchCenterBean
-import com.ksballetba.rayplus.data.bean.SampleListBean
+import com.ksballetba.rayplus.data.bean.*
 import com.ksballetba.rayplus.data.source.remote.SampleDataSource
 
 class SamplesViewModel constructor(private var sampleDataSource: SampleDataSource): ViewModel(){
-    fun fetchData(): LiveData<MutableList<SampleListBean.Data>> {
+    fun fetchData(token:String?): LiveData<MutableList<SampleListBean.Data>> {
         val result = MutableLiveData<MutableList<SampleListBean.Data>>()
-        sampleDataSource.loadInitial {
+        sampleDataSource.loadInitial(token) {
             result.postValue(it)
         }
         return result
     }
 
-    fun fetchDataAfter(): LiveData<MutableList<SampleListBean.Data>> {
+    fun fetchDataAfter(token:String?): LiveData<MutableList<SampleListBean.Data>> {
         val result = MutableLiveData<MutableList<SampleListBean.Data>>()
-        sampleDataSource.loadAfter {
+        sampleDataSource.loadAfter(token) {
             result.postValue(it)
         }
         return result
@@ -27,6 +26,22 @@ class SamplesViewModel constructor(private var sampleDataSource: SampleDataSourc
     fun fetchAllResearchCenter(): LiveData<MutableList<ResearchCenterBean>>{
         val result = MutableLiveData<MutableList<ResearchCenterBean>>()
         sampleDataSource.loadAllResearchCenter {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun addSample(token:String?,sampleAddBodyBean: SampleAddBodyBean):LiveData<BaseResponseBean>{
+        val result = MutableLiveData<BaseResponseBean>()
+        sampleDataSource.addSample(token,sampleAddBodyBean){
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun submitSample(token:String?,sampleSubmitBodyBean: SampleSubmitBodyBean):LiveData<BaseResponseBean>{
+        val result = MutableLiveData<BaseResponseBean>()
+        sampleDataSource.submitSample(token,sampleSubmitBodyBean){
             result.postValue(it)
         }
         return result

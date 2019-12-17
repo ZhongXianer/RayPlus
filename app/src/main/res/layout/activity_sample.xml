@@ -15,6 +15,7 @@
             android:id="@+id/tb_sample"
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
             android:theme="@style/ThemeOverlay.AppCompat.Dark"
             app:popupTheme="@style/Base.ThemeOverlay.AppCompat.Light"
             app:title="临床试验样本">

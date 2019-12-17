@@ -17,13 +17,13 @@ data class SampleListBean(
         @SerializedName("group_name")
         val groupName: String, // 安罗替尼
         @SerializedName("id_num")
-        val idNum: String, // 111111111111111111
+        val idNum: String, // 111000000000000000
         @SerializedName("in_group_time")
         val inGroupTime: String, // 2019-10-02
         @SerializedName("interview_status")
         val interviewStatus: String, // 访视2
         @SerializedName("is_submit")
-        val isSubmit: Boolean, // true
+        val isSubmit: Any?, // null
         @SerializedName("last_interview_time")
         val lastInterviewTime: String,
         @SerializedName("lock_status")
@@ -37,9 +37,9 @@ data class SampleListBean(
         @SerializedName("project_id")
         val projectId: Int, // 1
         @SerializedName("research_center_id")
-        val researchCenterId: Int, // 1
+        val researchCenterId: Int, // 2
         @SerializedName("research_center_ids")
-        val researchCenterIds: String, // 同济医院
+        val researchCenterIds: String, // 襄阳市第一人民医院
         @SerializedName("sample_id")
         val sampleId: Int, // 5
         val sex: String, // 男

@@ -1,5 +1,6 @@
 package com.ksballetba.rayplus.ui.activity
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,14 +11,19 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.apkfuns.logutils.LogUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.ResearchCenterBean
 import com.ksballetba.rayplus.data.bean.SampleListBean
+import com.ksballetba.rayplus.data.bean.SampleSubmitBodyBean
 import com.ksballetba.rayplus.network.Status
+import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.LOGIN_TOKEN
+import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.SHARED_PREFERENCE_NAME
 import com.ksballetba.rayplus.ui.adapter.SamplesAdapter
 import com.ksballetba.rayplus.util.getSamplesViewModel
 import com.ksballetba.rayplus.viewmodel.SamplesViewModel
+import com.lxj.xpopup.XPopup
 import kotlinx.android.synthetic.main.activity_sample.*
 import org.jetbrains.anko.toast
 
@@ -25,12 +31,15 @@ class SampleActivity : AppCompatActivity() {
 
     companion object{
         const val TAG = "SampleActivity"
+        const val ADD_SIMPLE_ACTION = "ADD_SIMPLE_ACTION"
+        const val EDIT_SIMPLE_ACTION = "EDIT_SIMPLE_ACTION"
     }
 
     private lateinit var mViewModel: SamplesViewModel
     private lateinit var mSamplesAdapter: SamplesAdapter
     var mSampleList = mutableListOf<SampleListBean.Data>()
     var mResearchCenterList = mutableListOf<ResearchCenterBean>()
+    var mToken:String? = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,10 +62,12 @@ class SampleActivity : AppCompatActivity() {
     }
 
     private fun initUI(){
+        val sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+        mToken = sharedPreferences.getString(LOGIN_TOKEN,"")
         setSupportActionBar(tb_sample)
         initRefresh()
         fab_add_sample.setOnClickListener {
-            startActivity(Intent(this,SampleEditActivity::class.java))
+            navigateToSampleEditActivity(ADD_SIMPLE_ACTION)
         }
     }
 
@@ -70,6 +81,18 @@ class SampleActivity : AppCompatActivity() {
         rv_sample.adapter = mSamplesAdapter
         mSamplesAdapter.setOnItemClickListener { _, _, position ->
 
+        }
+        mSamplesAdapter.setOnItemChildClickListener { adapter, view, position ->
+            when(view.id){
+                R.id.btn_sample_edit->{
+                    navigateToSampleEditActivity(EDIT_SIMPLE_ACTION)
+                }
+                R.id.btn_sample_submit->{
+                    XPopup.Builder(this).asConfirm("信息","请问是否确认提交到总中心"){
+                        submitSample(mSampleList[position].sampleId)
+                    }.show()
+                }
+            }
         }
         mViewModel.fetchLoadStatus().observe(this, Observer {
             when(it.status){
@@ -91,16 +114,32 @@ class SampleActivity : AppCompatActivity() {
     }
 
     private fun loadInitial(){
-        mViewModel.fetchData().observe(this, Observer {
+        mViewModel.fetchData(mToken).observe(this, Observer {
             mSampleList = it
             mSamplesAdapter.setNewData(mSampleList)
         })
     }
 
     private fun loadAfter(){
-        mViewModel.fetchDataAfter().observe(this, Observer {
+        mViewModel.fetchDataAfter(mToken).observe(this, Observer {
             mSampleList.addAll(it)
             mSamplesAdapter.addData(it)
+        })
+    }
+
+    private fun navigateToSampleEditActivity(action:String){
+        val intent = Intent(this,SampleEditActivity::class.java)
+        intent.action = action
+        startActivity(intent)
+    }
+
+    private fun submitSample(sampleId:Int){
+        mViewModel.submitSample(mToken, SampleSubmitBodyBean(sampleId)).observe(this, Observer {
+            if(it.code==200){
+                toast("样本提交成功")
+            }else{
+                toast("样本提交失败")
+            }
         })
     }
 

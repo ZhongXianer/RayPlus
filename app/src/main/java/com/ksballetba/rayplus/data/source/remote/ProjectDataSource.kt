@@ -6,7 +6,6 @@ import com.ksballetba.rayplus.network.ApiService
 import com.ksballetba.rayplus.network.NetworkState
 import com.ksballetba.rayplus.network.RetrofitClient
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 

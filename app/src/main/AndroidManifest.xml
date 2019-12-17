@@ -24,7 +24,8 @@
         <activity android:name=".ui.activity.TreatmentVisitDetailActivity" />
         <activity android:name=".ui.activity.CRFActivity" />
         <activity android:name=".ui.activity.SampleActivity" />
-        <activity android:name=".ui.activity.LoginActivity">
+        <activity android:name=".ui.activity.LoginActivity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
