@@ -19,6 +19,7 @@ import com.ksballetba.rayplus.data.bean.SampleSubmitBodyBean
 import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.LOGIN_TOKEN
 import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.SHARED_PREFERENCE_NAME
+import com.ksballetba.rayplus.ui.activity.SampleEditActivity.Companion.REFRESH_LAST_PAGE
 import com.ksballetba.rayplus.ui.adapter.SamplesAdapter
 import com.ksballetba.rayplus.util.getSamplesViewModel
 import com.ksballetba.rayplus.viewmodel.SamplesViewModel
@@ -50,9 +51,11 @@ class SampleActivity : AppCompatActivity() {
         initList()
     }
 
-    override fun onRestart() {
-        super.onRestart()
-        srl_sample.autoRefresh()
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        if(intent?.action == REFRESH_LAST_PAGE){
+            srl_sample.autoRefresh()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

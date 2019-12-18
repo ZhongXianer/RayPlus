@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 
 import com.ksballetba.rayplus.R
+import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.adapter.ViewPagerAdapter
 import com.ksballetba.rayplus.ui.fragment.base_fragment.ImagingEvaluationFragment
 import com.ksballetba.rayplus.ui.fragment.base_fragment.InvestigatorSignatureFragment
@@ -22,8 +23,12 @@ import kotlinx.android.synthetic.main.fragment_baseline_visit.*
  */
 class BaselineVisitFragment : Fragment() {
 
+    companion object{
+        const val BASELINE_CYCLE_NUMBER = 1
+        const val BASELINE_CYCLE_NUMBER_KEY = "BASELINE_CYCLE_NUMBER_KEY"
+    }
+
     private val mFragmentList = mutableListOf<Fragment>()
-    lateinit var mVisitTimeFragment: VisitTimeFragment
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,7 +44,13 @@ class BaselineVisitFragment : Fragment() {
     }
 
     private fun initFragments(){
-        mFragmentList.add(VisitTimeFragment())
+        val sampleId = if(arguments!=null) (arguments as Bundle).getInt(SAMPLE_ID) else 0
+        val visitTimeFragment = VisitTimeFragment()
+        val baselineCycleNumberArgs = Bundle()
+        baselineCycleNumberArgs.putInt(BASELINE_CYCLE_NUMBER_KEY, BASELINE_CYCLE_NUMBER)
+        baselineCycleNumberArgs.putInt(SAMPLE_ID, sampleId)
+        visitTimeFragment.arguments = baselineCycleNumberArgs
+        mFragmentList.add(visitTimeFragment)
         mFragmentList.add(DemographicsFragment())
         mFragmentList.add(PhysicalExaminationFragment())
         mFragmentList.add(PreviousHistoryFragment())
@@ -61,4 +72,5 @@ class BaselineVisitFragment : Fragment() {
         tl_baseline_visit.getTabAt(7)?.text = "影像学评估"
         tl_baseline_visit.getTabAt(8)?.text = "研究者签字"
     }
+
 }

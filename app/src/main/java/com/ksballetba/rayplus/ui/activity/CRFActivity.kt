@@ -8,6 +8,7 @@ import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.ksballetba.rayplus.R
+import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.adapter.ViewPagerAdapter
 import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment
 import com.ksballetba.rayplus.ui.fragment.ProjectSummaryFragment
@@ -24,6 +25,8 @@ class CRFActivity : AppCompatActivity() {
 
     private val mFragmentList = ArrayList<Fragment>()
 
+    var mSampleId = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +41,7 @@ class CRFActivity : AppCompatActivity() {
     private fun initUI(){
         setSupportActionBar(tb_crf)
         supportActionBar?.title = "基线资料"
+        mSampleId = intent.getIntExtra(SAMPLE_ID,0)
         bnv_crf.setOnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.menu_baseline_visit -> {
@@ -62,10 +66,16 @@ class CRFActivity : AppCompatActivity() {
     }
 
     private fun initFragment(){
+        val sampleIdArgs = Bundle()
+        sampleIdArgs.putInt(SAMPLE_ID, mSampleId)
         mBaselineVisitFragment = BaselineVisitFragment()
         mTreatmentVisitFragment = TreatmentVisitFragment()
         mSurvivalVisitFragment = SurvivalVisitFragment()
         mProjectSummaryFragment = ProjectSummaryFragment()
+        mBaselineVisitFragment.arguments = sampleIdArgs
+        mTreatmentVisitFragment.arguments = sampleIdArgs
+        mSurvivalVisitFragment.arguments = sampleIdArgs
+        mProjectSummaryFragment.arguments = sampleIdArgs
         mFragmentList.add(mBaselineVisitFragment)
         mFragmentList.add(mTreatmentVisitFragment)
         mFragmentList.add(mSurvivalVisitFragment)

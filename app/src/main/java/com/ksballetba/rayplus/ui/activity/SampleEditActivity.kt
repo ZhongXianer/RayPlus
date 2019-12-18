@@ -1,6 +1,7 @@
 package com.ksballetba.rayplus.ui.activity
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -23,6 +24,7 @@ class SampleEditActivity : AppCompatActivity() {
 
     companion object{
         const val TAG = "SampleEditActivity"
+        const val REFRESH_LAST_PAGE = "REFRESH_LAST_PAGE"
     }
 
     lateinit var mViewModel:SamplesViewModel
@@ -186,7 +188,10 @@ class SampleEditActivity : AppCompatActivity() {
             mViewModel.editSample(mToken,sampleEditBodyBean).observe(this, Observer {
                 if(it.code==200){
                     toast("样本创建成功")
-                    finish()
+                    val intent = Intent(this,SampleActivity::class.java)
+                    intent.action = REFRESH_LAST_PAGE
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
                 }else{
                     toast("样本创建失败")
                 }

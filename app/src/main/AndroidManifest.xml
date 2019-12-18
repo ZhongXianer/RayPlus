@@ -23,7 +23,8 @@
         <activity android:name=".ui.activity.baseline_visit_activity.PhysicalExaminationActivity" />
         <activity android:name=".ui.activity.TreatmentVisitDetailActivity" />
         <activity android:name=".ui.activity.CRFActivity" />
-        <activity android:name=".ui.activity.SampleActivity" />
+        <activity android:name=".ui.activity.SampleActivity"
+            android:launchMode="singleTop"/>
         <activity android:name=".ui.activity.LoginActivity"
             android:launchMode="singleTop">
             <intent-filter>
