@@ -362,7 +362,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tv_patient__enter_group_date"
+                    android:id="@+id/tv_patient_enter_group_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/item_left_margin"

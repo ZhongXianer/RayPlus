@@ -1,6 +1,7 @@
 package com.ksballetba.rayplus.network
 
 import android.util.Log
+import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -15,6 +16,7 @@ class RetrofitClient{
     var mRetrofit:Retrofit? = null
 
     init {
+        val gson = GsonBuilder().serializeNulls().create()
         val logger = HttpLoggingInterceptor()
         logger.level = HttpLoggingInterceptor.Level.BASIC
         mOkHttpClient = OkHttpClient.Builder()
@@ -25,7 +27,7 @@ class RetrofitClient{
         mRetrofit = Retrofit.Builder()
             .client(mOkHttpClient!!)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .baseUrl(BASE_URL)
             .build()
     }

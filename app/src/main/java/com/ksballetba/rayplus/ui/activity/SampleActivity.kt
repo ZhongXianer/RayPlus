@@ -11,10 +11,9 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.apkfuns.logutils.LogUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ksballetba.rayplus.R
-import com.ksballetba.rayplus.data.bean.ResearchCenterBean
+import com.ksballetba.rayplus.data.bean.SampleEditBodyBean
 import com.ksballetba.rayplus.data.bean.SampleListBean
 import com.ksballetba.rayplus.data.bean.SampleSubmitBodyBean
 import com.ksballetba.rayplus.network.Status
@@ -31,14 +30,13 @@ class SampleActivity : AppCompatActivity() {
 
     companion object{
         const val TAG = "SampleActivity"
-        const val ADD_SIMPLE_ACTION = "ADD_SIMPLE_ACTION"
-        const val EDIT_SIMPLE_ACTION = "EDIT_SIMPLE_ACTION"
+        const val SAMPLE_ID = "SAMPLE_ID"
+        const val SAMPLE_BODY = "SAMPLE_BODY"
     }
 
     private lateinit var mViewModel: SamplesViewModel
     private lateinit var mSamplesAdapter: SamplesAdapter
     var mSampleList = mutableListOf<SampleListBean.Data>()
-    var mResearchCenterList = mutableListOf<ResearchCenterBean>()
     var mToken:String? = ""
 
 
@@ -50,6 +48,11 @@ class SampleActivity : AppCompatActivity() {
         setContentView(R.layout.activity_sample)
         initUI()
         initList()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        srl_sample.autoRefresh()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -67,7 +70,7 @@ class SampleActivity : AppCompatActivity() {
         setSupportActionBar(tb_sample)
         initRefresh()
         fab_add_sample.setOnClickListener {
-            navigateToSampleEditActivity(ADD_SIMPLE_ACTION)
+            navigateToSampleEditActivity(-1,null)
         }
     }
 
@@ -80,12 +83,25 @@ class SampleActivity : AppCompatActivity() {
         mSamplesAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
         rv_sample.adapter = mSamplesAdapter
         mSamplesAdapter.setOnItemClickListener { _, _, position ->
-
+            navigateToCRFActivity(mSampleList[position].sampleId)
         }
         mSamplesAdapter.setOnItemChildClickListener { adapter, view, position ->
             when(view.id){
                 R.id.btn_sample_edit->{
-                    navigateToSampleEditActivity(EDIT_SIMPLE_ACTION)
+                    val sample = mSampleList[position]
+                    val sampleBody = SampleEditBodyBean(
+                        sample.date,
+                        sample.groupId,
+                        sample.idNum,
+                        sample.inGroupTime,
+                        sample.patientIds,
+                        sample.patientName,
+                        sample.researchCenterId,
+                        sample.sampleId,
+                        if(sample.sex == "男") 0 else 1,
+                        sample.signTime
+                    )
+                    navigateToSampleEditActivity(mSampleList[position].sampleId,sampleBody)
                 }
                 R.id.btn_sample_submit->{
                     XPopup.Builder(this).asConfirm("信息","请问是否确认提交到总中心"){
@@ -127,9 +143,18 @@ class SampleActivity : AppCompatActivity() {
         })
     }
 
-    private fun navigateToSampleEditActivity(action:String){
+    private fun navigateToSampleEditActivity(sampleId: Int,sampleBody: SampleEditBodyBean?){
         val intent = Intent(this,SampleEditActivity::class.java)
-        intent.action = action
+        intent.putExtra(SAMPLE_ID,sampleId)
+        if(sampleId>0){
+            intent.putExtra(SAMPLE_BODY,sampleBody)
+        }
+        startActivity(intent)
+    }
+
+    private fun navigateToCRFActivity(sampleId: Int){
+        val intent = Intent(this,CRFActivity::class.java)
+        intent.putExtra(SAMPLE_ID,sampleId)
         startActivity(intent)
     }
 
@@ -153,3 +178,5 @@ class SampleActivity : AppCompatActivity() {
         srl_sample.setEnableLoadMoreWhenContentNotFull(true)
     }
 }
+
+

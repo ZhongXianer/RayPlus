@@ -31,9 +31,9 @@ class SamplesViewModel constructor(private var sampleDataSource: SampleDataSourc
         return result
     }
 
-    fun addSample(token:String?,sampleAddBodyBean: SampleAddBodyBean):LiveData<BaseResponseBean>{
+    fun editSample(token:String?,sampleEditBodyBean: SampleEditBodyBean):LiveData<BaseResponseBean>{
         val result = MutableLiveData<BaseResponseBean>()
-        sampleDataSource.addSample(token,sampleAddBodyBean){
+        sampleDataSource.editSample(token,sampleEditBodyBean){
             result.postValue(it)
         }
         return result

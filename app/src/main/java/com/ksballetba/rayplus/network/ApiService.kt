@@ -27,7 +27,7 @@ interface ApiService {
 
     @Headers("Content-Type:application/json")
     @POST("/sample")
-    fun addSample(@Header("Authorization") token:String?,@Body sampleAddBodyBean: SampleAddBodyBean):Observable<BaseResponseBean>
+    fun editSample(@Header("Authorization") token:String?,@Body sampleEditBodyBean: SampleEditBodyBean):Observable<BaseResponseBean>
 
     @Headers("Content-Type:application/json")
     @POST("/submit_sample")

@@ -85,10 +85,10 @@ class  SampleDataSource{
             )
     }
 
-    fun addSample(token:String?,sampleAddBodyBean: SampleAddBodyBean,callBack: (BaseResponseBean) -> Unit) {
+    fun editSample(token:String?, sampleEditBodyBean: SampleEditBodyBean, callBack: (BaseResponseBean) -> Unit) {
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .addSample(token,sampleAddBodyBean)
+            .editSample(token,sampleEditBodyBean)
             .subscribeOn(io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
