@@ -4,6 +4,8 @@ import com.ksballetba.rayplus.data.bean.*
 import io.reactivex.Observable
 import retrofit2.http.*
 
+//token = eyJhbGciOiJIUzI1NiIsImlhdCI6MTU3Njc0MzQ4MiwiZXhwIjoxNTc2NzQ3MDgyfQ.eyJ1c2VyX2lkIjoxfQ.y-163XUIqLIDRBn2iNMQLkwsCJhkHwidEyI1JHY8eLk
+
 interface ApiService {
 
     @Headers("Content-Type:application/json")
@@ -33,4 +35,9 @@ interface ApiService {
     @POST("/cycle_time/{sample_id}/{cycle_number}")
     fun editVisitTime(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int,@Body visitTimeBean: VisitTimeBean):Observable<BaseResponseBean>
 
+    @GET("/patient/{sample_id}")
+    fun getDemography(@Path("sample_id") sampleId:Int):Observable<DemographyBean>
+
+    @POST("/patient/{sample_id}")
+    fun editDemography(@Path("sample_id") sampleId:Int,@Body demographyBean: DemographyBean):Observable<BaseResponseBean>
 }

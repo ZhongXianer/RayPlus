@@ -27,9 +27,13 @@ class  SampleDataSource{
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onNext = {
-                    callBack(it.data.toMutableList())
-                    mNextPageKey = 10
-                    mLoadStatus.postValue(NetworkState.LOADED)
+                    if(it.msg=="success"){
+                        callBack(it.data.toMutableList())
+                        mNextPageKey = 10
+                        mLoadStatus.postValue(NetworkState.LOADED)
+                    }else{
+                        mLoadStatus.postValue(NetworkState.error(it.msg))
+                    }
                 },
                 onComplete = {
                     println("Completed")

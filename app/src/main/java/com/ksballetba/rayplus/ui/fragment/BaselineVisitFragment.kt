@@ -45,13 +45,15 @@ class BaselineVisitFragment : Fragment() {
 
     private fun initFragments(){
         val sampleId = if(arguments!=null) (arguments as Bundle).getInt(SAMPLE_ID) else 0
-        val visitTimeFragment = VisitTimeFragment()
         val baselineCycleNumberArgs = Bundle()
         baselineCycleNumberArgs.putInt(BASELINE_CYCLE_NUMBER_KEY, BASELINE_CYCLE_NUMBER)
         baselineCycleNumberArgs.putInt(SAMPLE_ID, sampleId)
+        val visitTimeFragment = VisitTimeFragment()
+        val demographicsFragment = DemographicsFragment()
         visitTimeFragment.arguments = baselineCycleNumberArgs
+        demographicsFragment.arguments = baselineCycleNumberArgs
         mFragmentList.add(visitTimeFragment)
-        mFragmentList.add(DemographicsFragment())
+        mFragmentList.add(demographicsFragment)
         mFragmentList.add(PhysicalExaminationFragment())
         mFragmentList.add(PreviousHistoryFragment())
         mFragmentList.add(FirstVisitProcessFragment())

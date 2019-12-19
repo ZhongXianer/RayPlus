@@ -6,18 +6,33 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import com.apkfuns.logutils.LogUtils
+import com.blankj.utilcode.util.ToastUtils
 
 import com.ksballetba.rayplus.R
+import com.ksballetba.rayplus.data.bean.DemographyBean
+import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
+import com.ksballetba.rayplus.util.*
+import com.ksballetba.rayplus.viewmodel.BaselineVisitViewModel
 import com.lxj.xpopup.XPopup
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.android.synthetic.main.fragment_demographics.*
-import kotlinx.android.synthetic.main.fragment_visit_time.*
-import java.util.*
+import java.util.Calendar
 
 /**
  * A simple [Fragment] subclass.
  */
 class DemographicsFragment : Fragment() {
+
+
+    companion object{
+        const val TAG = "DemographicsFragment"
+    }
+
+    lateinit var mViewModel:BaselineVisitViewModel
+
+    var mSampleId = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,10 +44,80 @@ class DemographicsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initData()
+        loadData()
         initUI()
     }
 
+    private fun initData(){
+        mSampleId = (arguments as Bundle).getInt(SAMPLE_ID)
+        mViewModel = getBaselineVisitViewModel(this)
+    }
+
+    private fun loadData(){
+        mViewModel.getDemography(mSampleId).observe(viewLifecycleOwner, Observer {
+            tv_sex.text = if(it.sex == 0) "男" else "女"
+            tv_birthday.text = it.date
+            tv_race.text = if(it.race == "其他") it.raceOther else it.race
+            tv_marital_status.text = if(it.marriage == "其他") it.marriageOther else it.marriage
+            if(it.degree!=null){
+                tv_degree.text = getDegreeList()[it.degree]
+            }
+            tv_occupation.text = if(it.vocation == "其他") it.vocationOther else it.vocation
+            if(it.zone!=null){
+                tv_area.text = getZoneList()[it.zone]
+            }
+            tv_id_num.text = it.idNum
+            tv_admission_number.text = it.hospitalIds
+            tv_patient_phone.text = it.phone
+            tv_relation_phone.text = it.familyPhone
+        })
+    }
+
+    private fun saveData(){
+        val sex = getSexList().indexOf(tv_sex.text)
+        val date = tv_birthday.text.toString()
+        var race = tv_race.text.toString()
+        var raceOther = tv_race.text.toString()
+        if(!getRaceList().contains(race)){
+            race = "其他"
+        }else{
+            raceOther = ""
+        }
+        var marriage = tv_marital_status.text.toString()
+        var marriageOther = tv_marital_status.text.toString()
+        if(!getMarriageList().contains(marriage)){
+            marriage = "其他"
+        }else{
+            marriageOther = ""
+        }
+        val degree = if(getDegreeList().indexOf(tv_degree.text)==-1) null else getDegreeList().indexOf(tv_degree.text)
+        var vocation = tv_occupation.text.toString()
+        var vocationOther = tv_occupation.text.toString()
+        if(!getVocationList().contains(vocation)){
+            vocation = "其他"
+        }else{
+            vocationOther = ""
+        }
+        val zone = if(getZoneList().indexOf(tv_area.text)==-1) null else getZoneList().indexOf(tv_area.text)
+        val idNum = tv_id_num.text.toString()
+        val hospitalIds = tv_admission_number.text.toString()
+        val phone = tv_patient_phone.text.toString()
+        val familyPhone = tv_relation_phone.text.toString()
+        val demographyBean = DemographyBean(date,degree,familyPhone,hospitalIds,idNum,marriage,marriageOther,phone,race,raceOther,sex,vocation,vocationOther,zone)
+        mViewModel.editDemography(mSampleId,demographyBean).observe(viewLifecycleOwner, Observer {
+            if(it.code==200){
+                ToastUtils.showShort("人口统计学表单修改成功")
+            }else{
+                ToastUtils.showShort("人口统计学表单修改失败")
+            }
+        })
+    }
+
     private fun initUI() {
+        fab_save_demographics.setOnClickListener {
+            saveData()
+        }
         cl_sex.setOnClickListener {
             XPopup.Builder(context).asCenterList("性别", arrayOf("男", "女")) { _, text ->
                 tv_sex.text = text
@@ -74,7 +159,7 @@ class DemographicsFragment : Fragment() {
             }.show()
         }
         cl_degree.setOnClickListener {
-            XPopup.Builder(context).asCenterList("文化程度", arrayOf("文盲", "小学", "初中", "中专或高中", "大专或本科", "本科以上")) { _, text ->
+            XPopup.Builder(context).asCenterList("文化程度", getDegreeList()) { _, text ->
                 tv_degree.text = text
             }.show()
         }
@@ -90,7 +175,7 @@ class DemographicsFragment : Fragment() {
             }.show()
         }
         cl_area.setOnClickListener {
-            XPopup.Builder(context).asCenterList("常住地区", arrayOf("城市", "农村")) { _, text ->
+            XPopup.Builder(context).asCenterList("常住地区", getZoneList()) { _, text ->
                 tv_area.text = text
             }.show()
         }

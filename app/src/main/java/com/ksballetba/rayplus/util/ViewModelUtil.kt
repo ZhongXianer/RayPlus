@@ -5,14 +5,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.ksballetba.rayplus.data.source.remote.BaseVisitDataSource
-import com.ksballetba.rayplus.data.source.remote.LoginDataSource
-import com.ksballetba.rayplus.data.source.remote.ProjectDataSource
-import com.ksballetba.rayplus.data.source.remote.SampleDataSource
-import com.ksballetba.rayplus.viewmodel.BaseVisitViewModel
-import com.ksballetba.rayplus.viewmodel.LoginViewModel
-import com.ksballetba.rayplus.viewmodel.ProjectsViewModel
-import com.ksballetba.rayplus.viewmodel.SamplesViewModel
+import com.ksballetba.rayplus.data.source.remote.*
+import com.ksballetba.rayplus.viewmodel.*
 
 fun getLoginViewModel(activity: FragmentActivity):LoginViewModel{
     return ViewModelProvider(activity, object : ViewModelProvider.Factory {
@@ -52,4 +46,14 @@ fun getBaseVisitViewModel(fragment: Fragment): BaseVisitViewModel {
             return BaseVisitViewModel(source) as T
         }
     }).get(BaseVisitViewModel::class.java)
+}
+
+fun getBaselineVisitViewModel(fragment: Fragment): BaselineVisitViewModel {
+    return ViewModelProvider(fragment, object : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            val source = BaselineVisitDataSource()
+            @Suppress("UNCHECKED_CAST")
+            return BaselineVisitViewModel(source) as T
+        }
+    }).get(BaselineVisitViewModel::class.java)
 }

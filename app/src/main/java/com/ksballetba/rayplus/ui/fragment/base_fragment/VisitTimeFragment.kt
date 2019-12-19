@@ -41,12 +41,12 @@ class VisitTimeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initData()
+        loadData()
         initUI()
     }
 
     private fun initUI(){
-        initData()
-        loadData()
         mOnDateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                 val date = "$year-${monthOfYear+1}-$dayOfMonth"
                 tv_visit_time.text = date

@@ -150,11 +150,11 @@ class SampleEditActivity : AppCompatActivity() {
     }
 
     private fun loadData(sampleBody: SampleEditBodyBean){
-        tv_research_center.text = getResearchCenterList()[sampleBody.researchCenterId]
+        tv_research_center.text = getResearchCenterList()[sampleBody.researchCenterId-1]
         tv_patient_name.text = sampleBody.patientName
         tv_patient_num.text = sampleBody.patientIds
         tv_patient_id.text = sampleBody.idNum
-        tv_patient_group.text = getPatientGroupList()[sampleBody.groupId]
+        tv_patient_group.text = getPatientGroupList()[sampleBody.groupId-1]
         tv_patient_sex.text = getSexList()[sampleBody.sex]
         tv_patient_birthday.text = sampleBody.date
         tv_patient_sign_date.text = sampleBody.signTime
@@ -162,12 +162,12 @@ class SampleEditActivity : AppCompatActivity() {
     }
 
     private fun addOrEditSample(sampleId: Int?){
-        val researchCenterId = getResearchCenterList().indexOf(parseDefaultContent(tv_research_center.text.toString()))
+        val researchCenterId = getResearchCenterList().indexOf(parseDefaultContent(tv_research_center.text.toString()))+1
         val patientName = parseDefaultContent(tv_patient_name.text.toString())
         val patientIds = parseDefaultContent(tv_patient_num.text.toString())
         val idNum = parseDefaultContent(tv_patient_id.text.toString())
         val groupId =
-            getPatientGroupList().indexOf(parseDefaultContent(tv_patient_group.text.toString()))
+            getPatientGroupList().indexOf(parseDefaultContent(tv_patient_group.text.toString()))+1
         val sex = getSexList().indexOf(parseDefaultContent(tv_patient_sex.text.toString()))
         val date = parseDefaultContent(tv_patient_birthday.text.toString())
         val signTime = parseDefaultContent(tv_patient_sign_date.text.toString())
