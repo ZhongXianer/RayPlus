@@ -16,4 +16,8 @@ class ViewPagerAdapter(var mList: List<Fragment>, fm: FragmentManager?) : Fragme
         return mList.size
     }
 
+    fun getFragmentByIdx(idx:Int):Fragment{
+        return mList[idx]
+    }
+
 }

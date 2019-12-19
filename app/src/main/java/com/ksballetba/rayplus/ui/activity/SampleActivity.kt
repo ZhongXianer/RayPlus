@@ -122,7 +122,7 @@ class SampleActivity : AppCompatActivity() {
                     srl_sample.finishRefresh()
                 }
                 Status.FAILED -> {
-                    toast("网络加载失败")
+                    toast(it.msg.toString())
                 }
             }
         })

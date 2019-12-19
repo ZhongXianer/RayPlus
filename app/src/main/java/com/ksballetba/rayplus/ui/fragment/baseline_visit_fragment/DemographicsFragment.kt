@@ -30,7 +30,7 @@ class DemographicsFragment : Fragment() {
         const val TAG = "DemographicsFragment"
     }
 
-    lateinit var mViewModel:BaselineVisitViewModel
+    private lateinit var mViewModel:BaselineVisitViewModel
 
     var mSampleId = 0
 
@@ -127,7 +127,7 @@ class DemographicsFragment : Fragment() {
             val now = Calendar.getInstance()
             val dpd = DatePickerDialog.newInstance(
                 { _, year, monthOfYear, dayOfMonth ->
-                    val date = "$year-$monthOfYear-$dayOfMonth"
+                    val date = "$year-${monthOfYear+1}-$dayOfMonth"
                     tv_birthday.text = date
                 },
                 now.get(Calendar.YEAR),

@@ -187,13 +187,13 @@ class SampleEditActivity : AppCompatActivity() {
         if (checkSampleValid(sampleEditBodyBean)) {
             mViewModel.editSample(mToken,sampleEditBodyBean).observe(this, Observer {
                 if(it.code==200){
-                    toast("样本创建成功")
+                    toast("样本操作成功")
                     val intent = Intent(this,SampleActivity::class.java)
                     intent.action = REFRESH_LAST_PAGE
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                     startActivity(intent)
                 }else{
-                    toast("样本创建失败")
+                    toast("样本操作失败")
                 }
             })
         }else{

@@ -1,5 +1,6 @@
 package com.ksballetba.rayplus.ui.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -9,11 +10,14 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
+import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.PhysicalExaminationActivity
+import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.PhysicalExaminationActivity.Companion.REFRESH_PHYSICAL_EXAMINATION_PAGE
 import com.ksballetba.rayplus.ui.adapter.ViewPagerAdapter
 import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment
 import com.ksballetba.rayplus.ui.fragment.ProjectSummaryFragment
 import com.ksballetba.rayplus.ui.fragment.SurvivalVisitFragment
 import com.ksballetba.rayplus.ui.fragment.TreatmentVisitFragment
+import com.ksballetba.rayplus.ui.fragment.baseline_visit_fragment.PhysicalExaminationFragment
 import kotlinx.android.synthetic.main.activity_crf.*
 
 class CRFActivity : AppCompatActivity() {
@@ -22,6 +26,7 @@ class CRFActivity : AppCompatActivity() {
     lateinit var mTreatmentVisitFragment:TreatmentVisitFragment
     lateinit var mSurvivalVisitFragment:SurvivalVisitFragment
     lateinit var mProjectSummaryFragment: ProjectSummaryFragment
+    lateinit var mViewPagerAdapter: ViewPagerAdapter
 
     private val mFragmentList = ArrayList<Fragment>()
 
@@ -36,6 +41,16 @@ class CRFActivity : AppCompatActivity() {
         setContentView(R.layout.activity_crf)
         initUI()
         initFragment()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        when(intent?.action){
+            REFRESH_PHYSICAL_EXAMINATION_PAGE->{
+                val peFragment = (mViewPagerAdapter.getFragmentByIdx(0) as BaselineVisitFragment).mViewPagerAdapter.getFragmentByIdx(2) as PhysicalExaminationFragment
+                peFragment.loadData()
+            }
+        }
     }
 
     private fun initUI(){
@@ -81,7 +96,8 @@ class CRFActivity : AppCompatActivity() {
         mFragmentList.add(mSurvivalVisitFragment)
         mFragmentList.add(mProjectSummaryFragment)
         nsvp_crf.offscreenPageLimit = 4
-        nsvp_crf.adapter = ViewPagerAdapter(mFragmentList,supportFragmentManager)
+        mViewPagerAdapter = ViewPagerAdapter(mFragmentList,supportFragmentManager)
+        nsvp_crf.adapter = mViewPagerAdapter
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

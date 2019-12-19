@@ -28,6 +28,8 @@ class BaselineVisitFragment : Fragment() {
         const val BASELINE_CYCLE_NUMBER_KEY = "BASELINE_CYCLE_NUMBER_KEY"
     }
 
+    lateinit var mViewPagerAdapter: ViewPagerAdapter
+
     private val mFragmentList = mutableListOf<Fragment>()
 
     override fun onCreateView(
@@ -50,18 +52,21 @@ class BaselineVisitFragment : Fragment() {
         baselineCycleNumberArgs.putInt(SAMPLE_ID, sampleId)
         val visitTimeFragment = VisitTimeFragment()
         val demographicsFragment = DemographicsFragment()
+        val physicalExaminationFragment = PhysicalExaminationFragment()
         visitTimeFragment.arguments = baselineCycleNumberArgs
         demographicsFragment.arguments = baselineCycleNumberArgs
+        physicalExaminationFragment.arguments = baselineCycleNumberArgs
         mFragmentList.add(visitTimeFragment)
         mFragmentList.add(demographicsFragment)
-        mFragmentList.add(PhysicalExaminationFragment())
+        mFragmentList.add(physicalExaminationFragment)
         mFragmentList.add(PreviousHistoryFragment())
         mFragmentList.add(FirstVisitProcessFragment())
         mFragmentList.add(TreatmentHistoryFragment())
         mFragmentList.add(LabInspectionFragment())
         mFragmentList.add(ImagingEvaluationFragment())
         mFragmentList.add(InvestigatorSignatureFragment())
-        vp_baseline_visit.adapter = ViewPagerAdapter(mFragmentList,childFragmentManager)
+        mViewPagerAdapter = ViewPagerAdapter(mFragmentList,childFragmentManager)
+        vp_baseline_visit.adapter = mViewPagerAdapter
         vp_baseline_visit.offscreenPageLimit = 3
         tl_baseline_visit.setupWithViewPager(vp_baseline_visit)
         tl_baseline_visit.getTabAt(0)?.text = "访视时间"

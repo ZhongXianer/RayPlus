@@ -32,12 +32,24 @@ interface ApiService {
     @GET("/cycle_time/{sample_id}/{cycle_number}")
     fun getVisitTime(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int):Observable<VisitTimeBean>
 
+    @Headers("Content-Type:application/json")
     @POST("/cycle_time/{sample_id}/{cycle_number}")
     fun editVisitTime(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int,@Body visitTimeBean: VisitTimeBean):Observable<BaseResponseBean>
 
     @GET("/patient/{sample_id}")
     fun getDemography(@Path("sample_id") sampleId:Int):Observable<DemographyBean>
 
+    @Headers("Content-Type:application/json")
     @POST("/patient/{sample_id}")
     fun editDemography(@Path("sample_id") sampleId:Int,@Body demographyBean: DemographyBean):Observable<BaseResponseBean>
+
+    @GET("/patient_report_table/{sample_id}")
+    fun getPhysicalExaminationList(@Path("sample_id") sampleId:Int):Observable<PhysicalExaminationListBean>
+
+    @Headers("Content-Type:application/json")
+    @POST("/patient_report/{sample_id}")
+    fun editPhysicalExamination(@Path("sample_id") sampleId:Int,@Body physicalExaminationBodyBean: PhysicalExaminationBodyBean):Observable<BaseResponseBean>
+
+    @DELETE("/patient_report/{sample_id}/{report_id}")
+    fun deletePhysicalExamination(@Path("sample_id") sampleId:Int,@Path("report_id") reportId:Int):Observable<BaseResponseBean>
 }

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cv_physical_examination"
+    android:id="@+id/cv_imaging_evaluation"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
@@ -29,61 +29,60 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_part"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="部位：肾"
-            android:textColor="@color/primary_text"
-            android:textSize="@dimen/material_typography_body1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <TextView
-            android:id="@+id/tv_way"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="方法：CT"
-            android:textColor="@color/primary_text"
-            android:textSize="@dimen/material_typography_body1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.62"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_tumor_long_dia"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="肿瘤长径：48"
-            android:textColor="@color/primary_text"
-            android:textSize="@dimen/material_typography_body1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_part" />
-
-        <TextView
-            android:id="@+id/tv_tumor_short_dia"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="肿瘤短径：27"
-            android:layout_marginTop="6dp"
-            android:textColor="@color/primary_text"
-            android:textSize="@dimen/material_typography_body1"
-            app:layout_constraintStart_toStartOf="@+id/tv_way"
-            app:layout_constraintTop_toBottomOf="@+id/tv_way" />
-
-
-        <TextView
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="时间：2018-5-1"
+            android:text="日期：2016-08-09"
             android:textColor="@color/primary_text"
             android:textSize="@dimen/material_typography_body1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_tumor_long_dia" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tv_body_temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="体温：37"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/material_typography_body1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_breathe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="呼吸：48"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/material_typography_body1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_date" />
+
+        <TextView
+            android:id="@+id/tv_blood_pressure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="血压：147/119"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/material_typography_body1"
+            app:layout_constraintStart_toStartOf="@+id/tv_body_temperature"
+            app:layout_constraintTop_toBottomOf="@+id/tv_body_temperature" />
+
+
+        <TextView
+            android:id="@+id/tv_heart_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="心率"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/material_typography_body1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_blood_pressure" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
