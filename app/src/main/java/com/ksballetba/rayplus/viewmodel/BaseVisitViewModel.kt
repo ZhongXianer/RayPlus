@@ -25,4 +25,6 @@ class BaseVisitViewModel constructor(private var baseVisitDataSource: BaseVisitD
         return result
     }
 
+    fun getLoadStatus() = baseVisitDataSource.mLoadStatus
+
 }

@@ -11,6 +11,7 @@ import com.blankj.utilcode.util.ToastUtils
 
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.VisitTimeBean
+import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.BASELINE_CYCLE_NUMBER_KEY
 import com.ksballetba.rayplus.util.getBaseVisitViewModel
@@ -64,6 +65,11 @@ class VisitTimeFragment : Fragment() {
         fab_save_visit_time.setOnClickListener {
             saveData()
         }
+        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
+            if(it.status == Status.FAILED){
+                ToastUtils.showShort(it.msg)
+            }
+        })
     }
 
     private fun initData(){

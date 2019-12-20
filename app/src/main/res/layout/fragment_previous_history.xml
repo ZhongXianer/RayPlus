@@ -78,6 +78,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/item_left_margin"
                     android:text="@string/input_visit_time"
+                    android:maxEms="14"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

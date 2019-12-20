@@ -6,23 +6,35 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import com.apkfuns.logutils.LogUtils
-import com.blankj.utilcode.util.ToastUtils
 import com.ksballetba.rayplus.R
+import com.ksballetba.rayplus.data.bean.BaseCheckBean
+import com.ksballetba.rayplus.data.bean.PreviousHistoryBean
+import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.lxj.xpopup.XPopup
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.android.synthetic.main.fragment_previous_history.*
-import java.util.*
+import java.util.Calendar
 import com.ksballetba.rayplus.util.asCheckboxList
+import com.ksballetba.rayplus.util.getBaseIllListInHistory
+import com.ksballetba.rayplus.util.getBaselineVisitViewModel
+import com.ksballetba.rayplus.viewmodel.BaselineVisitViewModel
 
 /**
  * A simple [Fragment] subclass.
  */
 class PreviousHistoryFragment : Fragment() {
 
-    companion object{
+    companion object {
         const val TAG = "PreviousHistoryFragment"
     }
+
+    private lateinit var mViewModel: BaselineVisitViewModel
+
+    private var mSampleId = 0
+
+    private var mBaseIllList = mutableListOf<BaseCheckBean>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,8 +46,14 @@ class PreviousHistoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initUI()
+        initData()
         loadData()
+        initUI()
+    }
+
+    private fun initData() {
+        mSampleId = (arguments as Bundle).getInt(SAMPLE_ID)
+        mViewModel = getBaselineVisitViewModel(this)
     }
 
     private fun loadData() {
@@ -45,6 +63,40 @@ class PreviousHistoryFragment : Fragment() {
         switch_drink_history.setSwitchTextAppearance(context, R.style.s_off)
         switch_is_quit_drink.setSwitchTextAppearance(context, R.style.s_off)
         switch_is_relapse_drink.setSwitchTextAppearance(context, R.style.s_off)
+        mViewModel.getPreviousHistory(mSampleId).observe(viewLifecycleOwner, Observer {
+            LogUtils.tag(TAG).d(it)
+//            tv_operation_history.text = if(it.surgery!="其他") it.surgery else it.surgeryOther
+//            initBaseIllList(it.baseIll)
+//            val illText = StringBuffer()
+//            for (ill in mBaseIllList){
+//                if(ill.isChecked&&ill.name!="其他，请描述"){
+//                    illText.append("${ill.name},")
+//                }
+//            }
+//            if(!mBaseIllList[13].isChecked&&illText.isNotEmpty()){
+//                illText.deleteCharAt(illText.length-1)
+//            }else{
+//                illText.append(it.baseIll.baseIllOther)
+//            }
+//            tv_diseases_history.text = illText
+        })
+    }
+
+    private fun initBaseIllList(baseIll: PreviousHistoryBean.BaseIll){
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[0],baseIll.baseIll1 == "on"))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[1],baseIll.baseIll2 == "on"))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[2],baseIll.baseIll3 == "on"))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[3],baseIll.baseIll4 == "on"))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[4],baseIll.baseIll5 == "on"))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[5],baseIll.baseIll6 == "on"))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[6],baseIll.baseIll7 == "on"))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[7],baseIll.baseIll8 == "on"))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[8],baseIll.baseIll9 == "on"))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[9],baseIll.baseIll10 == "on"))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[10],baseIll.baseIll11 == "on"))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[11],baseIll.baseIll12 == "on"))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[12],baseIll.baseIll13 == "on"))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[13],baseIll.baseIllOther.isNotEmpty()))
     }
 
     private fun initUI() {
@@ -62,36 +114,38 @@ class PreviousHistoryFragment : Fragment() {
         }
         cl_diseases_history.setOnClickListener {
             val title = "基础疾病史"
-            val data = mutableListOf(
-                "无",
-                "不详",
-                "高血压",
-                "冠心病",
-                "糖尿病",
-                "慢性阻塞性肺疾病",
-                "支气管哮喘",
-                "肺结核",
-                "间质性肺疾病",
-                "高脂血症",
-                "病毒性肝炎",
-                "风湿免疫性疾病",
-                "肾脏病",
-                "其他，请描述"
+            var data = mutableListOf(
+                BaseCheckBean("无", false),
+                BaseCheckBean("不详", false),
+                BaseCheckBean("高血压", true),
+                BaseCheckBean("冠心病", false),
+                BaseCheckBean("糖尿病", true),
+                BaseCheckBean("慢性阻塞性肺疾病", false),
+                BaseCheckBean("支气管哮喘", false),
+                BaseCheckBean("肺结核", true),
+                BaseCheckBean("间质性肺疾病", false),
+                BaseCheckBean("高脂血症", false),
+                BaseCheckBean("病毒性肝炎", false),
+                BaseCheckBean("风湿免疫性疾病", false),
+                BaseCheckBean("肾脏病", false),
+                BaseCheckBean("其他，请描述", false)
             )
             var otherDiseases = ""
             val diseases = StringBuffer()
-            asCheckboxList(context, title, data, listOf(0,1,2), { text, pos ->
-                if(pos==data.size-1){
+            asCheckboxList(context, title, data, { data, pos ->
+                if (data.name == "其他，请描述") {
                     XPopup.Builder(context).asInputConfirm("基础疾病史", "请输入基础疾病史") {
                         otherDiseases = it
                     }.show()
                 }
-            }, { selectedData ->
-                for(d in selectedData){
-                    diseases.append("$d,")
+            }, { checkedData ->
+                for (d in checkedData) {
+                    if (d.isChecked&&d.name!="其他，请描述") {
+                        diseases.append("${d.name},")
+                    }
                 }
-                if(otherDiseases.isBlank()){
-                    diseases.deleteCharAt(diseases.length-1)
+                if (diseases.isNotEmpty()&&otherDiseases.isBlank()) {
+                    diseases.deleteCharAt(diseases.length - 1)
                 }
                 diseases.append(otherDiseases)
                 tv_diseases_history.text = diseases.toString()

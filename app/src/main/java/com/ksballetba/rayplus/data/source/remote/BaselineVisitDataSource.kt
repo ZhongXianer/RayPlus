@@ -1,11 +1,10 @@
 package com.ksballetba.rayplus.data.source.remote
 
+import androidx.lifecycle.MutableLiveData
 import com.apkfuns.logutils.LogUtils
-import com.ksballetba.rayplus.data.bean.BaseResponseBean
-import com.ksballetba.rayplus.data.bean.DemographyBean
-import com.ksballetba.rayplus.data.bean.PhysicalExaminationBodyBean
-import com.ksballetba.rayplus.data.bean.PhysicalExaminationListBean
+import com.ksballetba.rayplus.data.bean.*
 import com.ksballetba.rayplus.network.ApiService
+import com.ksballetba.rayplus.network.NetworkState
 import com.ksballetba.rayplus.network.RetrofitClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
@@ -13,7 +12,10 @@ import io.reactivex.schedulers.Schedulers
 
 class BaselineVisitDataSource{
 
+    var mLoadStatus = MutableLiveData<NetworkState>()
+
     fun getDemography(sampleId:Int,callBack: (DemographyBean) -> Unit) {
+        mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.instance
             .create(ApiService::class.java)
             .getDemography(sampleId)
@@ -25,9 +27,11 @@ class BaselineVisitDataSource{
                 },
                 onComplete = {
                     LogUtils.d("Completed")
+                    mLoadStatus.postValue(NetworkState.LOADED)
                 },
                 onError = {
                     LogUtils.d(it.message)
+                    mLoadStatus.postValue(NetworkState.error(it.message))
                 }
             )
     }
@@ -52,6 +56,7 @@ class BaselineVisitDataSource{
     }
 
     fun getPhysicalExaminationList(sampleId:Int,callBack: (MutableList<PhysicalExaminationListBean.Data>) -> Unit) {
+        mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.instance
             .create(ApiService::class.java)
             .getPhysicalExaminationList(sampleId)
@@ -63,9 +68,11 @@ class BaselineVisitDataSource{
                 },
                 onComplete = {
                     LogUtils.d("Completed")
+                    mLoadStatus.postValue(NetworkState.LOADED)
                 },
                 onError = {
                     LogUtils.d(it.message)
+                    mLoadStatus.postValue(NetworkState.error(it.message))
                 }
             )
     }
@@ -93,6 +100,47 @@ class BaselineVisitDataSource{
         RetrofitClient.instance
             .create(ApiService::class.java)
             .deletePhysicalExamination(sampleId,reportId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                }
+            )
+    }
+
+    fun getPreviousHistory(sampleId:Int,callBack: (PreviousHistoryBean) -> Unit) {
+        mLoadStatus.postValue(NetworkState.LOADING)
+        RetrofitClient.instance
+            .create(ApiService::class.java)
+            .getPreviousHistory(sampleId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                    mLoadStatus.postValue(NetworkState.LOADED)
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                    mLoadStatus.postValue(NetworkState.error(it.message))
+                }
+            )
+    }
+
+    fun editPreviousHistory(sampleId:Int, previousHistoryBean: PreviousHistoryBean, callBack: (BaseResponseBean) -> Unit){
+        RetrofitClient.instance
+            .create(ApiService::class.java)
+            .editPreviousHistory(sampleId,previousHistoryBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(

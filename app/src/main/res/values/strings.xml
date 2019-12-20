@@ -59,8 +59,8 @@
     <string name="genetic_test_way">基因检测方法</string>
     <string name="genetic_mutation_type">基因突变类型</string>
     <string name="PD_L1_expression">PD-L1表达</string>
-    <string name="tumor_mutation_load">基因突变负荷</string>
-    <string name="microsatellite_instability">微卫星不稳定性</string>
+    <string name="tumor_mutation_load">肿瘤突变负荷（TMB）</string>
+    <string name="microsatellite_instability">微卫星不稳定性（MSI）</string>
     <string name="sampling_date">采样日期</string>
     <string name="blood_routine">血常规及凝血功能</string>
     <string name="clinical_significance">临床意义判定</string>
@@ -137,6 +137,11 @@
     <string name="patient_group">患者组别</string>
     <string name="patient_sign_date">签署同意书日期</string>
     <string name="patient_enter_group_date">入组日期</string>
+    <string name="last_best_treatment">一线治疗最佳疗效</string>
+    <string name="last_treatment_growth_date">一线治疗进展时间</string>
+    <string name="last_treatment_growth_part">一线治疗进展部位</string>
+    <string name="is_biopsy_again">是否再次活检</string>
+    <string name="biopsy_pathological_type">活检病理类型</string>
 
     <string-array name="clinical_significance">
         <item>1</item>

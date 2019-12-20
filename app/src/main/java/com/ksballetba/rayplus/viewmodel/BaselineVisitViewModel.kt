@@ -3,10 +3,7 @@ package com.ksballetba.rayplus.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.ksballetba.rayplus.data.bean.BaseResponseBean
-import com.ksballetba.rayplus.data.bean.DemographyBean
-import com.ksballetba.rayplus.data.bean.PhysicalExaminationBodyBean
-import com.ksballetba.rayplus.data.bean.PhysicalExaminationListBean
+import com.ksballetba.rayplus.data.bean.*
 import com.ksballetba.rayplus.data.source.remote.BaselineVisitDataSource
 
 class BaselineVisitViewModel constructor(private var baselineVisitDataSource: BaselineVisitDataSource): ViewModel() {
@@ -50,5 +47,23 @@ class BaselineVisitViewModel constructor(private var baselineVisitDataSource: Ba
         }
         return result
     }
+
+    fun getPreviousHistory(sampleId:Int): LiveData<PreviousHistoryBean> {
+        val result = MutableLiveData<PreviousHistoryBean>()
+        baselineVisitDataSource.getPreviousHistory(sampleId) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun editPreviousHistory(sampleId:Int, previousHistoryBean: PreviousHistoryBean): LiveData<BaseResponseBean> {
+        val result = MutableLiveData<BaseResponseBean>()
+        baselineVisitDataSource.editPreviousHistory(sampleId,previousHistoryBean) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun getLoadStatus() = baselineVisitDataSource.mLoadStatus
 
 }

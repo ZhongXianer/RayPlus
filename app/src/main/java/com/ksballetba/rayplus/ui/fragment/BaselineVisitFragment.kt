@@ -53,13 +53,15 @@ class BaselineVisitFragment : Fragment() {
         val visitTimeFragment = VisitTimeFragment()
         val demographicsFragment = DemographicsFragment()
         val physicalExaminationFragment = PhysicalExaminationFragment()
+        val previousHistoryFragment = PreviousHistoryFragment()
         visitTimeFragment.arguments = baselineCycleNumberArgs
         demographicsFragment.arguments = baselineCycleNumberArgs
         physicalExaminationFragment.arguments = baselineCycleNumberArgs
+        previousHistoryFragment.arguments = baselineCycleNumberArgs
         mFragmentList.add(visitTimeFragment)
         mFragmentList.add(demographicsFragment)
         mFragmentList.add(physicalExaminationFragment)
-        mFragmentList.add(PreviousHistoryFragment())
+        mFragmentList.add(previousHistoryFragment)
         mFragmentList.add(FirstVisitProcessFragment())
         mFragmentList.add(TreatmentHistoryFragment())
         mFragmentList.add(LabInspectionFragment())

@@ -12,6 +12,7 @@ import com.blankj.utilcode.util.ToastUtils
 
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.DemographyBean
+import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.util.*
 import com.ksballetba.rayplus.viewmodel.BaselineVisitViewModel
@@ -71,6 +72,11 @@ class DemographicsFragment : Fragment() {
             tv_admission_number.text = it.hospitalIds
             tv_patient_phone.text = it.phone
             tv_relation_phone.text = it.familyPhone
+        })
+        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
+            if(it.status == Status.FAILED){
+                ToastUtils.showShort(it.msg)
+            }
         })
     }
 

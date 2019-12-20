@@ -13,7 +13,10 @@ import io.reactivex.schedulers.Schedulers
 
 class BaseVisitDataSource{
 
+    var mLoadStatus = MutableLiveData<NetworkState>()
+
     fun getVisitTime(sampleId:Int,cycleNumber:Int,callBack: (VisitTimeBean) -> Unit) {
+        mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.instance
             .create(ApiService::class.java)
             .getVisitTime(sampleId,cycleNumber)
@@ -25,9 +28,11 @@ class BaseVisitDataSource{
                 },
                 onComplete = {
                     LogUtils.d("Completed")
+                    mLoadStatus.postValue(NetworkState.LOADED)
                 },
                 onError = {
                     LogUtils.d(it.message)
+                    mLoadStatus.postValue(NetworkState.error(it.message))
                 }
             )
     }

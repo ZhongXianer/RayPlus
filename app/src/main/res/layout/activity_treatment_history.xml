@@ -10,14 +10,14 @@
         android:id="@+id/tb_treatment_history"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark"
         android:background="@color/colorPrimary"
-        app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
-        app:popupTheme="@style/Base.ThemeOverlay.AppCompat.Light"
-        app:title="治疗史"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+        app:popupTheme="@style/Base.ThemeOverlay.AppCompat.Light"
+        app:title="治疗史" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -29,8 +29,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/material_layout_app_bar_height"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/material_layout_app_bar_height">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_treatment_line"
@@ -60,8 +60,8 @@
                     android:id="@+id/tv_treatment_line"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/input_visit_time"
                     android:layout_marginEnd="@dimen/item_left_margin"
+                    android:text="@string/input_visit_time"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -96,8 +96,8 @@
                     android:id="@+id/tv_first_line_treatment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/input_visit_time"
                     android:layout_marginEnd="@dimen/item_left_margin"
+                    android:text="@string/input_visit_time"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -105,318 +105,748 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
-                android:id="@+id/ll_first_line_treatment"
+                android:id="@+id/ll_treatment_history_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_treatment_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:padding="@dimen/material_component_cards_left_and_right_padding"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:id="@+id/tv_treatment_date_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/item_left_margin"
-                        android:text="@string/treatment_date"
-                        android:textColor="@color/primary_text"
-                        android:textSize="@dimen/material_typography_subheading"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tv_treatment_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/input_visit_time"
-                        android:layout_marginEnd="@dimen/item_left_margin"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
                 <LinearLayout
+                    android:id="@+id/ll_not_first_line_treatment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/material_component_cards_left_and_right_padding"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/item_left_margin"
-                        android:text="@string/treatment_way"
-                        android:textColor="@color/primary_text"
-                        android:textSize="@dimen/material_typography_subheading" />
-
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cl_operation"
+                        android:id="@+id/cl_last_best_treatment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?attr/selectableItemBackground"
+                        android:padding="@dimen/material_component_cards_left_and_right_padding"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
-                        <CheckBox
-                            android:id="@+id/cb_operation"
+                        <TextView
+                            android:id="@+id/tv_last_best_treatment_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/item_left_margin"
+                            android:text="@string/last_best_treatment"
+                            android:textColor="@color/primary_text"
+                            android:textSize="@dimen/material_typography_subheading"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/tv_operation_title"
+                            android:id="@+id/tv_last_best_treatment"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/treatment_operation"
-                            android:textColor="@color/primary_text"
-                            android:textSize="@dimen/material_typography_body1"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/cb_operation"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/tv_operation"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/item_left_margin"
                             android:text="@string/input_visit_time"
-                            android:layout_marginTop="6dp"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/cb_operation"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_operation_title" />
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cl_radiotherapy"
+                        android:id="@+id/cl_last_treatment_growth_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?attr/selectableItemBackground"
+                        android:padding="@dimen/material_component_cards_left_and_right_padding"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
-                        <CheckBox
-                            android:id="@+id/cb_radiotherapy"
+                        <TextView
+                            android:id="@+id/tv_last_treatment_growth_date_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/item_left_margin"
+                            android:text="@string/last_treatment_growth_date"
+                            android:textColor="@color/primary_text"
+                            android:textSize="@dimen/material_typography_subheading"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/tv_radiotherapy_title"
+                            android:id="@+id/tv_last_treatment_growth_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/radiotherapy"
-                            android:textColor="@color/primary_text"
-                            android:textSize="@dimen/material_typography_body1"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/cb_radiotherapy"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/tv_radiotherapy"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/item_left_margin"
                             android:text="@string/input_visit_time"
-                            android:layout_marginTop="6dp"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/cb_radiotherapy"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_radiotherapy_title" />
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cl_chemotherapy"
+                        android:id="@+id/cl_last_treatment_growth_part"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?attr/selectableItemBackground"
+                        android:padding="@dimen/material_component_cards_left_and_right_padding"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
-                        <CheckBox
-                            android:id="@+id/cb_chemotherapy"
+                        <TextView
+                            android:id="@+id/tv_last_treatment_growth_part_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/item_left_margin"
+                            android:text="@string/last_treatment_growth_part"
+                            android:textColor="@color/primary_text"
+                            android:textSize="@dimen/material_typography_subheading"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/tv_chemotherapy_title"
+                            android:id="@+id/tv_last_treatment_growth_part"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/chemotherapy"
-                            android:textColor="@color/primary_text"
-                            android:textSize="@dimen/material_typography_body1"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/cb_chemotherapy"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/tv_chemotherapy"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/item_left_margin"
                             android:text="@string/input_visit_time"
-                            android:layout_marginTop="6dp"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/cb_chemotherapy"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_chemotherapy_title" />
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cl_targeted_therapy"
+                        android:id="@+id/cl_is_biopsy_again"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?attr/selectableItemBackground"
+                        android:padding="@dimen/material_component_cards_left_and_right_padding"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
-                        <CheckBox
-                            android:id="@+id/cb_targeted_therapy"
+                        <TextView
+                            android:id="@+id/tv_is_biopsy_again_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/item_left_margin"
+                            android:text="@string/is_biopsy_again"
+                            android:textColor="@color/primary_text"
+                            android:textSize="@dimen/material_typography_subheading"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/tv_targeted_therapy_title"
+                            android:id="@+id/tv_is_biopsy_again"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/targeted_therapy"
-                            android:textColor="@color/primary_text"
-                            android:textSize="@dimen/material_typography_body1"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/cb_targeted_therapy"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/tv_targeted_therapy"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/item_left_margin"
                             android:text="@string/input_visit_time"
-                            android:layout_marginTop="6dp"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/cb_targeted_therapy"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_targeted_therapy_title" />
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cl_immunotherapy"
+                        android:id="@+id/cl_biopsy_way"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?attr/selectableItemBackground"
+                        android:padding="@dimen/material_component_cards_left_and_right_padding"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
-                        <CheckBox
-                            android:id="@+id/cb_immunotherapy"
+                        <TextView
+                            android:id="@+id/tv_biopsy_way_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/item_left_margin"
+                            android:text="@string/biopsy_way"
+                            android:textColor="@color/primary_text"
+                            android:textSize="@dimen/material_typography_subheading"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/tv_immunotherapy_title"
+                            android:id="@+id/tv_biopsy_way"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/immunotherapy"
-                            android:textColor="@color/primary_text"
-                            android:textSize="@dimen/material_typography_body1"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/cb_immunotherapy"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/tv_immunotherapy"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/item_left_margin"
                             android:text="@string/input_visit_time"
-                            android:layout_marginTop="6dp"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/cb_immunotherapy"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_immunotherapy_title" />
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cl_other_therapy"
+                        android:id="@+id/cl_biopsy_pathological_type"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?attr/selectableItemBackground"
+                        android:padding="@dimen/material_component_cards_left_and_right_padding"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
-                        <CheckBox
-                            android:id="@+id/cb_other_therapy"
+                        <TextView
+                            android:id="@+id/tv_biopsy_pathological_type_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/item_left_margin"
+                            android:text="@string/biopsy_pathological_type"
+                            android:textColor="@color/primary_text"
+                            android:textSize="@dimen/material_typography_subheading"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/tv_other_therapy_title"
+                            android:id="@+id/tv_biopsy_pathological_type"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/other_therapy"
-                            android:textColor="@color/primary_text"
-                            android:textSize="@dimen/material_typography_body1"
+                            android:layout_marginEnd="@dimen/item_left_margin"
+                            android:text="@string/input_visit_time"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/cb_other_therapy"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_genetic_test_sample"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+
+                        <TextView
+                            android:id="@+id/tv_genetic_test_sample_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/item_left_margin"
+                            android:text="@string/genetic_test_sample"
+                            android:textColor="@color/primary_text"
+                            android:textSize="@dimen/material_typography_subheading"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/tv_other_therapy"
+                            android:id="@+id/tv_genetic_test_sample"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/item_left_margin"
                             android:text="@string/input_visit_time"
-                            android:layout_marginTop="6dp"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/cb_other_therapy"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_other_therapy_title" />
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_genetic_test_way"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+
+                        <TextView
+                            android:id="@+id/tv_genetic_test_way_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/item_left_margin"
+                            android:text="@string/genetic_test_way"
+                            android:textColor="@color/primary_text"
+                            android:textSize="@dimen/material_typography_subheading"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_genetic_test_way"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/item_left_margin"
+                            android:text="@string/input_visit_time"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_genetic_mutation_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+
+                        <TextView
+                            android:id="@+id/tv_genetic_mutation_type_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/item_left_margin"
+                            android:text="@string/genetic_mutation_type"
+                            android:textColor="@color/primary_text"
+                            android:textSize="@dimen/material_typography_subheading"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_genetic_mutation_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/item_left_margin"
+                            android:text="@string/input_visit_time"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_PD_L1_expression"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+
+                        <TextView
+                            android:id="@+id/tv_PD_L1_expression_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/item_left_margin"
+                            android:text="@string/PD_L1_expression"
+                            android:textColor="@color/primary_text"
+                            android:textSize="@dimen/material_typography_subheading"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_PD_L1_expression"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/item_left_margin"
+                            android:text="@string/input_visit_time"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_tumor_mutation_load"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+
+                        <TextView
+                            android:id="@+id/tv_tumor_mutation_load_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/item_left_margin"
+                            android:text="@string/tumor_mutation_load"
+                            android:textColor="@color/primary_text"
+                            android:textSize="@dimen/material_typography_subheading"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_tumor_mutation_load"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/item_left_margin"
+                            android:text="@string/input_visit_time"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_microsatellite_instability"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+
+                        <TextView
+                            android:id="@+id/tv_microsatellite_instability_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/item_left_margin"
+                            android:text="@string/microsatellite_instability"
+                            android:textColor="@color/primary_text"
+                            android:textSize="@dimen/material_typography_subheading"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_microsatellite_instability"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/item_left_margin"
+                            android:text="@string/input_visit_time"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_treatment_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_treatment_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:padding="@dimen/material_component_cards_left_and_right_padding"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/tv_treatment_date_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/item_left_margin"
+                            android:text="@string/treatment_date"
+                            android:textColor="@color/primary_text"
+                            android:textSize="@dimen/material_typography_subheading"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_treatment_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/item_left_margin"
+                            android:text="@string/input_visit_time"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/material_component_cards_left_and_right_padding">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/item_left_margin"
+                            android:text="@string/treatment_way"
+                            android:textColor="@color/primary_text"
+                            android:textSize="@dimen/material_typography_subheading" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_operation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?attr/selectableItemBackground"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <CheckBox
+                                android:id="@+id/cb_operation"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/item_left_margin"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tv_operation_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/treatment_operation"
+                                android:textColor="@color/primary_text"
+                                android:textSize="@dimen/material_typography_body1"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cb_operation"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tv_operation"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="@string/input_visit_time"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cb_operation"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_operation_title" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_radiotherapy"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?attr/selectableItemBackground"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <CheckBox
+                                android:id="@+id/cb_radiotherapy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/item_left_margin"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tv_radiotherapy_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/radiotherapy"
+                                android:textColor="@color/primary_text"
+                                android:textSize="@dimen/material_typography_body1"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cb_radiotherapy"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tv_radiotherapy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="@string/input_visit_time"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cb_radiotherapy"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_radiotherapy_title" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_chemotherapy"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?attr/selectableItemBackground"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <CheckBox
+                                android:id="@+id/cb_chemotherapy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/item_left_margin"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tv_chemotherapy_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/chemotherapy"
+                                android:textColor="@color/primary_text"
+                                android:textSize="@dimen/material_typography_body1"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cb_chemotherapy"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tv_chemotherapy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="@string/input_visit_time"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cb_chemotherapy"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_chemotherapy_title" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_targeted_therapy"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?attr/selectableItemBackground"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <CheckBox
+                                android:id="@+id/cb_targeted_therapy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/item_left_margin"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tv_targeted_therapy_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/targeted_therapy"
+                                android:textColor="@color/primary_text"
+                                android:textSize="@dimen/material_typography_body1"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cb_targeted_therapy"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tv_targeted_therapy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="@string/input_visit_time"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cb_targeted_therapy"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_targeted_therapy_title" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_immunotherapy"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?attr/selectableItemBackground"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <CheckBox
+                                android:id="@+id/cb_immunotherapy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/item_left_margin"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tv_immunotherapy_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/immunotherapy"
+                                android:textColor="@color/primary_text"
+                                android:textSize="@dimen/material_typography_body1"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cb_immunotherapy"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tv_immunotherapy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="@string/input_visit_time"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cb_immunotherapy"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_immunotherapy_title" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_other_therapy"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?attr/selectableItemBackground"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <CheckBox
+                                android:id="@+id/cb_other_therapy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/item_left_margin"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tv_other_therapy_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/other_therapy"
+                                android:textColor="@color/primary_text"
+                                android:textSize="@dimen/material_typography_body1"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cb_other_therapy"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tv_other_therapy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:text="@string/input_visit_time"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cb_other_therapy"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_other_therapy_title" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -430,8 +860,8 @@
         android:id="@+id/fab_save_treatment_history"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_save_white_24dp"
         android:layout_margin="@dimen/material_component_floating_action_button_margin"
+        android:src="@drawable/ic_save_white_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

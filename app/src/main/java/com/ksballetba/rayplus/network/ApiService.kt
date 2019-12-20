@@ -52,4 +52,11 @@ interface ApiService {
 
     @DELETE("/patient_report/{sample_id}/{report_id}")
     fun deletePhysicalExamination(@Path("sample_id") sampleId:Int,@Path("report_id") reportId:Int):Observable<BaseResponseBean>
+
+    @GET("/patient_history/{sample_id}")
+    fun getPreviousHistory(@Path("sample_id") sampleId:Int):Observable<PreviousHistoryBean>
+
+    @Headers("Content-Type:application/json")
+    @POST("/patient_history/{sample_id}")
+    fun editPreviousHistory(@Path("sample_id") sampleId:Int,@Body previousHistoryBean: PreviousHistoryBean):Observable<BaseResponseBean>
 }

@@ -17,6 +17,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.PhysicalExaminationBodyBean
 import com.ksballetba.rayplus.data.bean.PhysicalExaminationListBean
+import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.SampleActivity
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.PhysicalExaminationActivity
@@ -94,7 +95,7 @@ class PhysicalExaminationFragment : Fragment() {
         }
         mAdapter.setOnItemChildClickListener { adapter, view, position ->
             XPopup.Builder(context).asConfirm("信息", "请问是否确认删除") {
-                deleteReport(mList[position].reportId, position)
+                deletePhysicalExamination(mList[position].reportId, position)
             }.show()
 
         }
@@ -105,6 +106,11 @@ class PhysicalExaminationFragment : Fragment() {
         mViewModel.getPhysicalExaminationList(mSampleId).observe(viewLifecycleOwner, Observer {
             mList = it
             mAdapter.setNewData(mList)
+        })
+        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
+            if(it.status == Status.FAILED){
+                ToastUtils.showShort(it.msg)
+            }
         })
     }
 
@@ -122,7 +128,7 @@ class PhysicalExaminationFragment : Fragment() {
         startActivity(intent)
     }
 
-    private fun deleteReport(reportId: Int, pos: Int) {
+    private fun deletePhysicalExamination(reportId: Int, pos: Int) {
         mViewModel.deletePhysicalExamination(mSampleId, reportId).observe(viewLifecycleOwner,
             Observer {
                 if (it.code == 200) {
