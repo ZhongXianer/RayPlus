@@ -4,7 +4,6 @@ import com.ksballetba.rayplus.data.bean.*
 import io.reactivex.Observable
 import retrofit2.http.*
 
-//token = eyJhbGciOiJIUzI1NiIsImlhdCI6MTU3Njc0MzQ4MiwiZXhwIjoxNTc2NzQ3MDgyfQ.eyJ1c2VyX2lkIjoxfQ.y-163XUIqLIDRBn2iNMQLkwsCJhkHwidEyI1JHY8eLk
 
 interface ApiService {
 
@@ -59,4 +58,22 @@ interface ApiService {
     @Headers("Content-Type:application/json")
     @POST("/patient_history/{sample_id}")
     fun editPreviousHistory(@Path("sample_id") sampleId:Int,@Body previousHistoryBean: PreviousHistoryBean):Observable<BaseResponseBean>
+
+    @GET("/lab_inspection/{sample_id}/{cycle_number}")
+    fun getLabInspection(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int):Observable<LabInspectionResponseBean>
+
+    @Headers("Content-Type:application/json")
+    @POST("/lab_inspection/{sample_id}/{cycle_number}")
+    fun editLabInspection(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int,@Body labInspectionBodyBean: LabInspectionBodyBean):Observable<BaseResponseBean>
+
+    @GET("/photo_evaluate_table/{sample_id}/{cycle_number}")
+    fun getImagingEvaluationList(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int):Observable<ImagingEvaluationListBean>
+
+    @Headers("Content-Type:application/json")
+    @POST("/photo_evaluate/{sample_id}/{cycle_number}")
+    fun editImagingEvaluation(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int,@Body imagingEvaluationBodyBean: ImagingEvaluationBodyBean):Observable<BaseResponseBean>
+
+    @Headers("Content-Type:application/x-www-form-urlencoded")
+    @DELETE("/photo_evaluate/{sample_id}/{cycle_number}/{evaluate_id}")
+    fun deleteImagingEvaluation(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int,@Path("evaluate_id") evaluateId:Int):Observable<BaseResponseBean>
 }

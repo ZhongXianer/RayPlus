@@ -54,18 +54,26 @@ class BaselineVisitFragment : Fragment() {
         val demographicsFragment = DemographicsFragment()
         val physicalExaminationFragment = PhysicalExaminationFragment()
         val previousHistoryFragment = PreviousHistoryFragment()
+        val firstVisitProcessFragment = FirstVisitProcessFragment()
+        val treatmentHistoryFragment = TreatmentHistoryFragment()
+        val labInspectionFragment = LabInspectionFragment()
+        val imagingEvaluationFragment = ImagingEvaluationFragment()
         visitTimeFragment.arguments = baselineCycleNumberArgs
         demographicsFragment.arguments = baselineCycleNumberArgs
         physicalExaminationFragment.arguments = baselineCycleNumberArgs
         previousHistoryFragment.arguments = baselineCycleNumberArgs
+        firstVisitProcessFragment.arguments = baselineCycleNumberArgs
+        treatmentHistoryFragment.arguments = baselineCycleNumberArgs
+        labInspectionFragment.arguments = baselineCycleNumberArgs
+        imagingEvaluationFragment.arguments = baselineCycleNumberArgs
         mFragmentList.add(visitTimeFragment)
         mFragmentList.add(demographicsFragment)
         mFragmentList.add(physicalExaminationFragment)
         mFragmentList.add(previousHistoryFragment)
-        mFragmentList.add(FirstVisitProcessFragment())
-        mFragmentList.add(TreatmentHistoryFragment())
-        mFragmentList.add(LabInspectionFragment())
-        mFragmentList.add(ImagingEvaluationFragment())
+        mFragmentList.add(firstVisitProcessFragment)
+        mFragmentList.add(treatmentHistoryFragment)
+        mFragmentList.add(labInspectionFragment)
+        mFragmentList.add(imagingEvaluationFragment)
         mFragmentList.add(InvestigatorSignatureFragment())
         mViewPagerAdapter = ViewPagerAdapter(mFragmentList,childFragmentManager)
         vp_baseline_visit.adapter = mViewPagerAdapter

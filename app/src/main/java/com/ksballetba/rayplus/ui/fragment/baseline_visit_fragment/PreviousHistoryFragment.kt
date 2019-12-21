@@ -63,8 +63,8 @@ class PreviousHistoryFragment : Fragment() {
         switch_drink_history.setSwitchTextAppearance(context, R.style.s_off)
         switch_is_quit_drink.setSwitchTextAppearance(context, R.style.s_off)
         switch_is_relapse_drink.setSwitchTextAppearance(context, R.style.s_off)
-        mViewModel.getPreviousHistory(mSampleId).observe(viewLifecycleOwner, Observer {
-            LogUtils.tag(TAG).d(it)
+//        mViewModel.getPreviousHistory(mSampleId).observe(viewLifecycleOwner, Observer {
+//            LogUtils.tag(TAG).d(it)
 //            tv_operation_history.text = if(it.surgery!="其他") it.surgery else it.surgeryOther
 //            initBaseIllList(it.baseIll)
 //            val illText = StringBuffer()
@@ -79,7 +79,7 @@ class PreviousHistoryFragment : Fragment() {
 //                illText.append(it.baseIll.baseIllOther)
 //            }
 //            tv_diseases_history.text = illText
-        })
+//        })
     }
 
     private fun initBaseIllList(baseIll: PreviousHistoryBean.BaseIll){

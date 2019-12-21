@@ -48,6 +48,16 @@ fun getBaseVisitViewModel(fragment: Fragment): BaseVisitViewModel {
     }).get(BaseVisitViewModel::class.java)
 }
 
+fun getBaseVisitViewModel(activity: FragmentActivity): BaseVisitViewModel {
+    return ViewModelProvider(activity, object : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            val source = BaseVisitDataSource()
+            @Suppress("UNCHECKED_CAST")
+            return BaseVisitViewModel(source) as T
+        }
+    }).get(BaseVisitViewModel::class.java)
+}
+
 fun getBaselineVisitViewModel(fragment: Fragment): BaselineVisitViewModel {
     return ViewModelProvider(fragment, object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {

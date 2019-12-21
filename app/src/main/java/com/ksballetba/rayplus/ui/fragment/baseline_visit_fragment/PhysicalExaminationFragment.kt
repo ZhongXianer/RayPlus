@@ -56,6 +56,7 @@ class PhysicalExaminationFragment : Fragment() {
         initData()
         initUI()
         initList()
+        loadData()
     }
 
     private fun initUI() {
@@ -99,7 +100,6 @@ class PhysicalExaminationFragment : Fragment() {
             }.show()
 
         }
-        loadData()
     }
 
     fun loadData() {

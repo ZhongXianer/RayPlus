@@ -110,7 +110,6 @@ class PhysicalExaminationActivity : AppCompatActivity() {
     }
 
     private fun addOrEditPhysicalExamination(sampleId:Int,reportId:Int?){
-        val reportId = reportId
         val time = parseDefaultContent(tv_date.text.toString())
         val temperature = tv_body_temperature.text.toString().toIntOrNull()
         val breathFrequency = tv_breathe.text.toString().toIntOrNull()

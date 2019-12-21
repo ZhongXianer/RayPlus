@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
+import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.ImagingEvaluationActivity.Companion.REFRESH_IMAGING_EVALUATION_PAGE
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.PhysicalExaminationActivity
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.PhysicalExaminationActivity.Companion.REFRESH_PHYSICAL_EXAMINATION_PAGE
 import com.ksballetba.rayplus.ui.adapter.ViewPagerAdapter
@@ -17,6 +18,7 @@ import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment
 import com.ksballetba.rayplus.ui.fragment.ProjectSummaryFragment
 import com.ksballetba.rayplus.ui.fragment.SurvivalVisitFragment
 import com.ksballetba.rayplus.ui.fragment.TreatmentVisitFragment
+import com.ksballetba.rayplus.ui.fragment.base_fragment.ImagingEvaluationFragment
 import com.ksballetba.rayplus.ui.fragment.baseline_visit_fragment.PhysicalExaminationFragment
 import kotlinx.android.synthetic.main.activity_crf.*
 
@@ -49,6 +51,10 @@ class CRFActivity : AppCompatActivity() {
             REFRESH_PHYSICAL_EXAMINATION_PAGE->{
                 val peFragment = (mViewPagerAdapter.getFragmentByIdx(0) as BaselineVisitFragment).mViewPagerAdapter.getFragmentByIdx(2) as PhysicalExaminationFragment
                 peFragment.loadData()
+            }
+            REFRESH_IMAGING_EVALUATION_PAGE->{
+                val ieFragment = (mViewPagerAdapter.getFragmentByIdx(0) as BaselineVisitFragment).mViewPagerAdapter.getFragmentByIdx(7) as ImagingEvaluationFragment
+                ieFragment.loadData()
             }
         }
     }
