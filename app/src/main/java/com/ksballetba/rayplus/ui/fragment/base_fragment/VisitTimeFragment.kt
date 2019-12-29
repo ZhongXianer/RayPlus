@@ -7,13 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import com.apkfuns.logutils.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.VisitTimeBean
 import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
-import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.BASELINE_CYCLE_NUMBER_KEY
+import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.CYCLE_NUMBER_KEY
 import com.ksballetba.rayplus.util.getBaseVisitViewModel
 import com.ksballetba.rayplus.viewmodel.BaseVisitViewModel
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
@@ -24,6 +25,10 @@ import java.util.Calendar
  * A simple [Fragment] subclass.
  */
 class VisitTimeFragment : Fragment() {
+
+    companion object{
+        const val TAG = "VisitTimeFragment"
+    }
 
     private lateinit var mOnDateSetListener:DatePickerDialog.OnDateSetListener
 
@@ -74,7 +79,7 @@ class VisitTimeFragment : Fragment() {
 
     private fun initData(){
         mSampleId = (arguments as Bundle).getInt(SAMPLE_ID)
-        mCycleNumber = (arguments as Bundle).getInt(BASELINE_CYCLE_NUMBER_KEY)
+        mCycleNumber = (arguments as Bundle).getInt(CYCLE_NUMBER_KEY)
         mViewModel = getBaseVisitViewModel(this)
     }
 

@@ -4,6 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import com.ksballetba.rayplus.R
+import com.ksballetba.rayplus.data.bean.MainPhysicalSignBodyBean
+import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
+import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.CYCLE_NUMBER_KEY
+import com.ksballetba.rayplus.ui.fragment.treatment_visit_fragment.MainPhysicalSignFragment.Companion.MAIN_PHYSICAL_SIGN_BODY
+import com.ksballetba.rayplus.util.getTreatmentVisitViewModel
+import com.ksballetba.rayplus.viewmodel.TreatmentVisitViewModel
 import com.lxj.xpopup.XPopup
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.android.synthetic.main.activity_main.*
@@ -11,6 +17,12 @@ import kotlinx.android.synthetic.main.activity_main_physical_sign.*
 import java.util.*
 
 class MainPhysicalSignActivity : AppCompatActivity() {
+
+    companion object {
+        const val REFRESH_MAIN_PHYSICAL_SIGN_PAGE = "REFRESH_MAIN_PHYSICAL_SIGN_PAGE"
+    }
+
+    lateinit var mViewModel:TreatmentVisitViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +41,11 @@ class MainPhysicalSignActivity : AppCompatActivity() {
 
     private fun initUI(){
         setSupportActionBar(tb_main_physical_sign)
+        mViewModel = getTreatmentVisitViewModel(this)
+        val mainPhysicalSignBody = intent.getParcelableExtra<MainPhysicalSignBodyBean>(MAIN_PHYSICAL_SIGN_BODY)
+        if(mainPhysicalSignBody!=null){
+            loadData(mainPhysicalSignBody)
+        }
         cl_physical_sign.setOnClickListener {
             XPopup.Builder(this).asCenterList("症状体征和描述", arrayOf("高血压", "腹泻", "皮疹","蛋白尿","出血","其他")) { pos, text ->
                 if(pos<5){
@@ -58,5 +75,24 @@ class MainPhysicalSignActivity : AppCompatActivity() {
                tv_exist_status.text = text
             }.show()
         }
+        fab_save_main_physical_sign.setOnClickListener{
+            val sampleId = intent.getIntExtra(SAMPLE_ID,-1)
+            val cycleNumber = intent.getIntExtra(CYCLE_NUMBER_KEY,-1)
+            if (mainPhysicalSignBody==null){
+                addOrEditData(sampleId,cycleNumber,null)
+            }else{
+                addOrEditData(sampleId,cycleNumber,mainPhysicalSignBody.mainSymptomId)
+            }
+        }
+    }
+
+    private fun addOrEditData(sampleId: Int, cycleNumber: Int, mainSymptomId: Int?) {
+        MainPhysicalSignBodyBean
+    }
+
+    private fun loadData(mainPhysicalSignBody: MainPhysicalSignBodyBean) {
+        tv_physical_sign.text = if(mainPhysicalSignBody.symptomDescription == "其他") mainPhysicalSignBody.symptomDescription else mainPhysicalSignBody.symptomDescriptionOther
+        tv_start_date.text = mainPhysicalSignBody.startTime
+        tv_exist_status.text =mainPhysicalSignBody.existence
     }
 }

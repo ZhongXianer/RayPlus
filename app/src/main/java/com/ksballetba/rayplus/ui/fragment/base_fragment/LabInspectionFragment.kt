@@ -20,7 +20,7 @@ import com.ksballetba.rayplus.data.bean.LabInspectionBodyBean
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.adapter.LabInspectionAdapter
 import com.ksballetba.rayplus.ui.adapter.ProjectsAdapter
-import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.BASELINE_CYCLE_NUMBER_KEY
+import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment
 import com.ksballetba.rayplus.util.getBaseVisitViewModel
 import com.ksballetba.rayplus.util.parseLabInspectionRank
 import com.ksballetba.rayplus.viewmodel.BaseVisitViewModel
@@ -82,7 +82,7 @@ class LabInspectionFragment : Fragment() {
 
     private fun initData() {
         mSampleId = (arguments as Bundle).getInt(SAMPLE_ID)
-        mCycleNumber = (arguments as Bundle).getInt(BASELINE_CYCLE_NUMBER_KEY)
+        mCycleNumber = (arguments as Bundle).getInt(BaselineVisitFragment.CYCLE_NUMBER_KEY)
         mViewModel = getBaseVisitViewModel(this)
     }
 

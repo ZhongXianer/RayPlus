@@ -22,7 +22,7 @@ import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.ImagingEvaluationActivity
 import com.ksballetba.rayplus.ui.adapter.ImagingEvaluationAdapter
 import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment
-import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.BASELINE_CYCLE_NUMBER_KEY
+import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.CYCLE_NUMBER_KEY
 import com.ksballetba.rayplus.util.getBaseVisitViewModel
 import com.ksballetba.rayplus.viewmodel.BaseVisitViewModel
 import com.lxj.xpopup.XPopup
@@ -68,7 +68,7 @@ class ImagingEvaluationFragment : Fragment() {
 
     private fun initData() {
         mSampleId = (arguments as Bundle).getInt(SAMPLE_ID)
-        mCycleNumber = (arguments as Bundle).getInt(BASELINE_CYCLE_NUMBER_KEY)
+        mCycleNumber = (arguments as Bundle).getInt(CYCLE_NUMBER_KEY)
         mViewModel = getBaseVisitViewModel(this)
     }
 
@@ -124,7 +124,7 @@ class ImagingEvaluationFragment : Fragment() {
     ) {
         val intent = Intent(activity, ImagingEvaluationActivity::class.java)
         intent.putExtra(SAMPLE_ID, sampleId)
-        intent.putExtra(BASELINE_CYCLE_NUMBER_KEY, cycleNumber)
+        intent.putExtra(CYCLE_NUMBER_KEY, cycleNumber)
         if (imagingEvaluationBodyBean?.evaluateId != null) {
             intent.putExtra(IMAGING_EVALUATION_BODY, imagingEvaluationBodyBean)
         }
@@ -138,7 +138,6 @@ class ImagingEvaluationFragment : Fragment() {
                     if (it.code == 200) {
                         ToastUtils.showShort("删除成功")
                         mAdapter.remove(pos)
-                        LogUtils.tag(TAG).d(mList)
                     } else {
                         ToastUtils.showShort("删除失败")
                     }

@@ -76,4 +76,36 @@ interface ApiService {
     @Headers("Content-Type:application/x-www-form-urlencoded")
     @DELETE("/photo_evaluate/{sample_id}/{cycle_number}/{evaluate_id}")
     fun deleteImagingEvaluation(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int,@Path("evaluate_id") evaluateId:Int):Observable<BaseResponseBean>
+
+    @GET("/nav/{sample_id}")
+    fun getNavigation(@Path("sample_id") sampleId:Int):Observable<List<NavigationBean>>
+
+    @Headers("Content-Type:application/json")
+    @POST("/cycle/{sample_id}")
+    fun addCycle(@Path("sample_id") sampleId:Int):Observable<BaseResponseBean>
+
+    @GET("/main_symptom_table/{sample_id}/{cycle_number}")
+    fun getMainPhysicalSignList(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int):Observable<MainPhysicalSignListBean>
+
+    @Headers("Content-Type:application/json")
+    @POST("/main_symptom/{sample_id}/{cycle_number}")
+    fun editMainPhysicalSign(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int,@Body mainPhysicalSignBodyBean: MainPhysicalSignBodyBean):Observable<BaseResponseBean>
+
+    @Headers("Content-Type:application/x-www-form-urlencoded")
+    @DELETE("/main_symptom/{sample_id}/{cycle_number}/{main_symptom_id}")
+    fun deleteMainPhysicalSign(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int,@Path("main_symptom_id") mainSymptomId:Int):Observable<BaseResponseBean>
+
+    @GET("/ECOG/{sample_id}/{cycle_number}")
+    fun getECOGScore(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int):Observable<ECOGBean>
+
+    @Headers("Content-Type:application/json")
+    @POST("/ECOG/{sample_id}/{cycle_number}")
+    fun editECOGScore(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int,@Body ecogBean: ECOGBean):Observable<BaseResponseBean>
+
+    @GET("/evaluation/{sample_id}/{cycle_number}")
+    fun getTherapeuticEvaluation(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int):Observable<TherapeuticEvaluationBean>
+
+    @Headers("Content-Type:application/json")
+    @POST("/evaluation/{sample_id}/{cycle_number}")
+    fun editTherapeuticEvaluation(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int,@Body therapeuticEvaluationBean: TherapeuticEvaluationBean):Observable<BaseResponseBean>
 }

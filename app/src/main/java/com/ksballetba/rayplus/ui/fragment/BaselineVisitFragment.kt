@@ -25,7 +25,7 @@ class BaselineVisitFragment : Fragment() {
 
     companion object{
         const val BASELINE_CYCLE_NUMBER = 1
-        const val BASELINE_CYCLE_NUMBER_KEY = "BASELINE_CYCLE_NUMBER_KEY"
+        const val CYCLE_NUMBER_KEY = "CYCLE_NUMBER_KEY"
     }
 
     lateinit var mViewPagerAdapter: ViewPagerAdapter
@@ -47,9 +47,9 @@ class BaselineVisitFragment : Fragment() {
 
     private fun initFragments(){
         val sampleId = if(arguments!=null) (arguments as Bundle).getInt(SAMPLE_ID) else 0
-        val baselineCycleNumberArgs = Bundle()
-        baselineCycleNumberArgs.putInt(BASELINE_CYCLE_NUMBER_KEY, BASELINE_CYCLE_NUMBER)
-        baselineCycleNumberArgs.putInt(SAMPLE_ID, sampleId)
+        val baselineArgs = Bundle()
+        baselineArgs.putInt(CYCLE_NUMBER_KEY, BASELINE_CYCLE_NUMBER)
+        baselineArgs.putInt(SAMPLE_ID, sampleId)
         val visitTimeFragment = VisitTimeFragment()
         val demographicsFragment = DemographicsFragment()
         val physicalExaminationFragment = PhysicalExaminationFragment()
@@ -58,14 +58,14 @@ class BaselineVisitFragment : Fragment() {
         val treatmentHistoryFragment = TreatmentHistoryFragment()
         val labInspectionFragment = LabInspectionFragment()
         val imagingEvaluationFragment = ImagingEvaluationFragment()
-        visitTimeFragment.arguments = baselineCycleNumberArgs
-        demographicsFragment.arguments = baselineCycleNumberArgs
-        physicalExaminationFragment.arguments = baselineCycleNumberArgs
-        previousHistoryFragment.arguments = baselineCycleNumberArgs
-        firstVisitProcessFragment.arguments = baselineCycleNumberArgs
-        treatmentHistoryFragment.arguments = baselineCycleNumberArgs
-        labInspectionFragment.arguments = baselineCycleNumberArgs
-        imagingEvaluationFragment.arguments = baselineCycleNumberArgs
+        visitTimeFragment.arguments = baselineArgs
+        demographicsFragment.arguments = baselineArgs
+        physicalExaminationFragment.arguments = baselineArgs
+        previousHistoryFragment.arguments = baselineArgs
+        firstVisitProcessFragment.arguments = baselineArgs
+        treatmentHistoryFragment.arguments = baselineArgs
+        labInspectionFragment.arguments = baselineArgs
+        imagingEvaluationFragment.arguments = baselineArgs
         mFragmentList.add(visitTimeFragment)
         mFragmentList.add(demographicsFragment)
         mFragmentList.add(physicalExaminationFragment)

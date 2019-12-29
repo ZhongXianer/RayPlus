@@ -26,7 +26,6 @@
             android:text="@string/patient_ECOG_score"
             android:textColor="@color/primary_text"
             android:textSize="@dimen/material_typography_subheading"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,11 +33,25 @@
             android:id="@+id/tv_ECOG_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/item_left_margin"
+            android:layout_marginTop="6dp"
             android:text="@string/input_visit_time"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_ECOG_score_title" />
+
+        <TextView
+            android:id="@+id/tv_save_ECOG_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/material_typography_body1"
             android:layout_marginEnd="@dimen/item_left_margin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

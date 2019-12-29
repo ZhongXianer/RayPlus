@@ -9,7 +9,7 @@ import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.ImagingEvaluationBodyBean
 import com.ksballetba.rayplus.ui.activity.CRFActivity
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
-import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.BASELINE_CYCLE_NUMBER_KEY
+import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.CYCLE_NUMBER_KEY
 import com.ksballetba.rayplus.ui.fragment.base_fragment.ImagingEvaluationFragment.Companion.IMAGING_EVALUATION_BODY
 import com.ksballetba.rayplus.util.getBaseVisitViewModel
 import com.ksballetba.rayplus.util.getImagingEvaluationWayListInHistory
@@ -96,7 +96,7 @@ class ImagingEvaluationActivity : AppCompatActivity() {
         }
         fab_save_imaging_evaluation.setOnClickListener {
             val sampleId = intent.getIntExtra(SAMPLE_ID,-1)
-            val cycleNumber = intent.getIntExtra(BASELINE_CYCLE_NUMBER_KEY,-1)
+            val cycleNumber = intent.getIntExtra(CYCLE_NUMBER_KEY,-1)
             if (imagingEvaluationBody==null){
                 addOrEditData(sampleId,cycleNumber,null)
             }else{

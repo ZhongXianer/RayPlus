@@ -5,7 +5,11 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import com.ksballetba.rayplus.R
+import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.adapter.ViewPagerAdapter
+import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.CYCLE_NUMBER_KEY
+import com.ksballetba.rayplus.ui.fragment.TreatmentVisitFragment.Companion.TREATMENT_CYCLE_NUMBER_KEY
+import com.ksballetba.rayplus.ui.fragment.TreatmentVisitFragment.Companion.VISIT_TITLE
 import com.ksballetba.rayplus.ui.fragment.base_fragment.ImagingEvaluationFragment
 import com.ksballetba.rayplus.ui.fragment.base_fragment.InvestigatorSignatureFragment
 import com.ksballetba.rayplus.ui.fragment.base_fragment.LabInspectionFragment
@@ -19,7 +23,6 @@ import kotlinx.android.synthetic.main.activity_treatment_visit_detail.*
 class TreatmentVisitDetailActivity : AppCompatActivity() {
 
     private val mFragmentList = mutableListOf<Fragment>()
-    lateinit var mVisitTimeFragment: VisitTimeFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,19 +42,40 @@ class TreatmentVisitDetailActivity : AppCompatActivity() {
 
     private fun initUI(){
         setSupportActionBar(tb_treatment_visit)
-        val title = intent?.getStringExtra("treatment_name")
+        val title = intent?.getStringExtra(VISIT_TITLE)
         supportActionBar?.title = title
     }
 
     private fun initFragments(){
-        mFragmentList.add(VisitTimeFragment())
-        mFragmentList.add(MainPhysicalSignFragment())
-        mFragmentList.add(ImagingEvaluationFragment())
-        mFragmentList.add(TherapeuticEvaluationFragment())
-        mFragmentList.add(LabInspectionFragment())
-        mFragmentList.add(TreatmentRecordFragment())
-        mFragmentList.add(AdverseEventFragment())
-        mFragmentList.add(InvestigatorSignatureFragment())
+        val sampleId  = intent.getIntExtra(SAMPLE_ID,0)
+        val cycleNumber  = intent.getIntExtra(TREATMENT_CYCLE_NUMBER_KEY,0)
+        val treatmentArgs = Bundle()
+        treatmentArgs.putInt(CYCLE_NUMBER_KEY, cycleNumber)
+        treatmentArgs.putInt(SAMPLE_ID, sampleId)
+        val visitTimeFragment = VisitTimeFragment()
+        val mainPhysicalSignFragment = MainPhysicalSignFragment()
+        val imagingEvaluationFragment = ImagingEvaluationFragment()
+        val therapeuticEvaluationFragment = TherapeuticEvaluationFragment()
+        val labInspectionFragment = LabInspectionFragment()
+        val treatmentRecordFragment = TreatmentRecordFragment()
+        val adverseEventFragment = AdverseEventFragment()
+        val investigatorSignatureFragment = InvestigatorSignatureFragment()
+        visitTimeFragment.arguments = treatmentArgs
+        mainPhysicalSignFragment.arguments = treatmentArgs
+        imagingEvaluationFragment.arguments = treatmentArgs
+        therapeuticEvaluationFragment.arguments = treatmentArgs
+        labInspectionFragment.arguments = treatmentArgs
+        treatmentRecordFragment.arguments = treatmentArgs
+        adverseEventFragment.arguments = treatmentArgs
+        investigatorSignatureFragment.arguments = treatmentArgs
+        mFragmentList.add(visitTimeFragment)
+        mFragmentList.add(mainPhysicalSignFragment)
+        mFragmentList.add(imagingEvaluationFragment)
+        mFragmentList.add(therapeuticEvaluationFragment)
+        mFragmentList.add(labInspectionFragment)
+        mFragmentList.add(treatmentRecordFragment)
+        mFragmentList.add(adverseEventFragment)
+        mFragmentList.add(investigatorSignatureFragment)
         vp_treatment_visit.adapter = ViewPagerAdapter(mFragmentList,supportFragmentManager)
         vp_treatment_visit.offscreenPageLimit = 3
         tl_treatment_visit.setupWithViewPager(vp_treatment_visit)
