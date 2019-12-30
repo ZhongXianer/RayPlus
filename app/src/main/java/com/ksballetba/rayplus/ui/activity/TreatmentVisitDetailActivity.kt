@@ -1,11 +1,14 @@
 package com.ksballetba.rayplus.ui.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
+import com.ksballetba.rayplus.ui.activity.treatment_visit_activity.MainPhysicalSignActivity.Companion.REFRESH_MAIN_PHYSICAL_SIGN_PAGE
+import com.ksballetba.rayplus.ui.activity.treatment_visit_activity.TreatmentRecordActivity.Companion.REFRESH_TREATMENT_RECORD_PAGE
 import com.ksballetba.rayplus.ui.adapter.ViewPagerAdapter
 import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.CYCLE_NUMBER_KEY
 import com.ksballetba.rayplus.ui.fragment.TreatmentVisitFragment.Companion.TREATMENT_CYCLE_NUMBER_KEY
@@ -22,6 +25,7 @@ import kotlinx.android.synthetic.main.activity_treatment_visit_detail.*
 
 class TreatmentVisitDetailActivity : AppCompatActivity() {
 
+    lateinit var mViewPagerAdapter: ViewPagerAdapter
     private val mFragmentList = mutableListOf<Fragment>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +33,20 @@ class TreatmentVisitDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_treatment_visit_detail)
         initUI()
         initFragments()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        when(intent?.action){
+            REFRESH_MAIN_PHYSICAL_SIGN_PAGE->{
+                val mpsFragment = mViewPagerAdapter.getFragmentByIdx(1) as MainPhysicalSignFragment
+                mpsFragment.loadData()
+            }
+            REFRESH_TREATMENT_RECORD_PAGE->{
+                val trFragment = mViewPagerAdapter.getFragmentByIdx(5) as TreatmentRecordFragment
+                trFragment.loadData()
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -76,7 +94,8 @@ class TreatmentVisitDetailActivity : AppCompatActivity() {
         mFragmentList.add(treatmentRecordFragment)
         mFragmentList.add(adverseEventFragment)
         mFragmentList.add(investigatorSignatureFragment)
-        vp_treatment_visit.adapter = ViewPagerAdapter(mFragmentList,supportFragmentManager)
+        mViewPagerAdapter = ViewPagerAdapter(mFragmentList,supportFragmentManager)
+        vp_treatment_visit.adapter = mViewPagerAdapter
         vp_treatment_visit.offscreenPageLimit = 3
         tl_treatment_visit.setupWithViewPager(vp_treatment_visit)
         tl_treatment_visit.getTabAt(0)?.text = "访视时间"

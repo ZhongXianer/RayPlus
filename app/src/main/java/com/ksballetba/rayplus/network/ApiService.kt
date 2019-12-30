@@ -108,4 +108,22 @@ interface ApiService {
     @Headers("Content-Type:application/json")
     @POST("/evaluation/{sample_id}/{cycle_number}")
     fun editTherapeuticEvaluation(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int,@Body therapeuticEvaluationBean: TherapeuticEvaluationBean):Observable<BaseResponseBean>
+
+    @GET("/treatment_record_table/{sample_id}/{cycle_number}")
+    fun getTreatmentRecordList(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int):Observable<TreatmentRecordListBean>
+
+    @Headers("Content-Type:application/json")
+    @POST("/treatment_record/{sample_id}/{cycle_number}")
+    fun editTreatmentRecord(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int,@Body treatmentRecordBodyBean: TreatmentRecordBodyBean):Observable<BaseResponseBean>
+
+    @Headers("Content-Type:application/x-www-form-urlencoded")
+    @DELETE("/treatment_record/{sample_id}/{cycle_number}/{treatment_record_id}")
+    fun deleteTreatmentRecord(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int,@Path("treatment_record_id") treatmentRecordId:Int):Observable<BaseResponseBean>
+
+    @GET("/treatment_record_adjustment_status/{sample_id}/{cycle_number}")
+    fun getAdjustment(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int):Observable<AdjustBean>
+
+    @Headers("Content-Type:application/json")
+    @POST("/treatment_record_adjustment_status/{sample_id}/{cycle_number}")
+    fun editAdjustment(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int,@Body adjustBodyBean: AdjustBodyBean):Observable<BaseResponseBean>
 }

@@ -142,6 +142,10 @@
     <string name="last_treatment_growth_part">一线治疗进展部位</string>
     <string name="is_biopsy_again">是否再次活检</string>
     <string name="biopsy_pathological_type">活检病理类型</string>
+    <string name="end_date">结束日期</string>
+    <string name="disappear">消失</string>
+    <string name="adjustment_percent">调整为标准剂量的百分比</string>
+    <string name="adjustment_reason">调整原因</string>
 
     <string-array name="clinical_significance">
         <item>1</item>

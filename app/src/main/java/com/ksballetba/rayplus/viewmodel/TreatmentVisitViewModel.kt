@@ -81,5 +81,45 @@ TreatmentVisitViewModel constructor(private var treatmentVisitDataSource: Treatm
         return result
     }
 
+    fun getTreatmentRecordList(sampleId: Int,cycleNumber:Int): LiveData<List<TreatmentRecordListBean.Data>> {
+        val result = MutableLiveData<List<TreatmentRecordListBean.Data>>()
+        treatmentVisitDataSource.getTreatmentRecordList(sampleId,cycleNumber) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun editTreatmentRecord(sampleId: Int,cycleNumber:Int,treatmentRecordBodyBean: TreatmentRecordBodyBean): LiveData<BaseResponseBean> {
+        val result = MutableLiveData<BaseResponseBean>()
+        treatmentVisitDataSource.editTreatmentRecord(sampleId,cycleNumber,treatmentRecordBodyBean) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun deleteTreatmentRecord(sampleId: Int,cycleNumber:Int,treatmentRecordId:Int): LiveData<BaseResponseBean> {
+        val result = MutableLiveData<BaseResponseBean>()
+        treatmentVisitDataSource.deleteTreatmentRecord(sampleId,cycleNumber,treatmentRecordId) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun getAdjustment(sampleId: Int,cycleNumber:Int): LiveData<AdjustBean> {
+        val result = MutableLiveData<AdjustBean>()
+        treatmentVisitDataSource.getAdjustment(sampleId,cycleNumber) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun editAdjustment(sampleId: Int,cycleNumber:Int,adjustBodyBean:AdjustBodyBean): LiveData<BaseResponseBean> {
+        val result = MutableLiveData<BaseResponseBean>()
+        treatmentVisitDataSource.editAdjustment(sampleId,cycleNumber,adjustBodyBean) {
+            result.postValue(it)
+        }
+        return result
+    }
+
     fun getLoadStatus() = treatmentVisitDataSource.mLoadStatus
 }

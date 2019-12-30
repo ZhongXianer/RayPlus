@@ -49,3 +49,5 @@ fun getBaseIllListInHistory() = arrayOf("无","不详","高血压","冠心病","
 fun getImagingEvaluationWayListInHistory() = arrayOf("CT","MRI","超声","X线平片","PET-CT")
 
 fun getTherapeuticEvaluationList() = arrayOf("完全缓解(CR)", "部分缓解(PR)", "疾病稳定(SD)", "疾病进展(PD)")
+
+fun getMainPhysicalSignList() =  arrayOf("高血压", "腹泻", "皮疹","蛋白尿","出血")

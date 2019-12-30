@@ -13,6 +13,7 @@ import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.ImagingEvaluationActivity.Companion.REFRESH_IMAGING_EVALUATION_PAGE
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.PhysicalExaminationActivity
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.PhysicalExaminationActivity.Companion.REFRESH_PHYSICAL_EXAMINATION_PAGE
+import com.ksballetba.rayplus.ui.activity.treatment_visit_activity.MainPhysicalSignActivity.Companion.REFRESH_MAIN_PHYSICAL_SIGN_PAGE
 import com.ksballetba.rayplus.ui.adapter.ViewPagerAdapter
 import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment
 import com.ksballetba.rayplus.ui.fragment.ProjectSummaryFragment

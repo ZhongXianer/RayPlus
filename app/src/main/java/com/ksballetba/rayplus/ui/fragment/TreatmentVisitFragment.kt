@@ -19,6 +19,7 @@ import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.SampleActivity
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.TreatmentVisitDetailActivity
+import com.ksballetba.rayplus.ui.adapter.ViewPagerAdapter
 import com.ksballetba.rayplus.ui.adapter.VisitsAdapter
 import com.ksballetba.rayplus.util.getTreatmentVisitViewModel
 import com.ksballetba.rayplus.viewmodel.TreatmentVisitViewModel
@@ -112,7 +113,7 @@ class TreatmentVisitFragment : Fragment() {
     private fun navigateToDetailPage(cycleNumber:Int,title:String){
         val intent = Intent(activity,TreatmentVisitDetailActivity::class.java)
         intent.putExtra(TREATMENT_CYCLE_NUMBER_KEY,cycleNumber)
-        intent.putExtra(TREATMENT_CYCLE_NUMBER_KEY,cycleNumber)
+        intent.putExtra(VISIT_TITLE,title)
         intent.putExtra(SAMPLE_ID,mSampleId)
         activity?.startActivity(intent)
     }

@@ -7,16 +7,16 @@ import com.google.gson.annotations.SerializedName
 
 data class MainPhysicalSignBodyBean(
     @SerializedName("end_time")
-    val endTime: String, // 2019-12-17
+    val endTime: String?, // 2019-12-17
     val existence: String, // 1
     @SerializedName("main_symptom_id")
     val mainSymptomId: Int?,
     @SerializedName("start_time")
-    val startTime: String, // 2019-12-11
+    val startTime: String?, // 2019-12-11
     @SerializedName("symptom_description")
-    val symptomDescription: String, // 其他
+    val symptomDescription: String?, // 其他
     @SerializedName("symptom_description_other")
-    val symptomDescriptionOther: String // 爆炸
+    val symptomDescriptionOther: String? // 爆炸
 ) : Parcelable {
     constructor(source: Parcel) : this(
         source.readString(),

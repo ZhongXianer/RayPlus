@@ -21,7 +21,8 @@
         <activity android:name=".ui.activity.baseline_visit_activity.ImagingEvaluationActivity" />
         <activity android:name=".ui.activity.baseline_visit_activity.TreatmentHistoryActivity" />
         <activity android:name=".ui.activity.baseline_visit_activity.PhysicalExaminationActivity" />
-        <activity android:name=".ui.activity.TreatmentVisitDetailActivity" />
+        <activity android:name=".ui.activity.TreatmentVisitDetailActivity"
+            android:launchMode="singleTop"/>
         <activity android:name=".ui.activity.CRFActivity"
             android:launchMode="singleTop"/>
         <activity android:name=".ui.activity.SampleActivity"

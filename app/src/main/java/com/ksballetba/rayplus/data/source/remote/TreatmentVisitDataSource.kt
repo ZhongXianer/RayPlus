@@ -197,4 +197,105 @@ class TreatmentVisitDataSource{
                 }
             )
     }
+
+    fun getTreatmentRecordList(sampleId:Int,cycleNumber:Int,callBack: (MutableList<TreatmentRecordListBean.Data>) -> Unit) {
+        mLoadStatus.postValue(NetworkState.LOADING)
+        RetrofitClient.instance
+            .create(ApiService::class.java)
+            .getTreatmentRecordList(sampleId,cycleNumber)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it.data.toMutableList())
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                    mLoadStatus.postValue(NetworkState.LOADED)
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                    mLoadStatus.postValue(NetworkState.error(it.message))
+                }
+            )
+    }
+
+    fun editTreatmentRecord(sampleId:Int,cycleNumber:Int,treatmentRecordBodyBean: TreatmentRecordBodyBean,callBack: (BaseResponseBean) -> Unit){
+        RetrofitClient.instance
+            .create(ApiService::class.java)
+            .editTreatmentRecord(sampleId,cycleNumber,treatmentRecordBodyBean)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                }
+            )
+    }
+
+    fun deleteTreatmentRecord(sampleId:Int,cycleNumber:Int,treatmentRecordId:Int,callBack: (BaseResponseBean) -> Unit){
+        RetrofitClient.instance
+            .create(ApiService::class.java)
+            .deleteTreatmentRecord(sampleId,cycleNumber,treatmentRecordId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                }
+            )
+    }
+
+    fun getAdjustment(sampleId:Int,cycleNumber:Int,callBack: (AdjustBean) -> Unit) {
+        mLoadStatus.postValue(NetworkState.LOADING)
+        RetrofitClient.instance
+            .create(ApiService::class.java)
+            .getAdjustment(sampleId,cycleNumber)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                    mLoadStatus.postValue(NetworkState.LOADED)
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                    mLoadStatus.postValue(NetworkState.error(it.message))
+                }
+            )
+    }
+
+    fun editAdjustment(sampleId:Int,cycleNumber:Int,adjustBodyBean: AdjustBodyBean,callBack: (BaseResponseBean) -> Unit){
+        RetrofitClient.instance
+            .create(ApiService::class.java)
+            .editAdjustment(sampleId,cycleNumber,adjustBodyBean)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                }
+            )
+    }
 }

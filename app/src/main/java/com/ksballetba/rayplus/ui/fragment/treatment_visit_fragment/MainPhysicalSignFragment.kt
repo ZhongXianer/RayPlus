@@ -34,7 +34,7 @@ import kotlinx.android.synthetic.main.fragment_main_physical_sign.*
 class MainPhysicalSignFragment : Fragment() {
 
     companion object {
-        const val TAG = "PhysicalExaminationFragment"
+        const val TAG = "MainPhysicalSignFragment"
         const val MAIN_PHYSICAL_SIGN_BODY = "MAIN_PHYSICAL_SIGN_BODY"
     }
 
@@ -100,7 +100,7 @@ class MainPhysicalSignFragment : Fragment() {
             val mainPhysicalSign = mList[position]
             val mainPhysicalSignBody = MainPhysicalSignBodyBean(
                 mainPhysicalSign.endTime,
-                mainPhysicalSign.existence,
+                if(mainPhysicalSign.existence=="存在") "0" else "1",
                 mainPhysicalSign.mainSymptomId,
                 mainPhysicalSign.startTime,
                 mainPhysicalSign.symptomDescription,
