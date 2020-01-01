@@ -146,6 +146,16 @@
     <string name="disappear">消失</string>
     <string name="adjustment_percent">调整为标准剂量的百分比</string>
     <string name="adjustment_reason">调整原因</string>
+    <string name="is_server_event">严重不良事件</string>
+    <string name="report_date">报告日期</string>
+    <string name="report_type">报告类型</string>
+    <string name="SAE_diagnose">SAE医学术语（诊断）</string>
+    <string name="SAE_state">SAE情况</string>
+    <string name="die_time">死亡日期</string>
+    <string name="SAE_start_time">SAE发生日期</string>
+    <string name="medicine_measure">对试验用药采取的措施</string>
+    <string name="SAE_recover">SAE转归</string>
+    <string name="SAE_relation">SAE与试验药的关系</string>
 
     <string-array name="clinical_significance">
         <item>1</item>

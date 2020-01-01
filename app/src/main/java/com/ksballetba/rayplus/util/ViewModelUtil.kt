@@ -97,3 +97,23 @@ fun getTreatmentVisitViewModel(activity: FragmentActivity): TreatmentVisitViewMo
         }
     }).get(TreatmentVisitViewModel::class.java)
 }
+
+fun getSurvivalVisitViewModel(fragment: Fragment): SurvivalVisitViewModel {
+    return ViewModelProvider(fragment, object : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            val source = SurvivalVisitDataSource()
+            @Suppress("UNCHECKED_CAST")
+            return SurvivalVisitViewModel(source) as T
+        }
+    }).get(SurvivalVisitViewModel::class.java)
+}
+
+fun getSurvivalVisitViewModel(activity: FragmentActivity): SurvivalVisitViewModel {
+    return ViewModelProvider(activity, object : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            val source = SurvivalVisitDataSource()
+            @Suppress("UNCHECKED_CAST")
+            return SurvivalVisitViewModel(source) as T
+        }
+    }).get(SurvivalVisitViewModel::class.java)
+}

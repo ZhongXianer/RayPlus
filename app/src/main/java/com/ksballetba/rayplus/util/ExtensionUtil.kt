@@ -51,3 +51,32 @@ fun getImagingEvaluationWayListInHistory() = arrayOf("CT","MRI","超声","X线�
 fun getTherapeuticEvaluationList() = arrayOf("完全缓解(CR)", "部分缓解(PR)", "疾病稳定(SD)", "疾病进展(PD)")
 
 fun getMainPhysicalSignList() =  arrayOf("高血压", "腹泻", "皮疹","蛋白尿","出血")
+
+fun getAdverseEventMeasure() = arrayOf("剂量不变","减少剂量","暂停用药","停止用药","实验用药已结束")
+
+fun getAdverseEventMedicineMeasure() = arrayOf("继续用药","减少剂量","药物暂停后又恢复","停止用药")
+
+fun getAdverseEventMedicineRelation() = arrayOf("肯定有关","很可能有关","可能有关","可能无关","肯定无关")
+
+fun getAdverseEventSAERecover() = arrayOf("症状消失后无后遗症","症状消失后有后遗症","症状持续")
+
+fun getAdverseEventReportType() = arrayOf("首次报告","随访报告","总结报告")
+
+fun getAdverseEventToxicityClassify() = arrayOf("1级","2级","3级","4级","5级")
+
+fun getAdverseEventSAEState() = arrayOf("死亡","导致住院","延长住院时间","伤残","功能障碍","导致先天畸形","危及生命","怀孕")
+
+fun getSurvivalStatus() = arrayOf("死亡","存活","失联")
+
+fun getInterviewWay() = arrayOf("电话", "门诊", "住院")
+
+fun getOSMethod() =  arrayOf(
+    "1.街道办开具死亡证明",
+    "2.民政局系统出具死亡证明",
+    "3.公安局及派出所出具死亡证明",
+    "4.火化证明或公墓数据",
+    "5.本院死亡的医疗文件",
+    "6.其他医院死亡的医疗文件",
+    "7.家属手写证明文件",
+    "8.电话随访获知"
+)

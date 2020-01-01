@@ -126,4 +126,26 @@ interface ApiService {
     @Headers("Content-Type:application/json")
     @POST("/treatment_record_adjustment_status/{sample_id}/{cycle_number}")
     fun editAdjustment(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int,@Body adjustBodyBean: AdjustBodyBean):Observable<BaseResponseBean>
+
+    @GET("/adverse_event_table/{sample_id}/{cycle_number}")
+    fun getAdverseEventList(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int):Observable<AdverseEventListBean>
+
+    @Headers("Content-Type:application/json")
+    @POST("/adverse_event/{sample_id}/{cycle_number}")
+    fun editAdverseEvent(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int,@Body adverseEventBodyBean: AdverseEventBodyBean):Observable<BaseResponseBean>
+
+    @Headers("Content-Type:application/x-www-form-urlencoded")
+    @DELETE("/adverse_event/{sample_id}/{cycle_number}/{adverse_event_id}")
+    fun deleteAdverseEvent(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int,@Path("adverse_event_id") adverseEventId:Int):Observable<BaseResponseBean>
+
+    @GET("/interview_table/{sample_id}")
+    fun getSurvivalVisitList(@Path("sample_id") sampleId:Int):Observable<SurvivalVisitListBean>
+
+    @Headers("Content-Type:application/json")
+    @POST("/interview/{sample_id}")
+    fun editSurvivalVisit(@Path("sample_id") sampleId:Int,@Body survivalVisitBodyBean: SurvivalVisitBodyBean):Observable<BaseResponseBean>
+
+    @Headers("Content-Type:application/x-www-form-urlencoded")
+    @DELETE("/interview/{sample_id}/{interview_id}")
+    fun deleteSurvivalVisit(@Path("sample_id") sampleId:Int,@Path("interview_id") interviewId:Int):Observable<BaseResponseBean>
 }

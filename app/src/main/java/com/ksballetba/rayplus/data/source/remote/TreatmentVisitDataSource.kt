@@ -298,4 +298,64 @@ class TreatmentVisitDataSource{
                 }
             )
     }
+
+    fun getAdverseEventList(sampleId:Int,cycleNumber:Int,callBack: (MutableList<AdverseEventListBean.Data>) -> Unit) {
+        mLoadStatus.postValue(NetworkState.LOADING)
+        RetrofitClient.instance
+            .create(ApiService::class.java)
+            .getAdverseEventList(sampleId,cycleNumber)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it.data.toMutableList())
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                    mLoadStatus.postValue(NetworkState.LOADED)
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                    mLoadStatus.postValue(NetworkState.error(it.message))
+                }
+            )
+    }
+
+    fun editAdverseEvent(sampleId:Int,cycleNumber:Int,adverseEventBodyBean: AdverseEventBodyBean,callBack: (BaseResponseBean) -> Unit){
+        RetrofitClient.instance
+            .create(ApiService::class.java)
+            .editAdverseEvent(sampleId,cycleNumber,adverseEventBodyBean)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                }
+            )
+    }
+
+    fun deleteAdverseEvent(sampleId:Int,cycleNumber:Int,adverseEventId:Int,callBack: (BaseResponseBean) -> Unit){
+        RetrofitClient.instance
+            .create(ApiService::class.java)
+            .deleteAdverseEvent(sampleId,cycleNumber,adverseEventId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                }
+            )
+    }
 }

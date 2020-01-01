@@ -121,5 +121,29 @@ TreatmentVisitViewModel constructor(private var treatmentVisitDataSource: Treatm
         return result
     }
 
+    fun getAdverseEventList(sampleId: Int,cycleNumber:Int): LiveData<List<AdverseEventListBean.Data>> {
+        val result = MutableLiveData<List<AdverseEventListBean.Data>>()
+        treatmentVisitDataSource.getAdverseEventList(sampleId,cycleNumber) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun editAdverseEvent(sampleId: Int,cycleNumber:Int,adverseEventBodyBean: AdverseEventBodyBean): LiveData<BaseResponseBean> {
+        val result = MutableLiveData<BaseResponseBean>()
+        treatmentVisitDataSource.editAdverseEvent(sampleId,cycleNumber,adverseEventBodyBean) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun deleteAdverseEvent(sampleId: Int,cycleNumber:Int,adverseEventId:Int): LiveData<BaseResponseBean> {
+        val result = MutableLiveData<BaseResponseBean>()
+        treatmentVisitDataSource.deleteAdverseEvent(sampleId,cycleNumber,adverseEventId) {
+            result.postValue(it)
+        }
+        return result
+    }
+
     fun getLoadStatus() = treatmentVisitDataSource.mLoadStatus
 }

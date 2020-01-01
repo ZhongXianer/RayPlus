@@ -7,6 +7,7 @@ import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
+import com.ksballetba.rayplus.ui.activity.treatment_visit_activity.AdverseEventActivity.Companion.REFRESH_ADVERSE_EVENT_PAGE
 import com.ksballetba.rayplus.ui.activity.treatment_visit_activity.MainPhysicalSignActivity.Companion.REFRESH_MAIN_PHYSICAL_SIGN_PAGE
 import com.ksballetba.rayplus.ui.activity.treatment_visit_activity.TreatmentRecordActivity.Companion.REFRESH_TREATMENT_RECORD_PAGE
 import com.ksballetba.rayplus.ui.adapter.ViewPagerAdapter
@@ -45,6 +46,10 @@ class TreatmentVisitDetailActivity : AppCompatActivity() {
             REFRESH_TREATMENT_RECORD_PAGE->{
                 val trFragment = mViewPagerAdapter.getFragmentByIdx(5) as TreatmentRecordFragment
                 trFragment.loadData()
+            }
+            REFRESH_ADVERSE_EVENT_PAGE->{
+                val aeFragment = mViewPagerAdapter.getFragmentByIdx(6) as AdverseEventFragment
+                aeFragment.loadData()
             }
         }
     }
