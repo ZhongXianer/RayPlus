@@ -50,10 +50,10 @@ class SurvivalVisitFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initRefresh()
         initData()
         initUI()
         initList()
-        loadData()
     }
 
     private fun initData() {
@@ -61,9 +61,9 @@ class SurvivalVisitFragment : Fragment() {
         mViewModel = getSurvivalVisitViewModel(this)
     }
 
-    private fun initUI(){
+    private fun initUI() {
         fab_add_survival_visit.setOnClickListener {
-            navigateToSurvivalVisitEditPage(mSampleId,null)
+            navigateToSurvivalVisitEditPage(mSampleId, null)
         }
     }
 
@@ -79,7 +79,7 @@ class SurvivalVisitFragment : Fragment() {
             val survivalVisitBody = SurvivalVisitBodyBean(
                 survivalVisit.dieReason,
                 survivalVisit.dieTime,
-                if(survivalVisit.hasOtherTreatment) 1 else 0,
+                if (survivalVisit.hasOtherTreatment) 1 else 0,
                 survivalVisit.interviewId,
                 survivalVisit.interviewTime,
                 survivalVisit.interviewWay,
@@ -100,6 +100,23 @@ class SurvivalVisitFragment : Fragment() {
                 deleteSurvivalVisit(mList[position].interviewId, position)
             }.show()
         }
+        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
+            when (it.status) {
+                Status.RUNNING -> {
+                    srl_survival_visit.autoRefresh()
+                }
+                Status.SUCCESS -> {
+                    srl_survival_visit.finishRefresh()
+                }
+                Status.FAILED -> {
+                    ToastUtils.showShort(it.msg)
+                }
+            }
+        })
+        srl_survival_visit.autoRefresh()
+        srl_survival_visit.setOnRefreshListener {
+            loadData()
+        }
     }
 
     fun loadData() {
@@ -108,11 +125,6 @@ class SurvivalVisitFragment : Fragment() {
                 mList = it.toMutableList()
                 mAdapter.setNewData(mList)
             })
-        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
-            if (it.status == Status.FAILED) {
-                ToastUtils.showShort(it.msg)
-            }
-        })
     }
 
 
@@ -139,5 +151,15 @@ class SurvivalVisitFragment : Fragment() {
                         ToastUtils.showShort("删除失败")
                     }
                 })
+    }
+
+    private fun initRefresh() {
+        srl_survival_visit.setEnableRefresh(true)
+        srl_survival_visit.setEnableLoadMore(false)
+        srl_survival_visit.setEnableOverScrollBounce(true)//是否启用越界回弹
+        srl_survival_visit.setEnableScrollContentWhenLoaded(true)//是否在加载完成时滚动列表显示新的内容
+        srl_survival_visit.setEnableHeaderTranslationContent(true)//是否下拉Header的时候向下平移列表或者内容
+        srl_survival_visit.setEnableFooterTranslationContent(true)//是否上拉Footer的时候向上平移列表或者内容
+        srl_survival_visit.setEnableLoadMoreWhenContentNotFull(true)
     }
 }

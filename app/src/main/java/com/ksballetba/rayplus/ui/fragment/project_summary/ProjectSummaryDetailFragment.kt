@@ -6,18 +6,34 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import androidx.lifecycle.Observer
+import com.blankj.utilcode.util.ToastUtils
 import com.ksballetba.rayplus.R
+import com.ksballetba.rayplus.data.bean.ProjectSummaryBodyBean
+import com.ksballetba.rayplus.network.Status
+import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
+import com.ksballetba.rayplus.util.getBestEffect
+import com.ksballetba.rayplus.util.getProjectSummaryViewModel
+import com.ksballetba.rayplus.util.getReasonStopDrug
+import com.ksballetba.rayplus.util.parseDefaultContent
+import com.ksballetba.rayplus.viewmodel.ProjectSummaryViewModel
 import com.lxj.xpopup.XPopup
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
-import kotlinx.android.synthetic.main.activity_survival_visit.*
 import kotlinx.android.synthetic.main.fragment_project_summary_detail.*
-import java.util.*
+import java.util.Calendar
 
 /**
  * A simple [Fragment] subclass.
  */
 class ProjectSummaryDetailFragment : Fragment() {
+
+    companion object{
+        const val TAG = "ProjectSummaryDetailFragment"
+    }
+
+    private lateinit var mViewModel:ProjectSummaryViewModel
+
+    var mSampleId = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,10 +45,68 @@ class ProjectSummaryDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initData()
+        loadData()
         initUI()
     }
 
+    private fun initData(){
+        mSampleId = (arguments as Bundle).getInt(SAMPLE_ID)
+        mViewModel = getProjectSummaryViewModel(this)
+    }
+
+    private fun loadData(){
+        mViewModel.getProjectSummary(mSampleId).observe(viewLifecycleOwner, Observer {
+            tv_is_stop_treat.text = if(it.isStop) "是" else "否"
+            tv_clinic_terminal.text = it.relay
+            tv_last_take_medicine_date.text = it.lastTimeDrug
+            tv_take_medicine_num_title.text = it.treatmentTimes.toString()
+            tv_stop_treat_cause_title.text = if(it.reasonStopDrug<7) getReasonStopDrug()[it.reasonStopDrug] else it.otherReasons
+            tv_curative_effect_summary_pfs.text = it.pFS
+            tv_curative_effect_summary_os.text = it.oS
+            tv_best_treat.text = getBestEffect()[it.bestEffect]
+        })
+        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
+            if(it.status == Status.FAILED){
+                ToastUtils.showShort(it.msg)
+            }
+        })
+    }
+
+    private fun saveData(){
+        val isStopStr = parseDefaultContent(tv_is_stop_treat.text.toString())
+        val isStop = if(isStopStr == "是") 1 else 0
+        val relay = parseDefaultContent(tv_clinic_terminal.text.toString())
+        val lastTimeDrug = parseDefaultContent(tv_last_take_medicine_date.text.toString())
+        val treatmentTimes = parseDefaultContent(tv_take_medicine_num.text.toString()).toIntOrNull()
+        val reasonStopDrugStr = parseDefaultContent(tv_stop_treat_cause.text.toString())
+        var otherReasons = parseDefaultContent(tv_stop_treat_cause.text.toString())
+        var reasonStopDrug = 0
+        if(getReasonStopDrug().contains(reasonStopDrugStr)){
+            reasonStopDrug = getReasonStopDrug().indexOf(reasonStopDrugStr)
+            otherReasons = ""
+        }else{
+            reasonStopDrug = 7
+        }
+        val pFS = parseDefaultContent(tv_curative_effect_summary_pfs.text.toString())
+        val oS = parseDefaultContent(tv_curative_effect_summary_os.text.toString())
+        val bestEffectStr = parseDefaultContent(tv_best_treat.text.toString())
+        val bestEffect = if(bestEffectStr.isEmpty()) null else getBestEffect().indexOf(bestEffectStr)
+        val projectSummaryBody = ProjectSummaryBodyBean(bestEffect,isStop,lastTimeDrug,oS,otherReasons,pFS,reasonStopDrug,relay,treatmentTimes)
+        mViewModel.editProjectSummary(mSampleId,projectSummaryBody).observe(viewLifecycleOwner,
+            Observer {
+                if(it.code==200){
+                    ToastUtils.showShort("项目总结修改成功")
+                }else{
+                    ToastUtils.showShort("项目总结修改失败")
+                }
+            })
+    }
+
     private fun initUI() {
+        fab_save_project_summary.setOnClickListener {
+            saveData()
+        }
         cl_is_stop_treat.setOnClickListener {
             XPopup.Builder(context).asCenterList(
                 getString(R.string.is_stop_treat),
@@ -89,13 +163,13 @@ class ProjectSummaryDetailFragment : Fragment() {
                     }
                 }.show()
         }
-        cl_curative_effect_summary_fps.setOnClickListener {
+        cl_curative_effect_summary_pfs.setOnClickListener {
             XPopup.Builder(context)
                 .asInputConfirm(
-                    getString(R.string.curative_effect_summary_fps),
-                    "请输入${getString(R.string.curative_effect_summary_fps)}"
+                    getString(R.string.curative_effect_summary_pfs),
+                    "请输入${getString(R.string.curative_effect_summary_pfs)}"
                 ) {
-                    tv_curative_effect_summary_fps.text = it
+                    tv_curative_effect_summary_pfs.text = it
                 }.show()
         }
         cl_curative_effect_summary_os.setOnClickListener {

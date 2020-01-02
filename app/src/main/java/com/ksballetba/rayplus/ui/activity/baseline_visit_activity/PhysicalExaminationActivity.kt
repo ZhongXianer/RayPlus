@@ -111,7 +111,7 @@ class PhysicalExaminationActivity : AppCompatActivity() {
 
     private fun addOrEditPhysicalExamination(sampleId:Int,reportId:Int?){
         val time = parseDefaultContent(tv_date.text.toString())
-        val temperature = tv_body_temperature.text.toString().toIntOrNull()
+        val temperature = tv_body_temperature.text.toString().toFloatOrNull()
         val breathFrequency = tv_breathe.text.toString().toIntOrNull()
         val maxpressure = tv_blood_systolic_pressure.text.toString().toIntOrNull()
         val minpressure = tv_blood_diastolic_pressure.text.toString().toIntOrNull()

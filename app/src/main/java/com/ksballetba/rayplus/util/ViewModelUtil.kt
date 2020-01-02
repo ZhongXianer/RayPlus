@@ -117,3 +117,13 @@ fun getSurvivalVisitViewModel(activity: FragmentActivity): SurvivalVisitViewMode
         }
     }).get(SurvivalVisitViewModel::class.java)
 }
+
+fun getProjectSummaryViewModel(fragment: Fragment): ProjectSummaryViewModel {
+    return ViewModelProvider(fragment, object : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            val source = ProjectSummaryDataSource()
+            @Suppress("UNCHECKED_CAST")
+            return ProjectSummaryViewModel(source) as T
+        }
+    }).get(ProjectSummaryViewModel::class.java)
+}

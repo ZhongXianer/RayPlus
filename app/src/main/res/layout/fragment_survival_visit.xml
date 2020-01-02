@@ -6,13 +6,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragment.SurvivalVisitFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_survival_visit"
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/srl_survival_visit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@color/icons"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:srlEnablePreviewInEditMode="true"
+        app:srlPrimaryColor="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.scwang.smartrefresh.header.MaterialHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_srlSpinnerStyle="Translate">
+
+        </com.scwang.smartrefresh.header.MaterialHeader>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_survival_visit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_survival_visit"

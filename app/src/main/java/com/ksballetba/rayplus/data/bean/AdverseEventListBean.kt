@@ -51,6 +51,7 @@ data class AdverseEventListBean(
         @SerializedName("start_time")
         val startTime: String, // 2019-10-20
         @SerializedName("toxicity_classification")
-        val toxicityClassification: Int // 0
+        val toxicityClassification: Int, // 0
+        var needDeleted:Boolean?
     )
 }

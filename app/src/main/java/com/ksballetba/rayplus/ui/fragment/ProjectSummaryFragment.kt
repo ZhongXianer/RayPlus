@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.ksballetba.rayplus.R
+import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.adapter.ViewPagerAdapter
 import com.ksballetba.rayplus.ui.fragment.base_fragment.VisitTimeFragment
 import com.ksballetba.rayplus.ui.fragment.project_summary.AdverseEventSummaryFragment
@@ -21,6 +22,8 @@ class ProjectSummaryFragment : Fragment() {
 
     private val mFragmentList = mutableListOf<Fragment>()
     lateinit var mVisitTimeFragment: VisitTimeFragment
+
+    var mSampleId = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,8 +39,15 @@ class ProjectSummaryFragment : Fragment() {
     }
 
     private fun initFragments(){
-        mFragmentList.add(ProjectSummaryDetailFragment())
-        mFragmentList.add(AdverseEventSummaryFragment())
+        mSampleId = (arguments as Bundle).getInt(SAMPLE_ID)
+        val sampleIdArgs = Bundle()
+        sampleIdArgs.putInt(SAMPLE_ID, mSampleId)
+        val projectSummaryDetailFragment = ProjectSummaryDetailFragment()
+        val adverseEventSummaryFragment = AdverseEventSummaryFragment()
+        projectSummaryDetailFragment.arguments = sampleIdArgs
+        adverseEventSummaryFragment.arguments = sampleIdArgs
+        mFragmentList.add(projectSummaryDetailFragment)
+        mFragmentList.add(adverseEventSummaryFragment)
         vp_project_summary.adapter = ViewPagerAdapter(mFragmentList,childFragmentManager)
         vp_project_summary.offscreenPageLimit = 3
         tl_project_summary.setupWithViewPager(vp_project_summary)

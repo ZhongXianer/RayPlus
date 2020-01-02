@@ -13,6 +13,7 @@ import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.ImagingEvaluationActivity.Companion.REFRESH_IMAGING_EVALUATION_PAGE
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.PhysicalExaminationActivity
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.PhysicalExaminationActivity.Companion.REFRESH_PHYSICAL_EXAMINATION_PAGE
+import com.ksballetba.rayplus.ui.activity.survival_visit_activity.SurvivalVisitActivity.Companion.REFRESH_SURVIVAL_VISIT_PAGE
 import com.ksballetba.rayplus.ui.activity.treatment_visit_activity.MainPhysicalSignActivity.Companion.REFRESH_MAIN_PHYSICAL_SIGN_PAGE
 import com.ksballetba.rayplus.ui.adapter.ViewPagerAdapter
 import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment
@@ -56,6 +57,10 @@ class CRFActivity : AppCompatActivity() {
             REFRESH_IMAGING_EVALUATION_PAGE->{
                 val ieFragment = (mViewPagerAdapter.getFragmentByIdx(0) as BaselineVisitFragment).mViewPagerAdapter.getFragmentByIdx(7) as ImagingEvaluationFragment
                 ieFragment.loadData()
+            }
+            REFRESH_SURVIVAL_VISIT_PAGE->{
+                val svFragment = mViewPagerAdapter.getFragmentByIdx(2) as SurvivalVisitFragment
+                svFragment.loadData()
             }
         }
     }

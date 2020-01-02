@@ -82,7 +82,7 @@ class TreatmentVisitFragment : Fragment() {
                     srl_treatment_visit.finishRefresh()
                 }
                 Status.FAILED -> {
-                    ToastUtils.showShort("网络加载失败")
+                    ToastUtils.showShort(it.msg)
                 }
             }
         })

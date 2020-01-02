@@ -14,7 +14,7 @@ data class PhysicalExaminationBodyBean(
     val minpressure: Int?, // 24
     @SerializedName("report_id")
     val reportId: Int?,
-    val temperature: Int?, // 36
+    val temperature: Float?, // 36
     val time: String? // 2019-12-21
 ) : Parcelable {
     constructor(source: Parcel) : this(
@@ -23,7 +23,7 @@ data class PhysicalExaminationBodyBean(
         source.readValue(Int::class.java.classLoader) as Int?,
         source.readValue(Int::class.java.classLoader) as Int?,
         source.readValue(Int::class.java.classLoader) as Int?,
-        source.readValue(Int::class.java.classLoader) as Int?,
+        source.readValue(Float::class.java.classLoader) as Float?,
         source.readString()
     )
 

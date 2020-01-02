@@ -20,7 +20,7 @@ data class PhysicalExaminationListBean(
         val reportId: Int, // 4
         @SerializedName("sample_id")
         val sampleId: Int, // 5
-        val temperature: Int, // 36
+        val temperature: Float, // 36
         val time: String // 2019-12-21
     )
 }

@@ -121,6 +121,9 @@ class AdverseEventFragment : Fragment() {
         mViewModel.getAdverseEventList(mSampleId, mCycleNumber)
             .observe(viewLifecycleOwner, Observer {
                 mList = it.toMutableList()
+                mList.forEach {item->
+                    item.needDeleted = true
+                }
                 mAdapter.setNewData(mList)
             })
         mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {

@@ -148,4 +148,14 @@ interface ApiService {
     @Headers("Content-Type:application/x-www-form-urlencoded")
     @DELETE("/interview/{sample_id}/{interview_id}")
     fun deleteSurvivalVisit(@Path("sample_id") sampleId:Int,@Path("interview_id") interviewId:Int):Observable<BaseResponseBean>
+
+    @GET("/summary/{sample_id}")
+    fun getProjectSummary(@Path("sample_id") sampleId:Int):Observable<ProjectSummaryResponseBean>
+
+    @Headers("Content-Type:application/json")
+    @POST("/summary/{sample_id}")
+    fun editProjectSummary(@Path("sample_id") sampleId:Int,@Body projectSummaryBodyBean: ProjectSummaryBodyBean):Observable<BaseResponseBean>
+
+    @GET("/adverse_event_table_all/{sample_id}")
+    fun getAllAdverseEventList(@Path("sample_id") sampleId:Int):Observable<AdverseEventListBean>
 }

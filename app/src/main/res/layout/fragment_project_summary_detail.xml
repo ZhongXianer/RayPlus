@@ -36,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/item_left_margin"
                     android:text="@string/is_stop_treat"
-                    android:maxEms="12"
+                    android:maxEms="8"
                     android:textColor="@color/primary_text"
                     android:textSize="@dimen/material_typography_subheading"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -47,7 +47,7 @@
                     android:id="@+id/tv_is_stop_treat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/input_visit_time"
+                    android:text="否"
                     android:layout_marginEnd="@dimen/item_left_margin"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -72,6 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/item_left_margin"
+                    android:maxEms="8"
                     android:text="@string/clinic_terminal"
                     android:textColor="@color/primary_text"
                     android:textSize="@dimen/material_typography_subheading"
@@ -109,6 +110,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/item_left_margin"
                     android:text="@string/last_take_medicine_date"
+                    android:maxEms="8"
                     android:textColor="@color/primary_text"
                     android:textSize="@dimen/material_typography_subheading"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -181,6 +183,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/item_left_margin"
                     android:text="@string/stop_treat_cause"
+                    android:maxEms="8"
                     android:textColor="@color/primary_text"
                     android:textSize="@dimen/material_typography_subheading"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -191,8 +194,9 @@
                     android:id="@+id/tv_stop_treat_cause"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/input_visit_time"
+                    android:text="病情进展（出现客观疗效评价的疾病进展或临床症状进展）"
                     android:layout_marginEnd="@dimen/item_left_margin"
+                    android:maxEms="8"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -200,7 +204,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_curative_effect_summary_fps"
+                android:id="@+id/cl_curative_effect_summary_pfs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -212,11 +216,11 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/tv_curative_effect_summary_fps_title"
+                    android:id="@+id/tv_curative_effect_summary_pfs_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/item_left_margin"
-                    android:text="@string/curative_effect_summary_fps"
+                    android:text="@string/curative_effect_summary_pfs"
                     android:textColor="@color/primary_text"
                     android:textSize="@dimen/material_typography_subheading"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -224,7 +228,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tv_curative_effect_summary_fps"
+                    android:id="@+id/tv_curative_effect_summary_pfs"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/input_visit_time"
@@ -289,7 +293,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/item_left_margin"
                     android:text="@string/best_treat"
-                    android:maxEms="12"
+                    android:maxEms="8"
                     android:textColor="@color/primary_text"
                     android:textSize="@dimen/material_typography_subheading"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -300,7 +304,7 @@
                     android:id="@+id/tv_best_treat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/input_visit_time"
+                    android:text="完全缓解(CR)"
                     android:layout_marginEnd="@dimen/item_left_margin"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

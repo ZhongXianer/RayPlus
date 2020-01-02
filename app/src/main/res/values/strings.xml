@@ -127,7 +127,7 @@
     <string name="last_take_medicine_date">末次服用治疗药物日期</string>
     <string name="take_medicine_num">共用药几个疗程</string>
     <string name="stop_treat_cause">患者终（中）止治疗的原因</string>
-    <string name="curative_effect_summary_fps">疗效总结(FPS)</string>
+    <string name="curative_effect_summary_pfs">疗效总结(PFS)</string>
     <string name="curative_effect_summary_os">疗效总结(OS)</string>
     <string name="best_treat">经确认后的最佳客观疗效（参考RECIST1.1）</string>
     <string name="research_center">研究中心</string>

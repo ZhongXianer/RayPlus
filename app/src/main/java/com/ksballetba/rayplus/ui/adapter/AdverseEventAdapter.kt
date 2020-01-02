@@ -1,5 +1,7 @@
 package com.ksballetba.rayplus.ui.adapter
 
+import android.view.View
+import android.widget.ImageView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.ksballetba.rayplus.R
@@ -18,6 +20,10 @@ class AdverseEventAdapter(layoutResId:Int,data:List<AdverseEventListBean.Data>):
             .setText(R.id.tv_drug_relationship,"与药物关系:${item?.medicineRelation}")
             .setText(R.id.tv_take_measure,"采取措施:${item?.measure}")
             .setText(R.id.tv_return,"转归:${item?.recover}")
-            .addOnClickListener(R.id.iv_delete_item_adverse_event)
+        helper.getView<ImageView>(R.id.iv_delete_item_adverse_event).visibility = if(item?.needDeleted!!) View.VISIBLE else View.GONE
+        if(item.needDeleted!!){
+            helper.addOnClickListener(R.id.iv_delete_item_adverse_event)
+        }
+
     }
 }
