@@ -115,7 +115,7 @@ class BaselineVisitDataSource{
             )
     }
 
-    fun getPreviousHistory(sampleId:Int,callBack: (PreviousHistoryBean) -> Unit) {
+    fun getPreviousHistory(sampleId:Int,callBack: (PreviousHistoryResponseBean) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.instance
             .create(ApiService::class.java)
@@ -137,10 +137,51 @@ class BaselineVisitDataSource{
             )
     }
 
-    fun editPreviousHistory(sampleId:Int, previousHistoryBean: PreviousHistoryBean, callBack: (BaseResponseBean) -> Unit){
+    fun editPreviousHistory(sampleId:Int, previousHistoryBodyBean: PreviousHistoryBodyBean, callBack: (BaseResponseBean) -> Unit){
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .editPreviousHistory(sampleId,previousHistoryBean)
+            .editPreviousHistory(sampleId,previousHistoryBodyBean)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                }
+            )
+    }
+
+    fun getFirstVisitProcess(sampleId:Int,callBack: (FirstVisitProcessResponseBean) -> Unit) {
+        mLoadStatus.postValue(NetworkState.LOADING)
+        RetrofitClient.instance
+            .create(ApiService::class.java)
+            .getFirstVisitProcess(sampleId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                    mLoadStatus.postValue(NetworkState.LOADED)
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                    mLoadStatus.postValue(NetworkState.error(it.message))
+                }
+            )
+    }
+
+    fun editFirstVisitProcess(sampleId:Int, firstVisitProcessBodyBean: FirstVisitProcessBodyBean, callBack: (BaseResponseBean) -> Unit){
+        RetrofitClient.instance
+            .create(ApiService::class.java)
+            .editFirstVisitProcess(sampleId,firstVisitProcessBodyBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(

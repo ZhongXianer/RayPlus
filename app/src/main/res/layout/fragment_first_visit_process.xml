@@ -44,6 +44,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/item_left_margin"
+                    android:maxEms="12"
+                    android:ellipsize="end"
                     android:text="@string/input_visit_time"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -111,6 +113,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/item_left_margin"
                     android:text="@string/input_visit_time"
+                    android:maxEms="12"
+                    android:ellipsize="end"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -276,6 +280,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/item_left_margin"
                     android:text="@string/input_visit_time"
+                    android:maxEms="12"
+                    android:ellipsize="end"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

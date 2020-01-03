@@ -78,9 +78,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/item_left_margin"
                     android:text="@string/input_visit_time"
-                    android:maxEms="14"
+                    android:maxEms="12"
                     android:ellipsize="end"
-                    android:maxLines="1"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -226,8 +225,7 @@
                 android:id="@+id/ll_smoke"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:orientation="vertical">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_average_cigarette"
@@ -335,8 +333,7 @@
                     android:id="@+id/ll_quit_smoke"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                    android:orientation="vertical">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cl_quit_smoke_date"
@@ -451,8 +448,7 @@
                 android:id="@+id/ll_drink"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:orientation="vertical">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_drink_frequency"
@@ -559,8 +555,7 @@
                     android:id="@+id/ll_quit_drink"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                    android:orientation="vertical">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cl_quit_drink_date"

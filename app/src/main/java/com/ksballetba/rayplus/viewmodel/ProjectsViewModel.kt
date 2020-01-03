@@ -4,9 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ksballetba.rayplus.data.bean.ProjectListBean
+import com.ksballetba.rayplus.data.bean.UserNameBean
 import com.ksballetba.rayplus.data.source.remote.ProjectDataSource
 
 class ProjectsViewModel constructor(private var projectDataSource: ProjectDataSource):ViewModel(){
+
+    fun getUserName(token:String?): LiveData<UserNameBean> {
+        val result = MutableLiveData<UserNameBean>()
+        projectDataSource.getUserName(token) {
+            result.postValue(it)
+        }
+        return result
+    }
+
     fun fetchData(): LiveData<MutableList<ProjectListBean.Data>> {
         val result = MutableLiveData<MutableList<ProjectListBean.Data>>()
         projectDataSource.loadInitial {

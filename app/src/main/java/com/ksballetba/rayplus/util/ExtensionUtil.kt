@@ -46,6 +46,20 @@ fun getVocationList() = arrayOf("脑力劳动者", "体力劳动者","学生","�
 
 fun getBaseIllListInHistory() = arrayOf("无","不详","高血压","冠心病","糖尿病","慢性阻塞性肺疾病","支气管哮喘","肺结核","间质性肺疾病","高脂血症","病毒性肝炎","风湿免疫性疾病","肾脏病","其他，请描述")
 
+fun getClinicalSymptomsList() = arrayOf("咳嗽","咳痰","咳血","发热","胸闷","胸痛","喘气","消瘦","体重下降","其他","不详")
+
+fun getTumorPart() = arrayOf("左上肺", "左下肺", "右上肺", "右中肺", "右下肺")
+
+fun getGeneticTestingMethod() = arrayOf("无", "ARMS", "FISH", "NGS")
+
+fun getGeneMutationType() = arrayOf("未测","不详","无突变","ROS-1","cMET","BRAF","KRAS","Her-2","RET","ERBB2","TP53","EGFR","ALK")
+
+fun getTransferSite() = arrayOf("无","对侧肺门淋巴结","锁骨上淋巴结肺内","肺内","脑","脊柱骨","四肢骨","肝","肾上腺","其他")
+
+fun getPD_L1Expression() = arrayOf("未测", "不详", ">50%", "1%-50%","<1%","阴性")
+
+fun getMSI() = arrayOf("未测", "不详", "微卫星稳定性", "微卫星不稳定性")
+
 fun getImagingEvaluationWayListInHistory() = arrayOf("CT","MRI","超声","X线平片","PET-CT")
 
 fun getTherapeuticEvaluationList() = arrayOf("完全缓解(CR)", "部分缓解(PR)", "疾病稳定(SD)", "疾病进展(PD)")

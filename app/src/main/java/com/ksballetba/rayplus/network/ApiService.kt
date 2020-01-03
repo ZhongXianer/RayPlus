@@ -14,6 +14,9 @@ interface ApiService {
     @GET("/project")
     fun getProjectList(@Query("page") page:Int,@Query("limit") limit:Int):Observable<ProjectListBean>
 
+    @GET("/user_div_info")
+    fun getUserName(@Header("Authorization") token:String?):Observable<UserNameBean>
+
     @GET("/sample")
     fun getSampleList(@Header("Authorization") token:String?, @Query("page") page:Int, @Query("limit") limit:Int):Observable<SampleListBean>
 
@@ -53,11 +56,18 @@ interface ApiService {
     fun deletePhysicalExamination(@Path("sample_id") sampleId:Int,@Path("report_id") reportId:Int):Observable<BaseResponseBean>
 
     @GET("/patient_history/{sample_id}")
-    fun getPreviousHistory(@Path("sample_id") sampleId:Int):Observable<PreviousHistoryBean>
+    fun getPreviousHistory(@Path("sample_id") sampleId:Int):Observable<PreviousHistoryResponseBean>
 
     @Headers("Content-Type:application/json")
     @POST("/patient_history/{sample_id}")
-    fun editPreviousHistory(@Path("sample_id") sampleId:Int,@Body previousHistoryBean: PreviousHistoryBean):Observable<BaseResponseBean>
+    fun editPreviousHistory(@Path("sample_id") sampleId:Int,@Body previousHistoryBodyBean: PreviousHistoryBodyBean):Observable<BaseResponseBean>
+
+    @GET("/first_diagnose/{sample_id}")
+    fun getFirstVisitProcess(@Path("sample_id") sampleId:Int):Observable<FirstVisitProcessResponseBean>
+
+    @Headers("Content-Type:application/json")
+    @POST("/first_diagnose/{sample_id}")
+    fun editFirstVisitProcess(@Path("sample_id") sampleId:Int,@Body firstVisitProcessBodyBean: FirstVisitProcessBodyBean):Observable<BaseResponseBean>
 
     @GET("/lab_inspection/{sample_id}/{cycle_number}")
     fun getLabInspection(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int):Observable<LabInspectionResponseBean>

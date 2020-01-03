@@ -6,10 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.apkfuns.logutils.LogUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.gyf.immersionbar.ImmersionBar
 import com.ksballetba.rayplus.R
@@ -107,9 +109,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadInitial(){
+        val sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+        val token = sharedPreferences.getString(LOGIN_TOKEN,"")
         mViewModel.fetchData().observe(this, Observer {
             mProjectList = it
             mProjectsAdapter.setNewData(mProjectList)
+        })
+        mViewModel.getUserName(token).observe(this, Observer {
+            if(it.userName==null){
+                toast("登录已过期，请重新登录")
+                logOut()
+            }
+            nav_view.getHeaderView(0).findViewById<TextView>(R.id.tv_doctor_name).text = "您好，${it.userName}医生"
         })
     }
 

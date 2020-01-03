@@ -48,17 +48,33 @@ class BaselineVisitViewModel constructor(private var baselineVisitDataSource: Ba
         return result
     }
 
-    fun getPreviousHistory(sampleId:Int): LiveData<PreviousHistoryBean> {
-        val result = MutableLiveData<PreviousHistoryBean>()
+    fun getPreviousHistory(sampleId:Int): LiveData<PreviousHistoryResponseBean> {
+        val result = MutableLiveData<PreviousHistoryResponseBean>()
         baselineVisitDataSource.getPreviousHistory(sampleId) {
             result.postValue(it)
         }
         return result
     }
 
-    fun editPreviousHistory(sampleId:Int, previousHistoryBean: PreviousHistoryBean): LiveData<BaseResponseBean> {
+    fun editPreviousHistory(sampleId:Int, previousHistoryBodyBean: PreviousHistoryBodyBean): LiveData<BaseResponseBean> {
         val result = MutableLiveData<BaseResponseBean>()
-        baselineVisitDataSource.editPreviousHistory(sampleId,previousHistoryBean) {
+        baselineVisitDataSource.editPreviousHistory(sampleId,previousHistoryBodyBean) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun getFirstVisitProcess(sampleId:Int): LiveData<FirstVisitProcessResponseBean> {
+        val result = MutableLiveData<FirstVisitProcessResponseBean>()
+        baselineVisitDataSource.getFirstVisitProcess(sampleId) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun editFirstVisitProcess(sampleId:Int, firstVisitProcessBodyBean: FirstVisitProcessBodyBean): LiveData<BaseResponseBean> {
+        val result = MutableLiveData<BaseResponseBean>()
+        baselineVisitDataSource.editFirstVisitProcess(sampleId,firstVisitProcessBodyBean) {
             result.postValue(it)
         }
         return result

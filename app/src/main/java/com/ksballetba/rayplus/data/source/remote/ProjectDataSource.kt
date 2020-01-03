@@ -1,7 +1,9 @@
 package com.ksballetba.rayplus.data.source.remote
 
 import androidx.lifecycle.MutableLiveData
+import com.apkfuns.logutils.LogUtils
 import com.ksballetba.rayplus.data.bean.ProjectListBean
+import com.ksballetba.rayplus.data.bean.UserNameBean
 import com.ksballetba.rayplus.network.ApiService
 import com.ksballetba.rayplus.network.NetworkState
 import com.ksballetba.rayplus.network.RetrofitClient
@@ -15,6 +17,25 @@ class  ProjectDataSource{
     }
     var mLoadStatus = MutableLiveData<NetworkState>()
     var mNextPageKey = 10
+
+    fun getUserName(token:String?,callBack: (UserNameBean) -> Unit){
+        RetrofitClient.instance
+            .create(ApiService::class.java)
+            .getUserName(token)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy (
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    println("Completed")
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                }
+            )
+    }
 
     fun loadInitial(callBack: (MutableList<ProjectListBean.Data>) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
