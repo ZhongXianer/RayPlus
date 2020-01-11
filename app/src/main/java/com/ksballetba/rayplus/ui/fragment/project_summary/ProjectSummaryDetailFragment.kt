@@ -12,10 +12,7 @@ import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.ProjectSummaryBodyBean
 import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
-import com.ksballetba.rayplus.util.getBestEffect
-import com.ksballetba.rayplus.util.getProjectSummaryViewModel
-import com.ksballetba.rayplus.util.getReasonStopDrug
-import com.ksballetba.rayplus.util.parseDefaultContent
+import com.ksballetba.rayplus.util.*
 import com.ksballetba.rayplus.viewmodel.ProjectSummaryViewModel
 import com.lxj.xpopup.XPopup
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
@@ -60,8 +57,8 @@ class ProjectSummaryDetailFragment : Fragment() {
             tv_is_stop_treat.text = if(it.isStop) "是" else "否"
             tv_clinic_terminal.text = it.relay
             tv_last_take_medicine_date.text = it.lastTimeDrug
-            tv_take_medicine_num_title.text = it.treatmentTimes.toString()
-            tv_stop_treat_cause_title.text = if(it.reasonStopDrug<7) getReasonStopDrug()[it.reasonStopDrug] else it.otherReasons
+            tv_take_medicine_num.text = it.treatmentTimes.toString()
+            tv_stop_treat_cause.text = if(it.reasonStopDrug<7) getReasonStopDrug()[it.reasonStopDrug] else it.otherReasons
             tv_curative_effect_summary_pfs.text = it.pFS
             tv_curative_effect_summary_os.text = it.oS
             tv_best_treat.text = getBestEffect()[it.bestEffect]
@@ -121,20 +118,10 @@ class ProjectSummaryDetailFragment : Fragment() {
             }.show()
         }
         cl_last_take_medicine_date.setOnClickListener {
-            val now = Calendar.getInstance()
-            val dpd = DatePickerDialog.newInstance(
-                { _, year, monthOfYear, dayOfMonth ->
-                    val date = "$year-$monthOfYear-$dayOfMonth"
-                    tv_last_take_medicine_date.text = date
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            )
-            dpd.show(parentFragmentManager, "请输入日期")
+            showDatePickerDialog(tv_last_take_medicine_date,parentFragmentManager)
         }
         cl_take_medicine_num.setOnClickListener {
-            XPopup.Builder(context).asInputConfirm(getString(R.string.clinic_terminal), "请输入内容") {
+            XPopup.Builder(context).asInputConfirm(getString(R.string.take_medicine_num), "请输入内容") {
                 tv_take_medicine_num.text = it
             }.show()
         }

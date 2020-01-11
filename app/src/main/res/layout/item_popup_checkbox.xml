@@ -9,6 +9,7 @@
     <CheckBox
         android:id="@+id/cb_popup_checkbox"
         android:layout_marginStart="@dimen/material_component_cards_left_and_right_padding"
+        android:clickable="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.ksballetba.rayplus.R
+import com.ksballetba.rayplus.util.showDatePickerDialog
 import com.lxj.xpopup.XPopup
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.android.synthetic.main.fragment_investigator_signature.*
@@ -38,17 +39,7 @@ class InvestigatorSignatureFragment : Fragment() {
             }.show()
         }
         cl_investigator_signature_date.setOnClickListener {
-            val now = Calendar.getInstance()
-            val dpd = DatePickerDialog.newInstance(
-                { _, year, monthOfYear, dayOfMonth ->
-                    val date = "$year-$monthOfYear-$dayOfMonth"
-                    tv_investigator_signature_date.text = date
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            )
-            dpd.show(parentFragmentManager, "日期")
+            showDatePickerDialog(tv_investigator_signature_date,parentFragmentManager)
         }
     }
 }

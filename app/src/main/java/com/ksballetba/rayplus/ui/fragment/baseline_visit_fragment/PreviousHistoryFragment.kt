@@ -14,14 +14,11 @@ import com.ksballetba.rayplus.data.bean.BaseCheckBean
 import com.ksballetba.rayplus.data.bean.PreviousHistoryBodyBean
 import com.ksballetba.rayplus.data.bean.PreviousHistoryResponseBean
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
+import com.ksballetba.rayplus.util.*
 import com.lxj.xpopup.XPopup
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.android.synthetic.main.fragment_previous_history.*
 import java.util.Calendar
-import com.ksballetba.rayplus.util.asCheckboxList
-import com.ksballetba.rayplus.util.getBaseIllListInHistory
-import com.ksballetba.rayplus.util.getBaselineVisitViewModel
-import com.ksballetba.rayplus.util.parseDefaultContent
 import com.ksballetba.rayplus.viewmodel.BaselineVisitViewModel
 
 /**
@@ -39,7 +36,7 @@ class PreviousHistoryFragment : Fragment() {
 
     private var mBaseIllList = mutableListOf<BaseCheckBean>()
 
-    private var mOtherIll = ""
+    private var mOtherIll:String? = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,6 +60,7 @@ class PreviousHistoryFragment : Fragment() {
 
     private fun loadData() {
         mViewModel.getPreviousHistory(mSampleId).observe(viewLifecycleOwner, Observer {
+            LogUtils.tag(TAG).d(it)
             tv_operation_history.text = if (it.surgery != "其他") it.surgery else it.surgeryOther
             initBaseIllList(it)
             tv_phymatosis_history.text = if (it.tumorIll != "其他") it.tumorIll else it.tumorIllOther
@@ -70,15 +68,23 @@ class PreviousHistoryFragment : Fragment() {
                 if (it.drugAllergy != "其他") it.drugAllergy else it.drugAllergyOther
             tv_medication_use_history.text = if (it.drugUse != "其他") it.drugUse else it.drugUseOther
             switch_smoke_history.isChecked = false
+            ll_smoke.visibility = View.GONE
             tv_average_cigarette.text = it.smokeSize
             tv_smoke_years.text = it.smokeYear
             switch_is_quit_smoke.isChecked = it.smokeIsquit == "on"
+            ll_quit_smoke.visibility = if(switch_is_quit_smoke.isChecked) View.VISIBLE else View.GONE
             tv_quit_smoke_date.text = it.smokeQuitTime
             switch_is_relapse_smoke.isChecked = it.smokeChemotherapy == "on"
             switch_drink_history.isChecked = false
-            tv_drink_frequency.text = it.drinkingFrequence
-            tv_drink_capacity.text = it.drinkingSize
+            ll_drink.visibility = View.GONE
+            if(it.drinkingFrequence!=null){
+                tv_drink_frequency.text = getDrinkingFrequency()[it.drinkingFrequence.toInt()]
+            }
+            if(it.drinkingSize!=null) {
+                tv_drink_capacity.text = getDrinkingSize()[it.drinkingSize.toInt()]
+            }
             switch_is_quit_drink.isChecked = it.drinkingIsQuit == "on"
+            ll_quit_drink.visibility = if(switch_is_quit_drink.isChecked) View.VISIBLE else View.GONE
             tv_quit_drink_date.text = it.drinkingQuitTime
             switch_is_relapse_drink.isChecked = it.drinkingChemotherapy == "on"
             tv_patient_height.text = it.height.toString()
@@ -96,38 +102,41 @@ class PreviousHistoryFragment : Fragment() {
         } else {
             surgery = "其他"
         }
-        val baseIll0 = if (mBaseIllList[0].isChecked) "on" else null
-        val baseIll1 = if (mBaseIllList[1].isChecked) "on" else null
-        val baseIll2 = if (mBaseIllList[2].isChecked) "on" else null
-        val baseIll3 = if (mBaseIllList[3].isChecked) "on" else null
-        val baseIll4 = if (mBaseIllList[4].isChecked) "on" else null
-        val baseIll5 = if (mBaseIllList[5].isChecked) "on" else null
-        val baseIll6 = if (mBaseIllList[6].isChecked) "on" else null
-        val baseIll7 = if (mBaseIllList[7].isChecked) "on" else null
-        val baseIll8 = if (mBaseIllList[8].isChecked) "on" else null
-        val baseIll9 = if (mBaseIllList[9].isChecked) "on" else null
-        val baseIll10 = if (mBaseIllList[10].isChecked) "on" else null
-        val baseIll11 = if (mBaseIllList[11].isChecked) "on" else null
-        val baseIll12 = if (mBaseIllList[12].isChecked) "on" else null
-        val baseIll13 = if (mBaseIllList[13].isChecked) "on" else null
-        val baseOther = mOtherIll
-        val baseIll = PreviousHistoryBodyBean.BaseIll(
-            baseOther,
-            baseIll1,
-            baseIll13,
-            baseIll3,
-            baseIll5,
-            baseIll6,
-            baseIll0,
-            baseIll10,
-            baseIll4,
-            baseIll7,
-            baseIll12,
-            baseIll8,
-            baseIll11,
-            baseIll9,
-            baseIll2
-        )
+        var baseIll = PreviousHistoryBodyBean.BaseIll(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
+        if(mBaseIllList.size>0){
+            val baseIll0 = if (mBaseIllList[0].isChecked) "on" else null
+            val baseIll1 = if (mBaseIllList[1].isChecked) "on" else null
+            val baseIll2 = if (mBaseIllList[2].isChecked) "on" else null
+            val baseIll3 = if (mBaseIllList[3].isChecked) "on" else null
+            val baseIll4 = if (mBaseIllList[4].isChecked) "on" else null
+            val baseIll5 = if (mBaseIllList[5].isChecked) "on" else null
+            val baseIll6 = if (mBaseIllList[6].isChecked) "on" else null
+            val baseIll7 = if (mBaseIllList[7].isChecked) "on" else null
+            val baseIll8 = if (mBaseIllList[8].isChecked) "on" else null
+            val baseIll9 = if (mBaseIllList[9].isChecked) "on" else null
+            val baseIll10 = if (mBaseIllList[10].isChecked) "on" else null
+            val baseIll11 = if (mBaseIllList[11].isChecked) "on" else null
+            val baseIll12 = if (mBaseIllList[12].isChecked) "on" else null
+            val baseIll13 = if (mBaseIllList[13].isChecked) "on" else null
+            val baseOther = mOtherIll
+            baseIll = PreviousHistoryBodyBean.BaseIll(
+                baseOther,
+                baseIll1,
+                baseIll13,
+                baseIll3,
+                baseIll5,
+                baseIll6,
+                baseIll0,
+                baseIll10,
+                baseIll4,
+                baseIll7,
+                baseIll12,
+                baseIll8,
+                baseIll11,
+                baseIll9,
+                baseIll2
+            )
+        }
         var tumorIll: String? = parseDefaultContent(tv_phymatosis_history.text.toString())
         var tumorIllOther: String? = parseDefaultContent(tv_phymatosis_history.text.toString())
         if (tumorIll == "无" || tumorIll == "不详") {
@@ -158,12 +167,11 @@ class PreviousHistoryFragment : Fragment() {
         var smokeBean:PreviousHistoryBodyBean.Smoke? = PreviousHistoryBodyBean.Smoke(
             smoke, smokeChemotherapy, smokeIsQuit, smokeQuitTime, smokeSize, smokeYear
         )
-        if(smoke==null){
-            smokeBean = null
-        }
         val drinking = if (switch_drink_history.isChecked) "on" else null
-        val drinkingFrequence = parseDefaultContent(tv_drink_frequency.text.toString())
-        val drinkingSize = parseDefaultContent(tv_smoke_years.text.toString())
+        val drinkingFrequenceStr = parseDefaultContent(tv_drink_frequency.text.toString())
+        val drinkingFrequence = if(drinkingFrequenceStr.isEmpty()) null else drinkingFrequenceStr[0].toString()
+        val drinkingSizeStr = parseDefaultContent(tv_drink_capacity.text.toString())
+        val drinkingSize = if(drinkingSizeStr.isEmpty()) null else drinkingSizeStr[0].toString()
         val drinkingIsQuit = if (switch_is_quit_drink.isChecked) "on" else null
         val drinkingQuitTime = parseDefaultContent(tv_quit_drink_date.text.toString())
         val drinkingChemotherapy = if (switch_is_relapse_drink.isChecked) "on" else null
@@ -175,9 +183,6 @@ class PreviousHistoryFragment : Fragment() {
             drinkingQuitTime,
             drinkingSize
         )
-        if(drinking==null){
-            drinkingBean = null
-        }
         val height = parseDefaultContent(tv_patient_height.text.toString()).toIntOrNull()
         val weight = parseDefaultContent(tv_patient_weight.text.toString()).toIntOrNull()
         val surfaceArea = parseDefaultContent(tv_patient_body_area.text.toString()).toIntOrNull()
@@ -230,11 +235,13 @@ class PreviousHistoryFragment : Fragment() {
                 illText.append("${ill.name},")
             }
         }
-        mOtherIll = bean.baseIllOther
+        if(bean.baseIllOther!=null){
+            mOtherIll = bean.baseIllOther
+        }
         if (!mBaseIllList[13].isChecked && illText.isNotEmpty()) {
             illText.deleteCharAt(illText.length - 1)
         } else {
-            illText.append(bean.baseIllOther)
+            illText.append(mOtherIll)
         }
         tv_diseases_history.text = illText
     }
@@ -267,7 +274,7 @@ class PreviousHistoryFragment : Fragment() {
                         diseases.append("${d.name},")
                     }
                 }
-                if (diseases.isNotEmpty() && mOtherIll.isBlank()) {
+                if (diseases.isNotEmpty() && mOtherIll.isNullOrEmpty()) {
                     diseases.deleteCharAt(diseases.length - 1)
                 }
                 diseases.append(mOtherIll)
@@ -318,6 +325,7 @@ class PreviousHistoryFragment : Fragment() {
                 context,
                 if (isChecked) R.style.s_on else R.style.s_off
             )
+            ll_smoke.visibility = if(isChecked) View.VISIBLE else View.GONE
         }
         cl_average_cigarette.setOnClickListener {
             XPopup.Builder(context).asInputConfirm("平均吸烟（支/天）", "请输入平均吸烟") {
@@ -337,19 +345,10 @@ class PreviousHistoryFragment : Fragment() {
                 context,
                 if (isChecked) R.style.s_on else R.style.s_off
             )
+            ll_quit_smoke.visibility = if(isChecked) View.VISIBLE else View.GONE
         }
         cl_quit_smoke_date.setOnClickListener {
-            val now = Calendar.getInstance()
-            val dpd = DatePickerDialog.newInstance(
-                { _, year, monthOfYear, dayOfMonth ->
-                    val date = "$year-${monthOfYear + 1}-$dayOfMonth"
-                    tv_quit_smoke_date.text = date
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            )
-            dpd.show(parentFragmentManager, "戒烟日期")
+            showDatePickerDialog(tv_quit_smoke_date,parentFragmentManager)
         }
         cl_is_relapse_smoke.setOnClickListener {
             switch_is_relapse_smoke.isChecked = !switch_is_relapse_smoke.isChecked
@@ -368,12 +367,13 @@ class PreviousHistoryFragment : Fragment() {
                 context,
                 if (isChecked) R.style.s_on else R.style.s_off
             )
+            ll_drink.visibility = if(isChecked) View.VISIBLE else View.GONE
         }
         cl_drink_frequency.setOnClickListener {
             XPopup.Builder(context)
                 .asCenterList(
                     "饮酒频率",
-                    arrayOf("0=几乎不", "1=每周1-2次", "2=每周3-4次", "3=每周5-7次")
+                    arrayOf("请设置","0=几乎不", "1=每周1-2次", "2=每周3-4次", "3=每周5-7次")
                 ) { pos, text ->
                     tv_drink_frequency.text = text
                 }.show()
@@ -382,7 +382,7 @@ class PreviousHistoryFragment : Fragment() {
             XPopup.Builder(context)
                 .asCenterList(
                     "每次饮酒量",
-                    arrayOf("0=每次少量", "1=每周微醉", "2=偶尔大醉", "3=每次大醉")
+                    arrayOf("请设置","0=每次少量", "1=每周微醉", "2=偶尔大醉", "3=每次大醉")
                 ) { pos, text ->
                     tv_drink_capacity.text = text
                 }.show()
@@ -395,19 +395,10 @@ class PreviousHistoryFragment : Fragment() {
                 context,
                 if (isChecked) R.style.s_on else R.style.s_off
             )
+            ll_quit_drink.visibility = if(isChecked) View.VISIBLE else View.GONE
         }
         cl_quit_drink_date.setOnClickListener {
-            val now = Calendar.getInstance()
-            val dpd = DatePickerDialog.newInstance(
-                { _, year, monthOfYear, dayOfMonth ->
-                    val date = "$year-${monthOfYear + 1}-$dayOfMonth"
-                    tv_quit_drink_date.text = date
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            )
-            dpd.show(parentFragmentManager, "戒烟日期")
+            showDatePickerDialog(tv_quit_drink_date,parentFragmentManager)
         }
         cl_is_relapse_drink.setOnClickListener {
             switch_is_relapse_drink.isChecked = !switch_is_relapse_smoke.isChecked

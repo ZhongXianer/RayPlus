@@ -130,17 +130,7 @@ class DemographicsFragment : Fragment() {
             }.show()
         }
         cl_birthday.setOnClickListener {
-            val now = Calendar.getInstance()
-            val dpd = DatePickerDialog.newInstance(
-                { _, year, monthOfYear, dayOfMonth ->
-                    val date = "$year-${monthOfYear+1}-$dayOfMonth"
-                    tv_birthday.text = date
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            )
-            dpd.show(parentFragmentManager, "访视时间")
+            showDatePickerDialog(tv_birthday,parentFragmentManager)
         }
         cl_race.setOnClickListener {
             XPopup.Builder(context).asCenterList("人种", arrayOf("白人", "黑人","东方人","其他")) { pos, text ->
@@ -170,7 +160,7 @@ class DemographicsFragment : Fragment() {
             }.show()
         }
         cl_occupation.setOnClickListener {
-            XPopup.Builder(context).asCenterList("职业", arrayOf("脑力劳动者", "体力劳动者","学生","离退休","无业或事业","其他，请描述")) { pos, text ->
+            XPopup.Builder(context).asCenterList("职业", arrayOf("脑力劳动者", "体力劳动者","学生","离退休","无业或失业","其他，请描述")) { pos, text ->
                 if(pos<5){
                     tv_occupation.text = text
                 }else{

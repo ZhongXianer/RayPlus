@@ -22,8 +22,8 @@ data class ImagingEvaluationListBean(
         val sampleId: Int, // 5
         val time: String, // 2019-12-25
         @SerializedName("tumor_long")
-        val tumorLong: Int, // 11
+        val tumorLong: Float, // 11
         @SerializedName("tumor_short")
-        val tumorShort: Int // 15
+        val tumorShort: Float // 15
     )
 }

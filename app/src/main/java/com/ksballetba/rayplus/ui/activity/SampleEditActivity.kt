@@ -15,10 +15,8 @@ import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.util.*
 import com.ksballetba.rayplus.viewmodel.SamplesViewModel
 import com.lxj.xpopup.XPopup
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.android.synthetic.main.activity_sample_edit.*
 import org.jetbrains.anko.toast
-import java.util.Calendar
 
 class SampleEditActivity : AppCompatActivity() {
 
@@ -109,44 +107,15 @@ class SampleEditActivity : AppCompatActivity() {
                 }.show()
         }
         cl_patient_birthday.setOnClickListener {
-            val now = Calendar.getInstance()
-            val dpd = DatePickerDialog.newInstance(
-                { _, year, monthOfYear, dayOfMonth ->
-                    val date = "$year-$monthOfYear-$dayOfMonth"
-                    tv_patient_birthday.text = date
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            )
-            dpd.show(supportFragmentManager, "请选择日期")
+            showDatePickerDialog(tv_patient_birthday,supportFragmentManager)
         }
         cl_patient_sign_date.setOnClickListener {
-            val now = Calendar.getInstance()
-            val dpd = DatePickerDialog.newInstance(
-                { _, year, monthOfYear, dayOfMonth ->
-                    val date = "$year-$monthOfYear-$dayOfMonth"
-                    tv_patient_sign_date.text = date
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            )
-            dpd.show(supportFragmentManager, "请选择日期")
+            showDatePickerDialog(tv_patient_sign_date,supportFragmentManager)
         }
         cl_patient_enter_group_date.setOnClickListener {
-            val now = Calendar.getInstance()
-            val dpd = DatePickerDialog.newInstance(
-                { _, year, monthOfYear, dayOfMonth ->
-                    val date = "$year-$monthOfYear-$dayOfMonth"
-                    tv_patient_enter_group_date.text = date
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            )
-            dpd.show(supportFragmentManager, "请选择日期")
+            showDatePickerDialog(tv_patient_enter_group_date,supportFragmentManager)
         }
+
     }
 
     private fun loadData(sampleBody: SampleEditBodyBean){
@@ -203,27 +172,31 @@ class SampleEditActivity : AppCompatActivity() {
 
 
     private fun checkSampleValid(sampleEditBodyBean: SampleEditBodyBean): Boolean {
+        var idNum = ""
+        if(sampleEditBodyBean.idNum!=null){
+            idNum = sampleEditBodyBean.idNum
+        }
         if(sampleEditBodyBean.sampleId==null){
             return !(sampleEditBodyBean.researchCenterId < 0 ||
-                    sampleEditBodyBean.patientName.isEmpty() ||
-                    sampleEditBodyBean.patientIds.isEmpty() ||
-                    sampleEditBodyBean.idNum.length<18 ||
+                    sampleEditBodyBean.patientName.isNullOrEmpty() ||
+                    sampleEditBodyBean.patientIds.isNullOrEmpty() ||
+                    idNum.length!=18 ||
                     sampleEditBodyBean.groupId < 0 ||
                     sampleEditBodyBean.sex < 0 ||
-                    sampleEditBodyBean.date.isEmpty() ||
-                    sampleEditBodyBean.signTime.isEmpty() ||
-                    sampleEditBodyBean.inGroupTime.isEmpty())
+                    sampleEditBodyBean.date.isNullOrEmpty() ||
+                    sampleEditBodyBean.signTime.isNullOrEmpty() ||
+                    sampleEditBodyBean.inGroupTime.isNullOrEmpty())
         }else{
             return !(sampleEditBodyBean.sampleId<0||
                     sampleEditBodyBean.researchCenterId < 0 ||
-                    sampleEditBodyBean.patientName.isEmpty() ||
-                    sampleEditBodyBean.patientIds.isEmpty() ||
-                    sampleEditBodyBean.idNum.length<18 ||
+                    sampleEditBodyBean.patientName.isNullOrEmpty() ||
+                    sampleEditBodyBean.patientIds.isNullOrEmpty() ||
+                    idNum.length!=18 ||
                     sampleEditBodyBean.groupId < 0 ||
                     sampleEditBodyBean.sex < 0 ||
-                    sampleEditBodyBean.date.isEmpty() ||
-                    sampleEditBodyBean.signTime.isEmpty() ||
-                    sampleEditBodyBean.inGroupTime.isEmpty())
+                    sampleEditBodyBean.date.isNullOrEmpty() ||
+                    sampleEditBodyBean.signTime.isNullOrEmpty() ||
+                    sampleEditBodyBean.inGroupTime.isNullOrEmpty())
         }
 
     }

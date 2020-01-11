@@ -78,7 +78,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/item_left_margin"
                     android:text="@string/input_visit_time"
-                    android:maxEms="12"
+                    android:maxEms="8"
                     android:ellipsize="end"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -225,7 +225,14 @@
                 android:id="@+id/ll_smoke"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
                 android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/divider"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_average_cigarette"
@@ -335,6 +342,11 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/divider"/>
+
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cl_quit_smoke_date"
                         android:layout_width="match_parent"
@@ -406,6 +418,11 @@
 
                 </LinearLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/divider"/>
+
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -448,7 +465,14 @@
                 android:id="@+id/ll_drink"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
                 android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/divider"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_drink_frequency"
@@ -557,6 +581,11 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/divider"/>
+
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cl_quit_drink_date"
                         android:layout_width="match_parent"
@@ -628,6 +657,11 @@
 
 
                 </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/divider"/>
 
             </LinearLayout>
 

@@ -23,6 +23,7 @@ import com.ksballetba.rayplus.ui.adapter.ProjectsAdapter
 import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment
 import com.ksballetba.rayplus.util.getBaseVisitViewModel
 import com.ksballetba.rayplus.util.parseLabInspectionRank
+import com.ksballetba.rayplus.util.showDatePickerDialog
 import com.ksballetba.rayplus.viewmodel.BaseVisitViewModel
 import com.lxj.xpopup.XPopup
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
@@ -63,17 +64,7 @@ class LabInspectionFragment : Fragment() {
 
     private fun initUI() {
         cl_sampling_date.setOnClickListener {
-            val now = Calendar.getInstance()
-            val dpd = DatePickerDialog.newInstance(
-                { _, year, monthOfYear, dayOfMonth ->
-                    val date = "$year-${monthOfYear+1}-$dayOfMonth"
-                    tv_sampling_date.text = date
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            )
-            dpd.show(parentFragmentManager, "采样日期")
+            showDatePickerDialog(tv_sampling_date,parentFragmentManager)
         }
         fab_save_lab_inspection.setOnClickListener {
             saveData()
@@ -90,49 +81,49 @@ class LabInspectionFragment : Fragment() {
         mViewModel.getLabInspection(mSampleId, mCycleNumber).observe(viewLifecycleOwner, Observer {
             tv_sampling_date.text = it.time
             (mBloodRoutineAdapter.getViewByPosition(0, R.id.tv_lab_inspection) as TextView).text =
-                it.hbVal.toString()
+                "${it.hbVal?:""}"
             (mBloodRoutineAdapter.getViewByPosition(
                 0,
                 R.id.ns_lab_inspection
             ) as NiceSpinner).selectedIndex = it.hbRank ?: 0
             (mBloodRoutineAdapter.getViewByPosition(1, R.id.tv_lab_inspection) as TextView).text =
-                it.rBCBVal.toString()
+                "${it.rBCBVal?:""}"
             (mBloodRoutineAdapter.getViewByPosition(
                 1,
                 R.id.ns_lab_inspection
             ) as NiceSpinner).selectedIndex = it.rBCBRank ?: 0
             (mBloodRoutineAdapter.getViewByPosition(2, R.id.tv_lab_inspection) as TextView).text =
-                it.wBCBVal.toString()
+                "${it.wBCBVal?:""}"
             (mBloodRoutineAdapter.getViewByPosition(
                 2,
                 R.id.ns_lab_inspection
             ) as NiceSpinner).selectedIndex = it.wBCBRank ?: 0
             (mBloodRoutineAdapter.getViewByPosition(3, R.id.tv_lab_inspection) as TextView).text =
-                it.pltVal.toString()
+                "${it.pltVal?:""}"
             (mBloodRoutineAdapter.getViewByPosition(
                 3,
                 R.id.ns_lab_inspection
             ) as NiceSpinner).selectedIndex = it.pltRank ?: 0
             (mBloodRoutineAdapter.getViewByPosition(4, R.id.tv_lab_inspection) as TextView).text =
-                it.pTVal.toString()
+                "${it.pTVal?:""}"
             (mBloodRoutineAdapter.getViewByPosition(
                 4,
                 R.id.ns_lab_inspection
             ) as NiceSpinner).selectedIndex = it.pTRank ?: 0
             (mUrineRoutineAdapter.getViewByPosition(0, R.id.tv_lab_inspection) as TextView).text =
-                it.wBCPVal.toString()
+                "${it.wBCPVal?:""}"
             (mUrineRoutineAdapter.getViewByPosition(
                 0,
                 R.id.ns_lab_inspection
             ) as NiceSpinner).selectedIndex = it.wBCPRank ?: 0
             (mUrineRoutineAdapter.getViewByPosition(1, R.id.tv_lab_inspection) as TextView).text =
-                it.rBCPVal.toString()
+                "${it.rBCPVal?:""}"
             (mUrineRoutineAdapter.getViewByPosition(
                 1,
                 R.id.ns_lab_inspection
             ) as NiceSpinner).selectedIndex = it.rBCPRank ?: 0
             (mUrineRoutineAdapter.getViewByPosition(2, R.id.tv_lab_inspection) as TextView).text =
-                if (it.pROVal == 1) "+" else "-"
+                if (it.pROVal == 1.0f) "+" else "-"
             (mUrineRoutineAdapter.getViewByPosition(
                 2,
                 R.id.ns_lab_inspection
@@ -140,7 +131,7 @@ class LabInspectionFragment : Fragment() {
             (mBloodBiochemistryAdapter.getViewByPosition(
                 0,
                 R.id.tv_lab_inspection
-            ) as TextView).text = it.aLTVal.toString()
+            ) as TextView).text = "${it.aLTVal?:""}"
             (mBloodBiochemistryAdapter.getViewByPosition(
                 0,
                 R.id.ns_lab_inspection
@@ -148,7 +139,7 @@ class LabInspectionFragment : Fragment() {
             (mBloodBiochemistryAdapter.getViewByPosition(
                 1,
                 R.id.tv_lab_inspection
-            ) as TextView).text = it.aSTVal.toString()
+            ) as TextView).text = "${it.aSTVal?:""}"
             (mBloodBiochemistryAdapter.getViewByPosition(
                 1,
                 R.id.ns_lab_inspection
@@ -156,7 +147,7 @@ class LabInspectionFragment : Fragment() {
             (mBloodBiochemistryAdapter.getViewByPosition(
                 2,
                 R.id.tv_lab_inspection
-            ) as TextView).text = it.tBILVal.toString()
+            ) as TextView).text = "${it.tBILVal?:""}"
             (mBloodBiochemistryAdapter.getViewByPosition(
                 2,
                 R.id.ns_lab_inspection
@@ -164,7 +155,7 @@ class LabInspectionFragment : Fragment() {
             (mBloodBiochemistryAdapter.getViewByPosition(
                 3,
                 R.id.tv_lab_inspection
-            ) as TextView).text = it.dBILVal.toString()
+            ) as TextView).text = "${it.dBILVal?:""}"
             (mBloodBiochemistryAdapter.getViewByPosition(
                 3,
                 R.id.ns_lab_inspection
@@ -172,7 +163,7 @@ class LabInspectionFragment : Fragment() {
             (mBloodBiochemistryAdapter.getViewByPosition(
                 4,
                 R.id.tv_lab_inspection
-            ) as TextView).text = it.aLBVal.toString()
+            ) as TextView).text = "${it.aLBVal?:""}"
             (mBloodBiochemistryAdapter.getViewByPosition(
                 4,
                 R.id.ns_lab_inspection
@@ -180,7 +171,7 @@ class LabInspectionFragment : Fragment() {
             (mBloodBiochemistryAdapter.getViewByPosition(
                 5,
                 R.id.tv_lab_inspection
-            ) as TextView).text = it.crVal.toString()
+            ) as TextView).text = "${it.crVal?:""}"
             (mBloodBiochemistryAdapter.getViewByPosition(
                 5,
                 R.id.ns_lab_inspection
@@ -188,7 +179,7 @@ class LabInspectionFragment : Fragment() {
             (mBloodBiochemistryAdapter.getViewByPosition(
                 6,
                 R.id.tv_lab_inspection
-            ) as TextView).text = it.bUNVal.toString()
+            ) as TextView).text = "${it.bUNVal?:""}"
             (mBloodBiochemistryAdapter.getViewByPosition(
                 6,
                 R.id.ns_lab_inspection
@@ -196,25 +187,25 @@ class LabInspectionFragment : Fragment() {
             (mBloodBiochemistryAdapter.getViewByPosition(
                 7,
                 R.id.tv_lab_inspection
-            ) as TextView).text = it.gluVal.toString()
+            ) as TextView).text = "${it.gluVal?:""}"
             (mBloodBiochemistryAdapter.getViewByPosition(
                 7,
                 R.id.ns_lab_inspection
             ) as NiceSpinner).selectedIndex = it.gluRank ?: 0
             (mTumorMarkerAdapter.getViewByPosition(0, R.id.tv_lab_inspection) as TextView).text =
-                it.cEAVal.toString()
+                "${it.cEAVal?:""}"
             (mTumorMarkerAdapter.getViewByPosition(
                 0,
                 R.id.ns_lab_inspection
             ) as NiceSpinner).selectedIndex = it.cEARank ?: 0
             (mTumorMarkerAdapter.getViewByPosition(1, R.id.tv_lab_inspection) as TextView).text =
-                it.sCCVal.toString()
+                "${it.sCCVal?:""}"
             (mTumorMarkerAdapter.getViewByPosition(
                 1,
                 R.id.ns_lab_inspection
             ) as NiceSpinner).selectedIndex = it.sCCRank ?: 0
             (mTumorMarkerAdapter.getViewByPosition(2, R.id.tv_lab_inspection) as TextView).text =
-                it.nSEVal.toString()
+                "${it.nSEVal?:""}"
             (mTumorMarkerAdapter.getViewByPosition(
                 2,
                 R.id.ns_lab_inspection
@@ -227,7 +218,7 @@ class LabInspectionFragment : Fragment() {
         val hbVal = (mBloodRoutineAdapter.getViewByPosition(
             0,
             R.id.tv_lab_inspection
-        ) as TextView).text.toString().toIntOrNull()
+        ) as TextView).text.toString().toFloatOrNull()
         val hbRank = parseLabInspectionRank(
             (mBloodRoutineAdapter.getViewByPosition(
                 0,
@@ -237,7 +228,7 @@ class LabInspectionFragment : Fragment() {
         val rBCBVal = (mBloodRoutineAdapter.getViewByPosition(
             1,
             R.id.tv_lab_inspection
-        ) as TextView).text.toString().toIntOrNull()
+        ) as TextView).text.toString().toFloatOrNull()
         val rBCBRank = parseLabInspectionRank(
             (mBloodRoutineAdapter.getViewByPosition(
                 1,
@@ -247,7 +238,7 @@ class LabInspectionFragment : Fragment() {
         val wBCBVal = (mBloodRoutineAdapter.getViewByPosition(
             2,
             R.id.tv_lab_inspection
-        ) as TextView).text.toString().toIntOrNull()
+        ) as TextView).text.toString().toFloatOrNull()
         val wBCBRank = parseLabInspectionRank(
             (mBloodRoutineAdapter.getViewByPosition(
                 2,
@@ -257,7 +248,7 @@ class LabInspectionFragment : Fragment() {
         val pltVal = (mBloodRoutineAdapter.getViewByPosition(
             3,
             R.id.tv_lab_inspection
-        ) as TextView).text.toString().toIntOrNull()
+        ) as TextView).text.toString().toFloatOrNull()
         val pltRank = parseLabInspectionRank(
             (mBloodRoutineAdapter.getViewByPosition(
                 3,
@@ -267,7 +258,7 @@ class LabInspectionFragment : Fragment() {
         val pTVal = (mBloodRoutineAdapter.getViewByPosition(
             4,
             R.id.tv_lab_inspection
-        ) as TextView).text.toString().toIntOrNull()
+        ) as TextView).text.toString().toFloatOrNull()
         val pTRank = parseLabInspectionRank(
             (mBloodRoutineAdapter.getViewByPosition(
                 4,
@@ -277,7 +268,7 @@ class LabInspectionFragment : Fragment() {
         val wBCPVal = (mUrineRoutineAdapter.getViewByPosition(
             0,
             R.id.tv_lab_inspection
-        ) as TextView).text.toString().toIntOrNull()
+        ) as TextView).text.toString().toFloatOrNull()
         val wBCPRank = parseLabInspectionRank(
             (mUrineRoutineAdapter.getViewByPosition(
                 0,
@@ -287,7 +278,7 @@ class LabInspectionFragment : Fragment() {
         val rBCPVal = (mUrineRoutineAdapter.getViewByPosition(
             1,
             R.id.tv_lab_inspection
-        ) as TextView).text.toString().toIntOrNull()
+        ) as TextView).text.toString().toFloatOrNull()
         val rBCPRank = parseLabInspectionRank(
             (mUrineRoutineAdapter.getViewByPosition(
                 1,
@@ -298,7 +289,7 @@ class LabInspectionFragment : Fragment() {
                 2,
                 R.id.tv_lab_inspection
             ) as TextView).text == "+"
-        ) 1 else 2
+        ) 1f else 2f
         val pRORank = parseLabInspectionRank(
             (mUrineRoutineAdapter.getViewByPosition(
                 2,
@@ -308,7 +299,7 @@ class LabInspectionFragment : Fragment() {
         val aLTVal = (mBloodBiochemistryAdapter.getViewByPosition(
             0,
             R.id.tv_lab_inspection
-        ) as TextView).text.toString().toIntOrNull()
+        ) as TextView).text.toString().toFloatOrNull()
         val aLTRank = parseLabInspectionRank(
             (mBloodBiochemistryAdapter.getViewByPosition(
                 0,
@@ -318,7 +309,7 @@ class LabInspectionFragment : Fragment() {
         val aSTVal = (mBloodBiochemistryAdapter.getViewByPosition(
             1,
             R.id.tv_lab_inspection
-        ) as TextView).text.toString().toIntOrNull()
+        ) as TextView).text.toString().toFloatOrNull()
         val aSTRank = parseLabInspectionRank(
             (mBloodBiochemistryAdapter.getViewByPosition(
                 1,
@@ -328,7 +319,7 @@ class LabInspectionFragment : Fragment() {
         val tBILVal = (mBloodBiochemistryAdapter.getViewByPosition(
             2,
             R.id.tv_lab_inspection
-        ) as TextView).text.toString().toIntOrNull()
+        ) as TextView).text.toString().toFloatOrNull()
         val tBILRank = parseLabInspectionRank(
             (mBloodBiochemistryAdapter.getViewByPosition(
                 2,
@@ -338,7 +329,7 @@ class LabInspectionFragment : Fragment() {
         val dBILVal = (mBloodBiochemistryAdapter.getViewByPosition(
             3,
             R.id.tv_lab_inspection
-        ) as TextView).text.toString().toIntOrNull()
+        ) as TextView).text.toString().toFloatOrNull()
         val dBILRank = parseLabInspectionRank(
             (mBloodBiochemistryAdapter.getViewByPosition(
                 3,
@@ -348,7 +339,7 @@ class LabInspectionFragment : Fragment() {
         val aLBVal = (mBloodBiochemistryAdapter.getViewByPosition(
             4,
             R.id.tv_lab_inspection
-        ) as TextView).text.toString().toIntOrNull()
+        ) as TextView).text.toString().toFloatOrNull()
         val aLBRank = parseLabInspectionRank(
             (mBloodBiochemistryAdapter.getViewByPosition(
                 4,
@@ -358,7 +349,7 @@ class LabInspectionFragment : Fragment() {
         val crVal = (mBloodBiochemistryAdapter.getViewByPosition(
             5,
             R.id.tv_lab_inspection
-        ) as TextView).text.toString().toIntOrNull()
+        ) as TextView).text.toString().toFloatOrNull()
         val crRank = parseLabInspectionRank(
             (mBloodBiochemistryAdapter.getViewByPosition(
                 5,
@@ -368,7 +359,7 @@ class LabInspectionFragment : Fragment() {
         val bUNVal = (mBloodBiochemistryAdapter.getViewByPosition(
             6,
             R.id.tv_lab_inspection
-        ) as TextView).text.toString().toIntOrNull()
+        ) as TextView).text.toString().toFloatOrNull()
         val bUNRank = parseLabInspectionRank(
             (mBloodBiochemistryAdapter.getViewByPosition(
                 6,
@@ -378,7 +369,7 @@ class LabInspectionFragment : Fragment() {
         val gluVal = (mBloodBiochemistryAdapter.getViewByPosition(
             7,
             R.id.tv_lab_inspection
-        ) as TextView).text.toString().toIntOrNull()
+        ) as TextView).text.toString().toFloatOrNull()
         val gluRank = parseLabInspectionRank(
             (mBloodBiochemistryAdapter.getViewByPosition(
                 7,
@@ -388,7 +379,7 @@ class LabInspectionFragment : Fragment() {
         val cEAVal = (mTumorMarkerAdapter.getViewByPosition(
             0,
             R.id.tv_lab_inspection
-        ) as TextView).text.toString().toIntOrNull()
+        ) as TextView).text.toString().toFloatOrNull()
         val cEARank = parseLabInspectionRank(
             (mTumorMarkerAdapter.getViewByPosition(
                 0,
@@ -398,7 +389,7 @@ class LabInspectionFragment : Fragment() {
         val sCCVal = (mTumorMarkerAdapter.getViewByPosition(
             1,
             R.id.tv_lab_inspection
-        ) as TextView).text.toString().toIntOrNull()
+        ) as TextView).text.toString().toFloatOrNull()
         val sCCRank = parseLabInspectionRank(
             (mTumorMarkerAdapter.getViewByPosition(
                 1,
@@ -408,7 +399,7 @@ class LabInspectionFragment : Fragment() {
         val nSEVal = (mTumorMarkerAdapter.getViewByPosition(
             2,
             R.id.tv_lab_inspection
-        ) as TextView).text.toString().toIntOrNull()
+        ) as TextView).text.toString().toFloatOrNull()
         val nSERank = parseLabInspectionRank(
             (mTumorMarkerAdapter.getViewByPosition(
                 2,
@@ -481,7 +472,7 @@ class LabInspectionFragment : Fragment() {
         rv_tumor_marker.layoutManager = tumorMarkerLayoutManager
         mBloodRoutineAdapter = LabInspectionAdapter(
             R.layout.item_lab_inspection,
-            listOf("Hb(g/L)", "RBC_B(×10¹²/L)", "WBC(×10^9/L)", "Plt(×10^9/L)", "PT(S)")
+            listOf("Hb(g/L)", "RBC_B(×10^12/L)", "WBC(×10^9/L)", "Plt(×10^9/L)", "PT(S)")
         )
         mUrineRoutineAdapter = LabInspectionAdapter(
             R.layout.item_lab_inspection,

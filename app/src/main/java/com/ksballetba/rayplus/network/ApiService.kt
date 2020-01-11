@@ -69,6 +69,16 @@ interface ApiService {
     @POST("/first_diagnose/{sample_id}")
     fun editFirstVisitProcess(@Path("sample_id") sampleId:Int,@Body firstVisitProcessBodyBean: FirstVisitProcessBodyBean):Observable<BaseResponseBean>
 
+    @GET("/diagnose_history/{sample_id}")
+    fun getTreatmentHistoryList(@Path("sample_id") sampleId:Int):Observable<TreatmentHistoryListBean>
+
+    @Headers("Content-Type:application/json")
+    @POST("/diagnose_history/{sample_id}")
+    fun editTreatmentHistory(@Path("sample_id") sampleId:Int,@Body treatmentHistoryBodyBean: TreatmentHistoryBodyBean):Observable<BaseResponseBean>
+
+//    @DELETE("/patient_report/{sample_id}/{report_id}")
+//    fun deleteTreatmentHistory(@Path("sample_id") sampleId:Int,@Path("report_id") reportId:Int):Observable<BaseResponseBean>
+
     @GET("/lab_inspection/{sample_id}/{cycle_number}")
     fun getLabInspection(@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int):Observable<LabInspectionResponseBean>
 

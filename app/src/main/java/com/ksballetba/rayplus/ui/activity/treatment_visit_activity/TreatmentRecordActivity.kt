@@ -13,6 +13,7 @@ import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.CYCLE_
 import com.ksballetba.rayplus.ui.fragment.treatment_visit_fragment.TreatmentRecordFragment.Companion.TREATMENT_RECORD_BODY
 import com.ksballetba.rayplus.util.getTreatmentVisitViewModel
 import com.ksballetba.rayplus.util.parseDefaultContent
+import com.ksballetba.rayplus.util.showDatePickerDialog
 import com.ksballetba.rayplus.viewmodel.TreatmentVisitViewModel
 import com.lxj.xpopup.XPopup
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
@@ -62,30 +63,10 @@ class TreatmentRecordActivity : AppCompatActivity() {
             }.show()
         }
         cl_treatment_start_date.setOnClickListener {
-            val now = Calendar.getInstance()
-            val dpd = DatePickerDialog.newInstance(
-                { _, year, monthOfYear, dayOfMonth ->
-                    val date = "$year-${monthOfYear+1}-$dayOfMonth"
-                    tv_treatment_start_date.text = date
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            )
-            dpd.show(supportFragmentManager, "请选择日期")
+            showDatePickerDialog(tv_treatment_start_date,supportFragmentManager)
         }
         cl_treatment_end_date.setOnClickListener {
-            val now = Calendar.getInstance()
-            val dpd = DatePickerDialog.newInstance(
-                { _, year, monthOfYear, dayOfMonth ->
-                    val date = "$year-${monthOfYear+1}-$dayOfMonth"
-                    tv_treatment_end_date.text = date
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            )
-            dpd.show(supportFragmentManager, "请选择日期")
+            showDatePickerDialog(tv_treatment_end_date,supportFragmentManager)
         }
         cl_dose_usage.setOnClickListener {
             XPopup.Builder(this).asInputConfirm("剂量及用法", "请输入剂量及用法") {

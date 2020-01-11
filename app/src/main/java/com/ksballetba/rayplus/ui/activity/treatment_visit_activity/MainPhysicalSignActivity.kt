@@ -15,6 +15,7 @@ import com.ksballetba.rayplus.ui.fragment.treatment_visit_fragment.MainPhysicalS
 import com.ksballetba.rayplus.util.getMainPhysicalSignList
 import com.ksballetba.rayplus.util.getTreatmentVisitViewModel
 import com.ksballetba.rayplus.util.parseDefaultContent
+import com.ksballetba.rayplus.util.showDatePickerDialog
 import com.ksballetba.rayplus.viewmodel.TreatmentVisitViewModel
 import com.lxj.xpopup.XPopup
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
@@ -68,30 +69,10 @@ class MainPhysicalSignActivity : AppCompatActivity() {
             }.show()
         }
         cl_start_date.setOnClickListener {
-            val now = Calendar.getInstance()
-            val dpd = DatePickerDialog.newInstance(
-                { _, year, monthOfYear, dayOfMonth ->
-                    val date = "$year-${monthOfYear+1}-$dayOfMonth"
-                    tv_start_date.text = date
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            )
-            dpd.show(supportFragmentManager, "请选择日期")
+            showDatePickerDialog(tv_start_date,supportFragmentManager)
         }
         cl_end_date.setOnClickListener {
-            val now = Calendar.getInstance()
-            val dpd = DatePickerDialog.newInstance(
-                { _, year, monthOfYear, dayOfMonth ->
-                    val date = "$year-${monthOfYear+1}-$dayOfMonth"
-                    tv_end_date.text = date
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            )
-            dpd.show(supportFragmentManager, "请选择日期")
+            showDatePickerDialog(tv_end_date,supportFragmentManager)
         }
         cl_exist_status.setOnClickListener {
             XPopup.Builder(this).asCenterList("存在状态", arrayOf("存在", "消失")) { pos, text ->

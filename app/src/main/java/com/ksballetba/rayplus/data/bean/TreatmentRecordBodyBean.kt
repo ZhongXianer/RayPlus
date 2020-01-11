@@ -14,7 +14,7 @@ data class TreatmentRecordBodyBean(
     @SerializedName("start_time")
     val startTime: String?, // 2019-12-04
     @SerializedName("treatment_name")
-    val treatmentName: String, // 吃药
+    val treatmentName: String?, // 吃药
     @SerializedName("treatment_record_id")
     val treatmentRecordId: Int?
 ) : Parcelable {

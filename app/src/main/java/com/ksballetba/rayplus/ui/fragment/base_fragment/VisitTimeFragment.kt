@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import com.apkfuns.logutils.LogUtils
 import com.blankj.utilcode.util.ToastUtils
@@ -14,8 +15,10 @@ import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.VisitTimeBean
 import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
+import com.ksballetba.rayplus.ui.activity.TreatmentVisitDetailActivity
 import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.CYCLE_NUMBER_KEY
 import com.ksballetba.rayplus.util.getBaseVisitViewModel
+import com.ksballetba.rayplus.util.showDatePickerDialog
 import com.ksballetba.rayplus.viewmodel.BaseVisitViewModel
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.android.synthetic.main.fragment_visit_time.*
@@ -30,7 +33,6 @@ class VisitTimeFragment : Fragment() {
         const val TAG = "VisitTimeFragment"
     }
 
-    private lateinit var mOnDateSetListener:DatePickerDialog.OnDateSetListener
 
     lateinit var mViewModel:BaseVisitViewModel
 
@@ -53,19 +55,10 @@ class VisitTimeFragment : Fragment() {
     }
 
     private fun initUI(){
-        mOnDateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                val date = "$year-${monthOfYear+1}-$dayOfMonth"
-                tv_visit_time.text = date
-            }
+
+
         cl_visit_time.setOnClickListener {
-            val now = Calendar.getInstance()
-            val dpd = DatePickerDialog.newInstance(
-                mOnDateSetListener,
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            )
-            dpd.show(parentFragmentManager,"访视时间")
+            showDatePickerDialog(tv_visit_time,parentFragmentManager)
         }
         fab_save_visit_time.setOnClickListener {
             saveData()
@@ -86,6 +79,11 @@ class VisitTimeFragment : Fragment() {
     private fun loadData(){
         mViewModel.getVisitTime(mSampleId,mCycleNumber).observe(viewLifecycleOwner, Observer {
             tv_visit_time.text = it.cycleTime
+            if(activity is TreatmentVisitDetailActivity){
+                val visitTitle = activity?.findViewById<Toolbar>(R.id.tb_treatment_visit)?.title
+                val visitTime = it.cycleTime?:""
+                activity?.findViewById<Toolbar>(R.id.tb_treatment_visit)?.title = "$visitTitle  $visitTime"
+            }
         })
     }
 

@@ -8,15 +8,15 @@ import com.google.gson.annotations.SerializedName
 data class ImagingEvaluationBodyBean(
     @SerializedName("evaluate_id")
     val evaluateId: Int?,
-    val method: String, // 其他
+    val method: String?, // 其他
     @SerializedName("method_other")
-    val methodOther: String, // 切片
-    val part: String, // 西瓜
+    val methodOther: String?, // 切片
+    val part: String?, // 西瓜
     val time: String?, // 2019-12-25
     @SerializedName("tumor_long")
-    val tumorLong: Int?, // 10
+    val tumorLong: Float?, // 10
     @SerializedName("tumor_short")
-    val tumorShort: Int? // 22
+    val tumorShort: Float? // 22
 ) : Parcelable {
     constructor(source: Parcel) : this(
         source.readValue(Int::class.java.classLoader) as Int?,
@@ -24,8 +24,8 @@ data class ImagingEvaluationBodyBean(
         source.readString(),
         source.readString(),
         source.readString(),
-        source.readValue(Int::class.java.classLoader) as Int?,
-        source.readValue(Int::class.java.classLoader) as Int?
+        source.readValue(Float::class.java.classLoader) as Float?,
+        source.readValue(Float::class.java.classLoader) as Float?
     )
 
     override fun describeContents() = 0

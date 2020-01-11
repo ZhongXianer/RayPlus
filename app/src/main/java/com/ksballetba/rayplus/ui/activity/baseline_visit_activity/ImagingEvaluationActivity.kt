@@ -9,11 +9,16 @@ import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.ImagingEvaluationBodyBean
 import com.ksballetba.rayplus.ui.activity.CRFActivity
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
+import com.ksballetba.rayplus.ui.activity.TreatmentVisitDetailActivity
 import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.CYCLE_NUMBER_KEY
+import com.ksballetba.rayplus.ui.fragment.base_fragment.ImagingEvaluationFragment.Companion.CRF_PAGE
 import com.ksballetba.rayplus.ui.fragment.base_fragment.ImagingEvaluationFragment.Companion.IMAGING_EVALUATION_BODY
+import com.ksballetba.rayplus.ui.fragment.base_fragment.ImagingEvaluationFragment.Companion.REFRESH_PAGE
+import com.ksballetba.rayplus.ui.fragment.base_fragment.ImagingEvaluationFragment.Companion.TREATMENT_VISIT_DETAIL_PAGE
 import com.ksballetba.rayplus.util.getBaseVisitViewModel
 import com.ksballetba.rayplus.util.getImagingEvaluationWayListInHistory
 import com.ksballetba.rayplus.util.parseDefaultContent
+import com.ksballetba.rayplus.util.showDatePickerDialog
 import com.ksballetba.rayplus.viewmodel.BaseVisitViewModel
 import com.lxj.xpopup.XPopup
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
@@ -28,6 +33,7 @@ class ImagingEvaluationActivity : AppCompatActivity() {
     }
 
     lateinit var mViewModel: BaseVisitViewModel
+    private lateinit var mRefreshPage:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +53,7 @@ class ImagingEvaluationActivity : AppCompatActivity() {
     private fun initUI() {
         setSupportActionBar(tb_imaging_evaluation)
         mViewModel = getBaseVisitViewModel(this)
+        mRefreshPage = intent.getStringExtra(REFRESH_PAGE)
         val imagingEvaluationBody =
             intent.getParcelableExtra<ImagingEvaluationBodyBean>(IMAGING_EVALUATION_BODY)
         if (imagingEvaluationBody != null) {
@@ -82,17 +89,7 @@ class ImagingEvaluationActivity : AppCompatActivity() {
             }.show()
         }
         cl_date.setOnClickListener {
-            val now = Calendar.getInstance()
-            val dpd = DatePickerDialog.newInstance(
-                { _, year, monthOfYear, dayOfMonth ->
-                    val date = "$year-${monthOfYear + 1}-$dayOfMonth"
-                    tv_date.text = date
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            )
-            dpd.show(supportFragmentManager, "请选择时间")
+            showDatePickerDialog(tv_date,supportFragmentManager)
         }
         fab_save_imaging_evaluation.setOnClickListener {
             val sampleId = intent.getIntExtra(SAMPLE_ID,-1)
@@ -124,8 +121,8 @@ class ImagingEvaluationActivity : AppCompatActivity() {
         } else {
             method = "其他"
         }
-        val tumorLong = tv_tumor_long_dia.text.toString().toIntOrNull()
-        val tumorShort = tv_tumor_short_dia.text.toString().toIntOrNull()
+        val tumorLong = tv_tumor_long_dia.text.toString().toFloatOrNull()
+        val tumorShort = tv_tumor_short_dia.text.toString().toFloatOrNull()
         val time = parseDefaultContent(tv_date.text.toString())
         val imagingEvaluationBody = ImagingEvaluationBodyBean(
             evaluateId, method, methodOther, part, time, tumorLong, tumorShort
@@ -134,10 +131,20 @@ class ImagingEvaluationActivity : AppCompatActivity() {
             Observer {
                 if(it.code==200){
                     toast("体格报告单操作成功")
-                    val intent = Intent(this, CRFActivity::class.java)
-                    intent.action = REFRESH_IMAGING_EVALUATION_PAGE
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    startActivity(intent)
+                    when(mRefreshPage){
+                        CRF_PAGE->{
+                            val intent = Intent(this, CRFActivity::class.java)
+                            intent.action = REFRESH_IMAGING_EVALUATION_PAGE
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                            startActivity(intent)
+                        }
+                        TREATMENT_VISIT_DETAIL_PAGE->{
+                            val intent = Intent(this, TreatmentVisitDetailActivity::class.java)
+                            intent.action = REFRESH_IMAGING_EVALUATION_PAGE
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                            startActivity(intent)
+                        }
+                    }
                 }else{
                     toast("体格报告单操作失败")
                 }

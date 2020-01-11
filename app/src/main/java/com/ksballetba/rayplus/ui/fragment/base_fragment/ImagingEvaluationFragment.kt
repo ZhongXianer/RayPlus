@@ -18,7 +18,9 @@ import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.ImagingEvaluationBodyBean
 import com.ksballetba.rayplus.data.bean.ImagingEvaluationListBean
 import com.ksballetba.rayplus.network.Status
+import com.ksballetba.rayplus.ui.activity.CRFActivity
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
+import com.ksballetba.rayplus.ui.activity.TreatmentVisitDetailActivity
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.ImagingEvaluationActivity
 import com.ksballetba.rayplus.ui.adapter.ImagingEvaluationAdapter
 import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment
@@ -36,6 +38,9 @@ class ImagingEvaluationFragment : Fragment() {
     companion object {
         const val TAG = "ImagingEvaluationFragment"
         const val IMAGING_EVALUATION_BODY = "IMAGING_EVALUATION_BODY"
+        const val REFRESH_PAGE = "REFRESH_PAGE"
+        const val CRF_PAGE = "CRF_PAGE"
+        const val TREATMENT_VISIT_DETAIL_PAGE = "TREATMENT_VISIT_DETAIL_PAGE"
     }
 
     private lateinit var mViewModel: BaseVisitViewModel
@@ -43,6 +48,7 @@ class ImagingEvaluationFragment : Fragment() {
     var mList = mutableListOf<ImagingEvaluationListBean.Data>()
     var mSampleId = 0
     var mCycleNumber = 0
+    var mCurrentPage = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,7 +68,7 @@ class ImagingEvaluationFragment : Fragment() {
 
     private fun initUI() {
         fab_imaging_evaluation.setOnClickListener {
-            navigateToImagingEvaluationEditPage(mSampleId, mCycleNumber, null)
+            navigateToImagingEvaluationEditPage(mSampleId, mCycleNumber,mCurrentPage ,null)
         }
     }
 
@@ -70,6 +76,14 @@ class ImagingEvaluationFragment : Fragment() {
         mSampleId = (arguments as Bundle).getInt(SAMPLE_ID)
         mCycleNumber = (arguments as Bundle).getInt(CYCLE_NUMBER_KEY)
         mViewModel = getBaseVisitViewModel(this)
+        when(activity){
+            is CRFActivity->{
+                mCurrentPage = CRF_PAGE
+            }
+            is TreatmentVisitDetailActivity->{
+                mCurrentPage = TREATMENT_VISIT_DETAIL_PAGE
+            }
+        }
     }
 
     private fun initList() {
@@ -93,6 +107,7 @@ class ImagingEvaluationFragment : Fragment() {
             navigateToImagingEvaluationEditPage(
                 mSampleId,
                 mCycleNumber,
+                mCurrentPage,
                 imagingEvaluationBody
             )
         }
@@ -120,11 +135,13 @@ class ImagingEvaluationFragment : Fragment() {
     private fun navigateToImagingEvaluationEditPage(
         sampleId: Int,
         cycleNumber: Int,
+        refreshPage:String,
         imagingEvaluationBodyBean: ImagingEvaluationBodyBean?
     ) {
         val intent = Intent(activity, ImagingEvaluationActivity::class.java)
         intent.putExtra(SAMPLE_ID, sampleId)
         intent.putExtra(CYCLE_NUMBER_KEY, cycleNumber)
+        intent.putExtra(REFRESH_PAGE,refreshPage)
         if (imagingEvaluationBodyBean?.evaluateId != null) {
             intent.putExtra(IMAGING_EVALUATION_BODY, imagingEvaluationBodyBean)
         }

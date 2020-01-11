@@ -1,16 +1,40 @@
 package com.ksballetba.rayplus.ui.activity.baseline_visit_activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import com.ksballetba.rayplus.R
+import com.ksballetba.rayplus.data.bean.BaseCheckBean
+import com.ksballetba.rayplus.data.bean.TreatmentHistoryBodyBean
+import com.ksballetba.rayplus.data.bean.TreatmentHistoryListBean
+import com.ksballetba.rayplus.ui.activity.CRFActivity
+import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
+import com.ksballetba.rayplus.ui.fragment.baseline_visit_fragment.TreatmentHistoryFragment.Companion.TREATMENT_HISTORY_BODY
+import com.ksballetba.rayplus.util.*
+import com.ksballetba.rayplus.viewmodel.BaselineVisitViewModel
 import com.lxj.xpopup.XPopup
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.android.synthetic.main.activity_treatment_history.*
+import kotlinx.android.synthetic.main.fragment_project_summary_detail.*
+import org.jetbrains.anko.toast
 import java.util.*
 
 class TreatmentHistoryActivity : AppCompatActivity() {
+
+    companion object {
+        const val REFRESH_TREATMENT_HISTORY_PAGE = "REFRESH_TREATMENT_HISTORY_PAGE"
+    }
+
+    lateinit var mViewModel: BaselineVisitViewModel
+
+    private var mGeneMutationTypeList = mutableListOf<BaseCheckBean>()
+    private var mLastFrontPartList = mutableListOf<BaseCheckBean>()
+
+    private var mOtherGeneMutationTypeEGFR: String? = ""
+    private var mOtherGeneMutationTypeALK: String? = ""
+    private var mOtherLastFrontPart: String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,65 +51,116 @@ class TreatmentHistoryActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun initUI(){
+    private fun initUI() {
         setSupportActionBar(tb_treatment_history)
+        mViewModel = getBaselineVisitViewModel(this)
+        val treatmentHistoryBody =
+            intent.getParcelableExtra<TreatmentHistoryListBean.Data>(TREATMENT_HISTORY_BODY)
+        if (treatmentHistoryBody != null) {
+            loadData(treatmentHistoryBody)
+        } else {
+            initEmptyLastFrontPart()
+            initEmptyGeneMutationType()
+        }
         cl_treatment_line.setOnClickListener {
-            XPopup.Builder(this).asCenterList("几线治疗", arrayOf("一线治疗", "二线治疗", "三线治疗", "四线治疗", "五线治疗")) { pos, text ->
+            XPopup.Builder(this).asCenterList("几线治疗", getDiagnoseNumber()) { pos, text ->
                 tv_treatment_line.text = text
-                if(pos>0){
-                    ll_not_first_line_treatment.visibility = View.VISIBLE
-                }else{
-                    ll_not_first_line_treatment.visibility = View.GONE
+                when (pos) {
+                    0 -> {
+                        ll_not_first_line_treatment.visibility = View.GONE
+                        tv_first_line_treatment_title.text = "一线治疗"
+                    }
+                    1 -> {
+                        ll_not_first_line_treatment.visibility = View.VISIBLE
+                        tv_first_line_treatment_title.text = "二线治疗"
+                        tv_last_best_treatment_title.text = "一线治疗最佳疗效"
+                        tv_last_treatment_growth_date_title.text = "一线治疗进展时间"
+                        tv_last_treatment_growth_part.text = "一线治疗进展部位"
+                    }
+                    2 -> {
+                        ll_not_first_line_treatment.visibility = View.VISIBLE
+                        tv_first_line_treatment_title.text = "三线治疗"
+                        tv_last_best_treatment_title.text = "二线治疗最佳疗效"
+                        tv_last_treatment_growth_date_title.text = "二线治疗进展时间"
+                        tv_last_treatment_growth_part_title.text = "二线治疗进展部位"
+                    }
+                    3 -> {
+                        ll_not_first_line_treatment.visibility = View.VISIBLE
+                        tv_first_line_treatment_title.text = "四线治疗"
+                        tv_last_best_treatment_title.text = "三线治疗最佳疗效"
+                        tv_last_treatment_growth_date_title.text = "三线治疗进展时间"
+                        tv_last_treatment_growth_part_title.text = "三线治疗进展部位"
+                    }
+                    4 -> {
+                        ll_not_first_line_treatment.visibility = View.VISIBLE
+                        tv_first_line_treatment_title.text = "五线治疗"
+                        tv_last_best_treatment_title.text = "四线治疗最佳疗效"
+                        tv_last_treatment_growth_date_title.text = "四线治疗进展时间"
+                        tv_last_treatment_growth_part_title.text = "四线治疗进展部位"
+                    }
                 }
             }.show()
         }
         cl_first_line_treatment.setOnClickListener {
-            XPopup.Builder(this).asCenterList("一线治疗", arrayOf("无", "不详", "有，请填下表")) { pos, text ->
-                if(pos<2){
+            XPopup.Builder(this).asCenterList("治疗", getDiagnoseExistence()) { pos, text ->
+                if (pos < 2) {
                     ll_treatment_history_detail.visibility = View.GONE
-                }else{
+                } else {
                     ll_treatment_history_detail.visibility = View.VISIBLE
                 }
                 tv_first_line_treatment.text = text
             }.show()
         }
         cl_last_best_treatment.setOnClickListener {
-            XPopup.Builder(this).asCenterList("一线治疗最佳疗效", arrayOf("完全缓解(CR)", "部分缓解(PR)", "疾病稳定(SD)", "疾病进展(PD)", "疗效不详(UK)")) { pos, text ->
+            XPopup.Builder(this).asCenterList(
+                "治疗最佳疗效",
+                arrayOf("完全缓解(CR)", "部分缓解(PR)", "疾病稳定(SD)", "疾病进展(PD)", "疗效不详(UK)")
+            ) { pos, text ->
                 tv_last_best_treatment.text = text
             }.show()
         }
         cl_last_treatment_growth_date.setOnClickListener {
-            val now = Calendar.getInstance()
-            val dpd = DatePickerDialog.newInstance(
-                { _, year, monthOfYear, dayOfMonth ->
-                    val date = "$year-$monthOfYear-$dayOfMonth"
-                    tv_last_treatment_growth_date.text = date
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            )
-            dpd.show(supportFragmentManager, "请选择日期")
+            showDatePickerDialog(tv_last_treatment_growth_date,supportFragmentManager)
         }
         cl_last_treatment_growth_part.setOnClickListener {
-
+            val transferSite = StringBuffer()
+            asCheckboxList(this, "治疗进展部位", mLastFrontPartList, { data, pos ->
+                if (data.name == "其他") {
+                    XPopup.Builder(this).asInputConfirm("治疗进展部位", "请输入其他治疗进展部位") {
+                        mOtherLastFrontPart = it
+                    }.show()
+                }
+            }, { checkedData ->
+                checkedData.forEach {
+                    if (it.isChecked && it.name != "其他") {
+                        transferSite.append("${it.name},")
+                    }
+                }
+                if (transferSite.isNotEmpty() && mOtherLastFrontPart.isNullOrBlank()) {
+                    transferSite.deleteCharAt(transferSite.length - 1)
+                }
+                transferSite.append(mOtherLastFrontPart)
+                tv_last_treatment_growth_part.text = transferSite
+            }).show()
         }
         cl_is_biopsy_again.setOnClickListener {
-            XPopup.Builder(this).asCenterList(getString(R.string.is_biopsy_again), arrayOf("是","否")) { pos, text ->
-                tv_is_biopsy_again.text = text
-            }.show()
+            XPopup.Builder(this)
+                .asCenterList(getString(R.string.is_biopsy_again), arrayOf("是", "否")) { pos, text ->
+                    tv_is_biopsy_again.text = text
+                }.show()
         }
         cl_biopsy_way.setOnClickListener {
             XPopup.Builder(this).asCenterList(
                 getString(R.string.biopsy_way),
-                arrayOf("无", "手术", "胸腔镜", "纵膈镜", "经皮肺穿刺", "纤支镜", "E-BUS", "EUS-FNA","淋巴结活检","其他")
+                arrayOf("无", "手术", "胸腔镜", "纵膈镜", "经皮肺穿刺", "纤支镜", "E-BUS", "EUS-FNA", "淋巴结活检", "其他")
             ) { pos, text ->
                 if (pos < 9) {
                     tv_biopsy_way.text = text
                 } else {
-                    XPopup.Builder(this).asInputConfirm(getString(R.string.biopsy_way), "请输入其他活检方式") {
-                        tv_biopsy_way.text = it
-                    }.show()
+                    XPopup.Builder(this)
+                        .asInputConfirm(getString(R.string.biopsy_way), "请输入其他活检方式") {
+                            tv_biopsy_way.text = it
+                        }.show()
                 }
             }.show()
         }
@@ -97,49 +172,81 @@ class TreatmentHistoryActivity : AppCompatActivity() {
                 if (pos < 2) {
                     tv_biopsy_pathological_type.text = text
                 } else {
-                    XPopup.Builder(this).asInputConfirm(getString(R.string.biopsy_pathological_type), "请输入其他活检病理类型") {
-                        tv_biopsy_pathological_type.text = it
-                    }.show()
+                    XPopup.Builder(this)
+                        .asInputConfirm(getString(R.string.biopsy_pathological_type), "请输入其他病理类型") {
+                            tv_biopsy_pathological_type.text = it
+                        }.show()
                 }
             }.show()
         }
         cl_genetic_test_sample.setOnClickListener {
             XPopup.Builder(this).asCenterList(
                 getString(R.string.genetic_test_sample),
-                arrayOf("无", "外周血", "原发灶组织","转移灶组织")
+                arrayOf("无", "外周血", "原发灶组织", "转移灶组织")
             ) { pos, text ->
                 if (pos < 3) {
                     tv_genetic_test_sample.text = text
                 } else {
-                    XPopup.Builder(this).asInputConfirm(getString(R.string.genetic_test_sample), "请输入其他基因检测标本") {
-                        tv_genetic_test_sample.text = it
-                    }.show()
+                    XPopup.Builder(this)
+                        .asInputConfirm(getString(R.string.genetic_test_sample), "请输入其他基因检测标本") {
+                            tv_genetic_test_sample.text = it
+                        }.show()
                 }
             }.show()
         }
         cl_genetic_test_way.setOnClickListener {
             XPopup.Builder(this).asCenterList(
                 getString(R.string.genetic_test_way),
-                arrayOf("无", "ARMS", "FISH","二代测序")
+                arrayOf("无", "ARMS", "FISH", "二代测序")
             ) { pos, text ->
-               tv_genetic_test_way.text = text
+                tv_genetic_test_way.text = text
             }.show()
         }
         cl_genetic_mutation_type.setOnClickListener {
-
+            val geneMutationType = StringBuffer()
+            asCheckboxList(this, "基因突变类型", mGeneMutationTypeList, { data, pos ->
+                if (data.name == "EGFR" || data.name == "ALK") {
+                    XPopup.Builder(this).asInputConfirm("基因突变类型", "请输入${data.name}描述") {
+                        when (data.name) {
+                            "EGFR" -> {
+                                mOtherGeneMutationTypeEGFR = it
+                            }
+                            "ALK" -> {
+                                mOtherGeneMutationTypeALK = it
+                            }
+                        }
+                    }.show()
+                }
+            }, { checkedData ->
+                checkedData.forEach {
+                    if (it.isChecked) {
+                        geneMutationType.append("${it.name},")
+                    }
+                }
+                if (!mOtherGeneMutationTypeEGFR.isNullOrBlank()) {
+                    geneMutationType.append("EGFR描述:$mOtherGeneMutationTypeEGFR,")
+                }
+                if (!mOtherGeneMutationTypeALK.isNullOrBlank()) {
+                    geneMutationType.append("ALK描述:$mOtherGeneMutationTypeALK")
+                }
+                tv_genetic_mutation_type.text = geneMutationType
+            }).show()
         }
         cl_PD_L1_expression.setOnClickListener {
             XPopup.Builder(this)
-                .asCenterList("PD-L1表达", arrayOf("未测", "不详", ">50%", "1%-50%","<1%","阴性")) { pos, text ->
+                .asCenterList(
+                    "PD-L1表达",
+                    arrayOf("未测", "不详", ">50%", "1%-50%", "<1%", "阴性")
+                ) { pos, text ->
                     tv_PD_L1_expression.text = text
                 }.show()
         }
         cl_tumor_mutation_load.setOnClickListener {
             XPopup.Builder(this)
                 .asCenterList("肿瘤突变负荷(TMB)", arrayOf("未测", "不详", "数量（个突变/Mb）")) { pos, text ->
-                    if(pos<3){
+                    if (pos < 3) {
                         tv_tumor_mutation_load.text = text
-                    }else{
+                    } else {
                         XPopup.Builder(this).asInputConfirm("基因检测标本", "请输入转移灶组织描述") {
                             tv_tumor_mutation_load.text = it
                         }.show()
@@ -148,22 +255,15 @@ class TreatmentHistoryActivity : AppCompatActivity() {
         }
         cl_microsatellite_instability.setOnClickListener {
             XPopup.Builder(this)
-                .asCenterList("微卫星不稳定性(MSI)", arrayOf("未测", "不详", "微卫星稳定性", "微卫星不稳定性")) { pos, text ->
+                .asCenterList(
+                    "微卫星不稳定性(MSI)",
+                    arrayOf("未测", "不详", "微卫星稳定性", "微卫星不稳定性")
+                ) { pos, text ->
                     tv_microsatellite_instability.text = text
                 }.show()
         }
         cl_treatment_date.setOnClickListener {
-            val now = Calendar.getInstance()
-            val dpd = DatePickerDialog.newInstance(
-                { _, year, monthOfYear, dayOfMonth ->
-                    val date = "$year-$monthOfYear-$dayOfMonth"
-                    tv_treatment_date.text = date
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            )
-            dpd.show(supportFragmentManager, "请选择日期")
+            showDatePickerDialog(tv_treatment_date,supportFragmentManager)
         }
         cl_operation.setOnClickListener {
             cb_operation.isChecked = !cb_operation.isChecked
@@ -184,46 +284,556 @@ class TreatmentHistoryActivity : AppCompatActivity() {
             cb_other_therapy.isChecked = !cb_other_therapy.isChecked
         }
         cb_operation.setOnCheckedChangeListener { button, isChecked ->
-            if(isChecked){
-                XPopup.Builder(this).asInputConfirm("手术","请输入手术（手术部位及方式）"){
+            if (isChecked) {
+                XPopup.Builder(this).asInputConfirm("手术", "请输入手术（手术部位及方式）") {
                     tv_operation.text = it
                 }.show()
             }
         }
         cb_radiotherapy.setOnCheckedChangeListener { button, isChecked ->
-            if(isChecked){
-                XPopup.Builder(this).asInputConfirm("放疗","请输入放疗（放疗部位及剂量）"){
+            if (isChecked) {
+                XPopup.Builder(this).asInputConfirm("放疗", "请输入放疗（放疗部位及剂量）") {
                     tv_radiotherapy.text = it
                 }.show()
             }
         }
         cb_chemotherapy.setOnCheckedChangeListener { button, isChecked ->
-            if(isChecked){
-                XPopup.Builder(this).asInputConfirm("化疗","请输入化疗（药名，使用剂量及频率，副作用）"){
+            if (isChecked) {
+                XPopup.Builder(this).asInputConfirm("化疗", "请输入化疗（药名，使用剂量及频率，副作用）") {
                     tv_chemotherapy.text = it
                 }.show()
             }
         }
         cb_targeted_therapy.setOnCheckedChangeListener { button, isChecked ->
-            if(isChecked){
-                XPopup.Builder(this).asInputConfirm("靶向治疗","请输入靶向治疗（药名，使用剂量及频率，副作用）"){
+            if (isChecked) {
+                XPopup.Builder(this).asInputConfirm("靶向治疗", "请输入靶向治疗（药名，使用剂量及频率，副作用）") {
                     tv_targeted_therapy.text = it
                 }.show()
             }
         }
         cb_immunotherapy.setOnCheckedChangeListener { button, isChecked ->
-            if(isChecked){
-                XPopup.Builder(this).asInputConfirm("免疫治疗","请输入免疫治疗（药名，使用剂量及频率，副作用）"){
+            if (isChecked) {
+                XPopup.Builder(this).asInputConfirm("免疫治疗", "请输入免疫治疗（药名，使用剂量及频率，副作用）") {
                     tv_immunotherapy.text = it
                 }.show()
             }
         }
         cb_other_therapy.setOnCheckedChangeListener { button, isChecked ->
-            if(isChecked){
-                XPopup.Builder(this).asInputConfirm("其他治疗","请输入其他治疗（药名，使用剂量及频率，副作用）"){
+            if (isChecked) {
+                XPopup.Builder(this).asInputConfirm("其他治疗", "请输入其他治疗（药名，使用剂量及频率，副作用）") {
                     tv_other_therapy.text = it
                 }.show()
             }
         }
+        fab_save_treatment_history.setOnClickListener {
+            val sampleId = intent.getIntExtra(SAMPLE_ID, -1)
+            addOrEditTreatmentHistory(sampleId)
+        }
+    }
+
+    private fun addOrEditTreatmentHistory(sampleId: Int) {
+        val diagnoseNumberStr = parseDefaultContent(tv_treatment_line.text.toString())
+        val diagnoseNumber =
+            if (diagnoseNumberStr.isEmpty()) null else getDiagnoseNumber().indexOf(diagnoseNumberStr) + 1
+        val diagnoseExistenceStr = parseDefaultContent(tv_first_line_treatment.text.toString())
+        val diagnoseExistence =
+            if (diagnoseExistenceStr.isEmpty()) null else getDiagnoseExistence().indexOf(
+                diagnoseExistenceStr
+            )
+        val lastFrontBestEfficacyStr = parseDefaultContent(tv_last_best_treatment.text.toString())
+        val lastFrontBestEfficacy =
+            if (lastFrontBestEfficacyStr.isEmpty()) null else getLastFrontBestEfficacyList().indexOf(
+                lastFrontBestEfficacyStr
+            )
+        val lastFrontTime = parseDefaultContent(tv_last_treatment_growth_date.text.toString())
+        val lastFrontPartprimaryFocus = if (mLastFrontPartList[0].isChecked) "on" else null
+        val lastFrontPart1 = if (mLastFrontPartList[1].isChecked) "on" else null
+        val lastFrontPart2 = if (mLastFrontPartList[2].isChecked) "on" else null
+        val lastFrontPart3 = if (mLastFrontPartList[3].isChecked) "on" else null
+        val lastFrontPart4 = if (mLastFrontPartList[4].isChecked) "on" else null
+        val lastFrontPart5 = if (mLastFrontPartList[5].isChecked) "on" else null
+        val lastFrontPart6 = if (mLastFrontPartList[6].isChecked) "on" else null
+        val lastFrontPart7 = if (mLastFrontPartList[7].isChecked) "on" else null
+        val lastFrontPart8 = if (mLastFrontPartList[8].isChecked) "on" else null
+        val lastFrontPart9 = if (mLastFrontPartList[9].isChecked) "on" else null
+        val lastFrontPartOther = mOtherLastFrontPart
+        val lastFrontPart = TreatmentHistoryBodyBean.LastFrontPart(
+            lastFrontPartprimaryFocus,
+            lastFrontPart9,
+            lastFrontPartOther,
+            lastFrontPart6,
+            lastFrontPart1,
+            lastFrontPart7,
+            lastFrontPart3,
+            lastFrontPart8,
+            lastFrontPart5,
+            lastFrontPart4,
+            lastFrontPart2
+        )
+        val isBiopsyAgainStr = parseDefaultContent(tv_is_biopsy_again.text.toString())
+        val isBiopsyAgain =
+            if (isBiopsyAgainStr.isEmpty()) null else if (isBiopsyAgainStr == "是") 1 else 0
+        var biopsyMethod: String? = parseDefaultContent(tv_biopsy_way.text.toString())
+        var biopsyMethodOther: String? = parseDefaultContent(tv_biopsy_way.text.toString())
+        if (getBiopsyMethod().contains(biopsyMethod)) {
+            biopsyMethodOther = null
+        } else {
+            biopsyMethod = "其他"
+        }
+        val biopsyTypeStr = parseDefaultContent(tv_biopsy_pathological_type.text.toString())
+        var biopsyTypeOther: String? =
+            parseDefaultContent(tv_biopsy_pathological_type.text.toString())
+        var biopsyType = "0"
+        if (getGeneticTestingSpecimen().contains(biopsyTypeStr)) {
+            biopsyType = getBiopsyType().indexOf(biopsyTypeStr).toString()
+            biopsyTypeOther = null
+        } else {
+            biopsyType = "2"
+        }
+        val geneticSpecimenStr = parseDefaultContent(tv_biopsy_pathological_type.text.toString())
+        var geneticSpecimenOther: String? =
+            parseDefaultContent(tv_biopsy_pathological_type.text.toString())
+        var geneticSpecimen = "0"
+        if (getGeneticTestingSpecimen().contains(geneticSpecimenStr)) {
+            geneticSpecimen = getBiopsyType().indexOf(geneticSpecimenStr).toString()
+            geneticSpecimenOther = null
+        } else {
+            geneticSpecimen = "3"
+        }
+        val geneticMethodStr = parseDefaultContent(tv_genetic_test_way.text.toString())
+        val geneticMethod =
+            if (geneticMethodStr.isEmpty()) null else getGeneticTestingMethod2().indexOf(
+                geneticMethodStr
+            )
+        val geneticMutationType0 = if (mGeneMutationTypeList[0].isChecked) "on" else null
+        val geneticMutationType1 = if (mGeneMutationTypeList[1].isChecked) "on" else null
+        val geneticMutationType2 = if (mGeneMutationTypeList[2].isChecked) "on" else null
+        val geneticMutationTypeROS1 = if (mGeneMutationTypeList[3].isChecked) "on" else null
+        val geneticMutationTypecMET = if (mGeneMutationTypeList[4].isChecked) "on" else null
+        val geneticMutationTypeBRAF = if (mGeneMutationTypeList[5].isChecked) "on" else null
+        val geneticMutationTypeKRAS = if (mGeneMutationTypeList[6].isChecked) "on" else null
+        val geneticMutationTypeHer2 = if (mGeneMutationTypeList[7].isChecked) "on" else null
+        val geneticMutationTypeRET = if (mGeneMutationTypeList[8].isChecked) "on" else null
+        val geneticMutationTypeERBB2 = if (mGeneMutationTypeList[9].isChecked) "on" else null
+        val geneticMutationTypeTP53 = if (mGeneMutationTypeList[10].isChecked) "on" else null
+        val geneticMutationTypeEGFR = if (mGeneMutationTypeList[11].isChecked) "on" else null
+        val geneticMutationTypeALK = if (mGeneMutationTypeList[12].isChecked) "on" else null
+        val geneticMutationTypeEGFROther = mOtherGeneMutationTypeEGFR
+        val geneticMutationTypeALKOther = mOtherGeneMutationTypeALK
+        val geneticMutationType = TreatmentHistoryBodyBean.GeneticMutationType(
+            geneticMutationTypeALK,
+            geneticMutationTypeALKOther,
+            geneticMutationTypeBRAF,
+            geneticMutationTypeEGFR,
+            geneticMutationTypeEGFROther,
+            geneticMutationTypeERBB2,
+            geneticMutationTypeHer2,
+            geneticMutationTypeKRAS,
+            geneticMutationTypeRET,
+            geneticMutationTypeROS1,
+            geneticMutationTypeTP53,
+            geneticMutationTypecMET,
+            geneticMutationType1,
+            geneticMutationType2,
+            geneticMutationType0
+        )
+        val pdl1Str = parseDefaultContent(tv_PD_L1_expression.text.toString())
+        val pdl1 = if (pdl1Str.isEmpty()) null else getPD_L1Expression().indexOf(pdl1Str)
+        val tmbStr: String? = parseDefaultContent(tv_tumor_mutation_load.text.toString())
+        var tmbOther: String? = parseDefaultContent(tv_tumor_mutation_load.text.toString())
+        var tmb = 0
+        if (getTMB().contains(tmbStr)) {
+            tmb = getTMB().indexOf(tmbStr)
+            tmbOther = null
+        } else {
+            tmb = 2
+        }
+        val msiStr = parseDefaultContent(tv_microsatellite_instability.text.toString())
+        val msi = if (msiStr.isEmpty()) null else getMSI().indexOf(msiStr)
+        val startTime = parseDefaultContent(tv_treatment_date.text.toString())
+        val diagnoseMethodoperation = if (cb_operation.isChecked) "on" else null
+        val diagnoseMethodoperationOther = parseDefaultContent(tv_operation.text.toString())
+        val diagnoseMethodradiotherapy = if (cb_radiotherapy.isChecked) "on" else null
+        val diagnoseMethodradiotherapyOther = parseDefaultContent(tv_radiotherapy.text.toString())
+        val diagnoseMethodchemotherapy = if (cb_chemotherapy.isChecked) "on" else null
+        val diagnoseMethodchemotherapyOther = parseDefaultContent(tv_chemotherapy.text.toString())
+        val diagnoseMethodtargetedtherapy = if (cb_targeted_therapy.isChecked) "on" else null
+        val diagnoseMethodtargetedtherapyOther =
+            parseDefaultContent(tv_targeted_therapy.text.toString())
+        val diagnoseMethodimmunotherapy = if (cb_immunotherapy.isChecked) "on" else null
+        val diagnoseMethodimmunotherapyOther = parseDefaultContent(tv_immunotherapy.text.toString())
+        val diagnoseMethodothertherapy = if (cb_other_therapy.isChecked) "on" else null
+        val diagnoseMethodothertherapyOther = parseDefaultContent(tv_other_therapy.text.toString())
+        val diagnoseMethod = TreatmentHistoryBodyBean.DiagnoseMethod(
+            diagnoseMethodchemotherapy,
+            diagnoseMethodchemotherapyOther,
+            diagnoseMethodimmunotherapy,
+            diagnoseMethodimmunotherapyOther,
+            diagnoseMethodoperation,
+            diagnoseMethodoperationOther,
+            diagnoseMethodothertherapy,
+            diagnoseMethodothertherapyOther,
+            diagnoseMethodradiotherapy,
+            diagnoseMethodradiotherapyOther,
+            diagnoseMethodtargetedtherapy,
+            diagnoseMethodtargetedtherapyOther
+        )
+        val treatmentHistoryBodyBean = TreatmentHistoryBodyBean(
+            biopsyMethod,
+            biopsyMethodOther,
+            biopsyType,
+            biopsyTypeOther,
+            diagnoseExistence,
+            diagnoseMethod,
+            diagnoseNumber,
+            geneticMethod,
+            geneticMutationType,
+            geneticSpecimen,
+            geneticSpecimenOther,
+            isBiopsyAgain,
+            lastFrontBestEfficacy,
+            lastFrontPart,
+            lastFrontTime,
+            msi,
+            pdl1,
+            startTime,
+            tmb,
+            tmbOther
+        )
+        mViewModel.editTreatmentHistory(sampleId, treatmentHistoryBodyBean)
+            .observe(this, androidx.lifecycle.Observer {
+                if (it.code == 200) {
+                    toast("治疗史操作成功")
+                    val intent = Intent(this, CRFActivity::class.java)
+                    intent.action = REFRESH_TREATMENT_HISTORY_PAGE
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
+                } else {
+                    toast("治疗史操作失败")
+                }
+            })
+    }
+
+    private fun loadData(bean: TreatmentHistoryListBean.Data) {
+        if (bean.diagnoseNumber != null) {
+            tv_treatment_line.text = getDiagnoseNumber()[bean.diagnoseNumber - 1]
+            when (bean.diagnoseNumber) {
+                1 -> {
+                    ll_not_first_line_treatment.visibility = View.GONE
+                    tv_first_line_treatment_title.text = "一线治疗"
+                    tv_treatment_date_title.text = "一线治疗开始时间"
+                }
+                2 -> {
+                    ll_not_first_line_treatment.visibility = View.VISIBLE
+                    tv_first_line_treatment_title.text = "二线治疗"
+                    tv_last_best_treatment_title.text = "一线治疗最佳疗效"
+                    tv_last_treatment_growth_date_title.text = "一线治疗进展时间"
+                    tv_last_treatment_growth_part_title.text = "一线治疗进展部位"
+                    tv_treatment_date_title.text = "二线治疗开始时间"
+                }
+                3 -> {
+                    ll_not_first_line_treatment.visibility = View.VISIBLE
+                    tv_first_line_treatment_title.text = "三线治疗"
+                    tv_last_best_treatment_title.text = "二线治疗最佳疗效"
+                    tv_last_treatment_growth_date_title.text = "二线治疗进展时间"
+                    tv_last_treatment_growth_part_title.text = "二线治疗进展部位"
+                    tv_treatment_date_title.text = "三线治疗开始时间"
+                }
+                4 -> {
+                    ll_not_first_line_treatment.visibility = View.VISIBLE
+                    tv_first_line_treatment_title.text = "四线治疗"
+                    tv_last_best_treatment_title.text = "三线治疗最佳疗效"
+                    tv_last_treatment_growth_date_title.text = "三线治疗进展时间"
+                    tv_last_treatment_growth_part_title.text = "三线治疗进展部位"
+                    tv_treatment_date_title.text = "四线治疗开始时间"
+                }
+                5 -> {
+                    ll_not_first_line_treatment.visibility = View.VISIBLE
+                    tv_first_line_treatment_title.text = "五线治疗"
+                    tv_last_best_treatment_title.text = "四线治疗最佳疗效"
+                    tv_last_treatment_growth_date_title.text = "四线治疗进展时间"
+                    tv_last_treatment_growth_part.text = "四线治疗进展部位"
+                    tv_treatment_date_title.text = "五线治疗开始时间"
+                }
+            }
+        }
+        if (bean.diagnoseExistence != null) {
+            tv_first_line_treatment.text = getDiagnoseExistence()[bean.diagnoseExistence]
+            if (bean.diagnoseExistence < 2) {
+                ll_treatment_history_detail.visibility = View.GONE
+            } else {
+                ll_treatment_history_detail.visibility = View.VISIBLE
+            }
+        }
+        if (bean.lastFrontBestEfficacy != null) {
+            tv_last_best_treatment.text = getLastFrontBestEfficacyList()[bean.lastFrontBestEfficacy]
+        }
+        tv_last_treatment_growth_date.text = bean.lastFrontTime
+        initLastFrontPart(bean)
+        if (bean.isBiopsyAgain != null) {
+            tv_is_biopsy_again.text = if (bean.isBiopsyAgain) "否" else "是"
+        }
+        tv_biopsy_way.text =
+            if (bean.biopsyMethod == "其他") bean.biopsyMethodOther else bean.biopsyMethod
+        if (bean.biopsyType?.toIntOrNull() != null) {
+            val biopsyTypeIdx = bean.biopsyType.toInt()
+            if (biopsyTypeIdx < 2) {
+                tv_biopsy_pathological_type.text = getBiopsyType()[biopsyTypeIdx]
+            } else {
+                tv_biopsy_pathological_type.text = bean.biopsyTypeOther
+            }
+        }
+        tv_genetic_test_sample.text =
+            if (bean.geneticSpecimen == "其他") bean.geneticSpecimenOther else bean.geneticSpecimen
+        if (bean.geneticMethod != null) {
+            tv_genetic_test_way.text = getGeneticTestingMethod2()[bean.geneticMethod]
+        }
+        initGeneMutationType(bean)
+        if (bean.pDL1 != null) {
+            tv_PD_L1_expression.text = getPD_L1Expression()[bean.pDL1]
+        }
+        tv_tumor_mutation_load.text = if (bean.tmb == "其他") bean.tmbOther else bean.tmb
+        if (bean.msi != null) {
+            tv_microsatellite_instability.text = getMSI()[bean.msi]
+        }
+        tv_treatment_date.text = bean.startTime
+        cb_operation.isChecked = bean.diagnoseMethodoperation == "on"
+        tv_operation.text = bean.diagnoseMethodoperationOther
+        cb_radiotherapy.isChecked = bean.diagnoseMethodradiotherapy == "on"
+        tv_radiotherapy.text = bean.diagnoseMethodradiotherapyOther
+        cb_chemotherapy.isChecked = bean.diagnoseMethodchemotherapy == "on"
+        tv_chemotherapy.text = bean.diagnoseMethodchemotherapyOther
+        cb_targeted_therapy.isChecked = bean.diagnoseMethodtargetedtherapy == "on"
+        tv_targeted_therapy.text = bean.diagnoseMethodtargetedtherapyOther
+        cb_immunotherapy.isChecked = bean.diagnoseMethodimmunotherapy == "on"
+        tv_immunotherapy.text = bean.diagnoseMethodimmunotherapyOther
+        cb_other_therapy.isChecked = bean.diagnoseMethodothertherapy == "on"
+        tv_other_therapy.text = bean.diagnoseMethodothertherapyOther
+    }
+
+    private fun initLastFrontPart(bean: TreatmentHistoryListBean.Data) {
+        mLastFrontPartList.add(
+            BaseCheckBean(
+                getLastFrontPart()[0],
+                bean.lastFrontPartprimaryFocus == "on"
+            )
+        )
+        mLastFrontPartList.add(BaseCheckBean(getLastFrontPart()[1], bean.lastFrontPart1 == "on"))
+        mLastFrontPartList.add(BaseCheckBean(getLastFrontPart()[2], bean.lastFrontPart2 == "on"))
+        mLastFrontPartList.add(BaseCheckBean(getLastFrontPart()[3], bean.lastFrontPart3 == "on"))
+        mLastFrontPartList.add(BaseCheckBean(getLastFrontPart()[4], bean.lastFrontPart4 == "on"))
+        mLastFrontPartList.add(BaseCheckBean(getLastFrontPart()[5], bean.lastFrontPart5 == "on"))
+        mLastFrontPartList.add(BaseCheckBean(getLastFrontPart()[6], bean.lastFrontPart6 == "on"))
+        mLastFrontPartList.add(BaseCheckBean(getLastFrontPart()[7], bean.lastFrontPart7 == "on"))
+        mLastFrontPartList.add(BaseCheckBean(getLastFrontPart()[8], bean.lastFrontPart8 == "on"))
+        mLastFrontPartList.add(BaseCheckBean(getLastFrontPart()[9], bean.lastFrontPart9 == "on"))
+        val lastFrontPartText = StringBuffer()
+        mLastFrontPartList.forEach {
+            if (it.isChecked && it.name != "其他") {
+                lastFrontPartText.append("${it.name},")
+            }
+        }
+        mOtherLastFrontPart = bean.lastFrontPartOther
+        if (lastFrontPartText.isNotEmpty() && !mLastFrontPartList[9].isChecked) {
+            lastFrontPartText.deleteCharAt(lastFrontPartText.length - 1)
+        } else {
+            lastFrontPartText.append(mOtherLastFrontPart)
+        }
+        tv_last_treatment_growth_part.text = lastFrontPartText
+    }
+
+    private fun initEmptyLastFrontPart() {
+        mLastFrontPartList.add(
+            BaseCheckBean(
+                getLastFrontPart()[0],
+                false
+            )
+        )
+        mLastFrontPartList.add(BaseCheckBean(getLastFrontPart()[1], false))
+        mLastFrontPartList.add(BaseCheckBean(getLastFrontPart()[2], false))
+        mLastFrontPartList.add(BaseCheckBean(getLastFrontPart()[3], false))
+        mLastFrontPartList.add(BaseCheckBean(getLastFrontPart()[4], false))
+        mLastFrontPartList.add(BaseCheckBean(getLastFrontPart()[5], false))
+        mLastFrontPartList.add(BaseCheckBean(getLastFrontPart()[6], false))
+        mLastFrontPartList.add(BaseCheckBean(getLastFrontPart()[7], false))
+        mLastFrontPartList.add(BaseCheckBean(getLastFrontPart()[8], false))
+        mLastFrontPartList.add(BaseCheckBean(getLastFrontPart()[9], false))
+    }
+
+    private fun initGeneMutationType(bean: TreatmentHistoryListBean.Data) {
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[0],
+                bean.geneticMutationType0 == "on"
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[1],
+                bean.geneticMutationType1 == "on"
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[2],
+                bean.geneticMutationType2 == "on"
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[3],
+                bean.geneticMutationTypeROS1 == "on"
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[4],
+                bean.geneticMutationTypecMET == "on"
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[5],
+                bean.geneticMutationTypeBRAF == "on"
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[6],
+                bean.geneticMutationTypeKRAS == "on"
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[7],
+                bean.geneticMutationTypeHer2 == "on"
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[8],
+                bean.geneticMutationTypeRET == "on"
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[9],
+                bean.geneticMutationTypeERBB2 == "on"
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[10],
+                bean.geneticMutationTypeTP53 == "on"
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[11],
+                bean.geneticMutationTypeEGFR == "on"
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[12],
+                bean.geneticMutationTypeALK == "on"
+            )
+        )
+        val geneMutationTypeText = StringBuffer()
+        mGeneMutationTypeList.forEach {
+            if (it.isChecked) {
+                geneMutationTypeText.append("${it.name},")
+            }
+        }
+        mOtherGeneMutationTypeEGFR = bean.geneticMutationTypeEGFROther
+        mOtherGeneMutationTypeALK = bean.geneticMutationTypeALKOther
+        if (!mOtherGeneMutationTypeEGFR.isNullOrBlank()) {
+            geneMutationTypeText.append("EGFR描述:$mOtherGeneMutationTypeEGFR,")
+        }
+        if (!mOtherGeneMutationTypeALK.isNullOrBlank()) {
+            geneMutationTypeText.append("ALK描述:$mOtherGeneMutationTypeALK")
+        }
+        tv_genetic_mutation_type.text = geneMutationTypeText
+    }
+
+    private fun initEmptyGeneMutationType() {
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[0],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[1],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[2],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[3],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[4],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[5],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[6],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[7],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[8],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[9],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[10],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[11],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[12],
+                false
+            )
+        )
     }
 }

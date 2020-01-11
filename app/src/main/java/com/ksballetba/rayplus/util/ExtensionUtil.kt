@@ -1,15 +1,42 @@
 package com.ksballetba.rayplus.util
 
 import android.content.Context
+import android.widget.TextView
+import androidx.fragment.app.FragmentManager
+import com.blankj.utilcode.util.TimeUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.ksballetba.rayplus.data.bean.BaseCheckBean
 import com.ksballetba.rayplus.ui.widget.CheckboxPopup
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.core.BasePopupView
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
+import java.text.SimpleDateFormat
+import java.util.*
 
 fun asCheckboxList(context:Context?,title:String,data:List<BaseCheckBean>,OnSelectedListener:(data:BaseCheckBean,pos:Int)->Unit,OnConfirmListener:(checkedData:List<BaseCheckBean>)->Unit): BasePopupView {
     return XPopup.Builder(context).asCustom(
         CheckboxPopup(context!!).setData(title, data).setOnSelectedListener(OnSelectedListener).setConfirmListener(OnConfirmListener)
     )
+}
+
+fun showDatePickerDialog(textView: TextView, fragmentManager:FragmentManager){
+    val now = Calendar.getInstance()
+    val dpd = DatePickerDialog.newInstance(
+        { _, year, monthOfYear, dayOfMonth ->
+            val date = "$year-${monthOfYear+1}-$dayOfMonth"
+            val formatter = SimpleDateFormat("yyyy-MM-dd")
+            val selectedDate = formatter.parse(date)
+            if(selectedDate.before(now.time)){
+                textView.text = date
+            }else{
+                ToastUtils.showShort("不可选择未来日期，请重新设置")
+            }
+        },
+        now.get(Calendar.YEAR),
+        now.get(Calendar.MONTH),
+        now.get(Calendar.DAY_OF_MONTH)
+    )
+    dpd.show(fragmentManager, "请选择日期")
 }
 
 fun parseDefaultContent(data:String):String{
@@ -52,17 +79,37 @@ fun getTumorPart() = arrayOf("左上肺", "左下肺", "右上肺", "右中肺",
 
 fun getGeneticTestingMethod() = arrayOf("无", "ARMS", "FISH", "NGS")
 
+fun getGeneticTestingMethod2() = arrayOf("无", "ARMS", "FISH", "二代测序")
+
 fun getGeneMutationType() = arrayOf("未测","不详","无突变","ROS-1","cMET","BRAF","KRAS","Her-2","RET","ERBB2","TP53","EGFR","ALK")
 
 fun getTransferSite() = arrayOf("无","对侧肺门淋巴结","锁骨上淋巴结肺内","肺内","脑","脊柱骨","四肢骨","肝","肾上腺","其他")
+
+fun getLastFrontPart() = arrayOf("原发灶","对侧肺门淋巴结","锁骨上淋巴结肺内","肺内","脑","脊柱骨","四肢骨","肝","肾上腺","其他")
+
+fun getBiopsyMethod() = arrayOf("无", "手术", "胸腔镜", "纵膈镜", "经皮肺穿刺", "纤支镜", "E-BUS", "EUS-FNA", "淋巴结活检")
+
+fun getTumorPathologicalType() = arrayOf("腺癌", "鳞癌", "小细胞肺癌", "大细胞癌", "神经内分泌癌", "肉瘤", "分化差的癌")
+
+fun getGeneticTestingSpecimen() = arrayOf("无", "外周血", "原发灶组织")
 
 fun getPD_L1Expression() = arrayOf("未测", "不详", ">50%", "1%-50%","<1%","阴性")
 
 fun getMSI() = arrayOf("未测", "不详", "微卫星稳定性", "微卫星不稳定性")
 
+fun getDiagnoseNumber() = arrayOf("一线治疗", "二线治疗", "三线治疗", "四线治疗", "五线治疗")
+
+fun getDiagnoseExistence() = arrayOf("无", "不详", "有，请填下表")
+
+fun getBiopsyType() = arrayOf("无", "与第1次活检病理类型一致")
+
+fun getTMB() = arrayOf("未测", "不详")
+
 fun getImagingEvaluationWayListInHistory() = arrayOf("CT","MRI","超声","X线平片","PET-CT")
 
 fun getTherapeuticEvaluationList() = arrayOf("完全缓解(CR)", "部分缓解(PR)", "疾病稳定(SD)", "疾病进展(PD)")
+
+fun getLastFrontBestEfficacyList() = arrayOf("完全缓解(CR)", "部分缓解(PR)", "疾病稳定(SD)", "疾病进展(PD)","疗效不详(UK)")
 
 fun getMainPhysicalSignList() =  arrayOf("高血压", "腹泻", "皮疹","蛋白尿","出血")
 
@@ -83,6 +130,10 @@ fun getAdverseEventSAEState() = arrayOf("死亡","导致住院","延长住院时
 fun getSurvivalStatus() = arrayOf("死亡","存活","失联")
 
 fun getInterviewWay() = arrayOf("电话", "门诊", "住院")
+
+fun getDrinkingFrequency() =  arrayOf("0=几乎不", "1=每周1-2次", "2=每周3-4次", "3=每周5-7次")
+
+fun getDrinkingSize() =  arrayOf("0=每次少量", "1=每周微醉", "2=偶尔大醉", "3=每次大醉")
 
 fun getOSMethod() =  arrayOf(
     "1.街道办开具死亡证明",

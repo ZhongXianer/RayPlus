@@ -80,6 +80,22 @@ class BaselineVisitViewModel constructor(private var baselineVisitDataSource: Ba
         return result
     }
 
+    fun getTreatmentHistoryList(sampleId:Int):LiveData<MutableList<TreatmentHistoryListBean.Data>>{
+        val result = MutableLiveData<MutableList<TreatmentHistoryListBean.Data>>()
+        baselineVisitDataSource.getTreatmentHistoryList(sampleId) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun editTreatmentHistory(sampleId:Int,treatmentHistoryBodyBean: TreatmentHistoryBodyBean): LiveData<BaseResponseBean>{
+        val result = MutableLiveData<BaseResponseBean>()
+        baselineVisitDataSource.editTreatmentHistory(sampleId,treatmentHistoryBodyBean) {
+            result.postValue(it)
+        }
+        return result
+    }
+
     fun getLoadStatus() = baselineVisitDataSource.mLoadStatus
 
 }

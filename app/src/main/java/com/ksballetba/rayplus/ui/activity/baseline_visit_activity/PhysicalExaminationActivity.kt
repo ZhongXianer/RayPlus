@@ -13,6 +13,7 @@ import com.ksballetba.rayplus.ui.fragment.baseline_visit_fragment.PhysicalExamin
 import com.ksballetba.rayplus.ui.fragment.baseline_visit_fragment.PhysicalExaminationFragment.Companion.REPORT_ID
 import com.ksballetba.rayplus.util.getBaselineVisitViewModel
 import com.ksballetba.rayplus.util.parseDefaultContent
+import com.ksballetba.rayplus.util.showDatePickerDialog
 import com.ksballetba.rayplus.viewmodel.BaselineVisitViewModel
 import com.lxj.xpopup.XPopup
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
@@ -51,17 +52,7 @@ class PhysicalExaminationActivity : AppCompatActivity() {
             loadData(physicalExaminationBody)
         }
         cl_date.setOnClickListener {
-            val now = Calendar.getInstance()
-            val dpd = DatePickerDialog.newInstance(
-                { _, year, monthOfYear, dayOfMonth ->
-                    val date = "$year-${monthOfYear+1}-$dayOfMonth"
-                    tv_date.text = date
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            )
-            dpd.show(supportFragmentManager, "请选择日期")
+            showDatePickerDialog(tv_date,supportFragmentManager)
         }
         cl_body_temperature.setOnClickListener {
             XPopup.Builder(this).asInputConfirm("体温（℃）","请输入体温"){

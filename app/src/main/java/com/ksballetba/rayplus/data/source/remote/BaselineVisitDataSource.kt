@@ -115,6 +115,47 @@ class BaselineVisitDataSource{
             )
     }
 
+    fun getTreatmentHistoryList(sampleId:Int,callBack: (MutableList<TreatmentHistoryListBean.Data>) -> Unit) {
+        mLoadStatus.postValue(NetworkState.LOADING)
+        RetrofitClient.instance
+            .create(ApiService::class.java)
+            .getTreatmentHistoryList(sampleId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it.data.toMutableList())
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                    mLoadStatus.postValue(NetworkState.LOADED)
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                    mLoadStatus.postValue(NetworkState.error(it.message))
+                }
+            )
+    }
+
+    fun editTreatmentHistory(sampleId:Int,treatmentHistoryBodyBean: TreatmentHistoryBodyBean,callBack: (BaseResponseBean) -> Unit){
+        RetrofitClient.instance
+            .create(ApiService::class.java)
+            .editTreatmentHistory(sampleId,treatmentHistoryBodyBean)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                }
+            )
+    }
+
     fun getPreviousHistory(sampleId:Int,callBack: (PreviousHistoryResponseBean) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.instance

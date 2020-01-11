@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.lifecycle.Observer
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.SurvivalVisitBodyBean
@@ -50,17 +51,7 @@ class SurvivalVisitActivity : AppCompatActivity() {
             loadData(survivalVisitBody)
         }
         cl_visit_date.setOnClickListener {
-            val now = Calendar.getInstance()
-            val dpd = DatePickerDialog.newInstance(
-                { _, year, monthOfYear, dayOfMonth ->
-                    val date = "$year-$monthOfYear-$dayOfMonth"
-                    tv_visit_date.text = date
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            )
-            dpd.show(supportFragmentManager, "请选择日期")
+            showDatePickerDialog(tv_visit_date,supportFragmentManager)
         }
         cl_visit_way.setOnClickListener {
             XPopup.Builder(this)
@@ -78,22 +69,19 @@ class SurvivalVisitActivity : AppCompatActivity() {
             XPopup.Builder(this).asCenterList(
                 getString(R.string.live_status),
                 getSurvivalStatus()
-            ) { _, text ->
+            ) { pos, text ->
                 tv_live_status.text = text
+                if(pos==0){
+                    cl_death_cause.visibility = View.VISIBLE
+                    cl_death_date.visibility = View.VISIBLE
+                }else{
+                    cl_death_cause.visibility = View.GONE
+                    cl_death_date.visibility = View.GONE
+                }
             }.show()
         }
         cl_death_date.setOnClickListener {
-            val now = Calendar.getInstance()
-            val dpd = DatePickerDialog.newInstance(
-                { _, year, monthOfYear, dayOfMonth ->
-                    val date = "$year-$monthOfYear-$dayOfMonth"
-                    tv_death_date.text = date
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            )
-            dpd.show(supportFragmentManager, "请选择日期")
+            showDatePickerDialog(tv_death_date,supportFragmentManager)
         }
         cl_death_cause.setOnClickListener {
             XPopup.Builder(this)
@@ -134,37 +122,17 @@ class SurvivalVisitActivity : AppCompatActivity() {
                 }.show()
         }
         cl_confirm_live_date.setOnClickListener {
-            val now = Calendar.getInstance()
-            val dpd = DatePickerDialog.newInstance(
-                { _, year, monthOfYear, dayOfMonth ->
-                    val date = "$year-$monthOfYear-$dayOfMonth"
-                    tv_confirm_live_date.text = date
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            )
-            dpd.show(supportFragmentManager, "请选择日期")
+            showDatePickerDialog(tv_confirm_live_date,supportFragmentManager)
         }
         cl_last_contact_date.setOnClickListener {
-            val now = Calendar.getInstance()
-            val dpd = DatePickerDialog.newInstance(
-                { _, year, monthOfYear, dayOfMonth ->
-                    val date = "$year-$monthOfYear-$dayOfMonth"
-                    tv_last_contact_date.text = date
-                },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-            )
-            dpd.show(supportFragmentManager, "请选择日期")
+            showDatePickerDialog(tv_last_contact_date,supportFragmentManager)
         }
         fab_save_survival_visit.setOnClickListener {
             val sampleId = intent.getIntExtra(SAMPLE_ID, -1)
             if (survivalVisitBody != null) {
-                addOrEditData(sampleId, null)
+                addOrEditData(sampleId, survivalVisitBody.interviewId)
             } else {
-                addOrEditData(sampleId, survivalVisitBody)
+                addOrEditData(sampleId, null)
             }
         }
     }
@@ -179,6 +147,13 @@ class SurvivalVisitActivity : AppCompatActivity() {
         }
         if (survivalVisitBody.survivalStatus != null) {
             tv_live_status.text = getSurvivalStatus()[survivalVisitBody.survivalStatus]
+            if(survivalVisitBody.survivalStatus==0){
+                cl_death_cause.visibility = View.VISIBLE
+                cl_death_date.visibility = View.VISIBLE
+            }else{
+                cl_death_cause.visibility = View.GONE
+                cl_death_date.visibility = View.GONE
+            }
         }
         tv_death_date.text = survivalVisitBody.dieTime
         if (survivalVisitBody.dieReason != null) {

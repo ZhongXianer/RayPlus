@@ -5,5 +5,5 @@ import com.google.gson.annotations.SerializedName
 
 data class ECOGBean(
     @SerializedName("ECOG")
-    val eCOG: String // 1
+    val eCOG: String? // 1
 )

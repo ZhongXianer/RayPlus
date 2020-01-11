@@ -13,6 +13,7 @@ import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.ImagingEvaluationActivity.Companion.REFRESH_IMAGING_EVALUATION_PAGE
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.PhysicalExaminationActivity
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.PhysicalExaminationActivity.Companion.REFRESH_PHYSICAL_EXAMINATION_PAGE
+import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.TreatmentHistoryActivity.Companion.REFRESH_TREATMENT_HISTORY_PAGE
 import com.ksballetba.rayplus.ui.activity.survival_visit_activity.SurvivalVisitActivity.Companion.REFRESH_SURVIVAL_VISIT_PAGE
 import com.ksballetba.rayplus.ui.activity.treatment_visit_activity.MainPhysicalSignActivity.Companion.REFRESH_MAIN_PHYSICAL_SIGN_PAGE
 import com.ksballetba.rayplus.ui.adapter.ViewPagerAdapter
@@ -22,6 +23,7 @@ import com.ksballetba.rayplus.ui.fragment.SurvivalVisitFragment
 import com.ksballetba.rayplus.ui.fragment.TreatmentVisitFragment
 import com.ksballetba.rayplus.ui.fragment.base_fragment.ImagingEvaluationFragment
 import com.ksballetba.rayplus.ui.fragment.baseline_visit_fragment.PhysicalExaminationFragment
+import com.ksballetba.rayplus.ui.fragment.baseline_visit_fragment.TreatmentHistoryFragment
 import kotlinx.android.synthetic.main.activity_crf.*
 
 class CRFActivity : AppCompatActivity() {
@@ -61,6 +63,10 @@ class CRFActivity : AppCompatActivity() {
             REFRESH_SURVIVAL_VISIT_PAGE->{
                 val svFragment = mViewPagerAdapter.getFragmentByIdx(2) as SurvivalVisitFragment
                 svFragment.loadData()
+            }
+            REFRESH_TREATMENT_HISTORY_PAGE->{
+                val thFragment = (mViewPagerAdapter.getFragmentByIdx(0) as BaselineVisitFragment).mViewPagerAdapter.getFragmentByIdx(5) as TreatmentHistoryFragment
+                thFragment.loadData()
             }
         }
     }

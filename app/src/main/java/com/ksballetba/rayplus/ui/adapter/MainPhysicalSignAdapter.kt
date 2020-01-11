@@ -12,10 +12,10 @@ class MainPhysicalSignAdapter(layoutResId:Int,data:List<MainPhysicalSignListBean
     }
 
     override fun convert(helper: BaseViewHolder, item: MainPhysicalSignListBean.Data?) {
-        helper.setText(R.id.tv_physical_sign,"症状体征和描述:${item?.symptomDescription}")
-            .setText(R.id.tv_exist_status,"存在状态:${item?.existence}")
-            .setText(R.id.tv_start_date,"开始时间:${item?.startTime}")
-            .setText(R.id.tv_end_date,"结束时间:${item?.endTime}")
+        helper.setText(R.id.tv_physical_sign,"症状体征和描述:${item?.symptomDescription?:""}")
+            .setText(R.id.tv_exist_status,"存在状态:${item?.existence?:""}")
+            .setText(R.id.tv_start_date,"开始时间:${item?.startTime?:""}")
+            .setText(R.id.tv_end_date,"结束时间:${item?.endTime?:""}")
             .addOnClickListener(R.id.iv_delete_item_main_physical_sign)
     }
 }

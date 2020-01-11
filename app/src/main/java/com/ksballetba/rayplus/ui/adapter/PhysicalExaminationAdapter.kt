@@ -12,11 +12,11 @@ class PhysicalExaminationAdapter(layoutResId:Int,data:List<PhysicalExaminationLi
     }
 
     override fun convert(helper: BaseViewHolder, item: PhysicalExaminationListBean.Data?) {
-        helper.setText(R.id.tv_date,"日期:${item?.time}")
-            .setText(R.id.tv_body_temperature,"体温(℃):${item?.temperature}")
-            .setText(R.id.tv_breathe,"呼吸(次/分):${item?.breathFrequency}")
-            .setText(R.id.tv_blood_pressure,"血压(mmHg):${item?.minpressure}/${item?.maxpressure}")
-            .setText(R.id.tv_heart_rate,"心率:${item?.heartRate}")
+        helper.setText(R.id.tv_date,"日期:${item?.time?:""}")
+            .setText(R.id.tv_body_temperature,"体温(℃):${item?.temperature?:""}")
+            .setText(R.id.tv_breathe,"呼吸(次/分):${item?.breathFrequency?:""}")
+            .setText(R.id.tv_blood_pressure,"血压(mmHg):${item?.minpressure?:""}/${item?.maxpressure?:""}")
+            .setText(R.id.tv_heart_rate,"心率:${item?.heartRate?:""}")
             .addOnClickListener(R.id.iv_delete_item_physical_examination)
     }
 }

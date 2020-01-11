@@ -30,6 +30,7 @@
     <string name="relation_phone">家属电话</string>
     <string name="operation_history">外伤及手术史</string>
     <string name="diseases_history">基础疾病史</string>
+    <string name="first_clinical_symptoms">初诊临床症状</string>
     <string name="phymatosis_history">肿瘤病史</string>
     <string name="allergy_history">药物过敏史</string>
     <string name="medication_use_history">药物使用史</string>
@@ -45,8 +46,8 @@
     <string name="is_quit_drink">是否戒酒</string>
     <string name="quit_drink_date">戒酒日期</string>
     <string name="is_relapse_drink">化疗期间是否饮酒</string>
-    <string name="patient_height">身高</string>
-    <string name="patient_weight">体重</string>
+    <string name="patient_height">身高(cm)</string>
+    <string name="patient_weight">体重(kg)</string>
     <string name="patient_body_area">体表面积（㎡）</string>
     <string name="patient_ECOG_score">ECOG评分</string>
     <string name="without">无</string>
@@ -120,7 +121,7 @@
     <string name="death_date">死亡日期</string>
     <string name="death_cause">死亡原因</string>
     <string name="gather_way">OS随访证明文件收集形式</string>
-    <string name="confirm_live_date">生存期状态确认日期</string>
+    <string name="confirm_live_date">生存状态确认日期</string>
     <string name="last_contact_date">最后一次联系上并确认患者仍存活的日期</string>
     <string name="is_stop_treat">患者是否已终（中）止本临床研究治疗</string>
     <string name="clinic_terminal">药物治疗依从性及临床终点</string>

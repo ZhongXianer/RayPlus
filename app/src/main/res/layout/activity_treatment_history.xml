@@ -61,7 +61,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/item_left_margin"
-                    android:text="@string/input_visit_time"
+                    android:text="一线治疗"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -97,7 +97,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/item_left_margin"
-                    android:text="@string/input_visit_time"
+                    android:text="有，请填下表"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -114,6 +114,7 @@
                     android:id="@+id/ll_not_first_line_treatment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:orientation="vertical">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -216,6 +217,7 @@
                             android:id="@+id/tv_last_treatment_growth_part"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:maxEms="8"
                             android:layout_marginEnd="@dimen/item_left_margin"
                             android:text="@string/input_visit_time"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -425,6 +427,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="@dimen/item_left_margin"
                             android:text="@string/input_visit_time"
+                            android:maxEms="8"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
