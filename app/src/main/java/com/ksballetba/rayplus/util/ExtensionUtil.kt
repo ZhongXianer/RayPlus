@@ -57,7 +57,7 @@ fun parseLabInspectionRank(idx:Int):Int?{
 
 fun getResearchCenterList() = arrayOf("同济医院","襄阳市第一人民医院","襄阳市中医医院","孝感市中心医院","荆州中心医院","宜昌市中心医院","恩施州中心医院","十堰市太和医院")
 
-fun getPatientGroupList() = arrayOf("安罗替尼","安罗替尼+TKI","安罗替尼+化疗","安罗替尼+免疫")
+fun getPatientGroupList() = arrayOf("安罗替尼","安罗替尼+TKI","安罗替尼+化疗","安罗替尼+免疫","其他")
 
 fun getSexList() = arrayOf("男","女")
 
@@ -73,7 +73,7 @@ fun getVocationList() = arrayOf("脑力劳动者", "体力劳动者","学生","�
 
 fun getBaseIllListInHistory() = arrayOf("无","不详","高血压","冠心病","糖尿病","慢性阻塞性肺疾病","支气管哮喘","肺结核","间质性肺疾病","高脂血症","病毒性肝炎","风湿免疫性疾病","肾脏病","其他，请描述")
 
-fun getClinicalSymptomsList() = arrayOf("咳嗽","咳痰","咳血","发热","胸闷","胸痛","喘气","消瘦","体重下降","其他","不详")
+fun getClinicalSymptomsList() = arrayOf("咳嗽","咳痰","咳血","发热","胸闷","胸痛","喘气","消瘦","体重下降","不详","其他")
 
 fun getTumorPart() = arrayOf("左上肺", "左下肺", "右上肺", "右中肺", "右下肺")
 

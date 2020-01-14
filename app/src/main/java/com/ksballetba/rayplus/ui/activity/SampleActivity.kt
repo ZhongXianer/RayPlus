@@ -38,7 +38,6 @@ class SampleActivity : AppCompatActivity() {
     private lateinit var mViewModel: SamplesViewModel
     private lateinit var mSamplesAdapter: SamplesAdapter
     var mSampleList = mutableListOf<SampleListBean.Data>()
-    var mToken:String? = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,8 +67,6 @@ class SampleActivity : AppCompatActivity() {
     }
 
     private fun initUI(){
-        val sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
-        mToken = sharedPreferences.getString(LOGIN_TOKEN,"")
         setSupportActionBar(tb_sample)
         initRefresh()
         fab_add_sample.setOnClickListener {
@@ -111,6 +108,11 @@ class SampleActivity : AppCompatActivity() {
                         submitSample(mSampleList[position].sampleId)
                     }.show()
                 }
+                R.id.iv_delete_item_sample->{
+                    XPopup.Builder(this).asConfirm("信息", "请问是否确认删除") {
+                        deleteSample(mSampleList[position].sampleId,position)
+                    }.show()
+                }
             }
         }
         mViewModel.fetchLoadStatus().observe(this, Observer {
@@ -133,18 +135,12 @@ class SampleActivity : AppCompatActivity() {
     }
 
     private fun loadInitial(){
-        mViewModel.fetchData(mToken).observe(this, Observer {
+        mViewModel.fetchData().observe(this, Observer {
             mSampleList = it
             mSamplesAdapter.setNewData(mSampleList)
         })
     }
 
-    private fun loadAfter(){
-        mViewModel.fetchDataAfter(mToken).observe(this, Observer {
-            mSampleList.addAll(it)
-            mSamplesAdapter.addData(it)
-        })
-    }
 
     private fun navigateToSampleEditActivity(sampleId: Int,sampleBody: SampleEditBodyBean?){
         val intent = Intent(this,SampleEditActivity::class.java)
@@ -162,11 +158,22 @@ class SampleActivity : AppCompatActivity() {
     }
 
     private fun submitSample(sampleId:Int){
-        mViewModel.submitSample(mToken, SampleSubmitBodyBean(sampleId)).observe(this, Observer {
+        mViewModel.submitSample(SampleSubmitBodyBean(sampleId)).observe(this, Observer {
             if(it.code==200){
                 toast("样本提交成功")
             }else{
                 toast("样本提交失败")
+            }
+        })
+    }
+
+    private fun deleteSample(sampleId: Int, pos: Int){
+        mViewModel.deleteSample(sampleId).observe(this, Observer {
+            if(it.code==200){
+                toast("样本删除成功")
+                mSamplesAdapter.remove(pos)
+            }else{
+                toast("样本删除失败")
             }
         })
     }

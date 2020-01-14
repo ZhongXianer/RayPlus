@@ -1,24 +1,29 @@
 package com.ksballetba.rayplus.data.source.remote
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.apkfuns.logutils.LogUtils
 import com.ksballetba.rayplus.data.bean.*
 import com.ksballetba.rayplus.network.ApiService
 import com.ksballetba.rayplus.network.NetworkState
 import com.ksballetba.rayplus.network.RetrofitClient
+import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.LOGIN_TOKEN
+import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.SHARED_PREFERENCE_NAME
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 
-class BaseVisitDataSource{
+class BaseVisitDataSource(context: Context){
 
     var mLoadStatus = MutableLiveData<NetworkState>()
+
+    private val mToken = "Bearer ${context.getSharedPreferences(SHARED_PREFERENCE_NAME,Context.MODE_PRIVATE).getString(LOGIN_TOKEN,"")}"
 
     fun getVisitTime(sampleId:Int,cycleNumber:Int,callBack: (VisitTimeBean) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .getVisitTime(sampleId,cycleNumber)
+            .getVisitTime(mToken,sampleId,cycleNumber)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -39,7 +44,7 @@ class BaseVisitDataSource{
     fun editVisitTime(sampleId:Int,cycleNumber:Int,visitTimeBean: VisitTimeBean,callBack: (BaseResponseBean) -> Unit){
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .editVisitTime(sampleId,cycleNumber,visitTimeBean)
+            .editVisitTime(mToken,sampleId,cycleNumber,visitTimeBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -59,7 +64,7 @@ class BaseVisitDataSource{
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .getLabInspection(sampleId,cycleNumber)
+            .getLabInspection(mToken,sampleId,cycleNumber)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -80,7 +85,7 @@ class BaseVisitDataSource{
     fun editLabInspection(sampleId:Int,cycleNumber:Int,labInspectionBodyBean: LabInspectionBodyBean,callBack: (BaseResponseBean) -> Unit){
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .editLabInspection(sampleId,cycleNumber,labInspectionBodyBean)
+            .editLabInspection(mToken,sampleId,cycleNumber,labInspectionBodyBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -100,7 +105,7 @@ class BaseVisitDataSource{
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .getImagingEvaluationList(sampleId,cycleNumber)
+            .getImagingEvaluationList(mToken,sampleId,cycleNumber)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -121,7 +126,7 @@ class BaseVisitDataSource{
     fun editImagingEvaluation(sampleId:Int,cycleNumber:Int,imagingEvaluationBodyBean: ImagingEvaluationBodyBean,callBack: (BaseResponseBean) -> Unit){
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .editImagingEvaluation(sampleId,cycleNumber,imagingEvaluationBodyBean)
+            .editImagingEvaluation(mToken,sampleId,cycleNumber,imagingEvaluationBodyBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -140,7 +145,7 @@ class BaseVisitDataSource{
     fun deleteImagingEvaluation(sampleId:Int,cycleNumber:Int,evaluateId:Int,callBack: (BaseResponseBean) -> Unit){
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .deleteImagingEvaluation(sampleId,cycleNumber,evaluateId)
+            .deleteImagingEvaluation(mToken,sampleId,cycleNumber,evaluateId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(

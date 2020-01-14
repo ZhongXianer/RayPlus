@@ -19,6 +19,15 @@
         android:layout_margin="8dp"
         android:padding="8dp">
 
+        <ImageView
+            android:id="@+id/iv_delete_item_sample"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_highlight_off_grey_800_24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
         <TextView
             android:id="@+id/tv_sample_research_center_ids"
             android:text="研究中心：同济医院"

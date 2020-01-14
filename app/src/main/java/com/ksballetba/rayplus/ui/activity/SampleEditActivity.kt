@@ -154,7 +154,7 @@ class SampleEditActivity : AppCompatActivity() {
             signTime
         )
         if (checkSampleValid(sampleEditBodyBean)) {
-            mViewModel.editSample(mToken,sampleEditBodyBean).observe(this, Observer {
+            mViewModel.editSample(sampleEditBodyBean).observe(this, Observer {
                 if(it.code==200){
                     toast("样本操作成功")
                     val intent = Intent(this,SampleActivity::class.java)

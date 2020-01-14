@@ -41,6 +41,7 @@ class FirstVisitProcessFragment : Fragment() {
     private var mOtherGeneMutationTypeEGFR: String? = ""
     private var mOtherGeneMutationTypeALK: String? = ""
     private var mOtherTransferSite: String? = ""
+    private var mOtherClinicalSymptoms: String? = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,7 +83,7 @@ class FirstVisitProcessFragment : Fragment() {
     }
 
     private fun saveData() {
-        var clinicalSymptoms = FirstVisitProcessBodyBean.ClinicalSymptoms(null,null,null,null,null,null,null,null,null,null,null)
+        var clinicalSymptoms = FirstVisitProcessBodyBean.ClinicalSymptoms(null,null,null,null,null,null,null,null,null,null,null,null)
         if(mClinicalSymptomsList.size!=0){
             val clinicalSymptoms0 = if (mClinicalSymptomsList[0].isChecked) "on" else null
             val clinicalSymptoms1 = if (mClinicalSymptomsList[1].isChecked) "on" else null
@@ -95,10 +96,12 @@ class FirstVisitProcessFragment : Fragment() {
             val clinicalSymptoms8 = if (mClinicalSymptomsList[8].isChecked) "on" else null
             val clinicalSymptoms9 = if (mClinicalSymptomsList[9].isChecked) "on" else null
             val clinicalSymptoms10 = if (mClinicalSymptomsList[10].isChecked) "on" else null
+            val clinicalSymptomsOther = mOtherClinicalSymptoms
             clinicalSymptoms = FirstVisitProcessBodyBean.ClinicalSymptoms(
-                clinicalSymptoms10,
-                clinicalSymptoms8,
                 clinicalSymptoms9,
+                clinicalSymptoms8,
+                clinicalSymptomsOther,
+                clinicalSymptoms10,
                 clinicalSymptoms3,
                 clinicalSymptoms0,
                 clinicalSymptoms1,
@@ -307,12 +310,17 @@ class FirstVisitProcessFragment : Fragment() {
         )
         val symptomsText = StringBuffer()
         mClinicalSymptomsList.forEach {
-            if (it.isChecked) {
+            if (it.isChecked && it.name != "其他") {
                 symptomsText.append("${it.name},")
             }
         }
-        if (symptomsText.isNotEmpty()) {
+        if(bean.clinicalSymptomsOther!=null){
+            mOtherClinicalSymptoms = bean.clinicalSymptomsOther
+        }
+        if (symptomsText.isNotEmpty() && !mClinicalSymptomsList[10].isChecked) {
             symptomsText.deleteCharAt(symptomsText.length - 1)
+        }else {
+            symptomsText.append(mOtherClinicalSymptoms)
         }
         tv_diseases_history.text = symptomsText
     }
@@ -443,18 +451,24 @@ class FirstVisitProcessFragment : Fragment() {
 
     private fun initUI() {
         cl_diseases_history.setOnClickListener {
-            val title = "基础疾病史"
+            val title = "初诊临床症状"
             val diseases = StringBuffer()
             asCheckboxList(context, title, mClinicalSymptomsList, { data, pos ->
+                if (data.name == "其他") {
+                    XPopup.Builder(context).asInputConfirm("初诊临床症状", "请输入其他初诊临床症状") {
+                        mOtherClinicalSymptoms = it
+                    }.show()
+                }
             }, { checkedData ->
                 checkedData.forEach {
-                    if (it.isChecked) {
+                    if (it.isChecked && it.name != "其他") {
                         diseases.append("${it.name},")
                     }
                 }
-                if (diseases.isNotEmpty()) {
+                if (diseases.isNotEmpty()&&mOtherClinicalSymptoms.isNullOrEmpty()) {
                     diseases.deleteCharAt(diseases.length - 1)
                 }
+                diseases.append(mOtherClinicalSymptoms)
                 tv_diseases_history.text = diseases.toString()
             }).show()
         }

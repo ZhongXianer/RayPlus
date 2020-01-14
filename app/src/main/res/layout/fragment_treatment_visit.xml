@@ -33,7 +33,19 @@
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_treatment_visit"
+        android:id="@+id/fab_delete_treatment_visit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/delete"
+        app:borderWidth="0dp"
+        android:layout_marginEnd="@dimen/material_component_floating_action_button_margin"
+        android:layout_marginBottom="@dimen/material_component_floating_action_button_margin"
+        android:src="@drawable/ic_delete_forever_white_24dp"
+        app:layout_constraintBottom_toTopOf="@+id/fab_add_treatment_visit"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_treatment_visit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/material_component_floating_action_button_margin"

@@ -22,6 +22,7 @@ import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.TreatmentHisto
 import com.ksballetba.rayplus.ui.adapter.TreatmentHistoryAdapter
 import com.ksballetba.rayplus.util.getBaselineVisitViewModel
 import com.ksballetba.rayplus.viewmodel.BaselineVisitViewModel
+import com.lxj.xpopup.XPopup
 import kotlinx.android.synthetic.main.fragment_treatment_history.*
 
 /**
@@ -80,12 +81,12 @@ class TreatmentHistoryFragment : Fragment() {
                 treatmentHistory
             )
         }
-//        mAdapter.setOnItemChildClickListener { adapter, view, position ->
-//            XPopup.Builder(context).asConfirm("信息", "请问是否确认删除") {
-//                deletePhysicalExamination(mList[position].reportId, position)
-//            }.show()
-//
-//        }
+        mAdapter.setOnItemChildClickListener { adapter, view, position ->
+            XPopup.Builder(context).asConfirm("信息", "请问是否确认删除") {
+                deleteTreatmentHistory(mList[position].diagnoseNumber?:1, position)
+            }.show()
+
+        }
     }
 
     fun loadData() {
@@ -111,5 +112,17 @@ class TreatmentHistoryFragment : Fragment() {
             intent.putExtra(TREATMENT_HISTORY_BODY, treatmentHistoryBodyBean)
         }
         startActivity(intent)
+    }
+
+    private fun deleteTreatmentHistory(diagnoseNumber: Int, pos: Int) {
+        mViewModel.deleteTreatmentHistory(mSampleId, diagnoseNumber).observe(viewLifecycleOwner,
+            Observer {
+                if (it.code == 200) {
+                    ToastUtils.showShort("删除成功")
+                    mAdapter.remove(pos)
+                } else {
+                    ToastUtils.showShort("删除失败")
+                }
+            })
     }
 }

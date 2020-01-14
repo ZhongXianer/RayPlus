@@ -96,6 +96,14 @@ class BaselineVisitViewModel constructor(private var baselineVisitDataSource: Ba
         return result
     }
 
+    fun deleteTreatmentHistory(sampleId:Int,diagnoseNumber:Int): LiveData<BaseResponseBean>{
+        val result = MutableLiveData<BaseResponseBean>()
+        baselineVisitDataSource.deleteTreatmentHistory(sampleId,diagnoseNumber) {
+            result.postValue(it)
+        }
+        return result
+    }
+
     fun getLoadStatus() = baselineVisitDataSource.mLoadStatus
 
 }

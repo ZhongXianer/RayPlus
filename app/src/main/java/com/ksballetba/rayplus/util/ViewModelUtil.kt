@@ -21,7 +21,7 @@ fun getLoginViewModel(activity: FragmentActivity):LoginViewModel{
 fun getProjectsViewModel(activity: FragmentActivity): ProjectsViewModel {
     return ViewModelProvider(activity, object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val source = ProjectDataSource()
+            val source = ProjectDataSource(activity)
             @Suppress("UNCHECKED_CAST")
             return ProjectsViewModel(source) as T
         }
@@ -31,7 +31,7 @@ fun getProjectsViewModel(activity: FragmentActivity): ProjectsViewModel {
 fun getSamplesViewModel(activity: FragmentActivity): SamplesViewModel {
     return ViewModelProvider(activity, object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val source = SampleDataSource()
+            val source = SampleDataSource(activity)
             @Suppress("UNCHECKED_CAST")
             return SamplesViewModel(source) as T
         }
@@ -41,7 +41,7 @@ fun getSamplesViewModel(activity: FragmentActivity): SamplesViewModel {
 fun getBaseVisitViewModel(fragment: Fragment): BaseVisitViewModel {
     return ViewModelProvider(fragment, object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val source = BaseVisitDataSource()
+            val source = BaseVisitDataSource(fragment.context!!)
             @Suppress("UNCHECKED_CAST")
             return BaseVisitViewModel(source) as T
         }
@@ -51,7 +51,7 @@ fun getBaseVisitViewModel(fragment: Fragment): BaseVisitViewModel {
 fun getBaseVisitViewModel(activity: FragmentActivity): BaseVisitViewModel {
     return ViewModelProvider(activity, object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val source = BaseVisitDataSource()
+            val source = BaseVisitDataSource(activity)
             @Suppress("UNCHECKED_CAST")
             return BaseVisitViewModel(source) as T
         }
@@ -61,7 +61,7 @@ fun getBaseVisitViewModel(activity: FragmentActivity): BaseVisitViewModel {
 fun getBaselineVisitViewModel(fragment: Fragment): BaselineVisitViewModel {
     return ViewModelProvider(fragment, object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val source = BaselineVisitDataSource()
+            val source = BaselineVisitDataSource(fragment.context!!)
             @Suppress("UNCHECKED_CAST")
             return BaselineVisitViewModel(source) as T
         }
@@ -71,7 +71,7 @@ fun getBaselineVisitViewModel(fragment: Fragment): BaselineVisitViewModel {
 fun getBaselineVisitViewModel(activity: FragmentActivity): BaselineVisitViewModel {
     return ViewModelProvider(activity, object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val source = BaselineVisitDataSource()
+            val source = BaselineVisitDataSource(activity)
             @Suppress("UNCHECKED_CAST")
             return BaselineVisitViewModel(source) as T
         }
@@ -81,7 +81,7 @@ fun getBaselineVisitViewModel(activity: FragmentActivity): BaselineVisitViewMode
 fun getTreatmentVisitViewModel(fragment: Fragment): TreatmentVisitViewModel {
     return ViewModelProvider(fragment, object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val source = TreatmentVisitDataSource()
+            val source = TreatmentVisitDataSource(fragment.context!!)
             @Suppress("UNCHECKED_CAST")
             return TreatmentVisitViewModel(source) as T
         }
@@ -91,7 +91,7 @@ fun getTreatmentVisitViewModel(fragment: Fragment): TreatmentVisitViewModel {
 fun getTreatmentVisitViewModel(activity: FragmentActivity): TreatmentVisitViewModel {
     return ViewModelProvider(activity, object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val source = TreatmentVisitDataSource()
+            val source = TreatmentVisitDataSource(activity)
             @Suppress("UNCHECKED_CAST")
             return TreatmentVisitViewModel(source) as T
         }
@@ -101,7 +101,7 @@ fun getTreatmentVisitViewModel(activity: FragmentActivity): TreatmentVisitViewMo
 fun getSurvivalVisitViewModel(fragment: Fragment): SurvivalVisitViewModel {
     return ViewModelProvider(fragment, object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val source = SurvivalVisitDataSource()
+            val source = SurvivalVisitDataSource(fragment.context!!)
             @Suppress("UNCHECKED_CAST")
             return SurvivalVisitViewModel(source) as T
         }
@@ -111,7 +111,7 @@ fun getSurvivalVisitViewModel(fragment: Fragment): SurvivalVisitViewModel {
 fun getSurvivalVisitViewModel(activity: FragmentActivity): SurvivalVisitViewModel {
     return ViewModelProvider(activity, object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val source = SurvivalVisitDataSource()
+            val source = SurvivalVisitDataSource(activity)
             @Suppress("UNCHECKED_CAST")
             return SurvivalVisitViewModel(source) as T
         }
@@ -121,7 +121,7 @@ fun getSurvivalVisitViewModel(activity: FragmentActivity): SurvivalVisitViewMode
 fun getProjectSummaryViewModel(fragment: Fragment): ProjectSummaryViewModel {
     return ViewModelProvider(fragment, object : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            val source = ProjectSummaryDataSource()
+            val source = ProjectSummaryDataSource(fragment.context!!)
             @Suppress("UNCHECKED_CAST")
             return ProjectSummaryViewModel(source) as T
         }

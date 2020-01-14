@@ -9,9 +9,9 @@ import com.ksballetba.rayplus.data.source.remote.ProjectDataSource
 
 class ProjectsViewModel constructor(private var projectDataSource: ProjectDataSource):ViewModel(){
 
-    fun getUserName(token:String?): LiveData<UserNameBean> {
+    fun getUserName(): LiveData<UserNameBean> {
         val result = MutableLiveData<UserNameBean>()
-        projectDataSource.getUserName(token) {
+        projectDataSource.getUserName {
             result.postValue(it)
         }
         return result
@@ -25,13 +25,6 @@ class ProjectsViewModel constructor(private var projectDataSource: ProjectDataSo
         return result
     }
 
-    fun fetchDataAfter(): LiveData<MutableList<ProjectListBean.Data>> {
-        val result = MutableLiveData<MutableList<ProjectListBean.Data>>()
-        projectDataSource.loadAfter {
-            result.postValue(it)
-        }
-        return result
-    }
 
     fun fetchLoadStatus() = projectDataSource.mLoadStatus
 }

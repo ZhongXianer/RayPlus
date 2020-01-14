@@ -7,17 +7,10 @@ import com.ksballetba.rayplus.data.bean.*
 import com.ksballetba.rayplus.data.source.remote.SampleDataSource
 
 class SamplesViewModel constructor(private var sampleDataSource: SampleDataSource): ViewModel(){
-    fun fetchData(token:String?): LiveData<MutableList<SampleListBean.Data>> {
-        val result = MutableLiveData<MutableList<SampleListBean.Data>>()
-        sampleDataSource.loadInitial(token) {
-            result.postValue(it)
-        }
-        return result
-    }
 
-    fun fetchDataAfter(token:String?): LiveData<MutableList<SampleListBean.Data>> {
+    fun fetchData(): LiveData<MutableList<SampleListBean.Data>> {
         val result = MutableLiveData<MutableList<SampleListBean.Data>>()
-        sampleDataSource.loadAfter(token) {
+        sampleDataSource.loadInitial {
             result.postValue(it)
         }
         return result
@@ -31,21 +24,30 @@ class SamplesViewModel constructor(private var sampleDataSource: SampleDataSourc
         return result
     }
 
-    fun editSample(token:String?,sampleEditBodyBean: SampleEditBodyBean):LiveData<BaseResponseBean>{
+    fun editSample(sampleEditBodyBean: SampleEditBodyBean):LiveData<BaseResponseBean>{
         val result = MutableLiveData<BaseResponseBean>()
-        sampleDataSource.editSample(token,sampleEditBodyBean){
+        sampleDataSource.editSample(sampleEditBodyBean){
             result.postValue(it)
         }
         return result
     }
 
-    fun submitSample(token:String?,sampleSubmitBodyBean: SampleSubmitBodyBean):LiveData<BaseResponseBean>{
+    fun submitSample(sampleSubmitBodyBean: SampleSubmitBodyBean):LiveData<BaseResponseBean>{
         val result = MutableLiveData<BaseResponseBean>()
-        sampleDataSource.submitSample(token,sampleSubmitBodyBean){
+        sampleDataSource.submitSample(sampleSubmitBodyBean){
             result.postValue(it)
         }
         return result
     }
+
+    fun deleteSample(sampleId:Int):LiveData<BaseResponseBean>{
+        val result = MutableLiveData<BaseResponseBean>()
+        sampleDataSource.deleteSample(sampleId){
+            result.postValue(it)
+        }
+        return result
+    }
+
 
     fun fetchLoadStatus() = sampleDataSource.mLoadStatus
 }

@@ -1,5 +1,6 @@
 package com.ksballetba.rayplus.data.source.remote
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.apkfuns.logutils.LogUtils
 import com.ksballetba.rayplus.data.bean.BaseResponseBean
@@ -8,19 +9,23 @@ import com.ksballetba.rayplus.data.bean.SurvivalVisitListBean
 import com.ksballetba.rayplus.network.ApiService
 import com.ksballetba.rayplus.network.NetworkState
 import com.ksballetba.rayplus.network.RetrofitClient
+import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.LOGIN_TOKEN
+import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.SHARED_PREFERENCE_NAME
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 
-class SurvivalVisitDataSource{
+class SurvivalVisitDataSource(context: Context){
 
     var mLoadStatus = MutableLiveData<NetworkState>()
+
+    private val mToken = "Bearer ${context.getSharedPreferences(SHARED_PREFERENCE_NAME,Context.MODE_PRIVATE).getString(LOGIN_TOKEN,"")}"
 
     fun getSurvivalVisitList(sampleId:Int,callBack: (MutableList<SurvivalVisitListBean.Data>) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .getSurvivalVisitList(sampleId)
+            .getSurvivalVisitList(mToken,sampleId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -41,7 +46,7 @@ class SurvivalVisitDataSource{
     fun editSurvivalVisit(sampleId:Int,survivalVisitBodyBean: SurvivalVisitBodyBean,callBack: (BaseResponseBean) -> Unit){
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .editSurvivalVisit(sampleId,survivalVisitBodyBean)
+            .editSurvivalVisit(mToken,sampleId,survivalVisitBodyBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -60,7 +65,7 @@ class SurvivalVisitDataSource{
     fun deleteSurvivalVisit(sampleId:Int,interviewId:Int,callBack: (BaseResponseBean) -> Unit){
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .deleteSurvivalVisit(sampleId,interviewId)
+            .deleteSurvivalVisit(mToken,sampleId,interviewId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(

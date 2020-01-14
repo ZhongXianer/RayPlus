@@ -109,13 +109,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadInitial(){
-        val sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
-        val token = sharedPreferences.getString(LOGIN_TOKEN,"")
         mViewModel.fetchData().observe(this, Observer {
             mProjectList = it
             mProjectsAdapter.setNewData(mProjectList)
         })
-        mViewModel.getUserName(token).observe(this, Observer {
+        mViewModel.getUserName().observe(this, Observer {
             if(it.userName==null){
                 toast("登录已过期，请重新登录")
                 logOut()
@@ -124,12 +122,6 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun loadAfter(){
-        mViewModel.fetchDataAfter().observe(this, Observer {
-            mProjectList.addAll(it)
-            mProjectsAdapter.addData(it)
-        })
-    }
 
     private fun logOut(){
         deleteLoginToken()

@@ -24,5 +24,6 @@ class SamplesAdapter(layoutResId:Int,data:List<SampleListBean.Data>): BaseQuickA
             .setText(R.id.tv_sample_next_interview_time,"预计下一次随访时间：${item?.nextInterviewTime}")
             .addOnClickListener(R.id.btn_sample_edit)
             .addOnClickListener(R.id.btn_sample_submit)
+            .addOnClickListener(R.id.iv_delete_item_sample)
     }
 }

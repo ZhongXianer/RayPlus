@@ -56,8 +56,11 @@ class TreatmentVisitFragment : Fragment() {
     }
 
     private fun initUI(){
-        fab_treatment_visit.setOnClickListener {
+        fab_add_treatment_visit.setOnClickListener {
             addCycle()
+        }
+        fab_delete_treatment_visit.setOnClickListener {
+            deleteCycle()
         }
     }
 
@@ -106,6 +109,17 @@ class TreatmentVisitFragment : Fragment() {
                 srl_treatment_visit.autoRefresh()
             }else{
                 ToastUtils.showShort("添加治疗期随访失败")
+            }
+        })
+    }
+
+    private fun deleteCycle(){
+        mViewModel.deleteCycle(mSampleId).observe(viewLifecycleOwner, Observer {
+            if(it.code==200){
+                ToastUtils.showShort("删除治疗期随访成功")
+                srl_treatment_visit.autoRefresh()
+            }else{
+                ToastUtils.showShort("删除治疗期随访失败")
             }
         })
     }

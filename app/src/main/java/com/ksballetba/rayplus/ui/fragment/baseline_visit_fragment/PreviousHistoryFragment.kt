@@ -67,20 +67,20 @@ class PreviousHistoryFragment : Fragment() {
             tv_allergy_history.text =
                 if (it.drugAllergy != "其他") it.drugAllergy else it.drugAllergyOther
             tv_medication_use_history.text = if (it.drugUse != "其他") it.drugUse else it.drugUseOther
-            switch_smoke_history.isChecked = false
-            ll_smoke.visibility = View.GONE
+            switch_smoke_history.isChecked = it.smoke == "on"
+            ll_smoke.visibility = if(switch_smoke_history.isChecked) View.VISIBLE else View.GONE
             tv_average_cigarette.text = it.smokeSize
             tv_smoke_years.text = it.smokeYear
             switch_is_quit_smoke.isChecked = it.smokeIsquit == "on"
             ll_quit_smoke.visibility = if(switch_is_quit_smoke.isChecked) View.VISIBLE else View.GONE
             tv_quit_smoke_date.text = it.smokeQuitTime
             switch_is_relapse_smoke.isChecked = it.smokeChemotherapy == "on"
-            switch_drink_history.isChecked = false
-            ll_drink.visibility = View.GONE
-            if(it.drinkingFrequence!=null){
+            switch_drink_history.isChecked = it.drinking == "on"
+            ll_drink.visibility = if(switch_drink_history.isChecked) View.VISIBLE else View.GONE
+            if(!it.drinkingFrequence.isNullOrEmpty()){
                 tv_drink_frequency.text = getDrinkingFrequency()[it.drinkingFrequence.toInt()]
             }
-            if(it.drinkingSize!=null) {
+            if(!it.drinkingSize.isNullOrEmpty()) {
                 tv_drink_capacity.text = getDrinkingSize()[it.drinkingSize.toInt()]
             }
             switch_is_quit_drink.isChecked = it.drinkingIsQuit == "on"

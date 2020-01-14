@@ -1,24 +1,30 @@
 package com.ksballetba.rayplus.data.source.remote
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.apkfuns.logutils.LogUtils
 import com.ksballetba.rayplus.data.bean.*
 import com.ksballetba.rayplus.network.ApiService
 import com.ksballetba.rayplus.network.NetworkState
 import com.ksballetba.rayplus.network.RetrofitClient
+import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.LOGIN_TOKEN
+import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.SHARED_PREFERENCE_NAME
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 
-class BaselineVisitDataSource{
+class BaselineVisitDataSource(context:Context){
 
     var mLoadStatus = MutableLiveData<NetworkState>()
+
+    private val mToken = "Bearer ${context.getSharedPreferences(SHARED_PREFERENCE_NAME,Context.MODE_PRIVATE).getString(LOGIN_TOKEN,"")}"
+
 
     fun getDemography(sampleId:Int,callBack: (DemographyBean) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .getDemography(sampleId)
+            .getDemography(mToken,sampleId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -39,7 +45,7 @@ class BaselineVisitDataSource{
     fun editDemography(sampleId:Int,demographyBean: DemographyBean,callBack: (BaseResponseBean) -> Unit){
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .editDemography(sampleId,demographyBean)
+            .editDemography(mToken,sampleId,demographyBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -59,7 +65,7 @@ class BaselineVisitDataSource{
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .getPhysicalExaminationList(sampleId)
+            .getPhysicalExaminationList(mToken,sampleId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -80,7 +86,7 @@ class BaselineVisitDataSource{
     fun editPhysicalExamination(sampleId:Int,physicalExaminationBodyBean: PhysicalExaminationBodyBean,callBack: (BaseResponseBean) -> Unit){
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .editPhysicalExamination(sampleId,physicalExaminationBodyBean)
+            .editPhysicalExamination(mToken,sampleId,physicalExaminationBodyBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -99,7 +105,7 @@ class BaselineVisitDataSource{
     fun deletePhysicalExamination(sampleId:Int,reportId:Int,callBack: (BaseResponseBean) -> Unit){
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .deletePhysicalExamination(sampleId,reportId)
+            .deletePhysicalExamination(mToken,sampleId,reportId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -119,7 +125,7 @@ class BaselineVisitDataSource{
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .getTreatmentHistoryList(sampleId)
+            .getTreatmentHistoryList(mToken,sampleId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -140,7 +146,26 @@ class BaselineVisitDataSource{
     fun editTreatmentHistory(sampleId:Int,treatmentHistoryBodyBean: TreatmentHistoryBodyBean,callBack: (BaseResponseBean) -> Unit){
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .editTreatmentHistory(sampleId,treatmentHistoryBodyBean)
+            .editTreatmentHistory(mToken,sampleId,treatmentHistoryBodyBean)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                }
+            )
+    }
+
+    fun deleteTreatmentHistory(sampleId:Int,diagnoseNumber:Int,callBack: (BaseResponseBean) -> Unit){
+        RetrofitClient.instance
+            .create(ApiService::class.java)
+            .deleteTreatmentHistory(mToken,sampleId,diagnoseNumber)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -160,7 +185,7 @@ class BaselineVisitDataSource{
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .getPreviousHistory(sampleId)
+            .getPreviousHistory(mToken,sampleId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -181,7 +206,7 @@ class BaselineVisitDataSource{
     fun editPreviousHistory(sampleId:Int, previousHistoryBodyBean: PreviousHistoryBodyBean, callBack: (BaseResponseBean) -> Unit){
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .editPreviousHistory(sampleId,previousHistoryBodyBean)
+            .editPreviousHistory(mToken,sampleId,previousHistoryBodyBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -201,7 +226,7 @@ class BaselineVisitDataSource{
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .getFirstVisitProcess(sampleId)
+            .getFirstVisitProcess(mToken,sampleId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -222,7 +247,7 @@ class BaselineVisitDataSource{
     fun editFirstVisitProcess(sampleId:Int, firstVisitProcessBodyBean: FirstVisitProcessBodyBean, callBack: (BaseResponseBean) -> Unit){
         RetrofitClient.instance
             .create(ApiService::class.java)
-            .editFirstVisitProcess(sampleId,firstVisitProcessBodyBean)
+            .editFirstVisitProcess(mToken,sampleId,firstVisitProcessBodyBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(

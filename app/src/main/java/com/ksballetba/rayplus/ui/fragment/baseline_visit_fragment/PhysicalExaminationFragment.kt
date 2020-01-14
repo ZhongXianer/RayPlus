@@ -134,7 +134,6 @@ class PhysicalExaminationFragment : Fragment() {
                 if (it.code == 200) {
                     ToastUtils.showShort("删除成功")
                     mAdapter.remove(pos)
-                    LogUtils.tag(TAG).d(mList)
                 } else {
                     ToastUtils.showShort("删除失败")
                 }

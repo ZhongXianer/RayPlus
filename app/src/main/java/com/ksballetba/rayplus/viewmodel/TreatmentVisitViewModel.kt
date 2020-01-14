@@ -25,6 +25,14 @@ TreatmentVisitViewModel constructor(private var treatmentVisitDataSource: Treatm
         return result
     }
 
+    fun deleteCycle(sampleId: Int): LiveData<BaseResponseBean> {
+        val result = MutableLiveData<BaseResponseBean>()
+        treatmentVisitDataSource.deleteCycle(sampleId) {
+            result.postValue(it)
+        }
+        return result
+    }
+
     fun getMainPhysicalSignList(sampleId: Int,cycleNumber:Int): LiveData<List<MainPhysicalSignListBean.Data>> {
         val result = MutableLiveData<List<MainPhysicalSignListBean.Data>>()
         treatmentVisitDataSource.getMainPhysicalSignList(sampleId,cycleNumber) {

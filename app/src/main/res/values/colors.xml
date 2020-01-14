@@ -10,4 +10,5 @@
     <color name="trans">#2d000000</color>
     <color name="footer_color">#03A9F4</color>
     <color name="background">#fafafa</color>
+    <color name="delete">#d32f2f</color>
 </resources>
