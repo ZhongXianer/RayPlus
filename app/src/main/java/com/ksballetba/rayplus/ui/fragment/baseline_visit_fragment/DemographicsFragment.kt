@@ -73,11 +73,11 @@ class DemographicsFragment : Fragment() {
             tv_patient_phone.text = it.phone
             tv_relation_phone.text = it.familyPhone
         })
-        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
-            if(it.status == Status.FAILED){
-                ToastUtils.showShort(it.msg)
-            }
-        })
+//        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
+//            if(it.status == Status.FAILED){
+//                ToastUtils.showShort(it.msg)
+//            }
+//        })
     }
 
     private fun saveData(){

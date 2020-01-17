@@ -11,6 +11,7 @@ import com.blankj.utilcode.util.ToastUtils
 
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.TherapeuticEvaluationBean
+import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.CYCLE_NUMBER_KEY
 import com.ksballetba.rayplus.util.getTherapeuticEvaluationList
@@ -70,6 +71,11 @@ class TherapeuticEvaluationFragment : Fragment() {
                     tv_therapeutic_evaluation.text = getTherapeuticEvaluationList()[it.evaluation]
                 }
             })
+//        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
+//            if(it.status == Status.FAILED){
+//                ToastUtils.showShort(it.msg)
+//            }
+//        })
     }
 
     private fun saveData(){

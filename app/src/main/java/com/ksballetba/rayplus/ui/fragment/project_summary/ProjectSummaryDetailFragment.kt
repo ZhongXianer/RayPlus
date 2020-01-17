@@ -63,11 +63,11 @@ class ProjectSummaryDetailFragment : Fragment() {
             tv_curative_effect_summary_os.text = it.oS
             tv_best_treat.text = getBestEffect()[it.bestEffect]
         })
-        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
-            if(it.status == Status.FAILED){
-                ToastUtils.showShort(it.msg)
-            }
-        })
+//        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
+//            if(it.status == Status.FAILED){
+//                ToastUtils.showShort(it.msg)
+//            }
+//        })
     }
 
     private fun saveData(){

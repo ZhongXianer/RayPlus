@@ -15,6 +15,7 @@ import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.BaseCheckBean
 import com.ksballetba.rayplus.data.bean.FirstVisitProcessBodyBean
 import com.ksballetba.rayplus.data.bean.FirstVisitProcessResponseBean
+import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.util.*
 import com.ksballetba.rayplus.viewmodel.BaselineVisitViewModel
@@ -80,11 +81,31 @@ class FirstVisitProcessFragment : Fragment() {
             tv_tumor_mutation_load.text = if (it.tmb == "其他") it.tmbOther else it.tmb
             tv_microsatellite_instability.text = getMSI()[it.msi]
         })
+        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
+            if (it.status == Status.FAILED) {
+                initEmptyClinicalSymptoms()
+                initEmptyTransferSite()
+                initEmptyGeneMutationType()
+            }
+        })
     }
 
     private fun saveData() {
-        var clinicalSymptoms = FirstVisitProcessBodyBean.ClinicalSymptoms(null,null,null,null,null,null,null,null,null,null,null,null)
-        if(mClinicalSymptomsList.size!=0){
+        var clinicalSymptoms = FirstVisitProcessBodyBean.ClinicalSymptoms(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+        if (mClinicalSymptomsList.size != 0) {
             val clinicalSymptoms0 = if (mClinicalSymptomsList[0].isChecked) "on" else null
             val clinicalSymptoms1 = if (mClinicalSymptomsList[1].isChecked) "on" else null
             val clinicalSymptoms2 = if (mClinicalSymptomsList[2].isChecked) "on" else null
@@ -114,8 +135,20 @@ class FirstVisitProcessFragment : Fragment() {
         }
         val tumorPartStr = parseDefaultContent(tv_lesion.text.toString())
         val tumorPart = if (tumorPartStr.isEmpty()) null else getTumorPart().indexOf(tumorPartStr)
-        var transferSite = FirstVisitProcessBodyBean.TransferSite(null,null,null,null,null,null,null,null,null,null,null)
-        if(mTransferSiteList.size!=0){
+        var transferSite = FirstVisitProcessBodyBean.TransferSite(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+        if (mTransferSiteList.size != 0) {
             val transferSite0 = if (mTransferSiteList[0].isChecked) "on" else null
             val transferSite1 = if (mTransferSiteList[1].isChecked) "on" else null
             val transferSite2 = if (mTransferSiteList[2].isChecked) "on" else null
@@ -168,8 +201,24 @@ class FirstVisitProcessFragment : Fragment() {
             if (geneticTestingMethodStr.isEmpty()) null else getGeneticTestingMethod().indexOf(
                 geneticTestingMethodStr
             )
-        var geneMutationType = FirstVisitProcessBodyBean.GeneMutationType(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-        if(mGeneMutationTypeList.size!=0){
+        var geneMutationType = FirstVisitProcessBodyBean.GeneMutationType(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+        if (mGeneMutationTypeList.size != 0) {
             val geneMutationType0 = if (mGeneMutationTypeList[0].isChecked) "on" else null
             val geneMutationType1 = if (mGeneMutationTypeList[1].isChecked) "on" else null
             val geneMutationType2 = if (mGeneMutationTypeList[2].isChecked) "on" else null
@@ -231,14 +280,15 @@ class FirstVisitProcessFragment : Fragment() {
             tumorPathologicalType,
             tumorPathologicalTypeOther
         )
-        mViewModel.editFirstVisitProcess(mSampleId,firstVisitProcessBodyBean).observe(viewLifecycleOwner,
-            Observer {
-                if(it.code==200){
-                    ToastUtils.showShort("初诊过程表单修改成功")
-                }else{
-                    ToastUtils.showShort("初诊过程表单修改失败")
-                }
-            })
+        mViewModel.editFirstVisitProcess(mSampleId, firstVisitProcessBodyBean)
+            .observe(viewLifecycleOwner,
+                Observer {
+                    if (it.code == 200) {
+                        ToastUtils.showShort("初诊过程表单修改成功")
+                    } else {
+                        ToastUtils.showShort("初诊过程表单修改失败")
+                    }
+                })
     }
 
     private fun initClinicalSymptoms(bean: FirstVisitProcessResponseBean) {
@@ -314,12 +364,12 @@ class FirstVisitProcessFragment : Fragment() {
                 symptomsText.append("${it.name},")
             }
         }
-        if(bean.clinicalSymptomsOther!=null){
+        if (bean.clinicalSymptomsOther != null) {
             mOtherClinicalSymptoms = bean.clinicalSymptomsOther
         }
         if (symptomsText.isNotEmpty() && !mClinicalSymptomsList[10].isChecked) {
             symptomsText.deleteCharAt(symptomsText.length - 1)
-        }else {
+        } else {
             symptomsText.append(mOtherClinicalSymptoms)
         }
         tv_diseases_history.text = symptomsText
@@ -438,7 +488,7 @@ class FirstVisitProcessFragment : Fragment() {
                 transferSiteText.append("${it.name},")
             }
         }
-        if(bean.transferSiteOther!=null){
+        if (bean.transferSiteOther != null) {
             mOtherTransferSite = bean.transferSiteOther
         }
         if (transferSiteText.isNotEmpty() && !mTransferSiteList[9].isChecked) {
@@ -447,6 +497,169 @@ class FirstVisitProcessFragment : Fragment() {
             transferSiteText.append(mOtherTransferSite)
         }
         tv_transfer_area.text = transferSiteText
+    }
+
+    private fun initEmptyClinicalSymptoms() {
+        mClinicalSymptomsList.add(
+            BaseCheckBean(
+                getClinicalSymptomsList()[0],
+                false
+            )
+        )
+        mClinicalSymptomsList.add(
+            BaseCheckBean(
+                getClinicalSymptomsList()[1],
+                false
+            )
+        )
+        mClinicalSymptomsList.add(
+            BaseCheckBean(
+                getClinicalSymptomsList()[2],
+                false
+            )
+        )
+        mClinicalSymptomsList.add(
+            BaseCheckBean(
+                getClinicalSymptomsList()[3],
+                false
+            )
+        )
+        mClinicalSymptomsList.add(
+            BaseCheckBean(
+                getClinicalSymptomsList()[4],
+                false
+            )
+        )
+        mClinicalSymptomsList.add(
+            BaseCheckBean(
+                getClinicalSymptomsList()[5],
+                false
+            )
+        )
+        mClinicalSymptomsList.add(
+            BaseCheckBean(
+                getClinicalSymptomsList()[6],
+                false
+            )
+        )
+        mClinicalSymptomsList.add(
+            BaseCheckBean(
+                getClinicalSymptomsList()[7],
+                false
+            )
+        )
+        mClinicalSymptomsList.add(
+            BaseCheckBean(
+                getClinicalSymptomsList()[8],
+                false
+            )
+        )
+        mClinicalSymptomsList.add(
+            BaseCheckBean(
+                getClinicalSymptomsList()[9],
+                false
+            )
+        )
+        mClinicalSymptomsList.add(
+            BaseCheckBean(
+                getClinicalSymptomsList()[10],
+                false
+            )
+        )
+    }
+
+    private fun initEmptyGeneMutationType() {
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[0],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[1],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[2],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[3],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[4],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[5],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[6],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[7],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[8],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[9],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[10],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[11],
+                false
+            )
+        )
+        mGeneMutationTypeList.add(
+            BaseCheckBean(
+                getGeneMutationType()[12],
+                false
+            )
+        )
+    }
+
+    private fun initEmptyTransferSite() {
+        mTransferSiteList.add(BaseCheckBean(getTransferSite()[0], false))
+        mTransferSiteList.add(BaseCheckBean(getTransferSite()[1], false))
+        mTransferSiteList.add(BaseCheckBean(getTransferSite()[2], false))
+        mTransferSiteList.add(BaseCheckBean(getTransferSite()[3], false))
+        mTransferSiteList.add(BaseCheckBean(getTransferSite()[4], false))
+        mTransferSiteList.add(BaseCheckBean(getTransferSite()[5], false))
+        mTransferSiteList.add(BaseCheckBean(getTransferSite()[6], false))
+        mTransferSiteList.add(BaseCheckBean(getTransferSite()[7], false))
+        mTransferSiteList.add(BaseCheckBean(getTransferSite()[8], false))
+        mTransferSiteList.add(BaseCheckBean(getTransferSite()[9], false))
     }
 
     private fun initUI() {
@@ -465,7 +678,7 @@ class FirstVisitProcessFragment : Fragment() {
                         diseases.append("${it.name},")
                     }
                 }
-                if (diseases.isNotEmpty()&&mOtherClinicalSymptoms.isNullOrEmpty()) {
+                if (diseases.isNotEmpty() && mOtherClinicalSymptoms.isNullOrEmpty()) {
                     diseases.deleteCharAt(diseases.length - 1)
                 }
                 diseases.append(mOtherClinicalSymptoms)

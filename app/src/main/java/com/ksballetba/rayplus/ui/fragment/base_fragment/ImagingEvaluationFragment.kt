@@ -125,11 +125,11 @@ class ImagingEvaluationFragment : Fragment() {
                 mList = it
                 mAdapter.setNewData(mList)
             })
-        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
-            if (it.status == Status.FAILED) {
-                ToastUtils.showShort(it.msg)
-            }
-        })
+//        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
+//            if (it.status == Status.FAILED) {
+//                ToastUtils.showShort(it.msg)
+//            }
+//        })
     }
 
     private fun navigateToImagingEvaluationEditPage(

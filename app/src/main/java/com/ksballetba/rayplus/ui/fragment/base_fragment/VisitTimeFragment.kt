@@ -85,6 +85,11 @@ class VisitTimeFragment : Fragment() {
                 activity?.findViewById<Toolbar>(R.id.tb_treatment_visit)?.title = "$visitTitle  $visitTime"
             }
         })
+//        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
+//            if(it.status == Status.FAILED){
+//                ToastUtils.showShort(it.msg)
+//            }
+//        })
     }
 
     private fun saveData(){

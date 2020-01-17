@@ -16,6 +16,10 @@ import io.reactivex.schedulers.Schedulers
 
 class  ProjectDataSource(context: Context){
 
+    companion object{
+        const val TAG = "ProjectDataSource"
+    }
+
     var mLoadStatus = MutableLiveData<NetworkState>()
 
     private val mToken = "Bearer ${context.getSharedPreferences(SHARED_PREFERENCE_NAME,Context.MODE_PRIVATE).getString(LOGIN_TOKEN,"")}"
@@ -34,7 +38,7 @@ class  ProjectDataSource(context: Context){
                     println("Completed")
                 },
                 onError = {
-                    LogUtils.d(it.message)
+                    mLoadStatus.postValue(NetworkState.error(it.message))
                 }
             )
     }

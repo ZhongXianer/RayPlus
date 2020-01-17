@@ -17,6 +17,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.LabInspectionBodyBean
+import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.adapter.LabInspectionAdapter
 import com.ksballetba.rayplus.ui.adapter.ProjectsAdapter
@@ -211,6 +212,11 @@ class LabInspectionFragment : Fragment() {
                 R.id.ns_lab_inspection
             ) as NiceSpinner).selectedIndex = it.nSERank ?: 0
         })
+//        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
+//            if(it.status == Status.FAILED){
+//                ToastUtils.showShort(it.msg)
+//            }
+//        })
     }
 
     private fun saveData() {

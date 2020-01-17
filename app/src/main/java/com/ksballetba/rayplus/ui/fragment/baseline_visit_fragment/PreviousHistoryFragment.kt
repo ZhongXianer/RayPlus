@@ -13,6 +13,7 @@ import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.BaseCheckBean
 import com.ksballetba.rayplus.data.bean.PreviousHistoryBodyBean
 import com.ksballetba.rayplus.data.bean.PreviousHistoryResponseBean
+import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.util.*
 import com.lxj.xpopup.XPopup
@@ -60,7 +61,6 @@ class PreviousHistoryFragment : Fragment() {
 
     private fun loadData() {
         mViewModel.getPreviousHistory(mSampleId).observe(viewLifecycleOwner, Observer {
-            LogUtils.tag(TAG).d(it)
             tv_operation_history.text = if (it.surgery != "其他") it.surgery else it.surgeryOther
             initBaseIllList(it)
             tv_phymatosis_history.text = if (it.tumorIll != "其他") it.tumorIll else it.tumorIllOther
@@ -91,6 +91,11 @@ class PreviousHistoryFragment : Fragment() {
             tv_patient_weight.text = it.weight.toString()
             tv_patient_body_area.text = it.surfaceArea.toString()
             tv_ECOG_score.text = it.eCOG.toString()
+        })
+        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
+            if(it.status == Status.FAILED){
+                initEmptyBaseIllList()
+            }
         })
     }
 
@@ -244,6 +249,22 @@ class PreviousHistoryFragment : Fragment() {
             illText.append(mOtherIll)
         }
         tv_diseases_history.text = illText
+    }
+
+    private fun initEmptyBaseIllList() {
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[0], false))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[1], false))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[2], false))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[3], false))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[4], false))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[5], false))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[6], false))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[7], false))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[8], false))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[9], false))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[10], false))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[11], false))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[12], false))
     }
 
     private fun initUI() {

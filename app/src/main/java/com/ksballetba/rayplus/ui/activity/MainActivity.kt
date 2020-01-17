@@ -98,7 +98,12 @@ class MainActivity : AppCompatActivity() {
                     srl_project.finishRefresh()
                 }
                 Status.FAILED -> {
-                    toast("网络加载失败")
+                    if(it.msg=="HTTP 401 UNAUTHORIZED"){
+                        toast("登录已过期，请重新登录")
+                        logOut()
+                    }else{
+                        toast(it.msg.toString())
+                    }
                 }
             }
         })
@@ -114,10 +119,6 @@ class MainActivity : AppCompatActivity() {
             mProjectsAdapter.setNewData(mProjectList)
         })
         mViewModel.getUserName().observe(this, Observer {
-            if(it.userName==null){
-                toast("登录已过期，请重新登录")
-                logOut()
-            }
             nav_view.getHeaderView(0).findViewById<TextView>(R.id.tv_doctor_name).text = "您好，${it.userName}医生"
         })
     }

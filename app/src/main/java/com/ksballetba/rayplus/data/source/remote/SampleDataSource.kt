@@ -43,7 +43,7 @@ class  SampleDataSource(context: Context){
                 },
                 onError = {
                     LogUtils.tag(TAG).d(it.message)
-                    mLoadStatus.postValue(NetworkState.error("网络加载失败"))
+                    mLoadStatus.postValue(NetworkState.error(it.message))
                 }
             )
     }

@@ -29,7 +29,7 @@ class LoginDataSource{
                     println("Completed")
                 },
                 onError = {
-                    mLoadStatus.postValue(NetworkState.error("网络加载失败"))
+                    mLoadStatus.postValue(NetworkState.error(it.message))
                 }
             )
     }

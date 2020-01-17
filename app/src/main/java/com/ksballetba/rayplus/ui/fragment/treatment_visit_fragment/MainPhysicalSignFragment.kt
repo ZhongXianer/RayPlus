@@ -130,11 +130,11 @@ class MainPhysicalSignFragment : Fragment() {
             .observe(viewLifecycleOwner, Observer {
                 tv_ECOG_score.text = it.eCOG
             })
-        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
-            if (it.status == Status.FAILED) {
-                ToastUtils.showShort(it.msg)
-            }
-        })
+//        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
+//            if (it.status == Status.FAILED) {
+//                ToastUtils.showShort(it.msg)
+//            }
+//        })
     }
 
     private fun navigateToMainPhysicalSignEditPage(
