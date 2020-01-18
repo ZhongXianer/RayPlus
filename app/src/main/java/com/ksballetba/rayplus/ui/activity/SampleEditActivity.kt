@@ -27,6 +27,7 @@ class SampleEditActivity : AppCompatActivity() {
 
     lateinit var mViewModel:SamplesViewModel
     var mToken:String? = ""
+    var mResearchCenterId:Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,14 +60,6 @@ class SampleEditActivity : AppCompatActivity() {
             }else{
                 addOrEditSample(sampleId)
             }
-        }
-        cl_research_center.setOnClickListener {
-            XPopup.Builder(this).asCenterList(
-                getString(R.string.research_center),
-                getResearchCenterList()
-            ) { _, text ->
-                tv_research_center.text = text
-            }.show()
         }
         cl_patient_name.setOnClickListener {
             XPopup.Builder(this).asInputConfirm(
@@ -119,7 +112,7 @@ class SampleEditActivity : AppCompatActivity() {
     }
 
     private fun loadData(sampleBody: SampleEditBodyBean){
-        tv_research_center.text = getResearchCenterList()[sampleBody.researchCenterId-1]
+        mResearchCenterId = sampleBody.researchCenterId
         tv_patient_name.text = sampleBody.patientName
         tv_patient_num.text = sampleBody.patientIds
         tv_patient_id.text = sampleBody.idNum
@@ -131,7 +124,6 @@ class SampleEditActivity : AppCompatActivity() {
     }
 
     private fun addOrEditSample(sampleId: Int?){
-        val researchCenterId = getResearchCenterList().indexOf(parseDefaultContent(tv_research_center.text.toString()))+1
         val patientName = parseDefaultContent(tv_patient_name.text.toString())
         val patientIds = parseDefaultContent(tv_patient_num.text.toString())
         val idNum = parseDefaultContent(tv_patient_id.text.toString())
@@ -148,7 +140,7 @@ class SampleEditActivity : AppCompatActivity() {
             inGroupTime,
             patientIds,
             patientName,
-            researchCenterId,
+            mResearchCenterId,
             sampleId,
             sex,
             signTime
@@ -177,8 +169,7 @@ class SampleEditActivity : AppCompatActivity() {
             idNum = sampleEditBodyBean.idNum
         }
         if(sampleEditBodyBean.sampleId==null){
-            return !(sampleEditBodyBean.researchCenterId < 0 ||
-                    sampleEditBodyBean.patientName.isNullOrEmpty() ||
+            return !(sampleEditBodyBean.patientName.isNullOrEmpty() ||
                     sampleEditBodyBean.patientIds.isNullOrEmpty() ||
                     idNum.length!=18 ||
                     sampleEditBodyBean.groupId < 0 ||
@@ -188,7 +179,6 @@ class SampleEditActivity : AppCompatActivity() {
                     sampleEditBodyBean.inGroupTime.isNullOrEmpty())
         }else{
             return !(sampleEditBodyBean.sampleId<0||
-                    sampleEditBodyBean.researchCenterId < 0 ||
                     sampleEditBodyBean.patientName.isNullOrEmpty() ||
                     sampleEditBodyBean.patientIds.isNullOrEmpty() ||
                     idNum.length!=18 ||

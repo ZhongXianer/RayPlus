@@ -18,7 +18,7 @@ data class SampleEditBodyBean(
     @SerializedName("patient_name")
     val patientName: String?, // 李雷
     @SerializedName("research_center_id")
-    val researchCenterId: Int, // 1
+    val researchCenterId: Int?, // 1
     @SerializedName("sample_id")
     val sampleId: Int? = null, // null
     val sex: Int, // 0
@@ -32,7 +32,7 @@ data class SampleEditBodyBean(
         source.readString(),
         source.readString(),
         source.readString(),
-        source.readInt(),
+        source.readValue(Int::class.java.classLoader) as Int?,
         source.readValue(Int::class.java.classLoader) as Int?,
         source.readInt(),
         source.readString()
@@ -47,7 +47,7 @@ data class SampleEditBodyBean(
         writeString(inGroupTime)
         writeString(patientIds)
         writeString(patientName)
-        writeInt(researchCenterId)
+        writeValue(researchCenterId)
         writeValue(sampleId)
         writeInt(sex)
         writeString(signTime)

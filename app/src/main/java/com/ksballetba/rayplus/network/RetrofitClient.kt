@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit
 
 class RetrofitClient{
     private val DEFAULT_TIMEOUT:Long = 30
-    private val BASE_URL = "http://39.96.191.139/"
+    private val BASE_URL = "http://www.rayplus.top:81/"
     var mOkHttpClient:OkHttpClient? = null
     var mRetrofit:Retrofit? = null
 
