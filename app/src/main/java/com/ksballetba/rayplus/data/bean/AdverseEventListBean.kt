@@ -19,9 +19,9 @@ data class AdverseEventListBean(
         @SerializedName("die_time")
         val dieTime: String, // 2019-12-16
         @SerializedName("is_server_event")
-        val isServerEvent: String, // 严重不良事件
+        val isServerEvent: Int?, // 严重不良事件
         @SerializedName("is_using_medicine")
-        val isUsingMedicine: Boolean, // true
+        val isUsingMedicine: Int?, // true
         val measure: String, // 剂量不变
         @SerializedName("medicine_measure")
         val medicineMeasure: Int, // 1

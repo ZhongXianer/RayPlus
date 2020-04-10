@@ -11,7 +11,7 @@ data class ProjectSummaryResponseBean(
     @SerializedName("inspector_signature_time")
     val inspectorSignatureTime: Any?, // null
     @SerializedName("is_stop")
-    val isStop: Boolean, // false
+    val isStop: Int?, // false
     @SerializedName("last_time_drug")
     val lastTimeDrug: String, // 2019-12-19
     @SerializedName("OS")

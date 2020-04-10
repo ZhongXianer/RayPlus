@@ -74,9 +74,11 @@ class SurvivalVisitActivity : AppCompatActivity() {
                 if(pos==0){
                     cl_death_cause.visibility = View.VISIBLE
                     cl_death_date.visibility = View.VISIBLE
+                    cl_gather_way.visibility = View.VISIBLE
                 }else{
                     cl_death_cause.visibility = View.GONE
                     cl_death_date.visibility = View.GONE
+                    cl_gather_way.visibility = View.GONE
                 }
             }.show()
         }
@@ -150,9 +152,11 @@ class SurvivalVisitActivity : AppCompatActivity() {
             if(survivalVisitBody.survivalStatus==0){
                 cl_death_cause.visibility = View.VISIBLE
                 cl_death_date.visibility = View.VISIBLE
+                cl_gather_way.visibility = View.VISIBLE
             }else{
                 cl_death_cause.visibility = View.GONE
                 cl_death_date.visibility = View.GONE
+                cl_gather_way.visibility = View.GONE
             }
         }
         tv_death_date.text = survivalVisitBody.dieTime

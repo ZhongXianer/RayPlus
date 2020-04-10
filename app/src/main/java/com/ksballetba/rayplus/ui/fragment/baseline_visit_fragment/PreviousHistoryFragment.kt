@@ -265,6 +265,7 @@ class PreviousHistoryFragment : Fragment() {
         mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[10], false))
         mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[11], false))
         mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[12], false))
+        mBaseIllList.add(BaseCheckBean(getBaseIllListInHistory()[13], false))
     }
 
     private fun initUI() {

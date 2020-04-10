@@ -8,6 +8,7 @@ import android.view.View
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.apkfuns.logutils.LogUtils
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.ImagingEvaluationActivity.Companion.REFRESH_IMAGING_EVALUATION_PAGE
@@ -101,6 +102,7 @@ class CRFActivity : AppCompatActivity() {
     private fun initFragment(){
         val sampleIdArgs = Bundle()
         sampleIdArgs.putInt(SAMPLE_ID, mSampleId)
+        LogUtils.tag("sampleID").d(mSampleId)
         mBaselineVisitFragment = BaselineVisitFragment()
         mTreatmentVisitFragment = TreatmentVisitFragment()
         mSurvivalVisitFragment = SurvivalVisitFragment()

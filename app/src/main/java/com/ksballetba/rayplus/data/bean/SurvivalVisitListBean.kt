@@ -15,7 +15,7 @@ data class SurvivalVisitListBean(
         @SerializedName("die_time")
         val dieTime: String, // 2019-12-17
         @SerializedName("has_other_treatment")
-        val hasOtherTreatment: Boolean, // false
+        val hasOtherTreatment: Int?, // false
         @SerializedName("interview_id")
         val interviewId: Int, // 4
         @SerializedName("interview_time")

@@ -79,7 +79,7 @@ class SurvivalVisitFragment : Fragment() {
             val survivalVisitBody = SurvivalVisitBodyBean(
                 survivalVisit.dieReason,
                 survivalVisit.dieTime,
-                if (survivalVisit.hasOtherTreatment) 1 else 0,
+                survivalVisit.hasOtherTreatment,
                 survivalVisit.interviewId,
                 survivalVisit.interviewTime,
                 survivalVisit.interviewWay,

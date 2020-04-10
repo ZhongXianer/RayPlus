@@ -39,7 +39,7 @@ data class TreatmentHistoryBodyBean(
     val pDL1: Int?, // 2
     @SerializedName("start_time")
     val startTime: String?, // 2020-01-23
-    val tmb: Int?, // 2
+    val tmb: String?, // 2
     @SerializedName("tmb_other")
     val tmbOther: String? // 1000
 ) {

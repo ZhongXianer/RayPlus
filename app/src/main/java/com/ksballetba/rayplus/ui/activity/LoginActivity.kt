@@ -75,6 +75,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun saveLoginToken(token:String){
+        LogUtils.tag(TAG).d(token)
         val sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_NAME,Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putString(LOGIN_TOKEN,token)

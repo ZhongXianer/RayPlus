@@ -54,7 +54,7 @@ class ProjectSummaryDetailFragment : Fragment() {
 
     private fun loadData(){
         mViewModel.getProjectSummary(mSampleId).observe(viewLifecycleOwner, Observer {
-            tv_is_stop_treat.text = if(it.isStop) "是" else "否"
+            tv_is_stop_treat.text = if(it.isStop!=null&&it.isStop==1) "是" else "否"
             tv_clinic_terminal.text = it.relay
             tv_last_take_medicine_date.text = it.lastTimeDrug
             tv_take_medicine_num.text = it.treatmentTimes.toString()

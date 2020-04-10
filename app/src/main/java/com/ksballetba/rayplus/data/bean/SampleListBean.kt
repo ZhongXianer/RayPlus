@@ -23,11 +23,11 @@ data class SampleListBean(
         @SerializedName("interview_status")
         val interviewStatus: String, // 访视2
         @SerializedName("is_submit")
-        val isSubmit: Any?, // null
+        val isSubmit: Int?, // null
         @SerializedName("last_interview_time")
         val lastInterviewTime: String,
         @SerializedName("lock_status")
-        val lockStatus: Any?, // null
+        val lockStatus: Int?, // null
         @SerializedName("next_interview_time")
         val nextInterviewTime: String,
         @SerializedName("patient_ids")

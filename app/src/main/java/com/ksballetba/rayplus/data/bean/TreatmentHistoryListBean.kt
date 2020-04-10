@@ -85,7 +85,7 @@ data class TreatmentHistoryListBean(
         @SerializedName("genetic_specimen_other")
         val geneticSpecimenOther: String?, // 3
         @SerializedName("is_biopsy_again")
-        val isBiopsyAgain: Boolean?, // false
+        val isBiopsyAgain: Int?, // false
         @SerializedName("last_front_best_efficacy")
         val lastFrontBestEfficacy: Int?, // 0
         @SerializedName("last_front_part[primary_focus]")
@@ -160,7 +160,7 @@ data class TreatmentHistoryListBean(
             source.readString(),
             source.readString(),
             source.readString(),
-            source.readValue(Boolean::class.java.classLoader) as Boolean?,
+            source.readValue(Int::class.java.classLoader) as Int?,
             source.readValue(Int::class.java.classLoader) as Int?,
             source.readString(),
             source.readString(),
