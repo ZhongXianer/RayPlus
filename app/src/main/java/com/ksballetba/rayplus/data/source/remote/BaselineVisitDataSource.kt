@@ -6,6 +6,7 @@ import com.apkfuns.logutils.LogUtils
 import com.ksballetba.rayplus.data.bean.*
 import com.ksballetba.rayplus.network.ApiService
 import com.ksballetba.rayplus.network.NetworkState
+import com.ksballetba.rayplus.network.NetworkType
 import com.ksballetba.rayplus.network.RetrofitClient
 import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.LOGIN_TOKEN
 import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.SHARED_PREFERENCE_NAME
@@ -22,7 +23,7 @@ class BaselineVisitDataSource(context:Context){
 
     fun getDemography(sampleId:Int,callBack: (DemographyBean) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .getDemography(mToken,sampleId)
             .subscribeOn(Schedulers.io())
@@ -43,7 +44,7 @@ class BaselineVisitDataSource(context:Context){
     }
 
     fun editDemography(sampleId:Int,demographyBean: DemographyBean,callBack: (BaseResponseBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .editDemography(mToken,sampleId,demographyBean)
             .subscribeOn(Schedulers.io())
@@ -63,7 +64,7 @@ class BaselineVisitDataSource(context:Context){
 
     fun getPhysicalExaminationList(sampleId:Int,callBack: (MutableList<PhysicalExaminationListBean.Data>) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .getPhysicalExaminationList(mToken,sampleId)
             .subscribeOn(Schedulers.io())
@@ -84,7 +85,7 @@ class BaselineVisitDataSource(context:Context){
     }
 
     fun editPhysicalExamination(sampleId:Int,physicalExaminationBodyBean: PhysicalExaminationBodyBean,callBack: (BaseResponseBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .editPhysicalExamination(mToken,sampleId,physicalExaminationBodyBean)
             .subscribeOn(Schedulers.io())
@@ -103,7 +104,7 @@ class BaselineVisitDataSource(context:Context){
     }
 
     fun deletePhysicalExamination(sampleId:Int,reportId:Int,callBack: (BaseResponseBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .deletePhysicalExamination(mToken,sampleId,reportId)
             .subscribeOn(Schedulers.io())
@@ -123,7 +124,7 @@ class BaselineVisitDataSource(context:Context){
 
     fun getTreatmentHistoryList(sampleId:Int,callBack: (MutableList<TreatmentHistoryListBean.Data>) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .getTreatmentHistoryList(mToken,sampleId)
             .subscribeOn(Schedulers.io())
@@ -144,7 +145,7 @@ class BaselineVisitDataSource(context:Context){
     }
 
     fun editTreatmentHistory(sampleId:Int,treatmentHistoryBodyBean: TreatmentHistoryBodyBean,callBack: (BaseResponseBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .editTreatmentHistory(mToken,sampleId,treatmentHistoryBodyBean)
             .subscribeOn(Schedulers.io())
@@ -163,7 +164,7 @@ class BaselineVisitDataSource(context:Context){
     }
 
     fun deleteTreatmentHistory(sampleId:Int,diagnoseNumber:Int,callBack: (BaseResponseBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .deleteTreatmentHistory(mToken,sampleId,diagnoseNumber)
             .subscribeOn(Schedulers.io())
@@ -183,7 +184,7 @@ class BaselineVisitDataSource(context:Context){
 
     fun getPreviousHistory(sampleId:Int,callBack: (PreviousHistoryResponseBean) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .getPreviousHistory(mToken,sampleId)
             .subscribeOn(Schedulers.io())
@@ -204,7 +205,7 @@ class BaselineVisitDataSource(context:Context){
     }
 
     fun editPreviousHistory(sampleId:Int, previousHistoryBodyBean: PreviousHistoryBodyBean, callBack: (BaseResponseBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .editPreviousHistory(mToken,sampleId,previousHistoryBodyBean)
             .subscribeOn(Schedulers.io())
@@ -224,7 +225,7 @@ class BaselineVisitDataSource(context:Context){
 
     fun getFirstVisitProcess(sampleId:Int,callBack: (FirstVisitProcessResponseBean) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .getFirstVisitProcess(mToken,sampleId)
             .subscribeOn(Schedulers.io())
@@ -245,7 +246,7 @@ class BaselineVisitDataSource(context:Context){
     }
 
     fun editFirstVisitProcess(sampleId:Int, firstVisitProcessBodyBean: FirstVisitProcessBodyBean, callBack: (BaseResponseBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .editFirstVisitProcess(mToken,sampleId,firstVisitProcessBodyBean)
             .subscribeOn(Schedulers.io())

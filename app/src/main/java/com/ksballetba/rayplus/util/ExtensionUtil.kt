@@ -107,7 +107,7 @@ fun getTMB() = arrayOf("未测", "不详")
 
 fun getImagingEvaluationWayListInHistory() = arrayOf("CT","MRI","超声","X线平片","PET-CT")
 
-fun getTherapeuticEvaluationList() = arrayOf("完全缓解(CR)", "部分缓解(PR)", "疾病稳定(SD)", "疾病进展(PD)")
+fun getTherapeuticEvaluationList() = arrayOf("完全缓解(CR)", "部分缓解(PR)", "疾病稳定(SD)", "疾病进展(PD)","疗效不详(UK)")
 
 fun getLastFrontBestEfficacyList() = arrayOf("完全缓解(CR)", "部分缓解(PR)", "疾病稳定(SD)", "疾病进展(PD)","疗效不详(UK)")
 

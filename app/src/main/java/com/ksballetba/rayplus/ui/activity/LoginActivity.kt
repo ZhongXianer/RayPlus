@@ -27,6 +27,8 @@ class LoginActivity : AppCompatActivity() {
         const val TAG = "LoginActivity"
         const val SHARED_PREFERENCE_NAME = "SP_RAYPLUS"
         const val LOGIN_TOKEN = "token"
+        const val LOGIN_TYPE = "project"
+        const val USER_NAME = "USER_NAME"
     }
 
     private lateinit var mViewModel:LoginViewModel
@@ -64,21 +66,23 @@ class LoginActivity : AppCompatActivity() {
     private fun logIn(){
         val account = et_account.text.toString()
         val pwd = et_password.text.toString()
-        mViewModel.login(LoginBodyBean(account,pwd)).observe(this, Observer {
+        mViewModel.login(LoginBodyBean(account,pwd, LOGIN_TYPE)).observe(this, Observer {
             if(it.code==200){
-                saveLoginToken(it.data)
-                startActivity(Intent(this,MainActivity::class.java))
+                saveLoginToken(it.data.token,it.data.userInfo.name)
+                val intent = Intent(this,MainActivity::class.java)
+                startActivity(intent)
             }else{
                 toast("密码或账号有误，请重新输入")
             }
         })
     }
 
-    private fun saveLoginToken(token:String){
+    private fun saveLoginToken(token:String,userName:String){
         LogUtils.tag(TAG).d(token)
         val sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_NAME,Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putString(LOGIN_TOKEN,token)
+        editor.putString(USER_NAME,userName)
         editor.apply()
     }
 }

@@ -9,8 +9,8 @@ import com.ksballetba.rayplus.data.source.remote.TreatmentVisitDataSource
 class
 TreatmentVisitViewModel constructor(private var treatmentVisitDataSource: TreatmentVisitDataSource) : ViewModel() {
 
-    fun getNavigation(sampleId: Int): LiveData<List<NavigationBean>> {
-        val result = MutableLiveData<List<NavigationBean>>()
+    fun getNavigation(sampleId: Int): LiveData<List<NavigationBean.Data>> {
+        val result = MutableLiveData<List<NavigationBean.Data>>()
         treatmentVisitDataSource.getNavigation(sampleId) {
             result.postValue(it)
         }

@@ -4,10 +4,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.apkfuns.logutils.LogUtils
 import com.ksballetba.rayplus.data.bean.*
-import com.ksballetba.rayplus.network.ApiService
-import com.ksballetba.rayplus.network.NetworkState
-import com.ksballetba.rayplus.network.RetrofitClient
-import com.ksballetba.rayplus.network.Status
+import com.ksballetba.rayplus.network.*
 import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.LOGIN_TOKEN
 import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.SHARED_PREFERENCE_NAME
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -20,16 +17,16 @@ class TreatmentVisitDataSource(context: Context){
 
     private val mToken = "Bearer ${context.getSharedPreferences(SHARED_PREFERENCE_NAME,Context.MODE_PRIVATE).getString(LOGIN_TOKEN,"")}"
 
-    fun getNavigation(sampleId:Int,callBack: (List<NavigationBean>) -> Unit) {
+    fun getNavigation(sampleId:Int,callBack: (List<NavigationBean.Data>) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .getNavigation(mToken,sampleId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onNext = {
-                    callBack(it)
+                    callBack(it.data)
                 },
                 onComplete = {
                     mLoadStatus.postValue(NetworkState.LOADED)
@@ -43,7 +40,7 @@ class TreatmentVisitDataSource(context: Context){
     }
 
     fun addCycle(sampleId:Int,callBack: (BaseResponseBean) -> Unit) {
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .addCycle(mToken,sampleId)
             .subscribeOn(Schedulers.io())
@@ -62,7 +59,7 @@ class TreatmentVisitDataSource(context: Context){
     }
 
     fun deleteCycle(sampleId:Int,callBack: (BaseResponseBean) -> Unit) {
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .deleteCycle(mToken,sampleId)
             .subscribeOn(Schedulers.io())
@@ -82,7 +79,7 @@ class TreatmentVisitDataSource(context: Context){
 
     fun getMainPhysicalSignList(sampleId:Int,cycleNumber:Int,callBack: (MutableList<MainPhysicalSignListBean.Data>) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .getMainPhysicalSignList(mToken,sampleId,cycleNumber)
             .subscribeOn(Schedulers.io())
@@ -103,7 +100,7 @@ class TreatmentVisitDataSource(context: Context){
     }
 
     fun editMainPhysicalSign(sampleId:Int,cycleNumber:Int,mainPhysicalSignBodyBean: MainPhysicalSignBodyBean,callBack: (BaseResponseBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .editMainPhysicalSign(mToken,sampleId,cycleNumber,mainPhysicalSignBodyBean)
             .subscribeOn(Schedulers.io())
@@ -122,7 +119,7 @@ class TreatmentVisitDataSource(context: Context){
     }
 
     fun deleteMainPhysicalSign(sampleId:Int,cycleNumber:Int,mainSymptomId:Int,callBack: (BaseResponseBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .deleteMainPhysicalSign(mToken,sampleId,cycleNumber,mainSymptomId)
             .subscribeOn(Schedulers.io())
@@ -142,7 +139,7 @@ class TreatmentVisitDataSource(context: Context){
 
     fun getECOGScore(sampleId:Int,cycleNumber:Int,callBack: (ECOGBean) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .getECOGScore(mToken,sampleId,cycleNumber)
             .subscribeOn(Schedulers.io())
@@ -163,7 +160,7 @@ class TreatmentVisitDataSource(context: Context){
     }
 
     fun editECOGScore(sampleId:Int,cycleNumber:Int,ecogBean: ECOGBean,callBack: (BaseResponseBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .editECOGScore(mToken,sampleId,cycleNumber,ecogBean)
             .subscribeOn(Schedulers.io())
@@ -183,7 +180,7 @@ class TreatmentVisitDataSource(context: Context){
 
     fun getTherapeuticEvaluation(sampleId:Int,cycleNumber:Int,callBack: (TherapeuticEvaluationBean) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .getTherapeuticEvaluation(mToken,sampleId,cycleNumber)
             .subscribeOn(Schedulers.io())
@@ -204,7 +201,7 @@ class TreatmentVisitDataSource(context: Context){
     }
 
     fun editTherapeuticEvaluation(sampleId:Int,cycleNumber:Int,therapeuticEvaluationBean: TherapeuticEvaluationBean,callBack: (BaseResponseBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .editTherapeuticEvaluation(mToken,sampleId,cycleNumber,therapeuticEvaluationBean)
             .subscribeOn(Schedulers.io())
@@ -224,7 +221,7 @@ class TreatmentVisitDataSource(context: Context){
 
     fun getTreatmentRecordList(sampleId:Int,cycleNumber:Int,callBack: (MutableList<TreatmentRecordListBean.Data>) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .getTreatmentRecordList(mToken,sampleId,cycleNumber)
             .subscribeOn(Schedulers.io())
@@ -245,7 +242,7 @@ class TreatmentVisitDataSource(context: Context){
     }
 
     fun editTreatmentRecord(sampleId:Int,cycleNumber:Int,treatmentRecordBodyBean: TreatmentRecordBodyBean,callBack: (BaseResponseBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .editTreatmentRecord(mToken,sampleId,cycleNumber,treatmentRecordBodyBean)
             .subscribeOn(Schedulers.io())
@@ -264,7 +261,7 @@ class TreatmentVisitDataSource(context: Context){
     }
 
     fun deleteTreatmentRecord(sampleId:Int,cycleNumber:Int,treatmentRecordId:Int,callBack: (BaseResponseBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .deleteTreatmentRecord(mToken,sampleId,cycleNumber,treatmentRecordId)
             .subscribeOn(Schedulers.io())
@@ -284,7 +281,7 @@ class TreatmentVisitDataSource(context: Context){
 
     fun getAdjustment(sampleId:Int,cycleNumber:Int,callBack: (AdjustBean) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .getAdjustment(mToken,sampleId,cycleNumber)
             .subscribeOn(Schedulers.io())
@@ -305,7 +302,7 @@ class TreatmentVisitDataSource(context: Context){
     }
 
     fun editAdjustment(sampleId:Int,cycleNumber:Int,adjustBodyBean: AdjustBodyBean,callBack: (BaseResponseBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .editAdjustment(mToken,sampleId,cycleNumber,adjustBodyBean)
             .subscribeOn(Schedulers.io())
@@ -325,7 +322,7 @@ class TreatmentVisitDataSource(context: Context){
 
     fun getAdverseEventList(sampleId:Int,cycleNumber:Int,callBack: (MutableList<AdverseEventListBean.Data>) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .getAdverseEventList(mToken,sampleId,cycleNumber)
             .subscribeOn(Schedulers.io())
@@ -346,7 +343,7 @@ class TreatmentVisitDataSource(context: Context){
     }
 
     fun editAdverseEvent(sampleId:Int,cycleNumber:Int,adverseEventBodyBean: AdverseEventBodyBean,callBack: (BaseResponseBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .editAdverseEvent(mToken,sampleId,cycleNumber,adverseEventBodyBean)
             .subscribeOn(Schedulers.io())
@@ -365,7 +362,7 @@ class TreatmentVisitDataSource(context: Context){
     }
 
     fun deleteAdverseEvent(sampleId:Int,cycleNumber:Int,adverseEventId:Int,callBack: (BaseResponseBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .deleteAdverseEvent(mToken,sampleId,cycleNumber,adverseEventId)
             .subscribeOn(Schedulers.io())

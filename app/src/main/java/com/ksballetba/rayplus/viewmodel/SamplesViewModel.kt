@@ -8,9 +8,17 @@ import com.ksballetba.rayplus.data.source.remote.SampleDataSource
 
 class SamplesViewModel constructor(private var sampleDataSource: SampleDataSource): ViewModel(){
 
-    fun fetchData(): LiveData<MutableList<SampleListBean.Data>> {
+    fun fetchData(projectId: Int): LiveData<MutableList<SampleListBean.Data>> {
         val result = MutableLiveData<MutableList<SampleListBean.Data>>()
-        sampleDataSource.loadInitial {
+        sampleDataSource.loadInitial(projectId) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun fetchMore(projectId: Int): LiveData<MutableList<SampleListBean.Data>> {
+        val result = MutableLiveData<MutableList<SampleListBean.Data>>()
+        sampleDataSource.loadMore(projectId) {
             result.postValue(it)
         }
         return result

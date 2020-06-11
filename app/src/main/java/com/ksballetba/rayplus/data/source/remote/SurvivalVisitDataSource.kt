@@ -8,6 +8,7 @@ import com.ksballetba.rayplus.data.bean.SurvivalVisitBodyBean
 import com.ksballetba.rayplus.data.bean.SurvivalVisitListBean
 import com.ksballetba.rayplus.network.ApiService
 import com.ksballetba.rayplus.network.NetworkState
+import com.ksballetba.rayplus.network.NetworkType
 import com.ksballetba.rayplus.network.RetrofitClient
 import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.LOGIN_TOKEN
 import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.SHARED_PREFERENCE_NAME
@@ -23,7 +24,7 @@ class SurvivalVisitDataSource(context: Context){
 
     fun getSurvivalVisitList(sampleId:Int,callBack: (MutableList<SurvivalVisitListBean.Data>) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .getSurvivalVisitList(mToken,sampleId)
             .subscribeOn(Schedulers.io())
@@ -44,7 +45,7 @@ class SurvivalVisitDataSource(context: Context){
     }
 
     fun editSurvivalVisit(sampleId:Int,survivalVisitBodyBean: SurvivalVisitBodyBean,callBack: (BaseResponseBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .editSurvivalVisit(mToken,sampleId,survivalVisitBodyBean)
             .subscribeOn(Schedulers.io())
@@ -63,7 +64,7 @@ class SurvivalVisitDataSource(context: Context){
     }
 
     fun deleteSurvivalVisit(sampleId:Int,interviewId:Int,callBack: (BaseResponseBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .deleteSurvivalVisit(mToken,sampleId,interviewId)
             .subscribeOn(Schedulers.io())

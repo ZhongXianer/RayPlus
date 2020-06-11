@@ -9,9 +9,14 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class RetrofitClient{
+enum class NetworkType{
+    AUTH,PROJECT
+}
+
+class RetrofitClient(public val networkType: NetworkType){
     private val DEFAULT_TIMEOUT:Long = 30
-    private val BASE_URL = "http://www.rayplus.top:81/"
+    public val AUTH_BASE_URL = "http://www.rayplus.top:81/"
+    public val PROJECT_BASE_URL = "http://www.rayplus.top:82/"
     var mOkHttpClient:OkHttpClient? = null
     var mRetrofit:Retrofit? = null
 
@@ -28,24 +33,26 @@ class RetrofitClient{
             .client(mOkHttpClient!!)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(gson))
-            .baseUrl(BASE_URL)
+            .baseUrl(if(networkType == NetworkType.AUTH) AUTH_BASE_URL else PROJECT_BASE_URL)
             .build()
     }
 
     companion object {
         @Volatile
         var sRetrofitClient:RetrofitClient? = null
-        private fun initRetrofitClient():RetrofitClient{
-            if(sRetrofitClient==null){
+        private fun initRetrofitClient(networkType: NetworkType):RetrofitClient{
+            if(sRetrofitClient==null || sRetrofitClient?.networkType != networkType){
                 synchronized(RetrofitClient::class.java){
-                    if(sRetrofitClient==null){
-                        sRetrofitClient = RetrofitClient()
+                    if(sRetrofitClient==null || sRetrofitClient?.networkType != networkType){
+                        sRetrofitClient = RetrofitClient(networkType)
                     }
                 }
             }
             return sRetrofitClient!!
         }
-        val instance:Retrofit
-            get() = initRetrofitClient().mRetrofit!!
+
+        fun getInstance(networkType: NetworkType):Retrofit{
+          return initRetrofitClient(networkType).mRetrofit!!
+        }
     }
 }

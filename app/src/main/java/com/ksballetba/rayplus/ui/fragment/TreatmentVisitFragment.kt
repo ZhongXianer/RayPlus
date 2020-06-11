@@ -37,7 +37,7 @@ class TreatmentVisitFragment : Fragment() {
 
     private lateinit var mViewModel: TreatmentVisitViewModel
     private lateinit var mVisitsAdapter: VisitsAdapter
-    var mVisitList = mutableListOf<NavigationBean.Children>()
+    var mVisitList = mutableListOf<NavigationBean.Data>()
     var mSampleId = 0
 
     override fun onCreateView(
@@ -97,7 +97,7 @@ class TreatmentVisitFragment : Fragment() {
 
     private fun loadData(){
         mViewModel.getNavigation(mSampleId).observe(viewLifecycleOwner, Observer {
-            mVisitList = it[1].children.toMutableList()
+            mVisitList = it.toMutableList()
             mVisitsAdapter.setNewData(mVisitList)
         })
     }

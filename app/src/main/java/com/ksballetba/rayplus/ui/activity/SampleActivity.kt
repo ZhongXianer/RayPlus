@@ -19,6 +19,7 @@ import com.ksballetba.rayplus.data.bean.SampleSubmitBodyBean
 import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.LOGIN_TOKEN
 import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.SHARED_PREFERENCE_NAME
+import com.ksballetba.rayplus.ui.activity.MainActivity.Companion.PROJECT_ID
 import com.ksballetba.rayplus.ui.activity.SampleEditActivity.Companion.REFRESH_LAST_PAGE
 import com.ksballetba.rayplus.ui.adapter.SamplesAdapter
 import com.ksballetba.rayplus.util.getSamplesViewModel
@@ -34,6 +35,8 @@ class SampleActivity : AppCompatActivity() {
         const val SAMPLE_ID = "SAMPLE_ID"
         const val SAMPLE_BODY = "SAMPLE_BODY"
     }
+
+    var mProjectId = 0
 
     private lateinit var mViewModel: SamplesViewModel
     private lateinit var mSamplesAdapter: SamplesAdapter
@@ -69,6 +72,7 @@ class SampleActivity : AppCompatActivity() {
     private fun initUI(){
         setSupportActionBar(tb_sample)
         initRefresh()
+        mProjectId = intent.getIntExtra(PROJECT_ID,0)
         fab_add_sample.setOnClickListener {
             navigateToSampleEditActivity(-1,null)
         }
@@ -132,12 +136,22 @@ class SampleActivity : AppCompatActivity() {
         srl_sample.setOnRefreshListener {
             loadInitial()
         }
+        srl_sample.setOnLoadMoreListener {
+            loadMore()
+        }
     }
 
     private fun loadInitial(){
-        mViewModel.fetchData().observe(this, Observer {
+        mViewModel.fetchData(mProjectId).observe(this, Observer {
             mSampleList = it
             mSamplesAdapter.setNewData(mSampleList)
+        })
+    }
+
+    private fun loadMore(){
+        mViewModel.fetchMore(mProjectId).observe(this, Observer {
+            mSamplesAdapter.addData(it)
+            srl_sample.finishLoadMore()
         })
     }
 
@@ -180,7 +194,7 @@ class SampleActivity : AppCompatActivity() {
 
     private fun initRefresh() {
         srl_sample.setEnableRefresh(true)
-        srl_sample.setEnableLoadMore(false)
+        srl_sample.setEnableAutoLoadMore(true)
         srl_sample.setEnableOverScrollBounce(true)//是否启用越界回弹
         srl_sample.setEnableScrollContentWhenLoaded(true)//是否在加载完成时滚动列表显示新的内容
         srl_sample.setEnableHeaderTranslationContent(true)//是否下拉Header的时候向下平移列表或者内容

@@ -8,7 +8,7 @@ import retrofit2.http.*
 interface ApiService {
 
     @Headers("Content-Type:application/json")
-    @POST("/login")
+    @POST("/v1/token")
     fun login(@Body loginBodyBean: LoginBodyBean):Observable<LoginResponseBean>
 
     @Headers("Content-Type:application/json")
@@ -20,8 +20,8 @@ interface ApiService {
     fun getUserName(@Header("Authorization") token:String?):Observable<UserNameBean>
 
     @Headers("Content-Type:application/json")
-    @GET("/sample")
-    fun getSampleList(@Header("Authorization") token:String?):Observable<SampleListBean>
+    @GET("/sample/{project_id}")
+    fun getSampleList(@Header("Authorization") token:String?,@Path("project_id") projectId: Int,@Query("page") page:Int,@Query("limit") limit:Int):Observable<SampleListBean>
 
     @Headers("Content-Type:application/json")
     @POST("/sample")
@@ -117,7 +117,7 @@ interface ApiService {
 
     @Headers("Content-Type:application/json")
     @GET("/nav/{sample_id}")
-    fun getNavigation(@Header("Authorization") token:String?,@Path("sample_id") sampleId:Int):Observable<List<NavigationBean>>
+    fun getNavigation(@Header("Authorization") token:String?,@Path("sample_id") sampleId:Int):Observable<NavigationBean>
 
     @Headers("Content-Type:application/json")
     @POST("/cycle/{sample_id}")

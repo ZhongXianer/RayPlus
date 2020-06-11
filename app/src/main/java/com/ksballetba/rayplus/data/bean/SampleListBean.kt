@@ -7,7 +7,8 @@ data class SampleListBean(
     val code: Int, // 0
     val count: Int, // 2000000
     val `data`: List<Data>,
-    val msg: String // success
+    val msg: String, // success
+    val total: Int
 ) {
     data class Data(
         val age: Int, // 0

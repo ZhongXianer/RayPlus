@@ -6,6 +6,7 @@ import com.apkfuns.logutils.LogUtils
 import com.ksballetba.rayplus.data.bean.*
 import com.ksballetba.rayplus.network.ApiService
 import com.ksballetba.rayplus.network.NetworkState
+import com.ksballetba.rayplus.network.NetworkType
 import com.ksballetba.rayplus.network.RetrofitClient
 import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.LOGIN_TOKEN
 import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.SHARED_PREFERENCE_NAME
@@ -21,7 +22,7 @@ class BaseVisitDataSource(context: Context){
 
     fun getVisitTime(sampleId:Int,cycleNumber:Int,callBack: (VisitTimeBean) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .getVisitTime(mToken,sampleId,cycleNumber)
             .subscribeOn(Schedulers.io())
@@ -42,7 +43,7 @@ class BaseVisitDataSource(context: Context){
     }
 
     fun editVisitTime(sampleId:Int,cycleNumber:Int,visitTimeBean: VisitTimeBean,callBack: (BaseResponseBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .editVisitTime(mToken,sampleId,cycleNumber,visitTimeBean)
             .subscribeOn(Schedulers.io())
@@ -62,7 +63,7 @@ class BaseVisitDataSource(context: Context){
 
     fun getLabInspection(sampleId:Int,cycleNumber:Int,callBack: (LabInspectionResponseBean) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .getLabInspection(mToken,sampleId,cycleNumber)
             .subscribeOn(Schedulers.io())
@@ -76,14 +77,14 @@ class BaseVisitDataSource(context: Context){
                     mLoadStatus.postValue(NetworkState.LOADED)
                 },
                 onError = {
-                    LogUtils.d(it.message)
+                    LogUtils.tag("LabIns").d(it.message)
                     mLoadStatus.postValue(NetworkState.error(it.message))
                 }
             )
     }
 
     fun editLabInspection(sampleId:Int,cycleNumber:Int,labInspectionBodyBean: LabInspectionBodyBean,callBack: (BaseResponseBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .editLabInspection(mToken,sampleId,cycleNumber,labInspectionBodyBean)
             .subscribeOn(Schedulers.io())
@@ -103,7 +104,7 @@ class BaseVisitDataSource(context: Context){
 
     fun getImagingEvaluationList(sampleId:Int,cycleNumber:Int,callBack: (MutableList<ImagingEvaluationListBean.Data>) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .getImagingEvaluationList(mToken,sampleId,cycleNumber)
             .subscribeOn(Schedulers.io())
@@ -124,7 +125,7 @@ class BaseVisitDataSource(context: Context){
     }
 
     fun editImagingEvaluation(sampleId:Int,cycleNumber:Int,imagingEvaluationBodyBean: ImagingEvaluationBodyBean,callBack: (BaseResponseBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .editImagingEvaluation(mToken,sampleId,cycleNumber,imagingEvaluationBodyBean)
             .subscribeOn(Schedulers.io())
@@ -143,7 +144,7 @@ class BaseVisitDataSource(context: Context){
     }
 
     fun deleteImagingEvaluation(sampleId:Int,cycleNumber:Int,evaluateId:Int,callBack: (BaseResponseBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .deleteImagingEvaluation(mToken,sampleId,cycleNumber,evaluateId)
             .subscribeOn(Schedulers.io())

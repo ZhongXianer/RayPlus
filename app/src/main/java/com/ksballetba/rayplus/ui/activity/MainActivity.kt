@@ -19,6 +19,7 @@ import com.ksballetba.rayplus.data.bean.ProjectListBean
 import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.LOGIN_TOKEN
 import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.SHARED_PREFERENCE_NAME
+import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.USER_NAME
 import com.ksballetba.rayplus.ui.adapter.ProjectsAdapter
 import com.ksballetba.rayplus.util.getProjectsViewModel
 import com.ksballetba.rayplus.viewmodel.ProjectsViewModel
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object{
         const val TAG = "MainActivity"
+        const val PROJECT_ID = "PROJECT_ID"
         const val EXIT_APP_ACTION = "EXIT_APP_ACTION"
     }
 
@@ -76,6 +78,9 @@ class MainActivity : AppCompatActivity() {
             logOut()
         }
         initRefresh()
+        val sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_NAME,Context.MODE_PRIVATE)
+        val userName = sharedPreferences.getString(USER_NAME,"")
+        nav_view.getHeaderView(0).findViewById<TextView>(R.id.tv_doctor_name).text = "您好，$userName 医生"
     }
 
     private fun initList(){
@@ -87,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         mProjectsAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
         rv_project.adapter = mProjectsAdapter
         mProjectsAdapter.setOnItemClickListener { _, _, position ->
-            navigateToSamplePage()
+            navigateToSamplePage(mProjectList[position].projectId)
         }
         mViewModel.fetchLoadStatus().observe(this, Observer {
             when(it.status){
@@ -118,9 +123,6 @@ class MainActivity : AppCompatActivity() {
             mProjectList = it
             mProjectsAdapter.setNewData(mProjectList)
         })
-        mViewModel.getUserName().observe(this, Observer {
-            nav_view.getHeaderView(0).findViewById<TextView>(R.id.tv_doctor_name).text = "您好，${it.userName}医生"
-        })
     }
 
 
@@ -141,14 +143,17 @@ class MainActivity : AppCompatActivity() {
         srl_project.setEnableLoadMoreWhenContentNotFull(true)
     }
 
-    private fun navigateToSamplePage(){
-        startActivity(Intent(this,SampleActivity::class.java))
+    private fun navigateToSamplePage(projectId:Int){
+        val intent = Intent(this,SampleActivity::class.java)
+        intent.putExtra(PROJECT_ID,projectId)
+        startActivity(intent)
     }
 
     private fun deleteLoginToken(){
         val sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.remove(LOGIN_TOKEN)
+        editor.remove(USER_NAME)
         editor.apply()
     }
 }

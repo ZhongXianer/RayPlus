@@ -5,6 +5,7 @@ import com.ksballetba.rayplus.data.bean.LoginBodyBean
 import com.ksballetba.rayplus.data.bean.LoginResponseBean
 import com.ksballetba.rayplus.network.ApiService
 import com.ksballetba.rayplus.network.NetworkState
+import com.ksballetba.rayplus.network.NetworkType
 import com.ksballetba.rayplus.network.RetrofitClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
@@ -16,7 +17,7 @@ class LoginDataSource{
 
     fun login(loginBodyBean: LoginBodyBean,callBack: (LoginResponseBean) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.AUTH)
             .create(ApiService::class.java)
             .login(loginBodyBean)
             .subscribeOn(Schedulers.io())

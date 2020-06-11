@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.apkfuns.logutils.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 
@@ -23,6 +24,7 @@ import com.ksballetba.rayplus.ui.adapter.LabInspectionAdapter
 import com.ksballetba.rayplus.ui.adapter.ProjectsAdapter
 import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment
 import com.ksballetba.rayplus.util.getBaseVisitViewModel
+import com.ksballetba.rayplus.util.parseDefaultContent
 import com.ksballetba.rayplus.util.parseLabInspectionRank
 import com.ksballetba.rayplus.util.showDatePickerDialog
 import com.ksballetba.rayplus.viewmodel.BaseVisitViewModel
@@ -220,7 +222,7 @@ class LabInspectionFragment : Fragment() {
     }
 
     private fun saveData() {
-        val time = tv_sampling_date.text.toString()
+        val time = parseDefaultContent(tv_sampling_date.text.toString());
         val hbVal = (mBloodRoutineAdapter.getViewByPosition(
             0,
             R.id.tv_lab_inspection

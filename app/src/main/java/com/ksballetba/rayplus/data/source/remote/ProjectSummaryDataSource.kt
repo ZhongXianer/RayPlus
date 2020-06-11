@@ -9,6 +9,7 @@ import com.ksballetba.rayplus.data.bean.ProjectSummaryBodyBean
 import com.ksballetba.rayplus.data.bean.ProjectSummaryResponseBean
 import com.ksballetba.rayplus.network.ApiService
 import com.ksballetba.rayplus.network.NetworkState
+import com.ksballetba.rayplus.network.NetworkType
 import com.ksballetba.rayplus.network.RetrofitClient
 import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.LOGIN_TOKEN
 import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.SHARED_PREFERENCE_NAME
@@ -24,7 +25,7 @@ class ProjectSummaryDataSource(context: Context){
 
     fun getProjectSummary(sampleId:Int,callBack: (ProjectSummaryResponseBean) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .getProjectSummary(mToken,sampleId)
             .subscribeOn(Schedulers.io())
@@ -45,7 +46,7 @@ class ProjectSummaryDataSource(context: Context){
     }
 
     fun editProjectSummary(sampleId:Int,projectSummaryBodyBean: ProjectSummaryBodyBean,callBack: (BaseResponseBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .editProjectSummary(mToken,sampleId,projectSummaryBodyBean)
             .subscribeOn(Schedulers.io())
@@ -65,7 +66,7 @@ class ProjectSummaryDataSource(context: Context){
 
     fun getAllAdverseEventList(sampleId:Int,callBack: (MutableList<AdverseEventListBean.Data>) -> Unit){
         mLoadStatus.postValue(NetworkState.LOADING)
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .getAllAdverseEventList(mToken,sampleId)
             .subscribeOn(Schedulers.io())

@@ -7,6 +7,7 @@ import com.ksballetba.rayplus.data.bean.ProjectListBean
 import com.ksballetba.rayplus.data.bean.UserNameBean
 import com.ksballetba.rayplus.network.ApiService
 import com.ksballetba.rayplus.network.NetworkState
+import com.ksballetba.rayplus.network.NetworkType
 import com.ksballetba.rayplus.network.RetrofitClient
 import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.LOGIN_TOKEN
 import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.SHARED_PREFERENCE_NAME
@@ -25,7 +26,7 @@ class  ProjectDataSource(context: Context){
     private val mToken = "Bearer ${context.getSharedPreferences(SHARED_PREFERENCE_NAME,Context.MODE_PRIVATE).getString(LOGIN_TOKEN,"")}"
 
     fun getUserName(callBack: (UserNameBean) -> Unit){
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .getUserName(mToken)
             .subscribeOn(Schedulers.io())
@@ -45,7 +46,7 @@ class  ProjectDataSource(context: Context){
 
     fun loadInitial(callBack: (MutableList<ProjectListBean.Data>) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
-        RetrofitClient.instance
+        RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .getProjectList(mToken)
             .subscribeOn(Schedulers.io())

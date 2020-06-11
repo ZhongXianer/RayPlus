@@ -5,13 +5,13 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.NavigationBean
 
-class VisitsAdapter(layoutResId:Int,data:List<NavigationBean.Children>): BaseQuickAdapter<NavigationBean.Children, BaseViewHolder>(layoutResId,data) {
+class VisitsAdapter(layoutResId:Int,data:List<NavigationBean.Data>): BaseQuickAdapter<NavigationBean.Data, BaseViewHolder>(layoutResId,data) {
 
     companion object {
         const val TAG = "ProjectsAdapter"
     }
 
-    override fun convert(helper: BaseViewHolder, item: NavigationBean.Children?) {
+    override fun convert(helper: BaseViewHolder, item: NavigationBean.Data?) {
         helper.setText(R.id.tv_visit_name,item?.title)
     }
 }
