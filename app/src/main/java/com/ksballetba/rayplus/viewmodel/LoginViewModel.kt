@@ -7,11 +7,15 @@ import com.ksballetba.rayplus.data.bean.LoginBodyBean
 import com.ksballetba.rayplus.data.bean.LoginResponseBean
 import com.ksballetba.rayplus.data.source.remote.LoginDataSource
 
+/**
+ * Login界面的ViewModel类
+ */
 class LoginViewModel constructor(private var loginDataSource: LoginDataSource): ViewModel(){
+
     fun login(loginBodyBean: LoginBodyBean): LiveData<LoginResponseBean> {
         val result = MutableLiveData<LoginResponseBean>()
         loginDataSource.login(loginBodyBean) {
-            result.postValue(it)
+            result.postValue(it)  //Posts a task to a main thread to set the given value
         }
         return result
     }

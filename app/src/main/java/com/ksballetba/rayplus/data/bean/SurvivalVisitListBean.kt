@@ -35,6 +35,8 @@ data class SurvivalVisitListBean(
         @SerializedName("status_confirm_time")
         val statusConfirmTime: String, // 2019-12-27
         @SerializedName("survival_status")
-        val survivalStatus: Int // 1
+        val survivalStatus: Int, // 1
+        @SerializedName("is_submit")
+        val isSubmit: Int
     )
 }

@@ -1,6 +1,5 @@
 package com.ksballetba.rayplus.network
 
-import android.util.Log
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import okhttp3.OkHttpClient
@@ -9,20 +8,21 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
+//网络请求类型
 enum class NetworkType{
     AUTH,PROJECT
 }
 
-class RetrofitClient(public val networkType: NetworkType){
+class RetrofitClient(val networkType: NetworkType){
     private val DEFAULT_TIMEOUT:Long = 30
-    public val AUTH_BASE_URL = "http://www.rayplus.top:81/"
-    public val PROJECT_BASE_URL = "http://www.rayplus.top:82/"
+    private val AUTH_BASE_URL = "http://www.rayplus.top:81/"
+    private val PROJECT_BASE_URL = "http://www.rayplus.top:82/"
     var mOkHttpClient:OkHttpClient? = null
     var mRetrofit:Retrofit? = null
 
     init {
         val gson = GsonBuilder().serializeNulls().create()
-        val logger = HttpLoggingInterceptor()
+        val logger = HttpLoggingInterceptor()  //An OKHttp interceptor which logs request and response information
         logger.level = HttpLoggingInterceptor.Level.BASIC
         mOkHttpClient = OkHttpClient.Builder()
             .connectTimeout(DEFAULT_TIMEOUT,TimeUnit.SECONDS)
@@ -52,7 +52,7 @@ class RetrofitClient(public val networkType: NetworkType){
         }
 
         fun getInstance(networkType: NetworkType):Retrofit{
-          return initRetrofitClient(networkType).mRetrofit!!
+          return initRetrofitClient(networkType).mRetrofit!!    //不能为空
         }
     }
 }

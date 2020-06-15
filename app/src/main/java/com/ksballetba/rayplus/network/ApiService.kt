@@ -199,6 +199,10 @@ interface ApiService {
     @DELETE("/interview/{sample_id}/{interview_id}")
     fun deleteSurvivalVisit(@Header("Authorization") token:String?,@Path("sample_id") sampleId:Int,@Path("interview_id") interviewId:Int):Observable<BaseResponseBean>
 
+    @Headers("Content-Type:application/x-www-form-urlencoded")
+    @POST("/interview/submit/{interview_id}")
+    fun submitSurvivalVisit(@Header("Authorization") token: String?,@Path("interview_id")interviewId: Int):Observable<BaseResponseBean>
+
     @Headers("Content-Type:application/json")
     @GET("/summary/{sample_id}")
     fun getProjectSummary(@Header("Authorization") token:String?,@Path("sample_id") sampleId:Int):Observable<ProjectSummaryResponseBean>

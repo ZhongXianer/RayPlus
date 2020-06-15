@@ -3,6 +3,9 @@ package com.ksballetba.rayplus.data.bean
 
 import com.google.gson.annotations.SerializedName
 
+/**
+ * 项目类
+ */
 data class ProjectListBean(
     val code: Int, // 0
     val count: Int, // 20000

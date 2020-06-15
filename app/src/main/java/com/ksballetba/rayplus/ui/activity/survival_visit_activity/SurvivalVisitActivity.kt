@@ -26,6 +26,7 @@ class SurvivalVisitActivity : AppCompatActivity() {
     }
 
     lateinit var mViewModel: SurvivalVisitViewModel
+    lateinit var survivalVisitBody: SurvivalVisitBodyBean
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +52,7 @@ class SurvivalVisitActivity : AppCompatActivity() {
             loadData(survivalVisitBody)
         }
         cl_visit_date.setOnClickListener {
-            showDatePickerDialog(tv_visit_date,supportFragmentManager)
+            showDatePickerDialog(tv_visit_date, supportFragmentManager)
         }
         cl_visit_way.setOnClickListener {
             XPopup.Builder(this)
@@ -71,11 +72,11 @@ class SurvivalVisitActivity : AppCompatActivity() {
                 getSurvivalStatus()
             ) { pos, text ->
                 tv_live_status.text = text
-                if(pos==0){
+                if (pos == 0) {
                     cl_death_cause.visibility = View.VISIBLE
                     cl_death_date.visibility = View.VISIBLE
                     cl_gather_way.visibility = View.VISIBLE
-                }else{
+                } else {
                     cl_death_cause.visibility = View.GONE
                     cl_death_date.visibility = View.GONE
                     cl_gather_way.visibility = View.GONE
@@ -83,7 +84,7 @@ class SurvivalVisitActivity : AppCompatActivity() {
             }.show()
         }
         cl_death_date.setOnClickListener {
-            showDatePickerDialog(tv_death_date,supportFragmentManager)
+            showDatePickerDialog(tv_death_date, supportFragmentManager)
         }
         cl_death_cause.setOnClickListener {
             XPopup.Builder(this)
@@ -124,10 +125,10 @@ class SurvivalVisitActivity : AppCompatActivity() {
                 }.show()
         }
         cl_confirm_live_date.setOnClickListener {
-            showDatePickerDialog(tv_confirm_live_date,supportFragmentManager)
+            showDatePickerDialog(tv_confirm_live_date, supportFragmentManager)
         }
         cl_last_contact_date.setOnClickListener {
-            showDatePickerDialog(tv_last_contact_date,supportFragmentManager)
+            showDatePickerDialog(tv_last_contact_date, supportFragmentManager)
         }
         fab_save_survival_visit.setOnClickListener {
             val sampleId = intent.getIntExtra(SAMPLE_ID, -1)
@@ -149,11 +150,11 @@ class SurvivalVisitActivity : AppCompatActivity() {
         }
         if (survivalVisitBody.survivalStatus != null) {
             tv_live_status.text = getSurvivalStatus()[survivalVisitBody.survivalStatus]
-            if(survivalVisitBody.survivalStatus==0){
+            if (survivalVisitBody.survivalStatus == 0) {
                 cl_death_cause.visibility = View.VISIBLE
                 cl_death_date.visibility = View.VISIBLE
                 cl_gather_way.visibility = View.VISIBLE
-            }else{
+            } else {
                 cl_death_cause.visibility = View.GONE
                 cl_death_date.visibility = View.GONE
                 cl_gather_way.visibility = View.GONE
@@ -189,34 +190,50 @@ class SurvivalVisitActivity : AppCompatActivity() {
         val dieReasonStr = parseDefaultContent(tv_death_cause.text.toString())
         var otherReason = parseDefaultContent(tv_death_cause.text.toString())
         var dieReason = 0
-        if(dieReasonStr=="疾病进展"){
+        if (dieReasonStr == "疾病进展") {
             dieReason = 0
             otherReason = ""
-        }else{
+        } else {
             dieReason = 1
         }
         val OSMethodStr = parseDefaultContent(tv_gather_way.text.toString())
         var otherMethod = parseDefaultContent(tv_gather_way.text.toString())
         var OSMethod = 0
-        if(getOSMethod().contains(OSMethodStr)){
+        if (getOSMethod().contains(OSMethodStr)) {
             OSMethod = getOSMethod().indexOf(OSMethodStr)
             otherMethod = ""
-        }else{
+        } else {
             OSMethod = 8
         }
         val statusConfirmTime = parseDefaultContent(tv_confirm_live_date.text.toString())
         val lastTimeSurvival = parseDefaultContent(tv_last_contact_date.text.toString())
-        val survivalVisitBody = SurvivalVisitBodyBean(dieReason,dieTime,hasOtherTreatment,interviewId,interviewTime,interviewWay,lastTimeSurvival,OSMethod,otherMethod,otherReason,statusConfirmTime,survivalStatus)
-        mViewModel.editSurvivalVisit(sampleId,survivalVisitBody).observe(this, Observer {
-            if(it.code==200){
+        val isSubmit = 0
+        survivalVisitBody = SurvivalVisitBodyBean(
+            dieReason,
+            dieTime,
+            hasOtherTreatment,
+            interviewId,
+            interviewTime,
+            interviewWay,
+            lastTimeSurvival,
+            OSMethod,
+            otherMethod,
+            otherReason,
+            statusConfirmTime,
+            survivalStatus,
+            isSubmit
+        )
+        mViewModel.editSurvivalVisit(sampleId, survivalVisitBody).observe(this, Observer {
+            if (it.code == 200) {
                 toast("生存期随访操作成功")
                 val intent = Intent(this, CRFActivity::class.java)
                 intent.action = REFRESH_SURVIVAL_VISIT_PAGE
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 startActivity(intent)
-            }else{
+            } else {
                 toast("生存期随访操作失败")
             }
         })
     }
+
 }

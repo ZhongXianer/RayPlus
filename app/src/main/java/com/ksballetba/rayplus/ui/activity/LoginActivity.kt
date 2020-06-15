@@ -21,6 +21,9 @@ import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.toast
 import kotlin.math.log
 
+/**
+ * 登录Activity
+ */
 class LoginActivity : AppCompatActivity() {
 
     companion object{
@@ -53,6 +56,9 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * 初始化登录界面
+     */
     private fun initUI(){
         mViewModel = getLoginViewModel(this)
         btn_login.setOnClickListener {
@@ -63,6 +69,10 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * 登录按钮的点击事件
+     *
+     */
     private fun logIn(){
         val account = et_account.text.toString()
         val pwd = et_password.text.toString()
@@ -77,6 +87,9 @@ class LoginActivity : AppCompatActivity() {
         })
     }
 
+    /**
+     * 存储账号密码数据
+     */
     private fun saveLoginToken(token:String,userName:String){
         LogUtils.tag(TAG).d(token)
         val sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_NAME,Context.MODE_PRIVATE)

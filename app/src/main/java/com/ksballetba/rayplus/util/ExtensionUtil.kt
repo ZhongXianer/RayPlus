@@ -129,6 +129,8 @@ fun getAdverseEventSAEState() = arrayOf("死亡","导致住院","延长住院时
 
 fun getSurvivalStatus() = arrayOf("死亡","存活","失联")
 
+fun getSurvivalSubmitStatus()= arrayOf("未提交","已提交")
+
 fun getInterviewWay() = arrayOf("电话", "门诊", "住院")
 
 fun getDrinkingFrequency() =  arrayOf("0=几乎不", "1=每周1-2次", "2=每周3-4次", "3=每周5-7次")

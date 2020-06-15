@@ -11,7 +11,8 @@
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
     android:padding="8dp"
-    app:cardElevation="@dimen/cardview_default_elevation">
+    app:cardElevation="@dimen/cardview_default_elevation"
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -64,7 +65,7 @@
 
         <TextView
             android:id="@+id/tv_last_contact_date"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="最后一次联系日期：2012-09-09"
             android:layout_marginTop="6dp"
@@ -72,6 +73,24 @@
             android:textSize="@dimen/material_typography_body1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_death_date" />
+        <TextView
+            android:id="@+id/submit_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="提交状态："
+            android:layout_marginTop="6dp"
+            android:textColor="@color/primary_text"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_last_contact_date"/>
+        <Button
+            android:id="@+id/submit_button"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:text="提交"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/submit_status"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -76,30 +76,37 @@ class SurvivalVisitFragment : Fragment() {
         mAdapter.bindToRecyclerView(rv_survival_visit)
         mAdapter.setOnItemClickListener { _, _, position ->
             val survivalVisit = mList[position]
-            val survivalVisitBody = SurvivalVisitBodyBean(
-                survivalVisit.dieReason,
-                survivalVisit.dieTime,
-                survivalVisit.hasOtherTreatment,
-                survivalVisit.interviewId,
-                survivalVisit.interviewTime,
-                survivalVisit.interviewWay,
-                survivalVisit.lastTimeSurvival,
-                survivalVisit.oSMethod,
-                survivalVisit.otherMethod,
-                survivalVisit.otherReason,
-                survivalVisit.statusConfirmTime,
-                survivalVisit.survivalStatus
-            )
-            navigateToSurvivalVisitEditPage(
-                mSampleId,
-                survivalVisitBody
-            )
+            if (survivalVisit.isSubmit == 1) {
+                ToastUtils.showShort("已提交！不能再编辑")
+            } else {
+                val survivalVisitBody = SurvivalVisitBodyBean(
+                    survivalVisit.dieReason,
+                    survivalVisit.dieTime,
+                    survivalVisit.hasOtherTreatment,
+                    survivalVisit.interviewId,
+                    survivalVisit.interviewTime,
+                    survivalVisit.interviewWay,
+                    survivalVisit.lastTimeSurvival,
+                    survivalVisit.oSMethod,
+                    survivalVisit.otherMethod,
+                    survivalVisit.otherReason,
+                    survivalVisit.statusConfirmTime,
+                    survivalVisit.survivalStatus,
+                    survivalVisit.isSubmit
+                )
+                navigateToSurvivalVisitEditPage(
+                    mSampleId,
+                    survivalVisitBody
+                )
+            }
         }
-        mAdapter.setOnItemChildClickListener { adapter, view, position ->
-            XPopup.Builder(context).asConfirm("信息", "请问是否确认删除") {
-                deleteSurvivalVisit(mList[position].interviewId, position)
-            }.show()
+        mAdapter.setOnItemChildClickListener { _, view, position ->
+            when (view.id) {
+                R.id.iv_delete_item_survival_visit -> deleteListener(position)
+                R.id.submit_button -> submitButtonListener(position)
+            }
         }
+
         mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
             when (it.status) {
                 Status.RUNNING -> {
@@ -140,6 +147,16 @@ class SurvivalVisitFragment : Fragment() {
         startActivity(intent)
     }
 
+    private fun deleteListener(pos: Int) {
+        if (mList[pos].isSubmit == 0) {    //未提交
+            XPopup.Builder(context).asConfirm("信息", "请问是否确认删除") {
+                deleteSurvivalVisit(mList[pos].interviewId, pos)
+            }.show()
+        } else {
+            ToastUtils.showShort("已提交！不能再进行修改")
+        }
+    }
+
     private fun deleteSurvivalVisit(interviewId: Int, pos: Int) {
         mViewModel.deleteSurvivalVisit(mSampleId, interviewId)
             .observe(viewLifecycleOwner,
@@ -149,6 +166,30 @@ class SurvivalVisitFragment : Fragment() {
                         mAdapter.remove(pos)
                     } else {
                         ToastUtils.showShort("删除失败")
+                    }
+                })
+    }
+
+    private fun submitButtonListener(pos: Int) {
+        val survivalVisitListBean = mList[pos]
+        if (survivalVisitListBean.isSubmit == 0) {    //未提交
+            XPopup.Builder(context).asConfirm("信息", "请问是否确认提交") {
+                submitSurvivalVisit(survivalVisitListBean.interviewId)
+            }.show()
+        } else {
+            ToastUtils.showShort("已提交！不能再修改")
+        }
+    }
+
+    private fun submitSurvivalVisit(interviewId: Int) {
+        mViewModel.submitSurvivalVisit(interviewId)
+            .observe(viewLifecycleOwner,
+                Observer {
+                    if (it.code == 200) {
+                        ToastUtils.showShort("提交成功")
+                        initList()
+                    } else {
+                        ToastUtils.showShort("提交失败")
                     }
                 })
     }

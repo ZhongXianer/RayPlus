@@ -72,6 +72,9 @@ class MainActivity : AppCompatActivity() {
         return false
     }
 
+    /**
+     * 初始化主界面，初始化相关控件及点击事件
+     */
     private fun initUI(){
         setSupportActionBar(tb_main)
         btn_logout.setOnClickListener {
@@ -91,6 +94,7 @@ class MainActivity : AppCompatActivity() {
         mProjectsAdapter = ProjectsAdapter(R.layout.item_project,mProjectList)
         mProjectsAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
         rv_project.adapter = mProjectsAdapter
+        /*设置点击事件，跳转到对应的活动*/
         mProjectsAdapter.setOnItemClickListener { _, _, position ->
             navigateToSamplePage(mProjectList[position].projectId)
         }
@@ -126,8 +130,12 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    /**
+     * 退出登录点击事件
+     */
     private fun logOut(){
         deleteLoginToken()
+        /*返回登录界面*/
         val intent = Intent(this,LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
@@ -143,12 +151,19 @@ class MainActivity : AppCompatActivity() {
         srl_project.setEnableLoadMoreWhenContentNotFull(true)
     }
 
+    /**
+     * 跳转到相应的活动
+     */
     private fun navigateToSamplePage(projectId:Int){
         val intent = Intent(this,SampleActivity::class.java)
         intent.putExtra(PROJECT_ID,projectId)
         startActivity(intent)
     }
 
+    /**
+     * 删除账号密码数据
+     * 退出登录
+     */
     private fun deleteLoginToken(){
         val sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()

@@ -8,9 +8,10 @@ import com.ksballetba.rayplus.data.bean.SurvivalVisitBodyBean
 import com.ksballetba.rayplus.data.bean.SurvivalVisitListBean
 import com.ksballetba.rayplus.data.source.remote.SurvivalVisitDataSource
 
-class SurvivalVisitViewModel constructor(private var survivalVisitDataSource: SurvivalVisitDataSource): ViewModel() {
+class SurvivalVisitViewModel constructor(private var survivalVisitDataSource: SurvivalVisitDataSource) :
+    ViewModel() {
 
-    fun getSurvivalVisitList(sampleId:Int): LiveData<MutableList<SurvivalVisitListBean.Data>> {
+    fun getSurvivalVisitList(sampleId: Int): LiveData<MutableList<SurvivalVisitListBean.Data>> {
         val result = MutableLiveData<MutableList<SurvivalVisitListBean.Data>>()
         survivalVisitDataSource.getSurvivalVisitList(sampleId) {
             result.postValue(it)
@@ -18,17 +19,28 @@ class SurvivalVisitViewModel constructor(private var survivalVisitDataSource: Su
         return result
     }
 
-    fun editSurvivalVisit(sampleId:Int,survivalVisitBodyBean: SurvivalVisitBodyBean): LiveData<BaseResponseBean>{
+    fun editSurvivalVisit(
+        sampleId: Int,
+        survivalVisitBodyBean: SurvivalVisitBodyBean
+    ): LiveData<BaseResponseBean> {
         val result = MutableLiveData<BaseResponseBean>()
-        survivalVisitDataSource.editSurvivalVisit(sampleId,survivalVisitBodyBean) {
+        survivalVisitDataSource.editSurvivalVisit(sampleId, survivalVisitBodyBean) {
             result.postValue(it)
         }
         return result
     }
 
-    fun deleteSurvivalVisit(sampleId:Int,interviewId:Int): LiveData<BaseResponseBean>{
+    fun submitSurvivalVisit(interviewId: Int): LiveData<BaseResponseBean> {
         val result = MutableLiveData<BaseResponseBean>()
-        survivalVisitDataSource.deleteSurvivalVisit(sampleId,interviewId) {
+        survivalVisitDataSource.submitSurvivalVisit(interviewId) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun deleteSurvivalVisit(sampleId: Int, interviewId: Int): LiveData<BaseResponseBean> {
+        val result = MutableLiveData<BaseResponseBean>()
+        survivalVisitDataSource.deleteSurvivalVisit(sampleId, interviewId) {
             result.postValue(it)
         }
         return result

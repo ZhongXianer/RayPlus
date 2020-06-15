@@ -63,6 +63,26 @@ class SurvivalVisitDataSource(context: Context){
             )
     }
 
+    //新增提交治疗期随访接口
+    fun submitSurvivalVisit(interviewId: Int,callBack: (BaseResponseBean) -> Unit){
+        RetrofitClient.getInstance(NetworkType.PROJECT)
+            .create(ApiService::class.java)
+            .submitSurvivalVisit(mToken,interviewId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                },
+                onError = {
+                    LogUtils.tag(SampleDataSource.TAG).d(it.message)
+                }
+            )
+    }
+
     fun deleteSurvivalVisit(sampleId:Int,interviewId:Int,callBack: (BaseResponseBean) -> Unit){
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
