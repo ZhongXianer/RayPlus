@@ -11,6 +11,8 @@ data class NavigationBean(
     data class Data(
         @SerializedName("cycle_number")
         val cycleNumber: Int, // 2
-        val title: String // 访视2
+        val title: String, // 访视2
+        @SerializedName("is_submit")
+        val isSubmit: Int
     )
 }

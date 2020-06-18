@@ -33,6 +33,15 @@ TreatmentVisitViewModel constructor(private var treatmentVisitDataSource: Treatm
         return result
     }
 
+    fun submitCycle(sampleId:Int,cycleNumber: Int):LiveData<BaseResponseBean>{
+        val result=MutableLiveData<BaseResponseBean>()
+        treatmentVisitDataSource.submitCycle(sampleId,cycleNumber){
+            result.postValue(it)
+        }
+        return result
+    }
+
+
     fun getMainPhysicalSignList(sampleId: Int,cycleNumber:Int): LiveData<List<MainPhysicalSignListBean.Data>> {
         val result = MutableLiveData<List<MainPhysicalSignListBean.Data>>()
         treatmentVisitDataSource.getMainPhysicalSignList(sampleId,cycleNumber) {

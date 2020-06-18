@@ -47,6 +47,8 @@ data class SampleListBean(
         @SerializedName("sign_time")
         val signTime: String, // 2019-10-08
         @SerializedName("user_id")
-        val userId: Int // 1
+        val userId: Int, // 1
+        @SerializedName("submit_status")
+        val submitStatus: Int
     )
 }

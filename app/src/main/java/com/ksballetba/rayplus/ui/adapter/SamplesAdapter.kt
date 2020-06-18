@@ -4,6 +4,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.SampleListBean
+import com.ksballetba.rayplus.util.getSampleSubmitStatus
 
 class SamplesAdapter(layoutResId:Int,data:List<SampleListBean.Data>): BaseQuickAdapter<SampleListBean.Data, BaseViewHolder>(layoutResId,data) {
 
@@ -22,6 +23,7 @@ class SamplesAdapter(layoutResId:Int,data:List<SampleListBean.Data>): BaseQuickA
             .setText(R.id.tv_sample_interview_status,"随访进度：${item?.interviewStatus}")
             .setText(R.id.tv_sample_last_interview_time,"上一次随访时间：${item?.lastInterviewTime}")
             .setText(R.id.tv_sample_next_interview_time,"预计下一次随访时间：${item?.nextInterviewTime}")
+            .setText(R.id.tv_sample_submit_status,"状态：${getSampleSubmitStatus()[item!!.submitStatus]}")
             .addOnClickListener(R.id.btn_sample_edit)
             .addOnClickListener(R.id.btn_sample_submit)
             .addOnClickListener(R.id.iv_delete_item_sample)

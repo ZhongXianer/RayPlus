@@ -4,7 +4,7 @@ package com.ksballetba.rayplus.data.bean
 import com.google.gson.annotations.SerializedName
 
 /**
- * 项目类
+ * 项目列表类，用于在list中展示
  */
 data class ProjectListBean(
     val code: Int, // 0

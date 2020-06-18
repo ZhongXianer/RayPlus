@@ -23,6 +23,7 @@ import com.ksballetba.rayplus.ui.adapter.ViewPagerAdapter
 import com.ksballetba.rayplus.ui.adapter.VisitsAdapter
 import com.ksballetba.rayplus.util.getTreatmentVisitViewModel
 import com.ksballetba.rayplus.viewmodel.TreatmentVisitViewModel
+import com.lxj.xpopup.XPopup
 import kotlinx.android.synthetic.main.fragment_treatment_visit.*
 
 /**
@@ -76,6 +77,11 @@ class TreatmentVisitFragment : Fragment() {
         mVisitsAdapter.setOnItemClickListener { _, _, position ->
             navigateToDetailPage(mVisitList[position].cycleNumber,mVisitList[position].title)
         }
+        mVisitsAdapter.setOnItemChildClickListener { _, _, position ->
+            XPopup.Builder(context).asConfirm("信息","请问是否确定提交，确定后将不能修改"){
+                submitCycle(mVisitList[position].cycleNumber)
+            }.show()
+        }
         mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
             when(it.status){
                 Status.RUNNING -> {
@@ -120,6 +126,17 @@ class TreatmentVisitFragment : Fragment() {
                 srl_treatment_visit.autoRefresh()
             }else{
                 ToastUtils.showShort("删除治疗期随访失败")
+            }
+        })
+    }
+
+    private fun submitCycle(cycleNumber: Int){
+        mViewModel.submitCycle(mSampleId,cycleNumber).observe(viewLifecycleOwner, Observer {
+            if (it.code==200){
+                ToastUtils.showShort("提交治疗期随访成功")
+                //TODO
+            }else{
+                ToastUtils.showShort("提交治疗期随访失败")
             }
         })
     }

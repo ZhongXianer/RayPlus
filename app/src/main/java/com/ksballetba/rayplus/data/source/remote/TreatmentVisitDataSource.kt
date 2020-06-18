@@ -77,6 +77,25 @@ class TreatmentVisitDataSource(context: Context){
             )
     }
 
+    fun submitCycle(sampleId: Int,cycleNumber: Int,callBack: (BaseResponseBean) -> Unit){
+        RetrofitClient.getInstance(NetworkType.PROJECT)
+            .create(ApiService::class.java)
+            .submitCycle(mToken,sampleId, cycleNumber)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                }
+            )
+    }
+
     fun getMainPhysicalSignList(sampleId:Int,cycleNumber:Int,callBack: (MutableList<MainPhysicalSignListBean.Data>) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.getInstance(NetworkType.PROJECT)

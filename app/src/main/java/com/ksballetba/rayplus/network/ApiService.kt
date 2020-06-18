@@ -128,6 +128,10 @@ interface ApiService {
     fun deleteCycle(@Header("Authorization") token:String?,@Path("sample_id") sampleId:Int):Observable<BaseResponseBean>
 
     @Headers("Content-Type:application/json")
+    @POST("/submit_cycle/{sample_id}/{cycle_number}")
+    fun submitCycle(@Header("Authorization")token: String?, @Path("sample_id")sampleId: Int, @Path("cycle_number")cycleNumber: Int):Observable<BaseResponseBean>
+
+    @Headers("Content-Type:application/json")
     @GET("/main_symptom_table/{sample_id}/{cycle_number}")
     fun getMainPhysicalSignList(@Header("Authorization") token:String?,@Path("sample_id") sampleId:Int,@Path("cycle_number") cycleNumber:Int):Observable<MainPhysicalSignListBean>
 
