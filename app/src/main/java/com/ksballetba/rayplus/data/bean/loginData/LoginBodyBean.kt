@@ -1,4 +1,4 @@
-package com.ksballetba.rayplus.data.bean
+package com.ksballetba.rayplus.data.bean.loginData
 
 
 import com.google.gson.annotations.SerializedName
@@ -15,5 +15,7 @@ data class LoginBodyBean(
     val userPassword: String,
     /*登录类型*/
     @SerializedName("type")
-    val type: String
+    val type: String,
+    @SerializedName("system_id")
+    val systemId: Int
 )

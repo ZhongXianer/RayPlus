@@ -16,9 +16,9 @@ class BaseVisitViewModel constructor(private var baseVisitDataSource: BaseVisitD
         return result
     }
 
-    fun editVisitTime(sampleId:Int,cycleNumber:Int,visitTimeBean:VisitTimeBean): LiveData<BaseResponseBean> {
+    fun editVisitTime(sampleId:Int,cycleNumber:Int,visitEditBean: VisitEditBean): LiveData<BaseResponseBean> {
         val result = MutableLiveData<BaseResponseBean>()
-        baseVisitDataSource.editVisitTime(sampleId,cycleNumber,visitTimeBean) {
+        baseVisitDataSource.editVisitTime(sampleId,cycleNumber,visitEditBean) {
             result.postValue(it)
         }
         return result

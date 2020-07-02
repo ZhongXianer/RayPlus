@@ -1,15 +1,12 @@
 package com.ksballetba.rayplus.ui.activity
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.lifecycle.Observer
-import com.apkfuns.logutils.LogUtils
-import com.google.gson.Gson
 import com.ksballetba.rayplus.R
-import com.ksballetba.rayplus.data.bean.SampleEditBodyBean
+import com.ksballetba.rayplus.data.bean.sampleData.SampleEditBodyBean
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_BODY
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.util.*
@@ -20,14 +17,15 @@ import org.jetbrains.anko.toast
 
 class SampleEditActivity : AppCompatActivity() {
 
-    companion object{
+    companion object {
         const val TAG = "SampleEditActivity"
         const val REFRESH_LAST_PAGE = "REFRESH_LAST_PAGE"
     }
 
-    lateinit var mViewModel:SamplesViewModel
-    var mToken:String? = ""
-    var mResearchCenterId:Int? = null
+    lateinit var mViewModel: SamplesViewModel
+    var mToken: String? = ""
+    var mResearchCenterId: Int? = null
+    var mProjectId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,17 +45,18 @@ class SampleEditActivity : AppCompatActivity() {
     private fun initUI() {
         setSupportActionBar(tb_sample_edit)
         mViewModel = getSamplesViewModel(this)
-        val sharedPreferences = getSharedPreferences(LoginActivity.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
-        mToken = sharedPreferences.getString(LoginActivity.LOGIN_TOKEN,"")
+//        val sharedPreferences = getSharedPreferences(LoginActivity.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+//        mToken = sharedPreferences.getString(LoginActivity.LOGIN_TOKEN,"")
+        mToken = getToken()
         val sampleBody = intent.getParcelableExtra<SampleEditBodyBean>(SAMPLE_BODY)
-        if(sampleBody!=null){
+        if (sampleBody != null) {
             loadData(sampleBody)
         }
         fab_save_sample.setOnClickListener {
-            val sampleId = intent.getIntExtra(SAMPLE_ID,-1)
-            if(sampleId==-1){
+            val sampleId = intent.getIntExtra(SAMPLE_ID, -1)
+            if (sampleId == -1) {
                 addOrEditSample(null)
-            }else{
+            } else {
                 addOrEditSample(sampleId)
             }
         }
@@ -89,7 +88,7 @@ class SampleEditActivity : AppCompatActivity() {
             XPopup.Builder(this).asCenterList(
                 getString(R.string.patient_group),
                 getPatientGroupList()
-            ) { pos, text ->
+            ) { _, text ->
                 tv_patient_group.text = text
             }.show()
         }
@@ -100,64 +99,67 @@ class SampleEditActivity : AppCompatActivity() {
                 }.show()
         }
         cl_patient_birthday.setOnClickListener {
-            showDatePickerDialog(tv_patient_birthday,supportFragmentManager)
+            showDatePickerDialog(tv_patient_birthday, supportFragmentManager)
         }
         cl_patient_sign_date.setOnClickListener {
-            showDatePickerDialog(tv_patient_sign_date,supportFragmentManager)
+            showDatePickerDialog(tv_patient_sign_date, supportFragmentManager)
         }
         cl_patient_enter_group_date.setOnClickListener {
-            showDatePickerDialog(tv_patient_enter_group_date,supportFragmentManager)
+            showDatePickerDialog(tv_patient_enter_group_date, supportFragmentManager)
         }
 
     }
 
-    private fun loadData(sampleBody: SampleEditBodyBean){
+    private fun loadData(sampleBody: SampleEditBodyBean) {
         mResearchCenterId = sampleBody.researchCenterId
+//        mProjectId = sampleBody.projectId
         tv_patient_name.text = sampleBody.patientName
         tv_patient_num.text = sampleBody.patientIds
         tv_patient_id.text = sampleBody.idNum
-        tv_patient_group.text = getPatientGroupList()[sampleBody.groupId-1]
+        tv_patient_group.text = getPatientGroupList()[sampleBody.groupId - 1]
         tv_patient_sex.text = getSexList()[sampleBody.sex]
         tv_patient_birthday.text = sampleBody.date
         tv_patient_sign_date.text = sampleBody.signTime
         tv_patient_enter_group_date.text = sampleBody.inGroupTime
     }
 
-    private fun addOrEditSample(sampleId: Int?){
+    private fun addOrEditSample(sampleId: Int?) {
         val patientName = parseDefaultContent(tv_patient_name.text.toString())
         val patientIds = parseDefaultContent(tv_patient_num.text.toString())
         val idNum = parseDefaultContent(tv_patient_id.text.toString())
         val groupId =
-            getPatientGroupList().indexOf(parseDefaultContent(tv_patient_group.text.toString()))+1
+            getPatientGroupList().indexOf(parseDefaultContent(tv_patient_group.text.toString())) + 1
         val sex = getSexList().indexOf(parseDefaultContent(tv_patient_sex.text.toString()))
         val date = parseDefaultContent(tv_patient_birthday.text.toString())
         val signTime = parseDefaultContent(tv_patient_sign_date.text.toString())
         val inGroupTime = parseDefaultContent(tv_patient_enter_group_date.text.toString())
-        val sampleEditBodyBean = SampleEditBodyBean(
-            date,
-            groupId,
-            idNum,
-            inGroupTime,
-            patientIds,
-            patientName,
-            mResearchCenterId,
-            sampleId,
-            sex,
-            signTime
-        )
+        val sampleEditBodyBean =
+            SampleEditBodyBean(
+                date,
+                groupId,
+                idNum,
+                inGroupTime,
+                patientIds,
+                patientName,
+//                mProjectId,
+                mResearchCenterId,
+                sampleId,
+                sex,
+                signTime
+            )
         if (checkSampleValid(sampleEditBodyBean)) {
             mViewModel.editSample(sampleEditBodyBean).observe(this, Observer {
-                if(it.code==200){
+                if (it.code == 200) {
                     toast("样本操作成功")
-                    val intent = Intent(this,SampleActivity::class.java)
+                    val intent = Intent(this, SampleActivity::class.java)
                     intent.action = REFRESH_LAST_PAGE
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                     startActivity(intent)
-                }else{
+                } else {
                     toast("样本操作失败")
                 }
             })
-        }else{
+        } else {
             toast("请检查，身份证号是否正确或必填项是否为空")
         }
     }
@@ -165,23 +167,23 @@ class SampleEditActivity : AppCompatActivity() {
 
     private fun checkSampleValid(sampleEditBodyBean: SampleEditBodyBean): Boolean {
         var idNum = ""
-        if(sampleEditBodyBean.idNum!=null){
+        if (sampleEditBodyBean.idNum != null) {
             idNum = sampleEditBodyBean.idNum
         }
-        if(sampleEditBodyBean.sampleId==null){
+        if (sampleEditBodyBean.sampleId == null) {
             return !(sampleEditBodyBean.patientName.isNullOrEmpty() ||
                     sampleEditBodyBean.patientIds.isNullOrEmpty() ||
-                    idNum.length!=18 ||
+                    idNum.length != 18 ||
                     sampleEditBodyBean.groupId < 0 ||
                     sampleEditBodyBean.sex < 0 ||
                     sampleEditBodyBean.date.isNullOrEmpty() ||
                     sampleEditBodyBean.signTime.isNullOrEmpty() ||
                     sampleEditBodyBean.inGroupTime.isNullOrEmpty())
-        }else{
-            return !(sampleEditBodyBean.sampleId<0||
+        } else {
+            return !(sampleEditBodyBean.sampleId < 0 ||
                     sampleEditBodyBean.patientName.isNullOrEmpty() ||
                     sampleEditBodyBean.patientIds.isNullOrEmpty() ||
-                    idNum.length!=18 ||
+                    idNum.length != 18 ||
                     sampleEditBodyBean.groupId < 0 ||
                     sampleEditBodyBean.sex < 0 ||
                     sampleEditBodyBean.date.isNullOrEmpty() ||

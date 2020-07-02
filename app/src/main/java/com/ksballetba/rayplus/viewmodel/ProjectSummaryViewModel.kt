@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ksballetba.rayplus.data.bean.AdverseEventListBean
 import com.ksballetba.rayplus.data.bean.BaseResponseBean
-import com.ksballetba.rayplus.data.bean.ProjectSummaryBodyBean
-import com.ksballetba.rayplus.data.bean.ProjectSummaryResponseBean
+import com.ksballetba.rayplus.data.bean.projectSummaryData.ProjectSummaryBodyBean
+import com.ksballetba.rayplus.data.bean.projectSummaryData.ProjectSummaryResponseBean
 import com.ksballetba.rayplus.data.source.remote.ProjectSummaryDataSource
 
 class ProjectSummaryViewModel constructor(private var projectSummaryDataSource: ProjectSummaryDataSource): ViewModel() {

@@ -14,10 +14,9 @@ import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 import com.ksballetba.rayplus.R
-import com.ksballetba.rayplus.data.bean.AdjustBean
 import com.ksballetba.rayplus.data.bean.AdjustBodyBean
-import com.ksballetba.rayplus.data.bean.TreatmentRecordBodyBean
-import com.ksballetba.rayplus.data.bean.TreatmentRecordListBean
+import com.ksballetba.rayplus.data.bean.treatmentVisitData.TreatmentRecordBodyBean
+import com.ksballetba.rayplus.data.bean.treatmentVisitData.TreatmentRecordListBean
 import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.treatment_visit_activity.TreatmentRecordActivity
@@ -69,7 +68,7 @@ class TreatmentRecordFragment : Fragment() {
 
     private fun initUI(){
         cl_any_adjustment.setOnClickListener {
-            XPopup.Builder(context).asCenterList("治疗中用药剂量有无调整", arrayOf("有","无")) { pos, text ->
+            XPopup.Builder(context).asCenterList("治疗中用药剂量有无调整", arrayOf("有","无")) { _, text ->
                 tv_any_adjustment.text = text
                 if(text == "有"){
                     cl_adjustment_percent.visibility = View.VISIBLE
@@ -118,14 +117,15 @@ class TreatmentRecordFragment : Fragment() {
         mAdapter.bindToRecyclerView(rv_treatment_record)
         mAdapter.setOnItemClickListener { _, _, position ->
             val treatmentRecord = mList[position]
-            val treatmentRecordBody = TreatmentRecordBodyBean(
-                treatmentRecord.description,
-                treatmentRecord.endTime,
-                treatmentRecord.medicineName,
-                treatmentRecord.startTime,
-                treatmentRecord.treatmentName,
-                treatmentRecord.treatmentRecordId
-            )
+            val treatmentRecordBody =
+                TreatmentRecordBodyBean(
+                    treatmentRecord.description,
+                    treatmentRecord.endTime,
+                    treatmentRecord.medicineName,
+                    treatmentRecord.startTime,
+                    treatmentRecord.treatmentName,
+                    treatmentRecord.treatmentRecordId
+                )
             navigateToTreatmentRecordEditPage(
                 mSampleId,
                 mCycleNumber,
@@ -147,7 +147,7 @@ class TreatmentRecordFragment : Fragment() {
             })
         mViewModel.getAdjustment(mSampleId,mCycleNumber)
             .observe(viewLifecycleOwner, Observer {
-                if(it.adjustment == "0"){
+                if(it.data.adjustment == "0"){
                     cl_adjustment_percent.visibility = View.GONE
                     cl_adjustment_reason.visibility = View.GONE
                     tv_any_adjustment.text = "无"
@@ -155,8 +155,8 @@ class TreatmentRecordFragment : Fragment() {
                     cl_adjustment_percent.visibility = View.VISIBLE
                     cl_adjustment_reason.visibility = View.VISIBLE
                     tv_any_adjustment.text = "有"
-                    tv_adjustment_percent.text = it.adjustPercent
-                    tv_adjustment_reason.text = it.adjustReason
+                    tv_adjustment_percent.text = it.data.adjustPercent
+                    tv_adjustment_reason.text = it.data.adjustReason
                 }
             })
         mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {

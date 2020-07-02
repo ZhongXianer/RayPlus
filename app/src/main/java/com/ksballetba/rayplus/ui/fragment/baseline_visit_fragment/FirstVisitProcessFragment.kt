@@ -7,14 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import com.apkfuns.logutils.LogUtils
-import com.blankj.utilcode.util.GsonUtils
 import com.blankj.utilcode.util.ToastUtils
 
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.BaseCheckBean
-import com.ksballetba.rayplus.data.bean.FirstVisitProcessBodyBean
-import com.ksballetba.rayplus.data.bean.FirstVisitProcessResponseBean
+import com.ksballetba.rayplus.data.bean.baseLineData.FirstVisitProcessBodyBean
+import com.ksballetba.rayplus.data.bean.baseLineData.FirstVisitProcessResponseBean
 import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.util.*
@@ -67,19 +65,19 @@ class FirstVisitProcessFragment : Fragment() {
     private fun loadData() {
         mViewModel.getFirstVisitProcess(mSampleId).observe(viewLifecycleOwner, Observer {
             initClinicalSymptoms(it)
-            tv_lesion.text = getTumorPart()[it.tumorPart]
+            tv_lesion.text = getTumorPart()[it.data.tumorPart]
             initTransferSite(it)
             tv_biopsy_way.text =
-                if (it.biopsyMethod == "其他") it.biopsyMethodOther else it.biopsyMethod
+                if (it.data.biopsyMethod == "其他") it.data.biopsyMethodOther else it.data.biopsyMethod
             tv_tumor_type.text =
-                if (it.tumorPathologicalType == "混合型癌") it.tumorPathologicalTypeOther else it.tumorPathologicalType
+                if (it.data.tumorPathologicalType == "混合型癌") it.data.tumorPathologicalTypeOther else it.data.tumorPathologicalType
             tv_genetic_test_sample.text =
-                if (it.geneticTestingSpecimen == "转移灶组织") it.geneticTestingSpecimenOther else it.geneticTestingSpecimen
-            tv_genetic_test_way.text = getGeneticTestingMethod()[it.geneticTestingMethod]
+                if (it.data.geneticTestingSpecimen == "转移灶组织") it.data.geneticTestingSpecimenOther else it.data.geneticTestingSpecimen
+            tv_genetic_test_way.text = getGeneticTestingMethod()[it.data.geneticTestingMethod]
             initGeneMutationType(it)
-            tv_PD_L1_expression.text = getPD_L1Expression()[it.pdl1]
-            tv_tumor_mutation_load.text = if (it.tmb == "其他") it.tmbOther else it.tmb
-            tv_microsatellite_instability.text = getMSI()[it.msi]
+            tv_PD_L1_expression.text = getPD_L1Expression()[it.data.pdl1]
+            tv_tumor_mutation_load.text = if (it.data.tmb == "其他") it.data.tmbOther else it.data.tmb
+            tv_microsatellite_instability.text = getMSI()[it.data.msi]
         })
         mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
             if (it.status == Status.FAILED) {
@@ -263,23 +261,24 @@ class FirstVisitProcessFragment : Fragment() {
         }
         val msiStr = parseDefaultContent(tv_microsatellite_instability.text.toString())
         val msi = if (msiStr.isEmpty()) null else getMSI().indexOf(msiStr)
-        val firstVisitProcessBodyBean = FirstVisitProcessBodyBean(
-            biopsyMethod,
-            biopsyMethodOther,
-            clinicalSymptoms,
-            geneMutationType,
-            geneticTestingMethod,
-            geneticTestingSpecimen,
-            geneticTestingSpecimenOther,
-            msi,
-            pdl1,
-            tmb,
-            tmbOther,
-            transferSite,
-            tumorPart,
-            tumorPathologicalType,
-            tumorPathologicalTypeOther
-        )
+        val firstVisitProcessBodyBean =
+            FirstVisitProcessBodyBean(
+                biopsyMethod,
+                biopsyMethodOther,
+                clinicalSymptoms,
+                geneMutationType,
+                geneticTestingMethod,
+                geneticTestingSpecimen,
+                geneticTestingSpecimenOther,
+                msi,
+                pdl1,
+                tmb,
+                tmbOther,
+                transferSite,
+                tumorPart,
+                tumorPathologicalType,
+                tumorPathologicalTypeOther
+            )
         mViewModel.editFirstVisitProcess(mSampleId, firstVisitProcessBodyBean)
             .observe(viewLifecycleOwner,
                 Observer {
@@ -295,67 +294,67 @@ class FirstVisitProcessFragment : Fragment() {
         mClinicalSymptomsList.add(
             BaseCheckBean(
                 getClinicalSymptomsList()[0],
-                bean.clinicalSymptoms0 == "on"
+                bean.data.clinicalSymptoms0 == "on"
             )
         )
         mClinicalSymptomsList.add(
             BaseCheckBean(
                 getClinicalSymptomsList()[1],
-                bean.clinicalSymptoms1 == "on"
+                bean.data.clinicalSymptoms1 == "on"
             )
         )
         mClinicalSymptomsList.add(
             BaseCheckBean(
                 getClinicalSymptomsList()[2],
-                bean.clinicalSymptoms2 == "on"
+                bean.data.clinicalSymptoms2 == "on"
             )
         )
         mClinicalSymptomsList.add(
             BaseCheckBean(
                 getClinicalSymptomsList()[3],
-                bean.clinicalSymptoms3 == "on"
+                bean.data.clinicalSymptoms3 == "on"
             )
         )
         mClinicalSymptomsList.add(
             BaseCheckBean(
                 getClinicalSymptomsList()[4],
-                bean.clinicalSymptoms4 == "on"
+                bean.data.clinicalSymptoms4 == "on"
             )
         )
         mClinicalSymptomsList.add(
             BaseCheckBean(
                 getClinicalSymptomsList()[5],
-                bean.clinicalSymptoms5 == "on"
+                bean.data.clinicalSymptoms5 == "on"
             )
         )
         mClinicalSymptomsList.add(
             BaseCheckBean(
                 getClinicalSymptomsList()[6],
-                bean.clinicalSymptoms6 == "on"
+                bean.data.clinicalSymptoms6 == "on"
             )
         )
         mClinicalSymptomsList.add(
             BaseCheckBean(
                 getClinicalSymptomsList()[7],
-                bean.clinicalSymptoms7 == "on"
+                bean.data.clinicalSymptoms7 == "on"
             )
         )
         mClinicalSymptomsList.add(
             BaseCheckBean(
                 getClinicalSymptomsList()[8],
-                bean.clinicalSymptoms8 == "on"
+                bean.data.clinicalSymptoms8 == "on"
             )
         )
         mClinicalSymptomsList.add(
             BaseCheckBean(
                 getClinicalSymptomsList()[9],
-                bean.clinicalSymptoms9 == "on"
+                bean.data.clinicalSymptoms9 == "on"
             )
         )
         mClinicalSymptomsList.add(
             BaseCheckBean(
                 getClinicalSymptomsList()[10],
-                bean.clinicalSymptoms10 == "on"
+                bean.data.clinicalSymptoms10 == "on"
             )
         )
         val symptomsText = StringBuffer()
@@ -364,8 +363,8 @@ class FirstVisitProcessFragment : Fragment() {
                 symptomsText.append("${it.name},")
             }
         }
-        if (bean.clinicalSymptomsOther != null) {
-            mOtherClinicalSymptoms = bean.clinicalSymptomsOther
+        if (bean.data.clinicalSymptomsOther != null) {
+            mOtherClinicalSymptoms = bean.data.clinicalSymptomsOther
         }
         if (symptomsText.isNotEmpty() && !mClinicalSymptomsList[10].isChecked) {
             symptomsText.deleteCharAt(symptomsText.length - 1)
@@ -379,79 +378,79 @@ class FirstVisitProcessFragment : Fragment() {
         mGeneMutationTypeList.add(
             BaseCheckBean(
                 getGeneMutationType()[0],
-                bean.geneMutationType0 == "on"
+                bean.data.geneMutationType0 == "on"
             )
         )
         mGeneMutationTypeList.add(
             BaseCheckBean(
                 getGeneMutationType()[1],
-                bean.geneMutationType1 == "on"
+                bean.data.geneMutationType1 == "on"
             )
         )
         mGeneMutationTypeList.add(
             BaseCheckBean(
                 getGeneMutationType()[2],
-                bean.geneMutationType2 == "on"
+                bean.data.geneMutationType2 == "on"
             )
         )
         mGeneMutationTypeList.add(
             BaseCheckBean(
                 getGeneMutationType()[3],
-                bean.geneMutationTypeROS1 == "on"
+                bean.data.geneMutationTypeROS1 == "on"
             )
         )
         mGeneMutationTypeList.add(
             BaseCheckBean(
                 getGeneMutationType()[4],
-                bean.geneMutationTypecMET == "on"
+                bean.data.geneMutationTypecMET == "on"
             )
         )
         mGeneMutationTypeList.add(
             BaseCheckBean(
                 getGeneMutationType()[5],
-                bean.geneMutationTypeBRAF == "on"
+                bean.data.geneMutationTypeBRAF == "on"
             )
         )
         mGeneMutationTypeList.add(
             BaseCheckBean(
                 getGeneMutationType()[6],
-                bean.geneMutationTypeKRAS == "on"
+                bean.data.geneMutationTypeKRAS == "on"
             )
         )
         mGeneMutationTypeList.add(
             BaseCheckBean(
                 getGeneMutationType()[7],
-                bean.geneMutationTypeHer2 == "on"
+                bean.data.geneMutationTypeHer2 == "on"
             )
         )
         mGeneMutationTypeList.add(
             BaseCheckBean(
                 getGeneMutationType()[8],
-                bean.geneMutationTypeRET == "on"
+                bean.data.geneMutationTypeRET == "on"
             )
         )
         mGeneMutationTypeList.add(
             BaseCheckBean(
                 getGeneMutationType()[9],
-                bean.geneMutationTypeERBB2 == "on"
+                bean.data.geneMutationTypeERBB2 == "on"
             )
         )
         mGeneMutationTypeList.add(
             BaseCheckBean(
                 getGeneMutationType()[10],
-                bean.geneMutationTypeTP53 == "on"
+                bean.data.geneMutationTypeTP53 == "on"
             )
         )
         mGeneMutationTypeList.add(
             BaseCheckBean(
                 getGeneMutationType()[11],
-                bean.geneMutationTypeEGFR == "on"
+                bean.data.geneMutationTypeEGFR == "on"
             )
         )
         mGeneMutationTypeList.add(
             BaseCheckBean(
                 getGeneMutationType()[12],
-                bean.geneMutationTypeALK == "on"
+                bean.data.geneMutationTypeALK == "on"
             )
         )
         val geneMutationTypeText = StringBuffer()
@@ -460,8 +459,8 @@ class FirstVisitProcessFragment : Fragment() {
                 geneMutationTypeText.append("${it.name},")
             }
         }
-        mOtherGeneMutationTypeEGFR = bean.geneMutationTypeEGFROther
-        mOtherGeneMutationTypeALK = bean.geneMutationTypeALKOther
+        mOtherGeneMutationTypeEGFR = bean.data.geneMutationTypeEGFROther
+        mOtherGeneMutationTypeALK = bean.data.geneMutationTypeALKOther
         if (!mOtherGeneMutationTypeEGFR.isNullOrBlank()) {
             geneMutationTypeText.append("EGFR描述:$mOtherGeneMutationTypeEGFR,")
         }
@@ -472,24 +471,24 @@ class FirstVisitProcessFragment : Fragment() {
     }
 
     private fun initTransferSite(bean: FirstVisitProcessResponseBean) {
-        mTransferSiteList.add(BaseCheckBean(getTransferSite()[0], bean.transferSite0 == "on"))
-        mTransferSiteList.add(BaseCheckBean(getTransferSite()[1], bean.transferSite1 == "on"))
-        mTransferSiteList.add(BaseCheckBean(getTransferSite()[2], bean.transferSite2 == "on"))
-        mTransferSiteList.add(BaseCheckBean(getTransferSite()[3], bean.transferSite3 == "on"))
-        mTransferSiteList.add(BaseCheckBean(getTransferSite()[4], bean.transferSite4 == "on"))
-        mTransferSiteList.add(BaseCheckBean(getTransferSite()[5], bean.transferSite5 == "on"))
-        mTransferSiteList.add(BaseCheckBean(getTransferSite()[6], bean.transferSite6 == "on"))
-        mTransferSiteList.add(BaseCheckBean(getTransferSite()[7], bean.transferSite7 == "on"))
-        mTransferSiteList.add(BaseCheckBean(getTransferSite()[8], bean.transferSite8 == "on"))
-        mTransferSiteList.add(BaseCheckBean(getTransferSite()[9], bean.transferSite9 == "on"))
+        mTransferSiteList.add(BaseCheckBean(getTransferSite()[0], bean.data.transferSite0 == "on"))
+        mTransferSiteList.add(BaseCheckBean(getTransferSite()[1], bean.data.transferSite1 == "on"))
+        mTransferSiteList.add(BaseCheckBean(getTransferSite()[2], bean.data.transferSite2 == "on"))
+        mTransferSiteList.add(BaseCheckBean(getTransferSite()[3], bean.data.transferSite3 == "on"))
+        mTransferSiteList.add(BaseCheckBean(getTransferSite()[4], bean.data.transferSite4 == "on"))
+        mTransferSiteList.add(BaseCheckBean(getTransferSite()[5], bean.data.transferSite5 == "on"))
+        mTransferSiteList.add(BaseCheckBean(getTransferSite()[6], bean.data.transferSite6 == "on"))
+        mTransferSiteList.add(BaseCheckBean(getTransferSite()[7], bean.data.transferSite7 == "on"))
+        mTransferSiteList.add(BaseCheckBean(getTransferSite()[8], bean.data.transferSite8 == "on"))
+        mTransferSiteList.add(BaseCheckBean(getTransferSite()[9], bean.data.transferSite9 == "on"))
         val transferSiteText = StringBuffer()
         mTransferSiteList.forEach {
             if (it.isChecked && it.name != "其他") {
                 transferSiteText.append("${it.name},")
             }
         }
-        if (bean.transferSiteOther != null) {
-            mOtherTransferSite = bean.transferSiteOther
+        if (bean.data.transferSiteOther != null) {
+            mOtherTransferSite = bean.data.transferSiteOther
         }
         if (transferSiteText.isNotEmpty() && !mTransferSiteList[9].isChecked) {
             transferSiteText.deleteCharAt(transferSiteText.length - 1)

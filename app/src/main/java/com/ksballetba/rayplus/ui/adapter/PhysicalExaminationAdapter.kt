@@ -3,7 +3,7 @@ package com.ksballetba.rayplus.ui.adapter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.ksballetba.rayplus.R
-import com.ksballetba.rayplus.data.bean.PhysicalExaminationListBean
+import com.ksballetba.rayplus.data.bean.baseLineData.PhysicalExaminationListBean
 
 class PhysicalExaminationAdapter(layoutResId:Int,data:List<PhysicalExaminationListBean.Data>): BaseQuickAdapter<PhysicalExaminationListBean.Data, BaseViewHolder>(layoutResId,data) {
 

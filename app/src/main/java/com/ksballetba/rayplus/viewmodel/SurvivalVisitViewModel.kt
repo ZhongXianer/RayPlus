@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ksballetba.rayplus.data.bean.BaseResponseBean
-import com.ksballetba.rayplus.data.bean.SurvivalVisitBodyBean
-import com.ksballetba.rayplus.data.bean.SurvivalVisitListBean
+import com.ksballetba.rayplus.data.bean.survivalVisitData.SurvivalVisitBodyBean
+import com.ksballetba.rayplus.data.bean.survivalVisitData.SurvivalVisitListBean
 import com.ksballetba.rayplus.data.source.remote.SurvivalVisitDataSource
 
 class SurvivalVisitViewModel constructor(private var survivalVisitDataSource: SurvivalVisitDataSource) :

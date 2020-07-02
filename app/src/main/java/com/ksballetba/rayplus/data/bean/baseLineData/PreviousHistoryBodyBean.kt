@@ -1,4 +1,4 @@
-package com.ksballetba.rayplus.data.bean
+package com.ksballetba.rayplus.data.bean.baseLineData
 
 
 import com.google.gson.annotations.SerializedName

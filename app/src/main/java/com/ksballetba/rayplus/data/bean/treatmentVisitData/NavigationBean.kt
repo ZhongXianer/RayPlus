@@ -1,4 +1,4 @@
-package com.ksballetba.rayplus.data.bean
+package com.ksballetba.rayplus.data.bean.treatmentVisitData
 
 
 import com.google.gson.annotations.SerializedName
@@ -11,8 +11,6 @@ data class NavigationBean(
     data class Data(
         @SerializedName("cycle_number")
         val cycleNumber: Int, // 2
-        val title: String, // 访视2
-        @SerializedName("is_submit")
-        val isSubmit: Int
+        val title: String // 访视2
     )
 }

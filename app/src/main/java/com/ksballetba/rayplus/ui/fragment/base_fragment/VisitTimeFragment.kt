@@ -12,6 +12,7 @@ import com.apkfuns.logutils.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 
 import com.ksballetba.rayplus.R
+import com.ksballetba.rayplus.data.bean.VisitEditBean
 import com.ksballetba.rayplus.data.bean.VisitTimeBean
 import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
@@ -29,12 +30,12 @@ import java.util.Calendar
  */
 class VisitTimeFragment : Fragment() {
 
-    companion object{
+    companion object {
         const val TAG = "VisitTimeFragment"
     }
 
 
-    lateinit var mViewModel:BaseVisitViewModel
+    lateinit var mViewModel: BaseVisitViewModel
 
     var mSampleId = 0
     var mCycleNumber = 0
@@ -54,35 +55,36 @@ class VisitTimeFragment : Fragment() {
         initUI()
     }
 
-    private fun initUI(){
+    private fun initUI() {
 
 
         cl_visit_time.setOnClickListener {
-            showDatePickerDialog(tv_visit_time,parentFragmentManager)
+            showDatePickerDialog(tv_visit_time, parentFragmentManager)
         }
         fab_save_visit_time.setOnClickListener {
             saveData()
         }
         mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
-            if(it.status == Status.FAILED){
+            if (it.status == Status.FAILED) {
                 ToastUtils.showShort(it.msg)
             }
         })
     }
 
-    private fun initData(){
+    private fun initData() {
         mSampleId = (arguments as Bundle).getInt(SAMPLE_ID)
         mCycleNumber = (arguments as Bundle).getInt(CYCLE_NUMBER_KEY)
         mViewModel = getBaseVisitViewModel(this)
     }
 
-    private fun loadData(){
-        mViewModel.getVisitTime(mSampleId,mCycleNumber).observe(viewLifecycleOwner, Observer {
-            tv_visit_time.text = it.cycleTime
-            if(activity is TreatmentVisitDetailActivity){
+    private fun loadData() {
+        mViewModel.getVisitTime(mSampleId, mCycleNumber).observe(viewLifecycleOwner, Observer {
+            tv_visit_time.text = it.data!!.cycleTime ?: "请设置"
+            if (activity is TreatmentVisitDetailActivity) {
                 val visitTitle = activity?.findViewById<Toolbar>(R.id.tb_treatment_visit)?.title
-                val visitTime = it.cycleTime?:""
-                activity?.findViewById<Toolbar>(R.id.tb_treatment_visit)?.title = "$visitTitle  $visitTime"
+                val visitTime = it.data.cycleTime ?: ""
+                activity?.findViewById<Toolbar>(R.id.tb_treatment_visit)?.title =
+                    "$visitTitle  $visitTime"
             }
         })
 //        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
@@ -92,14 +94,15 @@ class VisitTimeFragment : Fragment() {
 //        })
     }
 
-    private fun saveData(){
-        val visitTimeBean = VisitTimeBean(tv_visit_time.text.toString())
-        mViewModel.editVisitTime(mSampleId,mCycleNumber,visitTimeBean).observe(viewLifecycleOwner, Observer {
-            if(it.code==200){
-                ToastUtils.showShort("访视时间修改成功")
-            }else{
-                ToastUtils.showShort("访视时间修改失败")
-            }
-        })
+    private fun saveData() {
+        val visitEditBean = VisitEditBean(tv_visit_time.text.toString())
+        mViewModel.editVisitTime(mSampleId, mCycleNumber, visitEditBean)
+            .observe(viewLifecycleOwner, Observer {
+                if (it.code == 200) {
+                    ToastUtils.showShort("访视时间修改成功")
+                } else {
+                    ToastUtils.showShort("访视时间修改失败")
+                }
+            })
     }
 }

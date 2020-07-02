@@ -15,8 +15,8 @@ enum class NetworkType{
 
 class RetrofitClient(val networkType: NetworkType){
     private val DEFAULT_TIMEOUT:Long = 30
-    private val AUTH_BASE_URL = "http://www.rayplus.top:81/"
-    private val PROJECT_BASE_URL = "http://www.rayplus.top:82/"
+    private val AUTH_BASE_URL = "http://39.106.111.52:81/"
+    private val PROJECT_BASE_URL = "http://39.106.111.52:82/"
     var mOkHttpClient:OkHttpClient? = null
     var mRetrofit:Retrofit? = null
 

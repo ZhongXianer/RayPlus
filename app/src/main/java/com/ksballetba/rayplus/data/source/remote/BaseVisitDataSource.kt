@@ -8,8 +8,7 @@ import com.ksballetba.rayplus.network.ApiService
 import com.ksballetba.rayplus.network.NetworkState
 import com.ksballetba.rayplus.network.NetworkType
 import com.ksballetba.rayplus.network.RetrofitClient
-import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.LOGIN_TOKEN
-import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.SHARED_PREFERENCE_NAME
+import com.ksballetba.rayplus.util.getToken
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -18,7 +17,8 @@ class BaseVisitDataSource(context: Context){
 
     var mLoadStatus = MutableLiveData<NetworkState>()
 
-    private val mToken = "Bearer ${context.getSharedPreferences(SHARED_PREFERENCE_NAME,Context.MODE_PRIVATE).getString(LOGIN_TOKEN,"")}"
+    private val mToken=getToken()
+//    private val mToken = "Bearer ${context.getSharedPreferences(SHARED_PREFERENCE_NAME,Context.MODE_PRIVATE).getString(LOGIN_TOKEN,"")}"
 
     fun getVisitTime(sampleId:Int,cycleNumber:Int,callBack: (VisitTimeBean) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
@@ -42,10 +42,10 @@ class BaseVisitDataSource(context: Context){
             )
     }
 
-    fun editVisitTime(sampleId:Int,cycleNumber:Int,visitTimeBean: VisitTimeBean,callBack: (BaseResponseBean) -> Unit){
+    fun editVisitTime(sampleId:Int,cycleNumber:Int,visitEditBean: VisitEditBean,callBack: (BaseResponseBean) -> Unit){
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .editVisitTime(mToken,sampleId,cycleNumber,visitTimeBean)
+            .editVisitTime(mToken,sampleId,cycleNumber,visitEditBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(

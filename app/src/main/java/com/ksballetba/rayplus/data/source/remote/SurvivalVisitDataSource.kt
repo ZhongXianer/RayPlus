@@ -4,29 +4,32 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.apkfuns.logutils.LogUtils
 import com.ksballetba.rayplus.data.bean.BaseResponseBean
-import com.ksballetba.rayplus.data.bean.SurvivalVisitBodyBean
-import com.ksballetba.rayplus.data.bean.SurvivalVisitListBean
+import com.ksballetba.rayplus.data.bean.survivalVisitData.SurvivalVisitBodyBean
+import com.ksballetba.rayplus.data.bean.survivalVisitData.SurvivalVisitListBean
 import com.ksballetba.rayplus.network.ApiService
 import com.ksballetba.rayplus.network.NetworkState
 import com.ksballetba.rayplus.network.NetworkType
 import com.ksballetba.rayplus.network.RetrofitClient
-import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.LOGIN_TOKEN
-import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.SHARED_PREFERENCE_NAME
+import com.ksballetba.rayplus.util.getToken
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 
-class SurvivalVisitDataSource(context: Context){
+class SurvivalVisitDataSource(context: Context) {
 
     var mLoadStatus = MutableLiveData<NetworkState>()
 
-    private val mToken = "Bearer ${context.getSharedPreferences(SHARED_PREFERENCE_NAME,Context.MODE_PRIVATE).getString(LOGIN_TOKEN,"")}"
+    private val mToken = getToken()
+//    private val mToken = "Bearer ${context.getSharedPreferences(SHARED_PREFERENCE_NAME,Context.MODE_PRIVATE).getString(LOGIN_TOKEN,"")}"
 
-    fun getSurvivalVisitList(sampleId:Int,callBack: (MutableList<SurvivalVisitListBean.Data>) -> Unit) {
+    fun getSurvivalVisitList(
+        sampleId: Int,
+        callBack: (MutableList<SurvivalVisitListBean.Data>) -> Unit
+    ) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .getSurvivalVisitList(mToken,sampleId)
+            .getSurvivalVisitList(mToken, sampleId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -44,10 +47,14 @@ class SurvivalVisitDataSource(context: Context){
             )
     }
 
-    fun editSurvivalVisit(sampleId:Int,survivalVisitBodyBean: SurvivalVisitBodyBean,callBack: (BaseResponseBean) -> Unit){
+    fun editSurvivalVisit(
+        sampleId: Int,
+        survivalVisitBodyBean: SurvivalVisitBodyBean,
+        callBack: (BaseResponseBean) -> Unit
+    ) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .editSurvivalVisit(mToken,sampleId,survivalVisitBodyBean)
+            .editSurvivalVisit(mToken, sampleId, survivalVisitBodyBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -64,10 +71,10 @@ class SurvivalVisitDataSource(context: Context){
     }
 
     //新增提交治疗期随访接口
-    fun submitSurvivalVisit(interviewId: Int,callBack: (BaseResponseBean) -> Unit){
+    fun submitSurvivalVisit(interviewId: Int, callBack: (BaseResponseBean) -> Unit) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .submitSurvivalVisit(mToken,interviewId)
+            .submitSurvivalVisit(mToken, interviewId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -83,10 +90,10 @@ class SurvivalVisitDataSource(context: Context){
             )
     }
 
-    fun deleteSurvivalVisit(sampleId:Int,interviewId:Int,callBack: (BaseResponseBean) -> Unit){
+    fun deleteSurvivalVisit(sampleId: Int, interviewId: Int, callBack: (BaseResponseBean) -> Unit) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .deleteSurvivalVisit(mToken,sampleId,interviewId)
+            .deleteSurvivalVisit(mToken, sampleId, interviewId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(

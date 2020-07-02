@@ -64,11 +64,12 @@ class TherapeuticEvaluationFragment : Fragment() {
         }
     }
 
-    private fun loadData(){
-        mViewModel.getTherapeuticEvaluation(mSampleId,mCycleNumber).observe(viewLifecycleOwner,
+    private fun loadData() {
+        mViewModel.getTherapeuticEvaluation(mSampleId, mCycleNumber).observe(viewLifecycleOwner,
             Observer {
-                if(it.evaluation!=null){
-                    tv_therapeutic_evaluation.text = getTherapeuticEvaluationList()[it.evaluation]
+                if (it.data.evaluation != null) {
+                    tv_therapeutic_evaluation.text =
+                        getTherapeuticEvaluationList()[it.data.evaluation]
                 }
             })
 //        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
@@ -78,16 +79,18 @@ class TherapeuticEvaluationFragment : Fragment() {
 //        })
     }
 
-    private fun saveData(){
+    private fun saveData() {
         val evaluation = getTherapeuticEvaluationList().indexOf(tv_therapeutic_evaluation.text)
-        val therapeuticEvaluationBean = TherapeuticEvaluationBean(if(evaluation>0) evaluation else null)
-        mViewModel.editTherapeuticEvaluation(mSampleId,mCycleNumber,therapeuticEvaluationBean).observe(viewLifecycleOwner,
-            Observer {
-                if(it.code==200){
-                    ToastUtils.showShort("疗效评价修改成功")
-                }else{
-                    ToastUtils.showShort("疗效评价修改失败")
-                }
-            })
+        val therapeuticEvaluation =
+            TherapeuticEvaluationBean.Data(if (evaluation > 0) evaluation.toInt() else 4)
+        mViewModel.editTherapeuticEvaluation(mSampleId, mCycleNumber, therapeuticEvaluation)
+            .observe(viewLifecycleOwner,
+                Observer {
+                    if (it.code == 200) {
+                        ToastUtils.showShort("疗效评价修改成功")
+                    } else {
+                        ToastUtils.showShort("疗效评价修改失败")
+                    }
+                })
     }
 }

@@ -7,17 +7,15 @@ import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
 import com.ksballetba.rayplus.R
-import com.ksballetba.rayplus.data.bean.SurvivalVisitBodyBean
+import com.ksballetba.rayplus.data.bean.survivalVisitData.SurvivalVisitBodyBean
 import com.ksballetba.rayplus.ui.activity.CRFActivity
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.fragment.SurvivalVisitFragment.Companion.SURVIVAL_VISIT_BODY
 import com.ksballetba.rayplus.util.*
 import com.ksballetba.rayplus.viewmodel.SurvivalVisitViewModel
 import com.lxj.xpopup.XPopup
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.android.synthetic.main.activity_survival_visit.*
 import org.jetbrains.anko.toast
-import java.util.Calendar
 
 class SurvivalVisitActivity : AppCompatActivity() {
 
@@ -208,21 +206,22 @@ class SurvivalVisitActivity : AppCompatActivity() {
         val statusConfirmTime = parseDefaultContent(tv_confirm_live_date.text.toString())
         val lastTimeSurvival = parseDefaultContent(tv_last_contact_date.text.toString())
         val isSubmit = 0
-        survivalVisitBody = SurvivalVisitBodyBean(
-            dieReason,
-            dieTime,
-            hasOtherTreatment,
-            interviewId,
-            interviewTime,
-            interviewWay,
-            lastTimeSurvival,
-            OSMethod,
-            otherMethod,
-            otherReason,
-            statusConfirmTime,
-            survivalStatus,
-            isSubmit
-        )
+        survivalVisitBody =
+            SurvivalVisitBodyBean(
+                dieReason,
+                dieTime,
+                hasOtherTreatment,
+                interviewId,
+                interviewTime,
+                interviewWay,
+                lastTimeSurvival,
+                OSMethod,
+                otherMethod,
+                otherReason,
+                statusConfirmTime,
+                survivalStatus,
+                isSubmit
+            )
         mViewModel.editSurvivalVisit(sampleId, survivalVisitBody).observe(this, Observer {
             if (it.code == 200) {
                 toast("生存期随访操作成功")

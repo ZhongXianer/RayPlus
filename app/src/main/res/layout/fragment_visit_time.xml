@@ -33,9 +33,9 @@
         <TextView
             android:id="@+id/tv_visit_time"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/input_visit_time"
+            android:layout_height="23dp"
             android:layout_marginEnd="@dimen/item_left_margin"
+            android:text="@string/input_visit_time"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -4,29 +4,33 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.apkfuns.logutils.LogUtils
 import com.ksballetba.rayplus.data.bean.*
+import com.ksballetba.rayplus.data.bean.treatmentVisitData.*
 import com.ksballetba.rayplus.network.*
-import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.LOGIN_TOKEN
-import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.SHARED_PREFERENCE_NAME
+import com.ksballetba.rayplus.util.getToken
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 
-class TreatmentVisitDataSource(context: Context){
+class TreatmentVisitDataSource(context: Context) {
 
     var mLoadStatus = MutableLiveData<NetworkState>()
 
-    private val mToken = "Bearer ${context.getSharedPreferences(SHARED_PREFERENCE_NAME,Context.MODE_PRIVATE).getString(LOGIN_TOKEN,"")}"
+    private val mToken = getToken()
+//    private val mToken = "Bearer ${context.getSharedPreferences(SHARED_PREFERENCE_NAME,Context.MODE_PRIVATE).getString(LOGIN_TOKEN,"")}"
 
-    fun getNavigation(sampleId:Int,callBack: (List<NavigationBean.Data>) -> Unit) {
+    fun getNavigation(
+        sampleId: Int,
+        callBack: (MutableList<NavigationBean.Data>) -> Unit
+    ) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .getNavigation(mToken,sampleId)
+            .getNavigation(mToken, sampleId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onNext = {
-                    callBack(it.data)
+                    callBack(it.data.toMutableList())
                 },
                 onComplete = {
                     mLoadStatus.postValue(NetworkState.LOADED)
@@ -39,10 +43,10 @@ class TreatmentVisitDataSource(context: Context){
             )
     }
 
-    fun addCycle(sampleId:Int,callBack: (BaseResponseBean) -> Unit) {
+    fun addCycle(sampleId: Int, callBack: (BaseResponseBean) -> Unit) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .addCycle(mToken,sampleId)
+            .addCycle(mToken, sampleId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -58,10 +62,10 @@ class TreatmentVisitDataSource(context: Context){
             )
     }
 
-    fun deleteCycle(sampleId:Int,callBack: (BaseResponseBean) -> Unit) {
+    fun deleteCycle(sampleId: Int, callBack: (BaseResponseBean) -> Unit) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .deleteCycle(mToken,sampleId)
+            .deleteCycle(mToken, sampleId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -77,10 +81,10 @@ class TreatmentVisitDataSource(context: Context){
             )
     }
 
-    fun submitCycle(sampleId: Int,cycleNumber: Int,callBack: (BaseResponseBean) -> Unit){
+    fun submitCycle(sampleId: Int, cycleNumber: Int, callBack: (BaseResponseBean) -> Unit) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .submitCycle(mToken,sampleId, cycleNumber)
+            .submitCycle(mToken, sampleId, cycleNumber)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -96,11 +100,37 @@ class TreatmentVisitDataSource(context: Context){
             )
     }
 
-    fun getMainPhysicalSignList(sampleId:Int,cycleNumber:Int,callBack: (MutableList<MainPhysicalSignListBean.Data>) -> Unit) {
+    fun getSubmitStatus(
+        sampleId: Int,
+        callBack: (MutableList<TreatmentVisitSubmitResponseBean.Data>) -> Unit
+    ) {
+        RetrofitClient.getInstance(NetworkType.PROJECT)
+            .create(ApiService::class.java)
+            .getTreatmentCycleSubmitStatus(mToken, sampleId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it.data.toMutableList())
+                },
+                onComplete = {
+                    LogUtils.d("completed")
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                }
+            )
+    }
+
+    fun getMainPhysicalSignList(
+        sampleId: Int,
+        cycleNumber: Int,
+        callBack: (MutableList<MainPhysicalSignListBean.Data>) -> Unit
+    ) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .getMainPhysicalSignList(mToken,sampleId,cycleNumber)
+            .getMainPhysicalSignList(mToken, sampleId, cycleNumber)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -118,10 +148,15 @@ class TreatmentVisitDataSource(context: Context){
             )
     }
 
-    fun editMainPhysicalSign(sampleId:Int,cycleNumber:Int,mainPhysicalSignBodyBean: MainPhysicalSignBodyBean,callBack: (BaseResponseBean) -> Unit){
+    fun editMainPhysicalSign(
+        sampleId: Int,
+        cycleNumber: Int,
+        mainPhysicalSignBodyBean: MainPhysicalSignBodyBean,
+        callBack: (BaseResponseBean) -> Unit
+    ) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .editMainPhysicalSign(mToken,sampleId,cycleNumber,mainPhysicalSignBodyBean)
+            .editMainPhysicalSign(mToken, sampleId, cycleNumber, mainPhysicalSignBodyBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -137,10 +172,15 @@ class TreatmentVisitDataSource(context: Context){
             )
     }
 
-    fun deleteMainPhysicalSign(sampleId:Int,cycleNumber:Int,mainSymptomId:Int,callBack: (BaseResponseBean) -> Unit){
+    fun deleteMainPhysicalSign(
+        sampleId: Int,
+        cycleNumber: Int,
+        mainSymptomId: Int,
+        callBack: (BaseResponseBean) -> Unit
+    ) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .deleteMainPhysicalSign(mToken,sampleId,cycleNumber,mainSymptomId)
+            .deleteMainPhysicalSign(mToken, sampleId, cycleNumber, mainSymptomId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -156,11 +196,11 @@ class TreatmentVisitDataSource(context: Context){
             )
     }
 
-    fun getECOGScore(sampleId:Int,cycleNumber:Int,callBack: (ECOGBean) -> Unit) {
+    fun getECOGScore(sampleId: Int, cycleNumber: Int, callBack: (ECOGBean) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .getECOGScore(mToken,sampleId,cycleNumber)
+            .getECOGScore(mToken, sampleId, cycleNumber)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -178,10 +218,15 @@ class TreatmentVisitDataSource(context: Context){
             )
     }
 
-    fun editECOGScore(sampleId:Int,cycleNumber:Int,ecogBean: ECOGBean,callBack: (BaseResponseBean) -> Unit){
+    fun editECOGScore(
+        sampleId: Int,
+        cycleNumber: Int,
+        ecog: ECOGBean.Data,
+        callBack: (BaseResponseBean) -> Unit
+    ) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .editECOGScore(mToken,sampleId,cycleNumber,ecogBean)
+            .editECOGScore(mToken, sampleId, cycleNumber, ecog)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -197,11 +242,15 @@ class TreatmentVisitDataSource(context: Context){
             )
     }
 
-    fun getTherapeuticEvaluation(sampleId:Int,cycleNumber:Int,callBack: (TherapeuticEvaluationBean) -> Unit) {
+    fun getTherapeuticEvaluation(
+        sampleId: Int,
+        cycleNumber: Int,
+        callBack: (TherapeuticEvaluationBean) -> Unit
+    ) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .getTherapeuticEvaluation(mToken,sampleId,cycleNumber)
+            .getTherapeuticEvaluation(mToken, sampleId, cycleNumber)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -219,10 +268,15 @@ class TreatmentVisitDataSource(context: Context){
             )
     }
 
-    fun editTherapeuticEvaluation(sampleId:Int,cycleNumber:Int,therapeuticEvaluationBean: TherapeuticEvaluationBean,callBack: (BaseResponseBean) -> Unit){
+    fun editTherapeuticEvaluation(
+        sampleId: Int,
+        cycleNumber: Int,
+        therapeuticEvaluationBean: TherapeuticEvaluationBean.Data,
+        callBack: (BaseResponseBean) -> Unit
+    ) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .editTherapeuticEvaluation(mToken,sampleId,cycleNumber,therapeuticEvaluationBean)
+            .editTherapeuticEvaluation(mToken, sampleId, cycleNumber, therapeuticEvaluationBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -238,11 +292,15 @@ class TreatmentVisitDataSource(context: Context){
             )
     }
 
-    fun getTreatmentRecordList(sampleId:Int,cycleNumber:Int,callBack: (MutableList<TreatmentRecordListBean.Data>) -> Unit) {
+    fun getTreatmentRecordList(
+        sampleId: Int,
+        cycleNumber: Int,
+        callBack: (MutableList<TreatmentRecordListBean.Data>) -> Unit
+    ) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .getTreatmentRecordList(mToken,sampleId,cycleNumber)
+            .getTreatmentRecordList(mToken, sampleId, cycleNumber)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -260,10 +318,15 @@ class TreatmentVisitDataSource(context: Context){
             )
     }
 
-    fun editTreatmentRecord(sampleId:Int,cycleNumber:Int,treatmentRecordBodyBean: TreatmentRecordBodyBean,callBack: (BaseResponseBean) -> Unit){
+    fun editTreatmentRecord(
+        sampleId: Int,
+        cycleNumber: Int,
+        treatmentRecordBodyBean: TreatmentRecordBodyBean,
+        callBack: (BaseResponseBean) -> Unit
+    ) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .editTreatmentRecord(mToken,sampleId,cycleNumber,treatmentRecordBodyBean)
+            .editTreatmentRecord(mToken, sampleId, cycleNumber, treatmentRecordBodyBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -279,10 +342,15 @@ class TreatmentVisitDataSource(context: Context){
             )
     }
 
-    fun deleteTreatmentRecord(sampleId:Int,cycleNumber:Int,treatmentRecordId:Int,callBack: (BaseResponseBean) -> Unit){
+    fun deleteTreatmentRecord(
+        sampleId: Int,
+        cycleNumber: Int,
+        treatmentRecordId: Int,
+        callBack: (BaseResponseBean) -> Unit
+    ) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .deleteTreatmentRecord(mToken,sampleId,cycleNumber,treatmentRecordId)
+            .deleteTreatmentRecord(mToken, sampleId, cycleNumber, treatmentRecordId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -298,11 +366,11 @@ class TreatmentVisitDataSource(context: Context){
             )
     }
 
-    fun getAdjustment(sampleId:Int,cycleNumber:Int,callBack: (AdjustBean) -> Unit) {
+    fun getAdjustment(sampleId: Int, cycleNumber: Int, callBack: (AdjustBean) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .getAdjustment(mToken,sampleId,cycleNumber)
+            .getAdjustment(mToken, sampleId, cycleNumber)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -320,10 +388,15 @@ class TreatmentVisitDataSource(context: Context){
             )
     }
 
-    fun editAdjustment(sampleId:Int,cycleNumber:Int,adjustBodyBean: AdjustBodyBean,callBack: (BaseResponseBean) -> Unit){
+    fun editAdjustment(
+        sampleId: Int,
+        cycleNumber: Int,
+        adjustBodyBean: AdjustBodyBean,
+        callBack: (BaseResponseBean) -> Unit
+    ) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .editAdjustment(mToken,sampleId,cycleNumber,adjustBodyBean)
+            .editAdjustment(mToken, sampleId, cycleNumber, adjustBodyBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -339,16 +412,20 @@ class TreatmentVisitDataSource(context: Context){
             )
     }
 
-    fun getAdverseEventList(sampleId:Int,cycleNumber:Int,callBack: (MutableList<AdverseEventListBean.Data>) -> Unit) {
+    fun getAdverseEventList(
+        sampleId: Int,
+        cycleNumber: Int,
+        callBack: (MutableList<AdverseEventListBean.Data>) -> Unit
+    ) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .getAdverseEventList(mToken,sampleId,cycleNumber)
+            .getAdverseEventList(mToken, sampleId, cycleNumber)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onNext = {
-                    callBack(it.data.toMutableList())
+                    callBack(it.data!!.toMutableList())
                 },
                 onComplete = {
                     LogUtils.d("Completed")
@@ -361,10 +438,15 @@ class TreatmentVisitDataSource(context: Context){
             )
     }
 
-    fun editAdverseEvent(sampleId:Int,cycleNumber:Int,adverseEventBodyBean: AdverseEventBodyBean,callBack: (BaseResponseBean) -> Unit){
+    fun editAdverseEvent(
+        sampleId: Int,
+        cycleNumber: Int,
+        adverseEventBodyBean: AdverseEventBodyBean,
+        callBack: (BaseResponseBean) -> Unit
+    ) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .editAdverseEvent(mToken,sampleId,cycleNumber,adverseEventBodyBean)
+            .editAdverseEvent(mToken, sampleId, cycleNumber, adverseEventBodyBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -380,10 +462,15 @@ class TreatmentVisitDataSource(context: Context){
             )
     }
 
-    fun deleteAdverseEvent(sampleId:Int,cycleNumber:Int,adverseEventId:Int,callBack: (BaseResponseBean) -> Unit){
+    fun deleteAdverseEvent(
+        sampleId: Int,
+        cycleNumber: Int,
+        adverseEventId: Int,
+        callBack: (BaseResponseBean) -> Unit
+    ) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .deleteAdverseEvent(mToken,sampleId,cycleNumber,adverseEventId)
+            .deleteAdverseEvent(mToken, sampleId, cycleNumber, adverseEventId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(

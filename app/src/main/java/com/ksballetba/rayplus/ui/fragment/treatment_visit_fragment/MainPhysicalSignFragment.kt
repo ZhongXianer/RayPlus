@@ -15,9 +15,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.ECOGBean
-import com.ksballetba.rayplus.data.bean.MainPhysicalSignBodyBean
-import com.ksballetba.rayplus.data.bean.MainPhysicalSignListBean
-import com.ksballetba.rayplus.network.Status
+import com.ksballetba.rayplus.data.bean.treatmentVisitData.MainPhysicalSignBodyBean
+import com.ksballetba.rayplus.data.bean.treatmentVisitData.MainPhysicalSignListBean
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.treatment_visit_activity.MainPhysicalSignActivity
 import com.ksballetba.rayplus.ui.adapter.MainPhysicalSignAdapter
@@ -68,7 +67,7 @@ class MainPhysicalSignFragment : Fragment() {
 
     private fun initUI() {
         fab_main_physical_sign.setOnClickListener {
-            navigateToMainPhysicalSignEditPage(mSampleId,mCycleNumber,null)
+            navigateToMainPhysicalSignEditPage(mSampleId, mCycleNumber, null)
         }
         cl_ECOG_score.setOnClickListener {
             XPopup.Builder(context).asInputConfirm("ECOG评分", "请输入ECOG评分") {
@@ -77,12 +76,12 @@ class MainPhysicalSignFragment : Fragment() {
         }
         tv_save_ECOG_score.setOnClickListener {
             val ecogScore = parseDefaultContent(tv_ECOG_score.text.toString())
-            val ECOGBean = ECOGBean(ecogScore)
-            mViewModel.editECOGScore(mSampleId,mCycleNumber,ECOGBean).observe(viewLifecycleOwner,
+            val eCOG = ECOGBean.Data(ecogScore)
+            mViewModel.editECOGScore(mSampleId, mCycleNumber, eCOG).observe(viewLifecycleOwner,
                 Observer {
-                    if(it.code==200){
+                    if (it.code == 200) {
                         ToastUtils.showShort("ECOG评分保存成功")
-                    }else{
+                    } else {
                         ToastUtils.showShort("ECOG评分保存失败")
                     }
                 })
@@ -98,14 +97,15 @@ class MainPhysicalSignFragment : Fragment() {
         mAdapter.bindToRecyclerView(rv_main_physical_sign)
         mAdapter.setOnItemClickListener { _, _, position ->
             val mainPhysicalSign = mList[position]
-            val mainPhysicalSignBody = MainPhysicalSignBodyBean(
-                mainPhysicalSign.endTime,
-                if(mainPhysicalSign.existence=="存在") "0" else "1",
-                mainPhysicalSign.mainSymptomId,
-                mainPhysicalSign.startTime,
-                mainPhysicalSign.symptomDescription,
-                mainPhysicalSign.symptomDescription
-            )
+            val mainPhysicalSignBody =
+                MainPhysicalSignBodyBean(
+                    mainPhysicalSign.endTime,
+                    if (mainPhysicalSign.existence == 0) "0" else "1",
+                    mainPhysicalSign.mainSymptomId,
+                    mainPhysicalSign.startTime,
+                    mainPhysicalSign.symptomDescription,
+                    mainPhysicalSign.symptomDescription
+                )
             navigateToMainPhysicalSignEditPage(
                 mSampleId,
                 mCycleNumber,
@@ -126,9 +126,9 @@ class MainPhysicalSignFragment : Fragment() {
                 mList = it.toMutableList()
                 mAdapter.setNewData(mList)
             })
-        mViewModel.getECOGScore(mSampleId,mCycleNumber)
+        mViewModel.getECOGScore(mSampleId, mCycleNumber)
             .observe(viewLifecycleOwner, Observer {
-                tv_ECOG_score.text = it.eCOG
+                tv_ECOG_score.text = it.data?.eCOG
             })
 //        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
 //            if (it.status == Status.FAILED) {

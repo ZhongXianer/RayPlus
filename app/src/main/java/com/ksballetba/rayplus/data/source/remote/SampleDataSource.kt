@@ -4,17 +4,19 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.apkfuns.logutils.LogUtils
 import com.ksballetba.rayplus.data.bean.*
+import com.ksballetba.rayplus.data.bean.sampleData.SampleEditBodyBean
+import com.ksballetba.rayplus.data.bean.sampleData.SampleListBean
+import com.ksballetba.rayplus.data.bean.sampleData.SampleSubmitBodyBean
 import com.ksballetba.rayplus.network.ApiService
 import com.ksballetba.rayplus.network.NetworkState
 import com.ksballetba.rayplus.network.NetworkType
 import com.ksballetba.rayplus.network.RetrofitClient
-import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.LOGIN_TOKEN
-import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.SHARED_PREFERENCE_NAME
+import com.ksballetba.rayplus.util.getToken
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers.*
 
-class  SampleDataSource(context: Context){
+class SampleDataSource(context: Context) {
     companion object {
         const val TAG = "SampleDataSource"
         const val DEFAULT_PAGE_LIMIT = 20
@@ -24,22 +26,22 @@ class  SampleDataSource(context: Context){
 
     var mLoadStatus = MutableLiveData<NetworkState>()
 
-    private val mToken = "Bearer ${context.getSharedPreferences(SHARED_PREFERENCE_NAME,Context.MODE_PRIVATE).getString(LOGIN_TOKEN,"")}"
+    private val mToken = getToken()
 
-    fun loadInitial(projectId:Int,callBack: (MutableList<SampleListBean.Data>) -> Unit) {
+    fun loadInitial(callBack: (MutableList<SampleListBean.Data>) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .getSampleList(mToken,projectId, 1, DEFAULT_PAGE_LIMIT)
+            .getSampleList(mToken,1, DEFAULT_PAGE_LIMIT)
             .subscribeOn(io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onNext = {
-                    if(it.msg=="获取样本成功"){
+                    if (it.msg == "获取样本成功") {
                         callBack(it.data.toMutableList())
                         mLoadStatus.postValue(NetworkState.LOADED)
                         CURRENT_PAGE = 2
-                    }else{
+                    } else {
                         mLoadStatus.postValue(NetworkState.error(it.msg))
                     }
                 },
@@ -53,20 +55,20 @@ class  SampleDataSource(context: Context){
             )
     }
 
-    fun loadMore(projectId:Int,callBack: (MutableList<SampleListBean.Data>) -> Unit) {
+    fun loadMore(callBack: (MutableList<SampleListBean.Data>) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .getSampleList(mToken,projectId, CURRENT_PAGE, DEFAULT_PAGE_LIMIT)
+            .getSampleList(mToken,CURRENT_PAGE, DEFAULT_PAGE_LIMIT)
             .subscribeOn(io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onNext = {
-                    if(it.msg=="获取样本成功"){
+                    if (it.msg == "获取样本成功") {
                         callBack(it.data.toMutableList())
                         mLoadStatus.postValue(NetworkState.LOADED)
-                        CURRENT_PAGE ++
-                    }else{
+                        CURRENT_PAGE++
+                    } else {
                         mLoadStatus.postValue(NetworkState.error(it.msg))
                     }
                 },
@@ -81,7 +83,7 @@ class  SampleDataSource(context: Context){
     }
 
 
-    fun loadAllResearchCenter(callBack: (MutableList<ResearchCenterBean>) -> Unit){
+    fun loadAllResearchCenter(callBack: (MutableList<ResearchCenterBean>) -> Unit) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .getAllResearchCenterList()
@@ -104,7 +106,7 @@ class  SampleDataSource(context: Context){
     fun editSample(sampleEditBodyBean: SampleEditBodyBean, callBack: (BaseResponseBean) -> Unit) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .editSample(mToken,sampleEditBodyBean)
+            .editSample(mToken, sampleEditBodyBean)
             .subscribeOn(io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -120,10 +122,13 @@ class  SampleDataSource(context: Context){
             )
     }
 
-    fun submitSample(sampleSubmitBodyBean: SampleSubmitBodyBean,callBack: (BaseResponseBean) -> Unit) {
+    fun submitSample(
+        sampleSubmitBodyBean: SampleSubmitBodyBean,
+        callBack: (BaseResponseBean) -> Unit
+    ) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .submitSample(mToken,sampleSubmitBodyBean)
+            .submitSample(mToken, sampleSubmitBodyBean)
             .subscribeOn(io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -139,10 +144,29 @@ class  SampleDataSource(context: Context){
             )
     }
 
-    fun deleteSample(sampleId: Int,callBack: (BaseResponseBean) -> Unit) {
+    fun deleteSample(sampleId: Int, callBack: (BaseResponseBean) -> Unit) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .deleteSample(mToken,sampleId)
+            .deleteSample(mToken, sampleId)
+            .subscribeOn(io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                },
+                onError = {
+                    LogUtils.tag(TAG).d(it.message)
+                }
+            )
+    }
+
+    fun unlockSample(sampleId: Int, callBack: (BaseResponseBean) -> Unit) {
+        RetrofitClient.getInstance(NetworkType.PROJECT)
+            .create(ApiService::class.java)
+            .unlockSample(mToken, sampleId)
             .subscribeOn(io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(

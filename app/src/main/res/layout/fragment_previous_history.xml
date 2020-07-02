@@ -211,7 +211,7 @@
                     android:id="@+id/switch_smoke_history"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/material_component_cards_left_and_right_padding"
+                    android:layout_marginEnd="16dp"
                     android:showText="true"
                     android:textOff="@string/without"
                     android:textOn="@string/exist"

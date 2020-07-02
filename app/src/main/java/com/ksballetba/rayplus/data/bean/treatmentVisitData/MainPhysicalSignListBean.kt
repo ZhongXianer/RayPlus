@@ -1,4 +1,4 @@
-package com.ksballetba.rayplus.data.bean
+package com.ksballetba.rayplus.data.bean.treatmentVisitData
 
 
 import com.google.gson.annotations.SerializedName
@@ -14,7 +14,7 @@ data class MainPhysicalSignListBean(
         val cycleId: Int, // 6
         @SerializedName("end_time")
         val endTime: String, // 2019-12-17
-        val existence: String, // 消失
+        val existence: Int?, // 消失
         @SerializedName("main_symptom_id")
         val mainSymptomId: Int, // 5
         @SerializedName("sample_id")

@@ -22,8 +22,9 @@
             android:id="@+id/tv_visit_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
             android:textColor="@color/primary_text"
+
             android:textSize="@dimen/material_typography_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -32,19 +33,19 @@
             android:id="@+id/tv_visit_submit_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
             android:text="提交状态："
-            android:textColor="@color/primary_text"
-            android:textSize="20sp"
+            android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_visit_name" />
 
         <Button
             android:id="@+id/tv_visit_submit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
             android:text="提交"
-            android:textColor="@color/primary_text"
+            android:textColor="@color/background"
+            android:background="@color/footer_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_visit_submit_status" />
     </androidx.constraintlayout.widget.ConstraintLayout>

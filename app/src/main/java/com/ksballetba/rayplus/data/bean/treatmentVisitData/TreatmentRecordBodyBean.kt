@@ -1,4 +1,4 @@
-package com.ksballetba.rayplus.data.bean
+package com.ksballetba.rayplus.data.bean.treatmentVisitData
 
 
 import android.os.Parcel
@@ -43,7 +43,9 @@ data class TreatmentRecordBodyBean(
         val CREATOR: Parcelable.Creator<TreatmentRecordBodyBean> =
             object : Parcelable.Creator<TreatmentRecordBodyBean> {
                 override fun createFromParcel(source: Parcel): TreatmentRecordBodyBean =
-                    TreatmentRecordBodyBean(source)
+                    TreatmentRecordBodyBean(
+                        source
+                    )
 
                 override fun newArray(size: Int): Array<TreatmentRecordBodyBean?> =
                     arrayOfNulls(size)

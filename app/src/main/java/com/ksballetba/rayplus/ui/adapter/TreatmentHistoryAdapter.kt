@@ -3,7 +3,7 @@ package com.ksballetba.rayplus.ui.adapter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.ksballetba.rayplus.R
-import com.ksballetba.rayplus.data.bean.TreatmentHistoryListBean
+import com.ksballetba.rayplus.data.bean.baseLineData.TreatmentHistoryListBean
 
 class TreatmentHistoryAdapter(layoutResId:Int, data:List<TreatmentHistoryListBean.Data>): BaseQuickAdapter<TreatmentHistoryListBean.Data, BaseViewHolder>(layoutResId,data) {
 

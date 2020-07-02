@@ -80,5 +80,21 @@ data class LabInspectionBodyBean(
     @SerializedName("WBC_P_rank")
     val wBCPRank: Int?, // 3
     @SerializedName("WBC_P_val")
-    val wBCPVal: Float?
+    val wBCPVal: Float?,
+    @SerializedName("K_rank")
+    val kRank: Int?,
+    @SerializedName("K_val")
+    val kVal:Float?,
+    @SerializedName("Na_rank")
+    val naRank: Int?,
+    @SerializedName("Na_val")
+    val naVal:Float?,
+    @SerializedName("Cl_rank")
+    val clRank: Int?,
+    @SerializedName("Cl_val")
+    val clVal:Float?,
+    @SerializedName("P_rank")
+    val pRank: Int?,
+    @SerializedName("P_val")
+    val pVal:Float?
 )

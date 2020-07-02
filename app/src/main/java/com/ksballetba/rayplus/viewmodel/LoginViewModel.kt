@@ -3,8 +3,8 @@ package com.ksballetba.rayplus.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.ksballetba.rayplus.data.bean.LoginBodyBean
-import com.ksballetba.rayplus.data.bean.LoginResponseBean
+import com.ksballetba.rayplus.data.bean.loginData.LoginBodyBean
+import com.ksballetba.rayplus.data.bean.loginData.LoginResponseBean
 import com.ksballetba.rayplus.data.source.remote.LoginDataSource
 
 /**

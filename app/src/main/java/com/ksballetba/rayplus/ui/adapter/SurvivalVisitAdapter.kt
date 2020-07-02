@@ -5,7 +5,7 @@ import android.widget.TextView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.ksballetba.rayplus.R
-import com.ksballetba.rayplus.data.bean.SurvivalVisitListBean
+import com.ksballetba.rayplus.data.bean.survivalVisitData.SurvivalVisitListBean
 import com.ksballetba.rayplus.util.getSurvivalStatus
 import com.ksballetba.rayplus.util.getSurvivalSubmitStatus
 

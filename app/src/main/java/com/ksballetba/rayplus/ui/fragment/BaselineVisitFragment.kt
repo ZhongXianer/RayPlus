@@ -11,10 +11,7 @@ import androidx.fragment.app.DialogFragment
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.adapter.ViewPagerAdapter
-import com.ksballetba.rayplus.ui.fragment.base_fragment.ImagingEvaluationFragment
-import com.ksballetba.rayplus.ui.fragment.base_fragment.InvestigatorSignatureFragment
-import com.ksballetba.rayplus.ui.fragment.base_fragment.LabInspectionFragment
-import com.ksballetba.rayplus.ui.fragment.base_fragment.VisitTimeFragment
+import com.ksballetba.rayplus.ui.fragment.base_fragment.*
 import com.ksballetba.rayplus.ui.fragment.baseline_visit_fragment.*
 import kotlinx.android.synthetic.main.fragment_baseline_visit.*
 
@@ -23,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_baseline_visit.*
  */
 class BaselineVisitFragment : Fragment() {
 
-    companion object{
+    companion object {
         const val BASELINE_CYCLE_NUMBER = 1
         const val CYCLE_NUMBER_KEY = "CYCLE_NUMBER_KEY"
     }
@@ -45,8 +42,8 @@ class BaselineVisitFragment : Fragment() {
         initFragments()
     }
 
-    private fun initFragments(){
-        val sampleId = if(arguments!=null) (arguments as Bundle).getInt(SAMPLE_ID) else 0
+    private fun initFragments() {
+        val sampleId = if (arguments != null) (arguments as Bundle).getInt(SAMPLE_ID) else 0
         val baselineArgs = Bundle()
         baselineArgs.putInt(CYCLE_NUMBER_KEY, BASELINE_CYCLE_NUMBER)
         baselineArgs.putInt(SAMPLE_ID, sampleId)
@@ -58,6 +55,7 @@ class BaselineVisitFragment : Fragment() {
         val treatmentHistoryFragment = TreatmentHistoryFragment()
         val labInspectionFragment = LabInspectionFragment()
         val imagingEvaluationFragment = ImagingEvaluationFragment()
+        val visitSubmitFragment = VisitSubmitFragment()
         visitTimeFragment.arguments = baselineArgs
         demographicsFragment.arguments = baselineArgs
         physicalExaminationFragment.arguments = baselineArgs
@@ -66,6 +64,7 @@ class BaselineVisitFragment : Fragment() {
         treatmentHistoryFragment.arguments = baselineArgs
         labInspectionFragment.arguments = baselineArgs
         imagingEvaluationFragment.arguments = baselineArgs
+        visitSubmitFragment.arguments = baselineArgs
         mFragmentList.add(visitTimeFragment)
         mFragmentList.add(demographicsFragment)
         mFragmentList.add(physicalExaminationFragment)
@@ -75,7 +74,8 @@ class BaselineVisitFragment : Fragment() {
         mFragmentList.add(labInspectionFragment)
         mFragmentList.add(imagingEvaluationFragment)
         mFragmentList.add(InvestigatorSignatureFragment())
-        mViewPagerAdapter = ViewPagerAdapter(mFragmentList,childFragmentManager)
+        mFragmentList.add(visitSubmitFragment)
+        mViewPagerAdapter = ViewPagerAdapter(mFragmentList, childFragmentManager)
         vp_baseline_visit.adapter = mViewPagerAdapter
         vp_baseline_visit.offscreenPageLimit = 3
         tl_baseline_visit.setupWithViewPager(vp_baseline_visit)
@@ -88,6 +88,7 @@ class BaselineVisitFragment : Fragment() {
         tl_baseline_visit.getTabAt(6)?.text = "实验室检查"
         tl_baseline_visit.getTabAt(7)?.text = "影像学评估"
         tl_baseline_visit.getTabAt(8)?.text = "研究者签字"
+        tl_baseline_visit.getTabAt(9)?.text = "访视提交"
     }
 
 }

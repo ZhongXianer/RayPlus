@@ -67,7 +67,7 @@ class LabInspectionFragment : Fragment() {
 
     private fun initUI() {
         cl_sampling_date.setOnClickListener {
-            showDatePickerDialog(tv_sampling_date,parentFragmentManager)
+            showDatePickerDialog(tv_sampling_date, parentFragmentManager)
         }
         fab_save_lab_inspection.setOnClickListener {
             saveData()
@@ -82,137 +82,169 @@ class LabInspectionFragment : Fragment() {
 
     private fun loadData() {
         mViewModel.getLabInspection(mSampleId, mCycleNumber).observe(viewLifecycleOwner, Observer {
-            tv_sampling_date.text = it.time
+            tv_sampling_date.text = it.data?.time ?: ""
             (mBloodRoutineAdapter.getViewByPosition(0, R.id.tv_lab_inspection) as TextView).text =
-                "${it.hbVal?:""}"
+                "${it.data?.hbVal ?: ""}"
             (mBloodRoutineAdapter.getViewByPosition(
                 0,
                 R.id.ns_lab_inspection
-            ) as NiceSpinner).selectedIndex = it.hbRank ?: 0
+            ) as NiceSpinner).selectedIndex = it.data?.hbRank ?: 0
             (mBloodRoutineAdapter.getViewByPosition(1, R.id.tv_lab_inspection) as TextView).text =
-                "${it.rBCBVal?:""}"
+                "${it.data?.rBCBVal ?: ""}"
             (mBloodRoutineAdapter.getViewByPosition(
                 1,
                 R.id.ns_lab_inspection
-            ) as NiceSpinner).selectedIndex = it.rBCBRank ?: 0
+            ) as NiceSpinner).selectedIndex = it.data?.rBCBRank ?: 0
             (mBloodRoutineAdapter.getViewByPosition(2, R.id.tv_lab_inspection) as TextView).text =
-                "${it.wBCBVal?:""}"
+                "${it.data?.wBCBVal ?: ""}"
             (mBloodRoutineAdapter.getViewByPosition(
                 2,
                 R.id.ns_lab_inspection
-            ) as NiceSpinner).selectedIndex = it.wBCBRank ?: 0
+            ) as NiceSpinner).selectedIndex = it.data?.wBCBRank ?: 0
             (mBloodRoutineAdapter.getViewByPosition(3, R.id.tv_lab_inspection) as TextView).text =
-                "${it.pltVal?:""}"
+                "${it.data?.pltVal ?: ""}"
             (mBloodRoutineAdapter.getViewByPosition(
                 3,
                 R.id.ns_lab_inspection
-            ) as NiceSpinner).selectedIndex = it.pltRank ?: 0
+            ) as NiceSpinner).selectedIndex = it.data?.pltRank ?: 0
             (mBloodRoutineAdapter.getViewByPosition(4, R.id.tv_lab_inspection) as TextView).text =
-                "${it.pTVal?:""}"
+                "${it.data?.pTVal ?: ""}"
             (mBloodRoutineAdapter.getViewByPosition(
                 4,
                 R.id.ns_lab_inspection
-            ) as NiceSpinner).selectedIndex = it.pTRank ?: 0
+            ) as NiceSpinner).selectedIndex = it.data?.pTRank ?: 0
             (mUrineRoutineAdapter.getViewByPosition(0, R.id.tv_lab_inspection) as TextView).text =
-                "${it.wBCPVal?:""}"
+                "${it.data?.wBCPVal ?: ""}"
             (mUrineRoutineAdapter.getViewByPosition(
                 0,
                 R.id.ns_lab_inspection
-            ) as NiceSpinner).selectedIndex = it.wBCPRank ?: 0
+            ) as NiceSpinner).selectedIndex = it.data?.wBCPRank ?: 0
             (mUrineRoutineAdapter.getViewByPosition(1, R.id.tv_lab_inspection) as TextView).text =
-                "${it.rBCPVal?:""}"
+                "${it.data?.rBCPVal ?: ""}"
             (mUrineRoutineAdapter.getViewByPosition(
                 1,
                 R.id.ns_lab_inspection
-            ) as NiceSpinner).selectedIndex = it.rBCPRank ?: 0
+            ) as NiceSpinner).selectedIndex = it.data?.rBCPRank ?: 0
             (mUrineRoutineAdapter.getViewByPosition(2, R.id.tv_lab_inspection) as TextView).text =
-                if (it.pROVal == 1.0f) "+" else "-"
+                if (it.data?.pROVal == 1.0f) "+" else "-"
             (mUrineRoutineAdapter.getViewByPosition(
                 2,
                 R.id.ns_lab_inspection
-            ) as NiceSpinner).selectedIndex = it.pRORank ?: 0
+            ) as NiceSpinner).selectedIndex = it.data?.pRORank ?: 0
             (mBloodBiochemistryAdapter.getViewByPosition(
                 0,
                 R.id.tv_lab_inspection
-            ) as TextView).text = "${it.aLTVal?:""}"
+            ) as TextView).text = "${it.data?.aLTVal ?: ""}"
             (mBloodBiochemistryAdapter.getViewByPosition(
                 0,
                 R.id.ns_lab_inspection
-            ) as NiceSpinner).selectedIndex = it.aLTRank ?: 0
+            ) as NiceSpinner).selectedIndex = it.data?.aLTRank ?: 0
             (mBloodBiochemistryAdapter.getViewByPosition(
                 1,
                 R.id.tv_lab_inspection
-            ) as TextView).text = "${it.aSTVal?:""}"
+            ) as TextView).text = "${it.data?.aSTVal ?: ""}"
             (mBloodBiochemistryAdapter.getViewByPosition(
                 1,
                 R.id.ns_lab_inspection
-            ) as NiceSpinner).selectedIndex = it.aSTRank ?: 0
+            ) as NiceSpinner).selectedIndex = it.data?.aSTRank ?: 0
             (mBloodBiochemistryAdapter.getViewByPosition(
                 2,
                 R.id.tv_lab_inspection
-            ) as TextView).text = "${it.tBILVal?:""}"
+            ) as TextView).text = "${it.data?.tBILVal ?: ""}"
             (mBloodBiochemistryAdapter.getViewByPosition(
                 2,
                 R.id.ns_lab_inspection
-            ) as NiceSpinner).selectedIndex = it.tBILRank ?: 0
+            ) as NiceSpinner).selectedIndex = it.data?.tBILRank ?: 0
             (mBloodBiochemistryAdapter.getViewByPosition(
                 3,
                 R.id.tv_lab_inspection
-            ) as TextView).text = "${it.dBILVal?:""}"
+            ) as TextView).text = "${it.data?.dBILVal ?: ""}"
             (mBloodBiochemistryAdapter.getViewByPosition(
                 3,
                 R.id.ns_lab_inspection
-            ) as NiceSpinner).selectedIndex = it.dBILRank ?: 0
+            ) as NiceSpinner).selectedIndex = it.data?.dBILRank ?: 0
             (mBloodBiochemistryAdapter.getViewByPosition(
                 4,
                 R.id.tv_lab_inspection
-            ) as TextView).text = "${it.aLBVal?:""}"
+            ) as TextView).text = "${it.data?.aLBVal ?: ""}"
             (mBloodBiochemistryAdapter.getViewByPosition(
                 4,
                 R.id.ns_lab_inspection
-            ) as NiceSpinner).selectedIndex = it.aLBRank ?: 0
+            ) as NiceSpinner).selectedIndex = it.data?.aLBRank ?: 0
             (mBloodBiochemistryAdapter.getViewByPosition(
                 5,
                 R.id.tv_lab_inspection
-            ) as TextView).text = "${it.crVal?:""}"
+            ) as TextView).text = "${it.data?.crVal ?: ""}"
             (mBloodBiochemistryAdapter.getViewByPosition(
                 5,
                 R.id.ns_lab_inspection
-            ) as NiceSpinner).selectedIndex = it.crRank ?: 0
+            ) as NiceSpinner).selectedIndex = it.data?.crRank ?: 0
             (mBloodBiochemistryAdapter.getViewByPosition(
                 6,
                 R.id.tv_lab_inspection
-            ) as TextView).text = "${it.bUNVal?:""}"
+            ) as TextView).text = "${it.data?.bUNVal ?: ""}"
             (mBloodBiochemistryAdapter.getViewByPosition(
                 6,
                 R.id.ns_lab_inspection
-            ) as NiceSpinner).selectedIndex = it.bUNRank ?: 0
+            ) as NiceSpinner).selectedIndex = it.data?.bUNRank ?: 0
             (mBloodBiochemistryAdapter.getViewByPosition(
                 7,
                 R.id.tv_lab_inspection
-            ) as TextView).text = "${it.gluVal?:""}"
+            ) as TextView).text = "${it.data?.gluVal ?: ""}"
             (mBloodBiochemistryAdapter.getViewByPosition(
                 7,
                 R.id.ns_lab_inspection
-            ) as NiceSpinner).selectedIndex = it.gluRank ?: 0
+            ) as NiceSpinner).selectedIndex = it.data?.gluRank ?: 0
+            (mBloodBiochemistryAdapter.getViewByPosition(
+                8,
+                R.id.tv_lab_inspection
+            ) as TextView).text = "${it.data?.kVal ?: ""}"
+            (mBloodBiochemistryAdapter.getViewByPosition(
+                8,
+                R.id.ns_lab_inspection
+            ) as NiceSpinner).selectedIndex = it.data?.kRank ?: 0
+            (mBloodBiochemistryAdapter.getViewByPosition(
+                9,
+                R.id.tv_lab_inspection
+            ) as TextView).text = "${it.data?.naVal ?: ""}"
+            (mBloodBiochemistryAdapter.getViewByPosition(
+                9,
+                R.id.ns_lab_inspection
+            ) as NiceSpinner).selectedIndex = it.data?.naRank ?: 0
+            (mBloodBiochemistryAdapter.getViewByPosition(
+                10,
+                R.id.tv_lab_inspection
+            ) as TextView).text = "${it.data?.clVal ?: ""}"
+            (mBloodBiochemistryAdapter.getViewByPosition(
+                10,
+                R.id.ns_lab_inspection
+            ) as NiceSpinner).selectedIndex = it.data?.clRank ?: 0
+            (mBloodBiochemistryAdapter.getViewByPosition(
+                11,
+                R.id.tv_lab_inspection
+            ) as TextView).text = "${it.data?.pVal ?: ""}"
+            (mBloodBiochemistryAdapter.getViewByPosition(
+                11,
+                R.id.ns_lab_inspection
+            ) as NiceSpinner).selectedIndex = it.data?.pRank ?: 0
             (mTumorMarkerAdapter.getViewByPosition(0, R.id.tv_lab_inspection) as TextView).text =
-                "${it.cEAVal?:""}"
+                "${it.data?.cEAVal ?: ""}"
             (mTumorMarkerAdapter.getViewByPosition(
                 0,
                 R.id.ns_lab_inspection
-            ) as NiceSpinner).selectedIndex = it.cEARank ?: 0
+            ) as NiceSpinner).selectedIndex = it.data?.cEARank ?: 0
             (mTumorMarkerAdapter.getViewByPosition(1, R.id.tv_lab_inspection) as TextView).text =
-                "${it.sCCVal?:""}"
+                "${it.data?.sCCVal ?: ""}"
             (mTumorMarkerAdapter.getViewByPosition(
                 1,
                 R.id.ns_lab_inspection
-            ) as NiceSpinner).selectedIndex = it.sCCRank ?: 0
+            ) as NiceSpinner).selectedIndex = it.data?.sCCRank ?: 0
             (mTumorMarkerAdapter.getViewByPosition(2, R.id.tv_lab_inspection) as TextView).text =
-                "${it.nSEVal?:""}"
+                "${it.data?.nSEVal ?: ""}"
             (mTumorMarkerAdapter.getViewByPosition(
                 2,
                 R.id.ns_lab_inspection
-            ) as NiceSpinner).selectedIndex = it.nSERank ?: 0
+            ) as NiceSpinner).selectedIndex = it.data?.nSERank ?: 0
         })
 //        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
 //            if(it.status == Status.FAILED){
@@ -384,6 +416,46 @@ class LabInspectionFragment : Fragment() {
                 R.id.ns_lab_inspection
             ) as NiceSpinner).selectedIndex
         )
+        val kVal = (mBloodBiochemistryAdapter.getViewByPosition(
+            8,
+            R.id.tv_lab_inspection
+        ) as TextView).text.toString().toFloatOrNull()
+        val kRank = parseLabInspectionRank(
+            (mBloodBiochemistryAdapter.getViewByPosition(
+                8,
+                R.id.ns_lab_inspection
+            ) as NiceSpinner).selectedIndex
+        )
+        val naVal = (mBloodBiochemistryAdapter.getViewByPosition(
+            9,
+            R.id.tv_lab_inspection
+        ) as TextView).text.toString().toFloatOrNull()
+        val naRank = parseLabInspectionRank(
+            (mBloodBiochemistryAdapter.getViewByPosition(
+                9,
+                R.id.ns_lab_inspection
+            ) as NiceSpinner).selectedIndex
+        )
+        val clVal = (mBloodBiochemistryAdapter.getViewByPosition(
+            10,
+            R.id.tv_lab_inspection
+        ) as TextView).text.toString().toFloatOrNull()
+        val clRank = parseLabInspectionRank(
+            (mBloodBiochemistryAdapter.getViewByPosition(
+                10,
+                R.id.ns_lab_inspection
+            ) as NiceSpinner).selectedIndex
+        )
+        val pVal = (mBloodBiochemistryAdapter.getViewByPosition(
+            11,
+            R.id.tv_lab_inspection
+        ) as TextView).text.toString().toFloatOrNull()
+        val pRank = parseLabInspectionRank(
+            (mBloodBiochemistryAdapter.getViewByPosition(
+                11,
+                R.id.ns_lab_inspection
+            ) as NiceSpinner).selectedIndex
+        )
         val cEAVal = (mTumorMarkerAdapter.getViewByPosition(
             0,
             R.id.tv_lab_inspection
@@ -453,16 +525,25 @@ class LabInspectionFragment : Fragment() {
             wBCBRank,
             wBCBVal,
             wBCPRank,
-            wBCPVal
+            wBCPVal,
+            kRank,
+            kVal,
+            naRank,
+            naVal,
+            clRank,
+            clVal,
+            pRank,
+            pVal
         )
-        mViewModel.editLabInspection(mSampleId,mCycleNumber,labInspectionBodyBean).observe(viewLifecycleOwner,
-            Observer {
-                if(it.code==200){
-                    ToastUtils.showShort("实验室检查表单修改成功")
-                }else{
-                    ToastUtils.showShort("实验室检查表单修改失败")
-                }
-            })
+        mViewModel.editLabInspection(mSampleId, mCycleNumber, labInspectionBodyBean)
+            .observe(viewLifecycleOwner,
+                Observer {
+                    if (it.code == 200) {
+                        ToastUtils.showShort("实验室检查表单修改成功")
+                    } else {
+                        ToastUtils.showShort("实验室检查表单修改失败")
+                    }
+                })
     }
 
     private fun initRecyclerView() {
@@ -496,7 +577,11 @@ class LabInspectionFragment : Fragment() {
                 "ALB(g/L)",
                 "Cr(umol/L)",
                 "BUN(mmol/1)",
-                "Glu(mmol/L)"
+                "Glu(mmol/L)",
+                "K(mmol/L)",
+                "Na(mmol/L)",
+                "Cl(mmol/L)",
+                "P(mmol/L)"
             )
         )
         mTumorMarkerAdapter = LabInspectionAdapter(

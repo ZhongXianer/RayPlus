@@ -9,51 +9,50 @@ import com.ksballetba.rayplus.network.ApiService
 import com.ksballetba.rayplus.network.NetworkState
 import com.ksballetba.rayplus.network.NetworkType
 import com.ksballetba.rayplus.network.RetrofitClient
-import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.LOGIN_TOKEN
-import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.SHARED_PREFERENCE_NAME
+import com.ksballetba.rayplus.util.getToken
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 
-class  ProjectDataSource(context: Context){
+class ProjectDataSource(context: Context) {
 
-    companion object{
+    companion object {
         const val TAG = "ProjectDataSource"
     }
 
     var mLoadStatus = MutableLiveData<NetworkState>()
+    val mContext = context
 
-    private val mToken = "Bearer ${context.getSharedPreferences(SHARED_PREFERENCE_NAME,Context.MODE_PRIVATE).getString(LOGIN_TOKEN,"")}"
 
-    fun getUserName(callBack: (UserNameBean) -> Unit){
-        RetrofitClient.getInstance(NetworkType.PROJECT)
-            .create(ApiService::class.java)
-            .getUserName(mToken)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy (
-                onNext = {
-                    callBack(it)
-                },
-                onComplete = {
-                    println("Completed")
-                },
-                onError = {
-                    mLoadStatus.postValue(NetworkState.error(it.message))
-                }
-            )
-    }
+//    fun getUserName(callBack: (UserNameBean) -> Unit){
+//        RetrofitClient.getInstance(NetworkType.PROJECT)
+//            .create(ApiService::class.java)
+//            .getUserName(mToken)
+//            .subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribeBy (
+//                onNext = {
+//                    callBack(it)
+//                },
+//                onComplete = {
+//                    println("Completed")
+//                },
+//                onError = {
+//                    mLoadStatus.postValue(NetworkState.error(it.message))
+//                }
+//            )
+//    }
 
-    fun loadInitial(callBack: (MutableList<ProjectListBean.Data>) -> Unit) {
+    fun loadInitial(projectId: Int, callBack: (ProjectListBean.Data) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
-        RetrofitClient.getInstance(NetworkType.PROJECT)
+        RetrofitClient.getInstance(NetworkType.AUTH)
             .create(ApiService::class.java)
-            .getProjectList(mToken)
+            .getProjectList(getToken(mContext, projectId), projectId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onNext = {
-                    callBack(it.data.toMutableList())
+                    callBack(it.data)
                     mLoadStatus.postValue(NetworkState.LOADED)
                 },
                 onComplete = {
@@ -64,4 +63,31 @@ class  ProjectDataSource(context: Context){
                 }
             )
     }
+
+    /**
+     * 获取用户在项目下的权限
+     */
+    fun getProjectAuthorization(
+        projectId: Int,
+        userId: Int,
+        callBack: (MutableList<String?>) -> Unit
+    ) {
+        RetrofitClient.getInstance(NetworkType.AUTH)
+            .create(ApiService::class.java)
+            .getProjectAuthorization(projectId, userId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it.data.toMutableList())
+                },
+                onComplete = {
+                    println("completed!")
+                },
+                onError = {
+                    LogUtils.tag(SampleDataSource.TAG).d(it.message)
+                }
+            )
+    }
+
 }

@@ -157,6 +157,7 @@
     <string name="medicine_measure">对试验用药采取的措施</string>
     <string name="SAE_recover">SAE转归</string>
     <string name="SAE_relation">SAE与试验药的关系</string>
+    <string name="unlock">解 锁</string>
 
     <string-array name="clinical_significance">
         <item>1</item>

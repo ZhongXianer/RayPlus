@@ -7,19 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import com.apkfuns.logutils.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.DemographyBean
-import com.ksballetba.rayplus.network.Status
+import com.ksballetba.rayplus.data.bean.EditDemographyBean
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.util.*
 import com.ksballetba.rayplus.viewmodel.BaselineVisitViewModel
 import com.lxj.xpopup.XPopup
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.android.synthetic.main.fragment_demographics.*
-import java.util.Calendar
 
 /**
  * A simple [Fragment] subclass.
@@ -27,11 +24,11 @@ import java.util.Calendar
 class DemographicsFragment : Fragment() {
 
 
-    companion object{
+    companion object {
         const val TAG = "DemographicsFragment"
     }
 
-    private lateinit var mViewModel:BaselineVisitViewModel
+    private lateinit var mViewModel: BaselineVisitViewModel
 
     var mSampleId = 0
 
@@ -50,28 +47,30 @@ class DemographicsFragment : Fragment() {
         initUI()
     }
 
-    private fun initData(){
+    private fun initData() {
         mSampleId = (arguments as Bundle).getInt(SAMPLE_ID)
         mViewModel = getBaselineVisitViewModel(this)
     }
 
-    private fun loadData(){
+    private fun loadData() {
         mViewModel.getDemography(mSampleId).observe(viewLifecycleOwner, Observer {
-            tv_sex.text = if(it.sex == 0) "男" else "女"
-            tv_birthday.text = it.date
-            tv_race.text = if(it.race == "其他") it.raceOther else it.race
-            tv_marital_status.text = if(it.marriage == "其他") it.marriageOther else it.marriage
-            if(it.degree!=null){
-                tv_degree.text = getDegreeList()[it.degree]
+            tv_sex.text = if (it.data.sex == 0) "男" else "女"
+            tv_birthday.text = it.data.date
+            tv_race.text = if (it.data.race == "其他") it.data.raceOther else it.data.race
+            tv_marital_status.text =
+                if (it.data.marriage == "其他") it.data.marriageOther else it.data.marriage
+            if (it.data.degree != null) {
+                tv_degree.text = getDegreeList()[it.data.degree]
             }
-            tv_occupation.text = if(it.vocation == "其他") it.vocationOther else it.vocation
-            if(it.zone!=null){
-                tv_area.text = getZoneList()[it.zone]
+            tv_occupation.text =
+                if (it.data.vocation == "其他") it.data.vocationOther else it.data.vocation
+            if (it.data.zone != null) {
+                tv_area.text = getZoneList()[it.data.zone]
             }
-            tv_id_num.text = it.idNum
-            tv_admission_number.text = it.hospitalIds
-            tv_patient_phone.text = it.phone
-            tv_relation_phone.text = it.familyPhone
+            tv_id_num.text = it.data.idNum
+            tv_admission_number.text = it.data.hospitalIds
+            tv_patient_phone.text = it.data.phone
+            tv_relation_phone.text = it.data.familyPhone
         })
 //        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
 //            if(it.status == Status.FAILED){
@@ -80,44 +79,64 @@ class DemographicsFragment : Fragment() {
 //        })
     }
 
-    private fun saveData(){
+    private fun saveData() {
         val sex = getSexList().indexOf(tv_sex.text)
         val date = tv_birthday.text.toString()
         var race = tv_race.text.toString()
         var raceOther = tv_race.text.toString()
-        if(!getRaceList().contains(race)){
+        if (!getRaceList().contains(race)) {
             race = "其他"
-        }else{
+        } else {
             raceOther = ""
         }
         var marriage = tv_marital_status.text.toString()
         var marriageOther = tv_marital_status.text.toString()
-        if(!getMarriageList().contains(marriage)){
+        if (!getMarriageList().contains(marriage)) {
             marriage = "其他"
-        }else{
+        } else {
             marriageOther = ""
         }
-        val degree = if(getDegreeList().indexOf(tv_degree.text)==-1) null else getDegreeList().indexOf(tv_degree.text)
+        val degree =
+            if (getDegreeList().indexOf(tv_degree.text) == -1) null else getDegreeList().indexOf(
+                tv_degree.text
+            )
         var vocation = tv_occupation.text.toString()
         var vocationOther = tv_occupation.text.toString()
-        if(!getVocationList().contains(vocation)){
+        if (!getVocationList().contains(vocation)) {
             vocation = "其他"
-        }else{
+        } else {
             vocationOther = ""
         }
-        val zone = if(getZoneList().indexOf(tv_area.text)==-1) null else getZoneList().indexOf(tv_area.text)
+        val zone =
+            if (getZoneList().indexOf(tv_area.text) == -1) null else getZoneList().indexOf(tv_area.text)
         val idNum = tv_id_num.text.toString()
         val hospitalIds = tv_admission_number.text.toString()
         val phone = tv_patient_phone.text.toString()
         val familyPhone = tv_relation_phone.text.toString()
-        val demographyBean = DemographyBean(date,degree,familyPhone,hospitalIds,idNum,marriage,marriageOther,phone,race,raceOther,sex,vocation,vocationOther,zone)
-        mViewModel.editDemography(mSampleId,demographyBean).observe(viewLifecycleOwner, Observer {
-            if(it.code==200){
-                ToastUtils.showShort("人口统计学表单修改成功")
-            }else{
-                ToastUtils.showShort("人口统计学表单修改失败")
-            }
-        })
+        val editDemographyBean = EditDemographyBean(
+            date,
+            degree,
+            familyPhone,
+            hospitalIds,
+            idNum,
+            marriage,
+            marriageOther,
+            phone,
+            race,
+            raceOther,
+            sex,
+            vocation,
+            vocationOther,
+            zone
+        )
+        mViewModel.editDemography(mSampleId, editDemographyBean)
+            .observe(viewLifecycleOwner, Observer {
+                if (it.code == 200) {
+                    ToastUtils.showShort("人口统计学表单修改成功")
+                } else {
+                    ToastUtils.showShort("人口统计学表单修改失败")
+                }
+            })
     }
 
     private fun initUI() {
@@ -130,25 +149,26 @@ class DemographicsFragment : Fragment() {
             }.show()
         }
         cl_birthday.setOnClickListener {
-            showDatePickerDialog(tv_birthday,parentFragmentManager)
+            showDatePickerDialog(tv_birthday, parentFragmentManager)
         }
         cl_race.setOnClickListener {
-            XPopup.Builder(context).asCenterList("人种", arrayOf("白人", "黑人","东方人","其他")) { pos, text ->
-                if(pos<3){
-                    tv_race.text = text
-                }else{
-                    XPopup.Builder(context).asInputConfirm("人种","请输入人种名称"){
-                        tv_race.text = it
-                    }.show()
-                }
-            }.show()
+            XPopup.Builder(context)
+                .asCenterList("人种", arrayOf("白人", "黑人", "东方人", "其他")) { pos, text ->
+                    if (pos < 3) {
+                        tv_race.text = text
+                    } else {
+                        XPopup.Builder(context).asInputConfirm("人种", "请输入人种名称") {
+                            tv_race.text = it
+                        }.show()
+                    }
+                }.show()
         }
         cl_marital_status.setOnClickListener {
-            XPopup.Builder(context).asCenterList("婚姻状况", arrayOf("已婚", "未婚","其他")) { pos, text ->
-                if(pos<2){
+            XPopup.Builder(context).asCenterList("婚姻状况", arrayOf("已婚", "未婚", "其他")) { pos, text ->
+                if (pos < 2) {
                     tv_marital_status.text = text
-                }else{
-                    XPopup.Builder(context).asInputConfirm("婚姻状况","请输入婚姻状况"){
+                } else {
+                    XPopup.Builder(context).asInputConfirm("婚姻状况", "请输入婚姻状况") {
                         tv_marital_status.text = it
                     }.show()
                 }
@@ -160,11 +180,14 @@ class DemographicsFragment : Fragment() {
             }.show()
         }
         cl_occupation.setOnClickListener {
-            XPopup.Builder(context).asCenterList("职业", arrayOf("脑力劳动者", "体力劳动者","学生","离退休","无业或失业","其他，请描述")) { pos, text ->
-                if(pos<5){
+            XPopup.Builder(context).asCenterList(
+                "职业",
+                arrayOf("脑力劳动者", "体力劳动者", "学生", "离退休", "无业或失业", "其他，请描述")
+            ) { pos, text ->
+                if (pos < 5) {
                     tv_occupation.text = text
-                }else{
-                    XPopup.Builder(context).asInputConfirm("职业","请输入职业名称"){
+                } else {
+                    XPopup.Builder(context).asInputConfirm("职业", "请输入职业名称") {
                         tv_occupation.text = it
                     }.show()
                 }
@@ -176,22 +199,22 @@ class DemographicsFragment : Fragment() {
             }.show()
         }
         cl_id_num.setOnClickListener {
-            XPopup.Builder(context).asInputConfirm("身份证号","请输入身份证号"){
+            XPopup.Builder(context).asInputConfirm("身份证号", "请输入身份证号") {
                 tv_id_num.text = it
             }.show()
         }
         cl_admission_number.setOnClickListener {
-            XPopup.Builder(context).asInputConfirm("住院号","请输入住院号"){
+            XPopup.Builder(context).asInputConfirm("住院号", "请输入住院号") {
                 tv_admission_number.text = it
             }.show()
         }
         cl_patient_phone.setOnClickListener {
-            XPopup.Builder(context).asInputConfirm("患者电话","请输入患者电话"){
+            XPopup.Builder(context).asInputConfirm("患者电话", "请输入患者电话") {
                 tv_patient_phone.text = it
             }.show()
         }
         cl_relation_phone.setOnClickListener {
-            XPopup.Builder(context).asInputConfirm("家属电话","请输入家属电话"){
+            XPopup.Builder(context).asInputConfirm("家属电话", "请输入家属电话") {
                 tv_relation_phone.text = it
             }.show()
         }

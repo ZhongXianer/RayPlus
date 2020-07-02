@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.lifecycle.Observer
 import com.ksballetba.rayplus.R
-import com.ksballetba.rayplus.data.bean.TreatmentRecordBodyBean
+import com.ksballetba.rayplus.data.bean.treatmentVisitData.TreatmentRecordBodyBean
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.TreatmentVisitDetailActivity
 import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.CYCLE_NUMBER_KEY
@@ -16,10 +16,8 @@ import com.ksballetba.rayplus.util.parseDefaultContent
 import com.ksballetba.rayplus.util.showDatePickerDialog
 import com.ksballetba.rayplus.viewmodel.TreatmentVisitViewModel
 import com.lxj.xpopup.XPopup
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.android.synthetic.main.activity_treatment_record.*
 import org.jetbrains.anko.toast
-import java.util.Calendar
 
 class TreatmentRecordActivity : AppCompatActivity() {
 
@@ -98,9 +96,10 @@ class TreatmentRecordActivity : AppCompatActivity() {
         val startTime = parseDefaultContent(tv_treatment_start_date.text.toString())
         val endTime = parseDefaultContent(tv_treatment_end_date.text.toString())
         val description = parseDefaultContent(tv_dose_usage.text.toString())
-        val treatmentRecordBody = TreatmentRecordBodyBean(
-            description, endTime, medicineName, startTime, treatmentName, treatmentRecordId
-        )
+        val treatmentRecordBody =
+            TreatmentRecordBodyBean(
+                description, endTime, medicineName, startTime, treatmentName, treatmentRecordId
+            )
         mViewModel.editTreatmentRecord(sampleId, cycleNumber, treatmentRecordBody).observe(this,
             Observer {
                 if(it.code==200){

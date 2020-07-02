@@ -86,8 +86,10 @@
         <Button
             android:id="@+id/submit_button"
             android:layout_width="60dp"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:text="提交"
+            android:textColor="@color/background"
+            android:background="@color/footer_color"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/submit_status"/>

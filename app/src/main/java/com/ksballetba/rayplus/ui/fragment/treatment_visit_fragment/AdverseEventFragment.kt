@@ -3,27 +3,25 @@ package com.ksballetba.rayplus.ui.fragment.treatment_visit_fragment
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
-
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.AdverseEventBodyBean
 import com.ksballetba.rayplus.data.bean.AdverseEventListBean
-import com.ksballetba.rayplus.data.bean.TreatmentRecordListBean
-import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.treatment_visit_activity.AdverseEventActivity
 import com.ksballetba.rayplus.ui.adapter.AdverseEventAdapter
 import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.CYCLE_NUMBER_KEY
 import com.ksballetba.rayplus.util.getAdverseEventMeasure
 import com.ksballetba.rayplus.util.getAdverseEventMedicineRelation
+import com.ksballetba.rayplus.util.getAdverseEventServer
 import com.ksballetba.rayplus.util.getTreatmentVisitViewModel
 import com.ksballetba.rayplus.viewmodel.TreatmentVisitViewModel
 import com.lxj.xpopup.XPopup
@@ -86,7 +84,7 @@ class AdverseEventFragment : Fragment() {
                 adverseEvent.adverseEventId,
                 adverseEvent.adverseEventName,
                 adverseEvent.dieTime,
-                adverseEvent.isServerEvent,
+                getAdverseEventServer().indexOf(adverseEvent.isServerEvent),
                 adverseEvent.isUsingMedicine,
                 getAdverseEventMeasure().indexOf(adverseEvent.measure),
                 adverseEvent.medicineMeasure,
@@ -110,9 +108,9 @@ class AdverseEventFragment : Fragment() {
                 adverseEventBody
             )
         }
-        mAdapter.setOnItemChildClickListener { adapter, view, position ->
+        mAdapter.setOnItemChildClickListener { _, _, position ->
             XPopup.Builder(context).asConfirm("信息", "请问是否确认删除") {
-                deleteAdverseEvent(mList[position].adverseEventId, position)
+                mList[position].adverseEventId?.let { deleteAdverseEvent(it, position) }
             }.show()
         }
     }

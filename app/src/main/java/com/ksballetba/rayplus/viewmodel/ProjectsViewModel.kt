@@ -9,17 +9,25 @@ import com.ksballetba.rayplus.data.source.remote.ProjectDataSource
 
 class ProjectsViewModel constructor(private var projectDataSource: ProjectDataSource):ViewModel(){
 
-    fun getUserName(): LiveData<UserNameBean> {
-        val result = MutableLiveData<UserNameBean>()
-        projectDataSource.getUserName {
+//    fun getUserName(): LiveData<UserNameBean> {
+//        val result = MutableLiveData<UserNameBean>()
+//        projectDataSource.getUserName {
+//            result.postValue(it)
+//        }
+//        return result
+//    }
+
+    fun fetchData(projectId: Int): LiveData<ProjectListBean.Data> {
+        val result = MutableLiveData<ProjectListBean.Data>()
+        projectDataSource.loadInitial(projectId) {
             result.postValue(it)
         }
         return result
     }
 
-    fun fetchData(): LiveData<MutableList<ProjectListBean.Data>> {
-        val result = MutableLiveData<MutableList<ProjectListBean.Data>>()
-        projectDataSource.loadInitial {
+    fun getAuthorization(projectId: Int, userId: Int): LiveData<MutableList<String?>> {
+        val result = MutableLiveData<MutableList<String?>>()
+        projectDataSource.getProjectAuthorization(projectId,userId){
             result.postValue(it)
         }
         return result

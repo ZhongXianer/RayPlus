@@ -1,28 +1,29 @@
 package com.ksballetba.rayplus.ui.activity
 
-import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ksballetba.rayplus.R
-import com.ksballetba.rayplus.data.bean.SampleEditBodyBean
-import com.ksballetba.rayplus.data.bean.SampleListBean
-import com.ksballetba.rayplus.data.bean.SampleSubmitBodyBean
+import com.ksballetba.rayplus.data.bean.sampleData.SampleEditBodyBean
+import com.ksballetba.rayplus.data.bean.sampleData.SampleListBean
+import com.ksballetba.rayplus.data.bean.sampleData.SampleSubmitBodyBean
 import com.ksballetba.rayplus.network.Status
-import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.LOGIN_TOKEN
-import com.ksballetba.rayplus.ui.activity.LoginActivity.Companion.SHARED_PREFERENCE_NAME
 import com.ksballetba.rayplus.ui.activity.MainActivity.Companion.PROJECT_ID
 import com.ksballetba.rayplus.ui.activity.SampleEditActivity.Companion.REFRESH_LAST_PAGE
 import com.ksballetba.rayplus.ui.adapter.SamplesAdapter
 import com.ksballetba.rayplus.util.getSamplesViewModel
+import com.ksballetba.rayplus.util.getUserId
+import com.ksballetba.rayplus.util.judgeUnlockSample
+import com.ksballetba.rayplus.util.reLogin
 import com.ksballetba.rayplus.viewmodel.SamplesViewModel
 import com.lxj.xpopup.XPopup
 import kotlinx.android.synthetic.main.activity_sample.*
@@ -30,7 +31,7 @@ import org.jetbrains.anko.toast
 
 class SampleActivity : AppCompatActivity() {
 
-    companion object{
+    companion object {
         const val TAG = "SampleActivity"
         const val SAMPLE_ID = "SAMPLE_ID"
         const val SAMPLE_BODY = "SAMPLE_BODY"
@@ -45,9 +46,10 @@ class SampleActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        window.decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.statusBarColor = ContextCompat.getColor(this,R.color.colorPrimary)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimary)
         setContentView(R.layout.activity_sample)
         initUI()
         initList()
@@ -55,7 +57,7 @@ class SampleActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        if(intent?.action == REFRESH_LAST_PAGE){
+        if (intent?.action == REFRESH_LAST_PAGE) {
             srl_sample.autoRefresh()
         }
     }
@@ -69,58 +71,79 @@ class SampleActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun initUI(){
+    private fun initUI() {
         setSupportActionBar(tb_sample)
         initRefresh()
-        mProjectId = intent.getIntExtra(PROJECT_ID,0)
+        mProjectId = intent.getIntExtra(PROJECT_ID, 0)
         fab_add_sample.setOnClickListener {
-            navigateToSampleEditActivity(-1,null)
+            navigateToSampleEditActivity(-1, null)
         }
     }
 
-    private fun initList(){
+    private fun initList() {
         mViewModel = getSamplesViewModel(this)
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = RecyclerView.VERTICAL
         rv_sample.layoutManager = layoutManager
-        mSamplesAdapter = SamplesAdapter(R.layout.item_sample,mSampleList)
+        mSamplesAdapter = SamplesAdapter(R.layout.item_sample, mSampleList)
         mSamplesAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
         rv_sample.adapter = mSamplesAdapter
         mSamplesAdapter.setOnItemClickListener { _, _, position ->
             navigateToCRFActivity(mSampleList[position].sampleId)
         }
-        mSamplesAdapter.setOnItemChildClickListener { adapter, view, position ->
-            when(view.id){
-                R.id.btn_sample_edit->{
-                    val sample = mSampleList[position]
-                    val sampleBody = SampleEditBodyBean(
-                        sample.date,
-                        sample.groupId,
-                        sample.idNum,
-                        sample.inGroupTime,
-                        sample.patientIds,
-                        sample.patientName,
-                        sample.researchCenterId,
-                        sample.sampleId,
-                        if(sample.sex == "男") 0 else 1,
-                        sample.signTime
-                    )
-                    navigateToSampleEditActivity(mSampleList[position].sampleId,sampleBody)
+        mSamplesAdapter.setOnItemChildClickListener { _, view, position ->
+            when (view.id) {
+                R.id.btn_sample_edit -> {
+                    if (mSampleList[position].submitStatus != 2) {
+                        val sample = mSampleList[position]
+                        val sampleBody =
+                            SampleEditBodyBean(
+                                sample.date,
+                                sample.groupId,
+                                sample.idNum,
+                                sample.inGroupTime,
+                                sample.patientIds,
+                                sample.patientName,
+//                            sample.projectId,
+                                sample.researchCenterId,
+                                sample.sampleId,
+                                if (sample.sex == "男") 0 else 1,
+                                sample.signTime
+                            )
+                        navigateToSampleEditActivity(mSampleList[position].sampleId, sampleBody)
+                    }
                 }
-                R.id.btn_sample_submit->{
-                    XPopup.Builder(this).asConfirm("信息","请问是否确认提交到总中心"){
-                        submitSample(mSampleList[position].sampleId)
-                    }.show()
+                R.id.btn_sample_submit -> {
+                    if (mSampleList[position].submitStatus != 2) {
+                        XPopup.Builder(this).asConfirm("信息", "请问是否确认提交到总中心") {
+                            submitSample(mSampleList[position].sampleId)
+                        }.show()
+                    }
                 }
-                R.id.iv_delete_item_sample->{
-                    XPopup.Builder(this).asConfirm("信息", "请问是否确认删除") {
-                        deleteSample(mSampleList[position].sampleId,position)
-                    }.show()
+                R.id.iv_delete_item_sample -> {
+                    if (mSampleList[position].submitStatus == 2) {
+                        toast("已全部提交，不能删除！")
+                    } else {
+                        XPopup.Builder(this).asConfirm("信息", "请问是否确认删除") {
+                            deleteSample(mSampleList[position].sampleId, position)
+                        }.show()
+                    }
+                }
+                R.id.btn_sample_unlock -> {
+                    if (judgeUnlockSample() &&
+                        (mSampleList[position].submitStatus == 1 || mSampleList[position].submitStatus == 2)
+                    ) {
+                        XPopup.Builder(this)
+                            .asConfirm("信息", "请问是否确认解锁${mSampleList[position].patientIds}号样本") {
+                                unlockSample(mSampleList[position].sampleId)
+                            }.show()
+                    }
                 }
             }
         }
+
         mViewModel.fetchLoadStatus().observe(this, Observer {
-            when(it.status){
+            when (it.status) {
                 Status.RUNNING -> {
                     srl_sample.autoRefresh()
                 }
@@ -128,7 +151,10 @@ class SampleActivity : AppCompatActivity() {
                     srl_sample.finishRefresh()
                 }
                 Status.FAILED -> {
+//                    Log.d(TAG, "获取失败")
+//                    reLogin(this)
                     toast(it.msg.toString())
+                    Log.d(TAG, it.msg.toString())
                 }
             }
         })
@@ -141,53 +167,76 @@ class SampleActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadInitial(){
-        mViewModel.fetchData(mProjectId).observe(this, Observer {
+    private fun loadInitial() {
+        mViewModel.fetchData().observe(this, Observer {
             mSampleList = it
+            if (mSampleList.size == 0)
+                Log.d(TAG, "样本为空")
             mSamplesAdapter.setNewData(mSampleList)
         })
     }
 
-    private fun loadMore(){
-        mViewModel.fetchMore(mProjectId).observe(this, Observer {
+    private fun loadMore() {
+        mViewModel.fetchMore().observe(this, Observer {
             mSamplesAdapter.addData(it)
             srl_sample.finishLoadMore()
         })
     }
 
-
-    private fun navigateToSampleEditActivity(sampleId: Int,sampleBody: SampleEditBodyBean?){
-        val intent = Intent(this,SampleEditActivity::class.java)
-        intent.putExtra(SAMPLE_ID,sampleId)
-        if(sampleId>0){
-            intent.putExtra(SAMPLE_BODY,sampleBody)
+    private fun navigateToSampleEditActivity(sampleId: Int, sampleBody: SampleEditBodyBean?) {
+        val intent = Intent(this, SampleEditActivity::class.java)
+        intent.putExtra(SAMPLE_ID, sampleId)
+        if (sampleId > 0) {
+            intent.putExtra(SAMPLE_BODY, sampleBody)
         }
         startActivity(intent)
     }
 
-    private fun navigateToCRFActivity(sampleId: Int){
-        val intent = Intent(this,CRFActivity::class.java)
-        intent.putExtra(SAMPLE_ID,sampleId)
+    private fun navigateToCRFActivity(sampleId: Int) {
+        val intent = Intent(this, CRFActivity::class.java)
+        intent.putExtra(SAMPLE_ID, sampleId)
         startActivity(intent)
     }
 
-    private fun submitSample(sampleId:Int){
-        mViewModel.submitSample(SampleSubmitBodyBean(sampleId)).observe(this, Observer {
-            if(it.code==200){
+    private fun submitSample(sampleId: Int) {
+        mViewModel.submitSample(
+            SampleSubmitBodyBean(
+                sampleId
+            )
+        ).observe(this, Observer {
+            if (it.code == 200) {
                 toast("样本提交成功")
-            }else{
+                srl_sample.autoRefresh()
+            } else if (it.code == 10031 || it.code == 10032) {
+                reLogin(this)
+            } else {
                 toast("样本提交失败")
             }
         })
     }
 
-    private fun deleteSample(sampleId: Int, pos: Int){
+    private fun deleteSample(sampleId: Int, pos: Int) {
         mViewModel.deleteSample(sampleId).observe(this, Observer {
-            if(it.code==200){
+            if (it.code == 200) {
                 toast("样本删除成功")
                 mSamplesAdapter.remove(pos)
-            }else{
+            } else if (it.code == 10031 || it.code == 10032) {
+                reLogin(this)
+            } else {
                 toast("样本删除失败")
+            }
+        })
+    }
+
+    private fun unlockSample(sampleId: Int) {
+        mViewModel.unlockSample(sampleId).observe(this, Observer {
+            if (it.code == 200) {
+                toast("样本解锁成功")
+                srl_sample.autoRefresh()
+            } else if (it.code == 10031 || it.code == 10032) {
+                reLogin(this)
+            } else {
+                toast("样本解锁失败")
             }
         })
     }

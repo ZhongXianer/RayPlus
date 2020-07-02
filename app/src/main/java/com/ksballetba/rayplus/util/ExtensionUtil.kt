@@ -64,7 +64,7 @@ fun parseLabInspectionRank(idx: Int): Int? {
     }
 }
 
-fun getSampleSubmitStatus()= arrayOf("未提交","部分提交","全部提交","已解锁")
+fun getSampleSubmitStatus() = arrayOf("未提交", "部分提交", "全部提交", "已解锁")
 
 fun getResearchCenterList() =
     arrayOf("同济医院", "襄阳市第一人民医院", "襄阳市中医医院", "孝感市中心医院", "荆州中心医院", "宜昌市中心医院", "恩施州中心医院", "十堰市太和医院")
@@ -160,6 +160,8 @@ fun getLastFrontBestEfficacyList() =
 
 fun getMainPhysicalSignList() = arrayOf("高血压", "腹泻", "皮疹", "蛋白尿", "出血")
 
+fun getAdverseEventServer() = arrayOf("不良事件", "严重不良事件")
+
 fun getAdverseEventMeasure() = arrayOf("剂量不变", "减少剂量", "暂停用药", "停止用药", "实验用药已结束")
 
 fun getAdverseEventMedicineMeasure() = arrayOf("继续用药", "减少剂量", "药物暂停后又恢复", "停止用药")
@@ -175,17 +177,21 @@ fun getAdverseEventToxicityClassify() = arrayOf("1级", "2级", "3级", "4级", 
 fun getAdverseEventSAEState() =
     arrayOf("死亡", "导致住院", "延长住院时间", "伤残", "功能障碍", "导致先天畸形", "危及生命", "怀孕")
 
+fun getExistenceStatus() = arrayOf("存活", "消失")
+
 fun getTreatmentVisitSubmitStatus() = arrayOf("未提交", "已提交")
 
 fun getSurvivalStatus() = arrayOf("死亡", "存活", "失联")
 
 fun getSurvivalSubmitStatus() = arrayOf("未提交", "已提交")
 
+fun getSubmitRemind()= arrayOf("提交后将会锁定该访视至不可编辑状态，请确认访视数据完善后提交。","已提交的访视处于锁定状态，如需修改请联系总中心")
+
 fun getInterviewWay() = arrayOf("电话", "门诊", "住院")
 
-fun getDrinkingFrequency() = arrayOf("0=几乎不", "1=每周1-2次", "2=每周3-4次", "3=每周5-7次")
+fun getDrinkingFrequency() = arrayOf("几乎不", "每周1-2次", "每周3-4次", "每周5-7次")
 
-fun getDrinkingSize() = arrayOf("0=每次少量", "1=每周微醉", "2=偶尔大醉", "3=每次大醉")
+fun getDrinkingSize() = arrayOf("每次少量", "每周微醉", "偶尔大醉", "每次大醉")
 
 fun getOSMethod() = arrayOf(
     "1.街道办开具死亡证明",

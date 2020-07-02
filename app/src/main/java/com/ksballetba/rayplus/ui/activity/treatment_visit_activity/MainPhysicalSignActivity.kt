@@ -7,7 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
 import com.ksballetba.rayplus.R
-import com.ksballetba.rayplus.data.bean.MainPhysicalSignBodyBean
+import com.ksballetba.rayplus.data.bean.treatmentVisitData.MainPhysicalSignBodyBean
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.TreatmentVisitDetailActivity
 import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.CYCLE_NUMBER_KEY
@@ -18,10 +18,8 @@ import com.ksballetba.rayplus.util.parseDefaultContent
 import com.ksballetba.rayplus.util.showDatePickerDialog
 import com.ksballetba.rayplus.viewmodel.TreatmentVisitViewModel
 import com.lxj.xpopup.XPopup
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.android.synthetic.main.activity_main_physical_sign.*
 import org.jetbrains.anko.toast
-import java.util.Calendar
 
 class MainPhysicalSignActivity : AppCompatActivity() {
 
@@ -108,14 +106,15 @@ class MainPhysicalSignActivity : AppCompatActivity() {
             if (cl_end_date.visibility == View.VISIBLE) parseDefaultContent(tv_end_date.text.toString()) else ""
         val existence =
             if (parseDefaultContent(tv_exist_status.text.toString()) == "存在") "0" else "1"
-        val mainPhysicalSignBody = MainPhysicalSignBodyBean(
-            endTime,
-            existence,
-            mainSymptomId,
-            startTime,
-            symptomDescription,
-            symptomDescriptionOther
-        )
+        val mainPhysicalSignBody =
+            MainPhysicalSignBodyBean(
+                endTime,
+                existence,
+                mainSymptomId,
+                startTime,
+                symptomDescription,
+                symptomDescriptionOther
+            )
         mViewModel.editMainPhysicalSign(sampleId, cycleNumber, mainPhysicalSignBody).observe(this,
             Observer {
                 if(it.code==200){

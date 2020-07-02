@@ -40,17 +40,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_ECOG_score_title" />
 
-        <TextView
+        <Button
             android:id="@+id/tv_save_ECOG_score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/save"
-            android:textColor="@color/primary_text"
-            android:textSize="@dimen/material_typography_body1"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:background="@color/footer_color"
             android:layout_marginEnd="@dimen/item_left_margin"
+            android:text="@string/save"
+            android:textColor="@color/background"
+            android:textSize="@dimen/material_typography_body1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

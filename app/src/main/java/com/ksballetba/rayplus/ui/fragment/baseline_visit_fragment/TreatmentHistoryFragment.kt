@@ -14,9 +14,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 import com.ksballetba.rayplus.R
-import com.ksballetba.rayplus.data.bean.TreatmentHistoryBodyBean
-import com.ksballetba.rayplus.data.bean.TreatmentHistoryListBean
-import com.ksballetba.rayplus.network.Status
+import com.ksballetba.rayplus.data.bean.baseLineData.TreatmentHistoryListBean
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.TreatmentHistoryActivity
 import com.ksballetba.rayplus.ui.adapter.TreatmentHistoryAdapter
@@ -56,9 +54,9 @@ class TreatmentHistoryFragment : Fragment() {
         loadData()
     }
 
-    private fun initUI(){
+    private fun initUI() {
         fab_treatment_history.setOnClickListener {
-            navigateToTreatmentHistoryEditPage(mSampleId,null)
+            navigateToTreatmentHistoryEditPage(mSampleId, null)
         }
     }
 
@@ -81,9 +79,9 @@ class TreatmentHistoryFragment : Fragment() {
                 treatmentHistory
             )
         }
-        mAdapter.setOnItemChildClickListener { adapter, view, position ->
+        mAdapter.setOnItemChildClickListener { _, _, position ->
             XPopup.Builder(context).asConfirm("信息", "请问是否确认删除") {
-                deleteTreatmentHistory(mList[position].diagnoseNumber?:1, position)
+                deleteTreatmentHistory(mList[position].id, position)
             }.show()
 
         }
@@ -108,7 +106,7 @@ class TreatmentHistoryFragment : Fragment() {
     ) {
         val intent = Intent(activity, TreatmentHistoryActivity::class.java)
         intent.putExtra(SAMPLE_ID, sampleId)
-        if (treatmentHistoryBodyBean!=null) {
+        if (treatmentHistoryBodyBean != null) {
             intent.putExtra(TREATMENT_HISTORY_BODY, treatmentHistoryBodyBean)
         }
         startActivity(intent)

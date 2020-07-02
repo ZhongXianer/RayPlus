@@ -10,15 +10,12 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.apkfuns.logutils.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 import com.ksballetba.rayplus.R
-import com.ksballetba.rayplus.data.bean.PhysicalExaminationBodyBean
-import com.ksballetba.rayplus.data.bean.PhysicalExaminationListBean
-import com.ksballetba.rayplus.network.Status
-import com.ksballetba.rayplus.ui.activity.SampleActivity
+import com.ksballetba.rayplus.data.bean.baseLineData.PhysicalExaminationBodyBean
+import com.ksballetba.rayplus.data.bean.baseLineData.PhysicalExaminationListBean
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.PhysicalExaminationActivity
 import com.ksballetba.rayplus.ui.adapter.PhysicalExaminationAdapter
@@ -79,15 +76,16 @@ class PhysicalExaminationFragment : Fragment() {
         rv_physical_examination.adapter = mAdapter
         mAdapter.setOnItemClickListener { _, _, position ->
             val physicalExamination = mList[position]
-            val physicalExaminationBody = PhysicalExaminationBodyBean(
-                physicalExamination.breathFrequency,
-                physicalExamination.heartRate,
-                physicalExamination.maxpressure,
-                physicalExamination.minpressure,
-                physicalExamination.reportId,
-                physicalExamination.temperature,
-                physicalExamination.time
-            )
+            val physicalExaminationBody =
+                PhysicalExaminationBodyBean(
+                    physicalExamination.breathFrequency,
+                    physicalExamination.heartRate,
+                    physicalExamination.maxpressure,
+                    physicalExamination.minpressure,
+                    physicalExamination.reportId,
+                    physicalExamination.temperature,
+                    physicalExamination.time
+                )
             navigateToPhysicalExaminationEditPage(
                 mSampleId,
                 mList[position].reportId,

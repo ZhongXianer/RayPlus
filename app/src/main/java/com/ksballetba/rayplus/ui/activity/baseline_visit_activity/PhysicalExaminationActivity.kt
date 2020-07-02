@@ -4,9 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.core.text.isDigitsOnly
 import com.ksballetba.rayplus.R
-import com.ksballetba.rayplus.data.bean.PhysicalExaminationBodyBean
+import com.ksballetba.rayplus.data.bean.baseLineData.PhysicalExaminationBodyBean
 import com.ksballetba.rayplus.ui.activity.CRFActivity
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.fragment.baseline_visit_fragment.PhysicalExaminationFragment.Companion.PHYSICAL_EXAMINATION_BODY
@@ -16,10 +15,8 @@ import com.ksballetba.rayplus.util.parseDefaultContent
 import com.ksballetba.rayplus.util.showDatePickerDialog
 import com.ksballetba.rayplus.viewmodel.BaselineVisitViewModel
 import com.lxj.xpopup.XPopup
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.android.synthetic.main.activity_physical_examination.*
 import org.jetbrains.anko.toast
-import java.util.*
 
 class PhysicalExaminationActivity : AppCompatActivity() {
 
@@ -107,15 +104,16 @@ class PhysicalExaminationActivity : AppCompatActivity() {
         val maxpressure = tv_blood_systolic_pressure.text.toString().toIntOrNull()
         val minpressure = tv_blood_diastolic_pressure.text.toString().toIntOrNull()
         val heartRate = tv_heart_rate.text.toString().toIntOrNull()
-        val physicalExaminationBodyBean = PhysicalExaminationBodyBean(
-            breathFrequency,
-            heartRate,
-            maxpressure,
-            minpressure,
-            reportId,
-            temperature,
-            time
-        )
+        val physicalExaminationBodyBean =
+            PhysicalExaminationBodyBean(
+                breathFrequency,
+                heartRate,
+                maxpressure,
+                minpressure,
+                reportId,
+                temperature,
+                time
+            )
         mViewModel.editPhysicalExamination(sampleId,physicalExaminationBodyBean).observe(this,androidx.lifecycle.Observer {
             if(it.code==200){
                 toast("体格报告单操作成功")

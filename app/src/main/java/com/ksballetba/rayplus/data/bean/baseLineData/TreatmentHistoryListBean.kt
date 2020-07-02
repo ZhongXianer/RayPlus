@@ -1,4 +1,4 @@
-package com.ksballetba.rayplus.data.bean
+package com.ksballetba.rayplus.data.bean.baseLineData
 
 
 import android.os.Parcel
@@ -121,7 +121,8 @@ data class TreatmentHistoryListBean(
         val startTime: String?, // 2020-01-23
         val tmb: String?, // 其他
         @SerializedName("tmb_other")
-        val tmbOther: String? // 2
+        val tmbOther: String?,// 2
+        val id: Int
     ) : Parcelable {
         constructor(source: Parcel) : this(
             source.readString(),
@@ -179,7 +180,8 @@ data class TreatmentHistoryListBean(
             source.readValue(Int::class.java.classLoader) as Int?,
             source.readString(),
             source.readString(),
-            source.readString()
+            source.readString(),
+            source.readInt()
         )
 
         override fun describeContents() = 0
@@ -246,7 +248,11 @@ data class TreatmentHistoryListBean(
         companion object {
             @JvmField
             val CREATOR: Parcelable.Creator<Data> = object : Parcelable.Creator<Data> {
-                override fun createFromParcel(source: Parcel): Data = Data(source)
+                override fun createFromParcel(source: Parcel): Data =
+                    Data(
+                        source
+                    )
+
                 override fun newArray(size: Int): Array<Data?> = arrayOfNulls(size)
             }
         }

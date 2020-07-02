@@ -32,8 +32,8 @@
         android:id="@+id/ll_account"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="16dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,51 +52,53 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:hint="@string/input_account"
+            android:singleLine="true"
             android:textSize="15sp" />
 
     </LinearLayout>
 
 
-        <LinearLayout
-            android:id="@+id/ll_pwd"
+    <LinearLayout
+        android:id="@+id/ll_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/ll_account">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_lock_outline_grey_700_24dp" />
+
+        <EditText
+            android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/ll_account"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_lock_outline_grey_700_24dp"/>
-
-            <EditText
-                android:id="@+id/et_password"
-                android:inputType="textPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:layout_marginStart="8dp"
-                android:hint="@string/input_pwd"/>
+            android:layout_marginStart="8dp"
+            android:hint="@string/input_pwd"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:textSize="15sp" />
 
 
-        </LinearLayout>
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
         android:layout_height="42dp"
-        android:background="@color/colorPrimary"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="36dp"
+        android:background="@color/footer_color"
         android:text="@string/login"
         android:textColor="@color/icons"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginEnd="36dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ll_pwd" />

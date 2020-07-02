@@ -14,9 +14,10 @@ import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 import com.ksballetba.rayplus.R
-import com.ksballetba.rayplus.data.bean.SurvivalVisitBodyBean
-import com.ksballetba.rayplus.data.bean.SurvivalVisitListBean
+import com.ksballetba.rayplus.data.bean.survivalVisitData.SurvivalVisitBodyBean
+import com.ksballetba.rayplus.data.bean.survivalVisitData.SurvivalVisitListBean
 import com.ksballetba.rayplus.network.Status
+import com.ksballetba.rayplus.ui.activity.LoginActivity
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.survival_visit_activity.SurvivalVisitActivity
 import com.ksballetba.rayplus.ui.adapter.SurvivalVisitAdapter
@@ -79,21 +80,22 @@ class SurvivalVisitFragment : Fragment() {
             if (survivalVisit.isSubmit == 1) {
                 ToastUtils.showShort("已提交！不能再编辑")
             } else {
-                val survivalVisitBody = SurvivalVisitBodyBean(
-                    survivalVisit.dieReason,
-                    survivalVisit.dieTime,
-                    survivalVisit.hasOtherTreatment,
-                    survivalVisit.interviewId,
-                    survivalVisit.interviewTime,
-                    survivalVisit.interviewWay,
-                    survivalVisit.lastTimeSurvival,
-                    survivalVisit.oSMethod,
-                    survivalVisit.otherMethod,
-                    survivalVisit.otherReason,
-                    survivalVisit.statusConfirmTime,
-                    survivalVisit.survivalStatus,
-                    survivalVisit.isSubmit
-                )
+                val survivalVisitBody =
+                    SurvivalVisitBodyBean(
+                        survivalVisit.dieReason,
+                        survivalVisit.dieTime,
+                        survivalVisit.hasOtherTreatment,
+                        survivalVisit.interviewId,
+                        survivalVisit.interviewTime,
+                        survivalVisit.interviewWay,
+                        survivalVisit.lastTimeSurvival,
+                        survivalVisit.oSMethod,
+                        survivalVisit.otherMethod,
+                        survivalVisit.otherReason,
+                        survivalVisit.statusConfirmTime,
+                        survivalVisit.survivalStatus,
+                        survivalVisit.isSubmit
+                    )
                 navigateToSurvivalVisitEditPage(
                     mSampleId,
                     survivalVisitBody
@@ -165,7 +167,7 @@ class SurvivalVisitFragment : Fragment() {
                         ToastUtils.showShort("删除成功")
                         mAdapter.remove(pos)
                     } else {
-                        ToastUtils.showShort("删除失败")
+                        invalidToken()
                     }
                 })
     }
@@ -189,7 +191,7 @@ class SurvivalVisitFragment : Fragment() {
                         ToastUtils.showShort("提交成功")
                         initList()
                     } else {
-                        ToastUtils.showShort("提交失败")
+                        invalidToken()
                     }
                 })
     }
@@ -202,5 +204,13 @@ class SurvivalVisitFragment : Fragment() {
         srl_survival_visit.setEnableHeaderTranslationContent(true)//是否下拉Header的时候向下平移列表或者内容
         srl_survival_visit.setEnableFooterTranslationContent(true)//是否上拉Footer的时候向上平移列表或者内容
         srl_survival_visit.setEnableLoadMoreWhenContentNotFull(true)
+    }
+
+    private fun invalidToken(){
+
+        XPopup.Builder(context).asLoading("操作失败！请尝试重新登录...").show()
+        val intent=Intent(activity,LoginActivity::class.java)
+        startActivity(intent)
+        activity?.finish()
     }
 }

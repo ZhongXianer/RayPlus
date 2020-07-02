@@ -14,12 +14,12 @@ import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 import com.ksballetba.rayplus.R
-import com.ksballetba.rayplus.data.bean.NavigationBean
+import com.ksballetba.rayplus.data.bean.treatmentVisitData.NavigationBean
+import com.ksballetba.rayplus.data.bean.treatmentVisitData.TreatmentVisitShowDataBean
+import com.ksballetba.rayplus.data.bean.treatmentVisitData.TreatmentVisitSubmitResponseBean
 import com.ksballetba.rayplus.network.Status
-import com.ksballetba.rayplus.ui.activity.SampleActivity
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.TreatmentVisitDetailActivity
-import com.ksballetba.rayplus.ui.adapter.ViewPagerAdapter
 import com.ksballetba.rayplus.ui.adapter.VisitsAdapter
 import com.ksballetba.rayplus.util.getTreatmentVisitViewModel
 import com.ksballetba.rayplus.viewmodel.TreatmentVisitViewModel
@@ -31,14 +31,14 @@ import kotlinx.android.synthetic.main.fragment_treatment_visit.*
  */
 class TreatmentVisitFragment : Fragment() {
 
-    companion object{
+    companion object {
         const val TREATMENT_CYCLE_NUMBER_KEY = "TREATMENT_CYCLE_NUMBER_KEY"
         const val VISIT_TITLE = "VISIT_TITLE"
     }
 
     private lateinit var mViewModel: TreatmentVisitViewModel
     private lateinit var mVisitsAdapter: VisitsAdapter
-    var mVisitList = mutableListOf<NavigationBean.Data>()
+    var mVisitList = mutableListOf<TreatmentVisitShowDataBean>()
     var mSampleId = 0
 
     override fun onCreateView(
@@ -56,7 +56,7 @@ class TreatmentVisitFragment : Fragment() {
         initRecyclerView()
     }
 
-    private fun initUI(){
+    private fun initUI() {
         fab_add_treatment_visit.setOnClickListener {
             addCycle()
         }
@@ -65,25 +65,32 @@ class TreatmentVisitFragment : Fragment() {
         }
     }
 
-    private fun initRecyclerView(){
+    private fun initRecyclerView() {
         mSampleId = (arguments as Bundle).getInt(SAMPLE_ID)
         mViewModel = getTreatmentVisitViewModel(this)
         val layoutManager = LinearLayoutManager(context)
         layoutManager.orientation = RecyclerView.VERTICAL
         rv_treatment_visit.layoutManager = layoutManager
-        mVisitsAdapter = VisitsAdapter(R.layout.item_treatment_visit,mVisitList)
+        mVisitsAdapter = VisitsAdapter(R.layout.item_treatment_visit, mVisitList)
         mVisitsAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
         mVisitsAdapter.bindToRecyclerView(rv_treatment_visit)
         mVisitsAdapter.setOnItemClickListener { _, _, position ->
-            navigateToDetailPage(mVisitList[position].cycleNumber,mVisitList[position].title)
+            navigateToDetailPage(
+                mVisitList[position].data.cycleNumber,
+                mVisitList[position].data.title
+            )
         }
         mVisitsAdapter.setOnItemChildClickListener { _, _, position ->
-            XPopup.Builder(context).asConfirm("信息","请问是否确定提交，确定后将不能修改"){
-                submitCycle(mVisitList[position].cycleNumber)
-            }.show()
+            if (mVisitList[position].submitStatus == 0) {
+                XPopup.Builder(context).asConfirm("信息", "请问是否确定提交，确定后将不能修改") {
+                    submitCycle(mVisitList[position].data.cycleNumber)
+                }.show()
+            } else
+                ToastUtils.showShort("已提交！")
+
         }
         mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
-            when(it.status){
+            when (it.status) {
                 Status.RUNNING -> {
                     srl_treatment_visit.autoRefresh()
                 }
@@ -101,51 +108,70 @@ class TreatmentVisitFragment : Fragment() {
         }
     }
 
-    private fun loadData(){
+    private fun loadData() {
+        //TODO
+        var dataList = mutableListOf<NavigationBean.Data>()
+        var submitStatusList = mutableListOf<TreatmentVisitSubmitResponseBean.Data>()
+        var map = mapOf<Int, Int>()
         mViewModel.getNavigation(mSampleId).observe(viewLifecycleOwner, Observer {
-            mVisitList = it.toMutableList()
+            dataList = it.toMutableList()
+            mVisitList.clear()
+            dataList.forEach {
+                val treatmentVisitShowDataBean =
+                    TreatmentVisitShowDataBean(
+                        it,
+                        map.get(it.cycleNumber) ?: 0
+                    )
+                mVisitList.add(treatmentVisitShowDataBean)
+            }
             mVisitsAdapter.setNewData(mVisitList)
         })
+        mViewModel.getSubmitStatus(mSampleId).observe(viewLifecycleOwner, Observer {
+            submitStatusList = it.toMutableList()
+            map = submitStatusList.associateBy({ it.cycleNumber }, { it.submitStatus })
+        })
+
     }
 
-    private fun addCycle(){
+    private fun addCycle() {
         mViewModel.addCycle(mSampleId).observe(viewLifecycleOwner, Observer {
-            if(it.code==200){
+            if (it.code == 200) {
                 ToastUtils.showShort("添加治疗期随访成功")
                 srl_treatment_visit.autoRefresh()
-            }else{
+            } else {
                 ToastUtils.showShort("添加治疗期随访失败")
             }
         })
     }
 
-    private fun deleteCycle(){
+    private fun deleteCycle() {
         mViewModel.deleteCycle(mSampleId).observe(viewLifecycleOwner, Observer {
-            if(it.code==200){
+            if (it.code == 200) {
                 ToastUtils.showShort("删除治疗期随访成功")
                 srl_treatment_visit.autoRefresh()
-            }else{
+            } else {
                 ToastUtils.showShort("删除治疗期随访失败")
             }
         })
     }
 
-    private fun submitCycle(cycleNumber: Int){
-        mViewModel.submitCycle(mSampleId,cycleNumber).observe(viewLifecycleOwner, Observer {
-            if (it.code==200){
+    private fun submitCycle(cycleNumber: Int) {
+        mViewModel.submitCycle(mSampleId, cycleNumber).observe(viewLifecycleOwner, Observer {
+            if (it.code == 200) {
+                srl_treatment_visit.autoRefresh()
                 ToastUtils.showShort("提交治疗期随访成功")
                 //TODO
-            }else{
+            } else {
                 ToastUtils.showShort("提交治疗期随访失败")
             }
         })
     }
 
-    private fun navigateToDetailPage(cycleNumber:Int,title:String){
-        val intent = Intent(activity,TreatmentVisitDetailActivity::class.java)
-        intent.putExtra(TREATMENT_CYCLE_NUMBER_KEY,cycleNumber)
-        intent.putExtra(VISIT_TITLE,title)
-        intent.putExtra(SAMPLE_ID,mSampleId)
+    private fun navigateToDetailPage(cycleNumber: Int, title: String) {
+        val intent = Intent(activity, TreatmentVisitDetailActivity::class.java)
+        intent.putExtra(TREATMENT_CYCLE_NUMBER_KEY, cycleNumber)
+        intent.putExtra(VISIT_TITLE, title)
+        intent.putExtra(SAMPLE_ID, mSampleId)
         activity?.startActivity(intent)
     }
 

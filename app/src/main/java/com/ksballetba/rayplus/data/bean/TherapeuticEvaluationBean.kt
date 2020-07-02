@@ -1,8 +1,13 @@
 package com.ksballetba.rayplus.data.bean
 
 
-import com.google.gson.annotations.SerializedName
-
 data class TherapeuticEvaluationBean(
-    val evaluation: Int? // 1
-)
+    val code: Int,
+    val msg: String,
+    val data: Data
+) {
+    data class Data(
+        val evaluation: Int // 1
+    )
+}
+

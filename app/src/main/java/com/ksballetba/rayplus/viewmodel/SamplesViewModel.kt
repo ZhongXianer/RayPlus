@@ -4,27 +4,30 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ksballetba.rayplus.data.bean.*
+import com.ksballetba.rayplus.data.bean.sampleData.SampleEditBodyBean
+import com.ksballetba.rayplus.data.bean.sampleData.SampleListBean
+import com.ksballetba.rayplus.data.bean.sampleData.SampleSubmitBodyBean
 import com.ksballetba.rayplus.data.source.remote.SampleDataSource
 
-class SamplesViewModel constructor(private var sampleDataSource: SampleDataSource): ViewModel(){
+class SamplesViewModel constructor(private var sampleDataSource: SampleDataSource) : ViewModel() {
 
-    fun fetchData(projectId: Int): LiveData<MutableList<SampleListBean.Data>> {
+    fun fetchData(): LiveData<MutableList<SampleListBean.Data>> {
         val result = MutableLiveData<MutableList<SampleListBean.Data>>()
-        sampleDataSource.loadInitial(projectId) {
+        sampleDataSource.loadInitial() {
             result.postValue(it)
         }
         return result
     }
 
-    fun fetchMore(projectId: Int): LiveData<MutableList<SampleListBean.Data>> {
+    fun fetchMore(): LiveData<MutableList<SampleListBean.Data>> {
         val result = MutableLiveData<MutableList<SampleListBean.Data>>()
-        sampleDataSource.loadMore(projectId) {
+        sampleDataSource.loadMore() {
             result.postValue(it)
         }
         return result
     }
 
-    fun fetchAllResearchCenter(): LiveData<MutableList<ResearchCenterBean>>{
+    fun fetchAllResearchCenter(): LiveData<MutableList<ResearchCenterBean>> {
         val result = MutableLiveData<MutableList<ResearchCenterBean>>()
         sampleDataSource.loadAllResearchCenter {
             result.postValue(it)
@@ -32,25 +35,33 @@ class SamplesViewModel constructor(private var sampleDataSource: SampleDataSourc
         return result
     }
 
-    fun editSample(sampleEditBodyBean: SampleEditBodyBean):LiveData<BaseResponseBean>{
+    fun editSample(sampleEditBodyBean: SampleEditBodyBean): LiveData<BaseResponseBean> {
         val result = MutableLiveData<BaseResponseBean>()
-        sampleDataSource.editSample(sampleEditBodyBean){
+        sampleDataSource.editSample(sampleEditBodyBean) {
             result.postValue(it)
         }
         return result
     }
 
-    fun submitSample(sampleSubmitBodyBean: SampleSubmitBodyBean):LiveData<BaseResponseBean>{
+    fun submitSample(sampleSubmitBodyBean: SampleSubmitBodyBean): LiveData<BaseResponseBean> {
         val result = MutableLiveData<BaseResponseBean>()
-        sampleDataSource.submitSample(sampleSubmitBodyBean){
+        sampleDataSource.submitSample(sampleSubmitBodyBean) {
             result.postValue(it)
         }
         return result
     }
 
-    fun deleteSample(sampleId:Int):LiveData<BaseResponseBean>{
+    fun deleteSample(sampleId: Int): LiveData<BaseResponseBean> {
         val result = MutableLiveData<BaseResponseBean>()
-        sampleDataSource.deleteSample(sampleId){
+        sampleDataSource.deleteSample(sampleId) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun unlockSample(sampleId: Int):LiveData<BaseResponseBean>{
+        val result= MutableLiveData<BaseResponseBean>()
+        sampleDataSource.unlockSample(sampleId){
             result.postValue(it)
         }
         return result

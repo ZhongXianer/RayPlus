@@ -121,7 +121,8 @@
             android:layout_marginEnd="@dimen/item_left_margin"
             android:layout_width="60dp"
             android:layout_height="32dp"
-            android:background="@drawable/shape_border_btn"/>
+            android:textColor="@color/background"
+            android:background="@color/footer_color"/>
 
     </LinearLayout>
 

@@ -2,40 +2,35 @@ package com.ksballetba.rayplus.ui.activity
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import com.apkfuns.logutils.LogUtils
 import com.ksballetba.rayplus.R
-import com.ksballetba.rayplus.data.bean.LoginBodyBean
+import com.ksballetba.rayplus.data.bean.loginData.LoginBodyBean
+import com.ksballetba.rayplus.util.LOGIN_TOKEN
+import com.ksballetba.rayplus.util.SHARED_PREFERENCE_NAME
 import com.ksballetba.rayplus.util.getLoginViewModel
+import com.ksballetba.rayplus.util.saveToken
 import com.ksballetba.rayplus.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.toast
-import kotlin.math.log
 
 /**
  * 登录Activity
  */
 class LoginActivity : AppCompatActivity() {
 
-    companion object{
+    companion object {
         const val TAG = "LoginActivity"
-        const val SHARED_PREFERENCE_NAME = "SP_RAYPLUS"
-        const val LOGIN_TOKEN = "token"
         const val LOGIN_TYPE = "project"
-        const val USER_NAME = "USER_NAME"
+        const val SYSTEM_ID = 1
     }
 
-    private lateinit var mViewModel:LoginViewModel
-
+    private lateinit var mViewModel: LoginViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +46,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        if(MainActivity.EXIT_APP_ACTION == intent?.action){
+        if (MainActivity.EXIT_APP_ACTION == intent?.action) {
             finish()
         }
     }
@@ -59,13 +54,17 @@ class LoginActivity : AppCompatActivity() {
     /**
      * 初始化登录界面
      */
-    private fun initUI(){
+    private fun initUI() {
         mViewModel = getLoginViewModel(this)
         btn_login.setOnClickListener {
             logIn()
         }
-        if(getSharedPreferences(SHARED_PREFERENCE_NAME,Context.MODE_PRIVATE).contains(LOGIN_TOKEN)){
-            startActivity(Intent(this,MainActivity::class.java))
+        if (getSharedPreferences(
+                SHARED_PREFERENCE_NAME,
+                Context.MODE_PRIVATE
+            ).contains(LOGIN_TOKEN)
+        ) {
+            startActivity(Intent(this, MainActivity::class.java))
         }
     }
 
@@ -73,29 +72,43 @@ class LoginActivity : AppCompatActivity() {
      * 登录按钮的点击事件
      *
      */
-    private fun logIn(){
+    private fun logIn() {
         val account = et_account.text.toString()
         val pwd = et_password.text.toString()
-        mViewModel.login(LoginBodyBean(account,pwd, LOGIN_TYPE)).observe(this, Observer {
-            if(it.code==200){
-                saveLoginToken(it.data.token,it.data.userInfo.name)
-                val intent = Intent(this,MainActivity::class.java)
-                startActivity(intent)
-            }else{
-                toast("密码或账号有误，请重新输入")
-            }
-        })
+        mViewModel.login(
+            LoginBodyBean(
+                account,
+                pwd,
+                LOGIN_TYPE,
+                SYSTEM_ID
+            )
+        )
+            .observe(this, Observer {
+                if (it.code == 200) {
+                    saveToken(
+                        this,
+                        it.data.tokens,
+                        it.data.userInfo.name,
+                        it.data.userInfo.id
+                    )
+//                    saveLoginToken(it.data.tokens, it.data.userInfo.name)
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    toast("密码或账号有误，请重新输入")
+                }
+            })
     }
 
     /**
      * 存储账号密码数据
      */
-    private fun saveLoginToken(token:String,userName:String){
-        LogUtils.tag(TAG).d(token)
-        val sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_NAME,Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString(LOGIN_TOKEN,token)
-        editor.putString(USER_NAME,userName)
-        editor.apply()
-    }
+//    private fun saveLoginToken(token: List<LoginResponseBean.Data.Token>, userName: String) {
+//        LogUtils.tag(TAG).d(token)
+//        val sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+//        val editor = sharedPreferences.edit()
+//        editor.putString(LOGIN_TOKEN, token[0].token)
+//        editor.putString(USER_NAME, userName)
+//        editor.apply()
+//    }
 }
