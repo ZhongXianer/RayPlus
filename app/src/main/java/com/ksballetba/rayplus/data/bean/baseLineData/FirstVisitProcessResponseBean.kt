@@ -4,10 +4,10 @@ package com.ksballetba.rayplus.data.bean.baseLineData
 import com.google.gson.annotations.SerializedName
 
 data class FirstVisitProcessResponseBean(
-    val code:Int,
+    val code: Int,
     val data: Data,
-    val msg:String
-){
+    val msg: String
+) {
     data class Data(
         @SerializedName("biopsy_method")
         val biopsyMethod: String, // 其他
@@ -68,13 +68,13 @@ data class FirstVisitProcessResponseBean(
         @SerializedName("gene_mutation_type[未测]")
         val geneMutationType0: String, // on
         @SerializedName("genetic_testing_method")
-        val geneticTestingMethod: Int, // 1
+        val geneticTestingMethod: Int?, // 1
         @SerializedName("genetic_testing_specimen")
         val geneticTestingSpecimen: String, // 转移灶组织
         @SerializedName("genetic_testing_specimen_other")
         val geneticTestingSpecimenOther: String, // 其他转移灶
-        val msi: Int, // 3
-        val pdl1: Int, // 5
+        val msi: Int?, // 3
+        val pdl1: Int?, // 5
         @SerializedName("sample_id")
         val sampleId: Int, // 7
         val tmb: String, // 其他
@@ -103,7 +103,7 @@ data class FirstVisitProcessResponseBean(
         @SerializedName("transfer_site[锁骨上淋巴结肺内]")
         val transferSite2: String, // on
         @SerializedName("tumor_part")
-        val tumorPart: Int, // 0
+        val tumorPart: Int?, // 0
         @SerializedName("tumor_pathological_type")
         val tumorPathologicalType: String, // 混合型癌
         @SerializedName("tumor_pathological_type_other")

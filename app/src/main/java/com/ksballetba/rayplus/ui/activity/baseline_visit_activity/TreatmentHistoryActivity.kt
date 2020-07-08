@@ -77,6 +77,7 @@ class TreatmentHistoryActivity : AppCompatActivity() {
                         tv_last_best_treatment_title.text = "一线治疗最佳疗效"
                         tv_last_treatment_growth_date_title.text = "一线治疗进展时间"
                         tv_last_treatment_growth_part.text = "一线治疗进展部位"
+                        tv_treatment_date_title.text="二线治疗开始时间"
                     }
                     2 -> {
                         ll_not_first_line_treatment.visibility = View.VISIBLE
@@ -84,6 +85,7 @@ class TreatmentHistoryActivity : AppCompatActivity() {
                         tv_last_best_treatment_title.text = "二线治疗最佳疗效"
                         tv_last_treatment_growth_date_title.text = "二线治疗进展时间"
                         tv_last_treatment_growth_part_title.text = "二线治疗进展部位"
+                        tv_treatment_date_title.text="三线治疗开始时间"
                     }
                     3 -> {
                         ll_not_first_line_treatment.visibility = View.VISIBLE
@@ -91,6 +93,7 @@ class TreatmentHistoryActivity : AppCompatActivity() {
                         tv_last_best_treatment_title.text = "三线治疗最佳疗效"
                         tv_last_treatment_growth_date_title.text = "三线治疗进展时间"
                         tv_last_treatment_growth_part_title.text = "三线治疗进展部位"
+                        tv_treatment_date_title.text="四线治疗开始"
                     }
                     4 -> {
                         ll_not_first_line_treatment.visibility = View.VISIBLE
@@ -245,10 +248,10 @@ class TreatmentHistoryActivity : AppCompatActivity() {
         cl_tumor_mutation_load.setOnClickListener {
             XPopup.Builder(this)
                 .asCenterList("肿瘤突变负荷(TMB)", arrayOf("未测", "不详", "数量（个突变/Mb）")) { pos, text ->
-                    if (pos < 3) {
+                    if (pos < 2) {
                         tv_tumor_mutation_load.text = text
                     } else {
-                        XPopup.Builder(this).asInputConfirm("基因检测标本", "请输入转移灶组织描述") {
+                        XPopup.Builder(this).asInputConfirm("肿瘤突变负荷数量", "请输入数量（个突变/Mb）") {
                             tv_tumor_mutation_load.text = it
                         }.show()
                     }

@@ -4,10 +4,10 @@ package com.ksballetba.rayplus.data.bean.baseLineData
 import com.google.gson.annotations.SerializedName
 
 data class PreviousHistoryResponseBean(
-    val code:Int,
-    val msg:String,
+    val code: Int,
+    val msg: String,
     val data: Data
-){
+) {
     data class Data(
         @SerializedName("base_ill_other")
         val baseIllOther: String?, // 其他疾病
@@ -60,8 +60,8 @@ data class PreviousHistoryResponseBean(
         @SerializedName("drug_use_other")
         val drugUseOther: String, // 板蓝根
         @SerializedName("ECOG")
-        val eCOG: Int, // 2
-        val height: Int, // 180
+        val eCOG: Int?, // 2
+        val height: Int?, // 180
         @SerializedName("sample_id")
         val sampleId: Int, // 7
         @SerializedName("smoke")
@@ -77,7 +77,7 @@ data class PreviousHistoryResponseBean(
         @SerializedName("smoke_year")
         val smokeYear: String, // 2
         @SerializedName("surface_area")
-        val surfaceArea: Double, // 200
+        val surfaceArea: Double?, // 200
         val surgery: String, // 其他
         @SerializedName("surgery_other")
         val surgeryOther: String,
@@ -85,7 +85,7 @@ data class PreviousHistoryResponseBean(
         val tumorIll: String, // 其他
         @SerializedName("tumor_ill_other")
         val tumorIllOther: String, // 脑
-        val weight: Int // 80
+        val weight: Int? // 80
     )
 }
 

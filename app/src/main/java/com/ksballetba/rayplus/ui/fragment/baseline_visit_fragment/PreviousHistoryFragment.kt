@@ -59,7 +59,6 @@ class PreviousHistoryFragment : Fragment() {
 
     private fun loadData() {
         mViewModel.getPreviousHistory(mSampleId).observe(viewLifecycleOwner, Observer {
-            Log.d(TAG,"HHH")
             tv_operation_history.text =
                 if (it.data.surgery != "其他") it.data.surgery else it.data.surgeryOther
             initBaseIllList(it)
@@ -91,10 +90,14 @@ class PreviousHistoryFragment : Fragment() {
                 if (switch_is_quit_drink.isChecked) View.VISIBLE else View.GONE
             tv_quit_drink_date.text = it.data.drinkingQuitTime
             switch_is_relapse_drink.isChecked = it.data.drinkingChemotherapy == "on"
-            tv_patient_height.text = it.data.height.toString()
-            tv_patient_weight.text = it.data.weight.toString()
-            tv_patient_body_area.text = it.data.surfaceArea.toString()
-            tv_ECOG_score.text = it.data.eCOG.toString()
+            tv_patient_height.text =
+                if (it.data.height == null) "" else it.data.height.toString()
+            tv_patient_weight.text =
+                if (it.data.weight == null) "" else it.data.weight.toString()
+            tv_patient_body_area.text =
+                if (it.data.surfaceArea == null) "" else it.data.surfaceArea.toString()
+            tv_ECOG_score.text =
+                if (it.data.eCOG == null) "" else it.data.eCOG.toString()
         })
         mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
             if (it.status == Status.FAILED) {
@@ -392,7 +395,9 @@ class PreviousHistoryFragment : Fragment() {
             ll_quit_smoke.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
         cl_quit_smoke_date.setOnClickListener {
-            showDatePickerDialog(tv_quit_smoke_date, parentFragmentManager)
+            XPopup.Builder(context).asInputConfirm("戒烟时间", "请输入戒烟时间") {
+                tv_quit_smoke_date.text = it
+            }.show()
         }
         cl_is_relapse_smoke.setOnClickListener {
             switch_is_relapse_smoke.isChecked = !switch_is_relapse_smoke.isChecked
@@ -427,14 +432,14 @@ class PreviousHistoryFragment : Fragment() {
                 .asCenterList(
                     "每次饮酒量",
                     arrayOf("请设置", "每次少量", "每周微醉", "偶尔大醉", "每次大醉")
-                ) { pos, text ->
+                ) { _, text ->
                     tv_drink_capacity.text = text
                 }.show()
         }
         cl_is_quit_drink.setOnClickListener {
             switch_is_quit_drink.isChecked = !switch_is_quit_drink.isChecked
         }
-        switch_is_quit_drink.setOnCheckedChangeListener { button, isChecked ->
+        switch_is_quit_drink.setOnCheckedChangeListener { _, isChecked ->
             switch_is_quit_drink.setSwitchTextAppearance(
                 context,
                 if (isChecked) R.style.s_on else R.style.s_off
@@ -442,12 +447,14 @@ class PreviousHistoryFragment : Fragment() {
             ll_quit_drink.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
         cl_quit_drink_date.setOnClickListener {
-            showDatePickerDialog(tv_quit_drink_date, parentFragmentManager)
+            XPopup.Builder(context).asInputConfirm("戒酒时间", "请输入戒酒时间") {
+                tv_quit_drink_date.text = it
+            }.show()
         }
         cl_is_relapse_drink.setOnClickListener {
             switch_is_relapse_drink.isChecked = !switch_is_relapse_smoke.isChecked
         }
-        switch_is_relapse_drink.setOnCheckedChangeListener { button, isChecked ->
+        switch_is_relapse_drink.setOnCheckedChangeListener { _, isChecked ->
             switch_is_relapse_drink.setSwitchTextAppearance(
                 context,
                 if (isChecked) R.style.s_on else R.style.s_off

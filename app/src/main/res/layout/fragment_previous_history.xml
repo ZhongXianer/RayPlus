@@ -325,14 +325,15 @@
                         android:id="@+id/switch_is_quit_smoke"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/material_component_cards_left_and_right_padding"
+                        android:layout_marginEnd="32dp"
                         android:showText="true"
                         android:textColor="@color/secondary_text"
-                        android:textOff="@string/without"
-                        android:textOn="@string/exist"
+                        android:textOff="@string/not"
+                        android:textOn="@string/yes"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.375" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -408,8 +409,8 @@
                             android:layout_marginEnd="@dimen/material_component_cards_left_and_right_padding"
                             android:showText="true"
                             android:textColor="@color/secondary_text"
-                            android:textOff="@string/without"
-                            android:textOn="@string/exist"
+                            android:textOff="@string/not"
+                            android:textOn="@string/yes"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -567,8 +568,8 @@
                         android:layout_marginEnd="@dimen/material_component_cards_left_and_right_padding"
                         android:showText="true"
                         android:textColor="@color/secondary_text"
-                        android:textOff="@string/without"
-                        android:textOn="@string/exist"
+                        android:textOff="@string/not"
+                        android:textOn="@string/yes"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -585,7 +586,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
                         android:background="@color/divider"/>
-
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cl_quit_drink_date"
                         android:layout_width="match_parent"
@@ -637,21 +637,22 @@
                             android:textColor="@color/primary_text"
                             android:textSize="@dimen/material_typography_subheading"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"/>
 
 
                         <Switch
                             android:id="@+id/switch_is_relapse_drink"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/material_component_cards_left_and_right_padding"
+                            android:layout_marginEnd="32dp"
                             android:showText="true"
                             android:textColor="@color/secondary_text"
-                            android:textOff="@string/without"
-                            android:textOn="@string/exist"
+                            android:textOff="@string/not"
+                            android:textOn="@string/yes"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -696,6 +697,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_patient_weight"

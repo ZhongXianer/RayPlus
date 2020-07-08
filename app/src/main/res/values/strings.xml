@@ -37,14 +37,14 @@
     <string name="smoke_history">吸烟史</string>
     <string name="smoke_years">吸烟年数</string>
     <string name="is_quit_smoke">是否戒烟</string>
-    <string name="quit_smoke_date">戒烟日期</string>
+    <string name="quit_smoke_date">戒烟时间</string>
     <string name="is_relapse_smoke">化疗期间是否吸烟</string>
     <string name="average_cigarette">平均吸烟（支/天）</string>
     <string name="drink_history">饮酒史</string>
     <string name="drink_frequency">饮酒频率</string>
     <string name="drink_capacity">每次饮酒量</string>
     <string name="is_quit_drink">是否戒酒</string>
-    <string name="quit_drink_date">戒酒日期</string>
+    <string name="quit_drink_date">戒酒时间</string>
     <string name="is_relapse_drink">化疗期间是否饮酒</string>
     <string name="patient_height">身高(cm)</string>
     <string name="patient_weight">体重(kg)</string>
@@ -158,6 +158,8 @@
     <string name="SAE_recover">SAE转归</string>
     <string name="SAE_relation">SAE与试验药的关系</string>
     <string name="unlock">解 锁</string>
+    <string name="not">否</string>
+    <string name="yes">是</string>
 
     <string-array name="clinical_significance">
         <item>1</item>

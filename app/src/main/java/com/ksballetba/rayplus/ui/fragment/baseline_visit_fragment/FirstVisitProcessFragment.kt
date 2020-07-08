@@ -65,7 +65,8 @@ class FirstVisitProcessFragment : Fragment() {
     private fun loadData() {
         mViewModel.getFirstVisitProcess(mSampleId).observe(viewLifecycleOwner, Observer {
             initClinicalSymptoms(it)
-            tv_lesion.text = getTumorPart()[it.data.tumorPart]
+            tv_lesion.text =
+                if (it.data.tumorPart == null) "" else getTumorPart()[it.data.tumorPart]
             initTransferSite(it)
             tv_biopsy_way.text =
                 if (it.data.biopsyMethod == "其他") it.data.biopsyMethodOther else it.data.biopsyMethod
@@ -73,11 +74,14 @@ class FirstVisitProcessFragment : Fragment() {
                 if (it.data.tumorPathologicalType == "混合型癌") it.data.tumorPathologicalTypeOther else it.data.tumorPathologicalType
             tv_genetic_test_sample.text =
                 if (it.data.geneticTestingSpecimen == "转移灶组织") it.data.geneticTestingSpecimenOther else it.data.geneticTestingSpecimen
-            tv_genetic_test_way.text = getGeneticTestingMethod()[it.data.geneticTestingMethod]
+            tv_genetic_test_way.text =
+                if (it.data.geneticTestingMethod == null) "" else getGeneticTestingMethod()[it.data.geneticTestingMethod]
             initGeneMutationType(it)
-            tv_PD_L1_expression.text = getPD_L1Expression()[it.data.pdl1]
+            tv_PD_L1_expression.text =
+                if (it.data.pdl1 == null) "" else getPD_L1Expression()[it.data.pdl1]
             tv_tumor_mutation_load.text = if (it.data.tmb == "其他") it.data.tmbOther else it.data.tmb
-            tv_microsatellite_instability.text = getMSI()[it.data.msi]
+            tv_microsatellite_instability.text =
+                if (it.data.msi == null) "" else getMSI()[it.data.msi]
         })
         mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
             if (it.status == Status.FAILED) {

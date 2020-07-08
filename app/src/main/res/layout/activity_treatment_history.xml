@@ -48,7 +48,7 @@
                     android:id="@+id/tv_treatment_line_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/item_left_margin"
+                    android:layout_marginStart="16dp"
                     android:text="@string/treatment_line"
                     android:textColor="@color/primary_text"
                     android:textSize="@dimen/material_typography_subheading"
@@ -60,8 +60,8 @@
                     android:id="@+id/tv_treatment_line"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/item_left_margin"
-                    android:text="一线治疗"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/input_visit_time"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -84,7 +84,7 @@
                     android:id="@+id/tv_first_line_treatment_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/item_left_margin"
+                    android:layout_marginStart="16dp"
                     android:text="@string/first_line_treatment"
                     android:textColor="@color/primary_text"
                     android:textSize="@dimen/material_typography_subheading"
@@ -96,7 +96,7 @@
                     android:id="@+id/tv_first_line_treatment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/item_left_margin"
+                    android:layout_marginEnd="16dp"
                     android:text="请选择"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -541,6 +541,11 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/divider"/>
+
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cl_treatment_date"
                         android:layout_width="match_parent"
@@ -557,7 +562,7 @@
                             android:id="@+id/tv_treatment_date_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/item_left_margin"
+                            android:layout_marginStart="16dp"
                             android:text="@string/treatment_date"
                             android:textColor="@color/primary_text"
                             android:textSize="@dimen/material_typography_subheading"
@@ -569,7 +574,7 @@
                             android:id="@+id/tv_treatment_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/item_left_margin"
+                            android:layout_marginEnd="16dp"
                             android:text="@string/input_visit_time"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -586,7 +591,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/item_left_margin"
+                            android:layout_marginStart="16dp"
                             android:text="@string/treatment_way"
                             android:textColor="@color/primary_text"
                             android:textSize="@dimen/material_typography_subheading" />
@@ -606,7 +611,7 @@
                                 android:id="@+id/cb_operation"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/item_left_margin"
+                                android:layout_marginStart="16dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -624,13 +629,16 @@
 
                             <TextView
                                 android:id="@+id/tv_operation"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="6dp"
+                                android:layout_marginStart="40dp"
+                                android:ellipsize="end"
                                 android:text="@string/input_visit_time"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/cb_operation"
-                                app:layout_constraintTop_toBottomOf="@+id/tv_operation_title" />
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_operation_title"
+                                app:layout_constraintVertical_bias="0.0" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -649,7 +657,7 @@
                                 android:id="@+id/cb_radiotherapy"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/item_left_margin"
+                                android:layout_marginStart="16dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -667,12 +675,14 @@
 
                             <TextView
                                 android:id="@+id/tv_radiotherapy"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="6dp"
+                                android:layout_marginStart="@dimen/dp_40"
+                                android:ellipsize="end"
                                 android:text="@string/input_visit_time"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/cb_radiotherapy"
+                                app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_radiotherapy_title" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -692,7 +702,7 @@
                                 android:id="@+id/cb_chemotherapy"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/item_left_margin"
+                                android:layout_marginStart="16dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -710,12 +720,14 @@
 
                             <TextView
                                 android:id="@+id/tv_chemotherapy"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="6dp"
+                                android:layout_marginStart="@dimen/dp_40"
+                                android:ellipsize="end"
                                 android:text="@string/input_visit_time"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/cb_chemotherapy"
+                                app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_chemotherapy_title" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -735,7 +747,7 @@
                                 android:id="@+id/cb_targeted_therapy"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/item_left_margin"
+                                android:layout_marginStart="16dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -753,12 +765,15 @@
 
                             <TextView
                                 android:id="@+id/tv_targeted_therapy"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:layout_marginStart="@dimen/dp_40"
                                 android:layout_marginTop="6dp"
+                                android:singleLine="false"
                                 android:text="@string/input_visit_time"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/cb_targeted_therapy"
+                                app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_targeted_therapy_title" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -778,7 +793,7 @@
                                 android:id="@+id/cb_immunotherapy"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/item_left_margin"
+                                android:layout_marginStart="16dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -796,12 +811,14 @@
 
                             <TextView
                                 android:id="@+id/tv_immunotherapy"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:ellipsize="end"
                                 android:layout_marginTop="6dp"
+                                android:layout_marginStart="@dimen/dp_40"
                                 android:text="@string/input_visit_time"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/cb_immunotherapy"
+                                app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_immunotherapy_title" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -821,7 +838,7 @@
                                 android:id="@+id/cb_other_therapy"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/item_left_margin"
+                                android:layout_marginStart="16dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -839,12 +856,14 @@
 
                             <TextView
                                 android:id="@+id/tv_other_therapy"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:layout_marginStart="@dimen/dp_40"
                                 android:layout_marginTop="6dp"
                                 android:text="@string/input_visit_time"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/cb_other_therapy"
+                                app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_other_therapy_title" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
