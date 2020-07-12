@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.apkfuns.logutils.LogUtils
 import com.ksballetba.rayplus.data.bean.*
+import com.ksballetba.rayplus.data.bean.baseData.VisitTimeBean
 import com.ksballetba.rayplus.data.bean.treatmentVisitData.*
 import com.ksballetba.rayplus.network.*
 import com.ksballetba.rayplus.util.getToken
@@ -38,6 +39,25 @@ class TreatmentVisitDataSource(context: Context) {
                 },
                 onError = {
                     mLoadStatus.postValue(NetworkState.error(it.message))
+                    LogUtils.d(it.message)
+                }
+            )
+    }
+
+    fun getVisitTime(sampleId: Int, cycleNumber: Int, callBack: (VisitTimeBean) -> Unit) {
+        RetrofitClient.getInstance(NetworkType.PROJECT)
+            .create(ApiService::class.java)
+            .getVisitTime(mToken, sampleId, cycleNumber)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("completed")
+                },
+                onError = {
                     LogUtils.d(it.message)
                 }
             )

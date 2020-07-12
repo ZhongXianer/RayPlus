@@ -7,7 +7,7 @@ data class TherapeuticEvaluationBean(
     val data: Data
 ) {
     data class Data(
-        val evaluation: Int // 1
+        val evaluation: Int? // 1
     )
 }
 

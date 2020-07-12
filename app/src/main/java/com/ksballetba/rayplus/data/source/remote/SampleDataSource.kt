@@ -6,6 +6,7 @@ import com.apkfuns.logutils.LogUtils
 import com.ksballetba.rayplus.data.bean.*
 import com.ksballetba.rayplus.data.bean.sampleData.SampleEditBodyBean
 import com.ksballetba.rayplus.data.bean.sampleData.SampleListBean
+import com.ksballetba.rayplus.data.bean.sampleData.SampleSelectBodyBean
 import com.ksballetba.rayplus.data.bean.sampleData.SampleSubmitBodyBean
 import com.ksballetba.rayplus.network.ApiService
 import com.ksballetba.rayplus.network.NetworkState
@@ -28,11 +29,24 @@ class SampleDataSource(context: Context) {
 
     private val mToken = getToken()
 
-    fun loadInitial(callBack: (MutableList<SampleListBean.Data>) -> Unit) {
+    fun loadInitial(
+        sampleQueryBodyBean: SampleQueryBodyBean,
+        callBack: (MutableList<SampleListBean.Data>) -> Unit
+    ) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .getSampleList(mToken,1, DEFAULT_PAGE_LIMIT)
+            .getSampleList(
+                mToken, 1, DEFAULT_PAGE_LIMIT,
+                sampleQueryBodyBean.tumorPathologicalType,
+                sampleQueryBodyBean.researchCenterId,
+                sampleQueryBodyBean.groupId,
+                sampleQueryBodyBean.sex,
+                sampleQueryBodyBean.name,
+                sampleQueryBodyBean.idCard,
+                sampleQueryBodyBean.patientIds,
+                sampleQueryBodyBean.submitStatus
+            )
             .subscribeOn(io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -55,11 +69,24 @@ class SampleDataSource(context: Context) {
             )
     }
 
-    fun loadMore(callBack: (MutableList<SampleListBean.Data>) -> Unit) {
+    fun loadMore(
+        sampleQueryBodyBean: SampleQueryBodyBean,
+        callBack: (MutableList<SampleListBean.Data>) -> Unit
+    ) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .getSampleList(mToken,CURRENT_PAGE, DEFAULT_PAGE_LIMIT)
+            .getSampleList(
+                mToken, CURRENT_PAGE, DEFAULT_PAGE_LIMIT,
+                sampleQueryBodyBean.tumorPathologicalType,
+                sampleQueryBodyBean.researchCenterId,
+                sampleQueryBodyBean.groupId,
+                sampleQueryBodyBean.sex,
+                sampleQueryBodyBean.name,
+                sampleQueryBodyBean.idCard,
+                sampleQueryBodyBean.patientIds,
+                sampleQueryBodyBean.submitStatus
+            )
             .subscribeOn(io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -83,15 +110,15 @@ class SampleDataSource(context: Context) {
     }
 
 
-    fun loadAllResearchCenter(callBack: (MutableList<ResearchCenterBean>) -> Unit) {
-        RetrofitClient.getInstance(NetworkType.PROJECT)
+    fun loadAllResearchCenter(projectId: Int, callBack: (MutableList<SampleSelectBodyBean.Data>) -> Unit) {
+        RetrofitClient.getInstance(NetworkType.AUTH)
             .create(ApiService::class.java)
-            .getAllResearchCenterList()
+            .getResearchCenters(mToken,projectId)
             .subscribeOn(io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onNext = {
-                    callBack(it.toMutableList())
+                    callBack(it.data.toMutableList())
                 },
                 onComplete = {
                     LogUtils.d("Completed")

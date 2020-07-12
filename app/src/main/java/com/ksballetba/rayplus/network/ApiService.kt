@@ -2,6 +2,9 @@ package com.ksballetba.rayplus.network
 
 import com.ksballetba.rayplus.data.bean.AuthorizationResponseBean
 import com.ksballetba.rayplus.data.bean.*
+import com.ksballetba.rayplus.data.bean.baseData.ImagingEvaluationBodyBean
+import com.ksballetba.rayplus.data.bean.baseData.ImagingEvaluationListBean
+import com.ksballetba.rayplus.data.bean.baseData.VisitTimeBean
 import com.ksballetba.rayplus.data.bean.baseLineData.*
 import com.ksballetba.rayplus.data.bean.loginData.LoginBodyBean
 import com.ksballetba.rayplus.data.bean.loginData.LoginResponseBean
@@ -9,6 +12,7 @@ import com.ksballetba.rayplus.data.bean.projectSummaryData.ProjectSummaryBodyBea
 import com.ksballetba.rayplus.data.bean.projectSummaryData.ProjectSummaryResponseBean
 import com.ksballetba.rayplus.data.bean.sampleData.SampleEditBodyBean
 import com.ksballetba.rayplus.data.bean.sampleData.SampleListBean
+import com.ksballetba.rayplus.data.bean.sampleData.SampleSelectBodyBean
 import com.ksballetba.rayplus.data.bean.sampleData.SampleSubmitBodyBean
 import com.ksballetba.rayplus.data.bean.survivalVisitData.SurvivalVisitBodyBean
 import com.ksballetba.rayplus.data.bean.survivalVisitData.SurvivalVisitListBean
@@ -36,12 +40,27 @@ interface ApiService {
         @Query("project_id") projectId: Int, @Query("user_id") userId: Int
     ): Observable<AuthorizationResponseBean>
 
+    @Headers("Content-Type: application/json")
+    @GET("/v1/research_centers")
+    fun getResearchCenters(
+        @Header("Authorization") token: String?,
+        @Query("project_id")projectId: Int
+    ):Observable<SampleSelectBodyBean>
+
     @Headers("Content-Type:application/json")
     @GET("/sample")
     fun getSampleList(
         @Header("Authorization") token: String?,
         @Query("page") page: Int,
-        @Query("limit") limit: Int
+        @Query("limit") limit: Int,
+        @Query("tumor_pathological_type") tumorPathologicalType: String?,
+        @Query("research_center_id") researchCenterId: Int?,
+        @Query("group_id") groupId: Int?,
+        @Query("sex") sex: Int?,
+        @Query("name") name: String?,
+        @Query("IDcard") idCard: String?,
+        @Query("patient_ids") patientIds: String?,
+        @Query("submit_status") submitStatus: Int?
     ): Observable<SampleListBean>
 
     @Headers("Content-Type:application/json")

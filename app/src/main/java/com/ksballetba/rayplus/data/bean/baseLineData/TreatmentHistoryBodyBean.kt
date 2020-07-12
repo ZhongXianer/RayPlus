@@ -26,6 +26,7 @@ data class TreatmentHistoryBodyBean(
     val geneticSpecimen: String?, // 3
     @SerializedName("genetic_specimen_other")
     val geneticSpecimenOther: String?, // 转移到了哪
+    val id: Int?,
     @SerializedName("is_biopsy_again")
     val isBiopsyAgain: Int?, // 0
     @SerializedName("last_front_best_efficacy")

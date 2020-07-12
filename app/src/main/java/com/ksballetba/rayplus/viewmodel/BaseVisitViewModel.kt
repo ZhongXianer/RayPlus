@@ -4,6 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ksballetba.rayplus.data.bean.*
+import com.ksballetba.rayplus.data.bean.baseData.ImagingEvaluationBodyBean
+import com.ksballetba.rayplus.data.bean.baseData.ImagingEvaluationListBean
+import com.ksballetba.rayplus.data.bean.baseData.VisitTimeBean
+import com.ksballetba.rayplus.data.bean.treatmentVisitData.TreatmentVisitSubmitResponseBean
 import com.ksballetba.rayplus.data.source.remote.BaseVisitDataSource
 
 class BaseVisitViewModel constructor(private var baseVisitDataSource: BaseVisitDataSource): ViewModel() {
@@ -11,6 +15,22 @@ class BaseVisitViewModel constructor(private var baseVisitDataSource: BaseVisitD
     fun getVisitTime(sampleId:Int,cycleNumber:Int): LiveData<VisitTimeBean> {
         val result = MutableLiveData<VisitTimeBean>()
         baseVisitDataSource.getVisitTime(sampleId,cycleNumber) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun submitBaseline(sampleId: Int,cycleNumber: Int): LiveData<BaseResponseBean> {
+        val result = MutableLiveData<BaseResponseBean>()
+        baseVisitDataSource.submitCycle(sampleId, cycleNumber) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun getSubmitStatus(sampleId: Int): LiveData<MutableList<TreatmentVisitSubmitResponseBean.Data>> {
+        val result = MutableLiveData<MutableList<TreatmentVisitSubmitResponseBean.Data>>()
+        baseVisitDataSource.getSubmitStatus(sampleId) {
             result.postValue(it)
         }
         return result

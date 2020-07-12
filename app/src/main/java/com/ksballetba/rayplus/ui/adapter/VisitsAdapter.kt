@@ -14,6 +14,7 @@ class VisitsAdapter(layoutResId:Int,data:List<TreatmentVisitShowDataBean>): Base
 
     override fun convert(helper: BaseViewHolder, item: TreatmentVisitShowDataBean) {
         helper.setText(R.id.tv_visit_name, item.data.title)
+            .setText(R.id.tv_visit_list_date,"访视时间：${item.visitTime?:"未设置"}")
             .setText(R.id.tv_visit_submit_status,"提交状态：${getTreatmentVisitSubmitStatus()[item.submitStatus]}")
             .addOnClickListener(R.id.tv_visit_submit)
     }

@@ -6,30 +6,31 @@ import androidx.lifecycle.ViewModel
 import com.ksballetba.rayplus.data.bean.*
 import com.ksballetba.rayplus.data.bean.sampleData.SampleEditBodyBean
 import com.ksballetba.rayplus.data.bean.sampleData.SampleListBean
+import com.ksballetba.rayplus.data.bean.sampleData.SampleSelectBodyBean
 import com.ksballetba.rayplus.data.bean.sampleData.SampleSubmitBodyBean
 import com.ksballetba.rayplus.data.source.remote.SampleDataSource
 
 class SamplesViewModel constructor(private var sampleDataSource: SampleDataSource) : ViewModel() {
 
-    fun fetchData(): LiveData<MutableList<SampleListBean.Data>> {
+    fun fetchData(sampleQueryBodyBean: SampleQueryBodyBean): LiveData<MutableList<SampleListBean.Data>> {
         val result = MutableLiveData<MutableList<SampleListBean.Data>>()
-        sampleDataSource.loadInitial() {
+        sampleDataSource.loadInitial(sampleQueryBodyBean) {
             result.postValue(it)
         }
         return result
     }
 
-    fun fetchMore(): LiveData<MutableList<SampleListBean.Data>> {
+    fun fetchMore(sampleQueryBodyBean: SampleQueryBodyBean): LiveData<MutableList<SampleListBean.Data>> {
         val result = MutableLiveData<MutableList<SampleListBean.Data>>()
-        sampleDataSource.loadMore() {
+        sampleDataSource.loadMore(sampleQueryBodyBean) {
             result.postValue(it)
         }
         return result
     }
 
-    fun fetchAllResearchCenter(): LiveData<MutableList<ResearchCenterBean>> {
-        val result = MutableLiveData<MutableList<ResearchCenterBean>>()
-        sampleDataSource.loadAllResearchCenter {
+    fun fetchAllResearchCenter(projectId: Int): LiveData<MutableList<SampleSelectBodyBean.Data>> {
+        val result = MutableLiveData<MutableList<SampleSelectBodyBean.Data>>()
+        sampleDataSource.loadAllResearchCenter(projectId) {
             result.postValue(it)
         }
         return result
@@ -59,9 +60,9 @@ class SamplesViewModel constructor(private var sampleDataSource: SampleDataSourc
         return result
     }
 
-    fun unlockSample(sampleId: Int):LiveData<BaseResponseBean>{
-        val result= MutableLiveData<BaseResponseBean>()
-        sampleDataSource.unlockSample(sampleId){
+    fun unlockSample(sampleId: Int): LiveData<BaseResponseBean> {
+        val result = MutableLiveData<BaseResponseBean>()
+        sampleDataSource.unlockSample(sampleId) {
             result.postValue(it)
         }
         return result

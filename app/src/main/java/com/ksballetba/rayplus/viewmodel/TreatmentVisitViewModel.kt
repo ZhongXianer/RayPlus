@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ksballetba.rayplus.data.bean.*
+import com.ksballetba.rayplus.data.bean.baseData.VisitTimeBean
 import com.ksballetba.rayplus.data.bean.treatmentVisitData.*
 import com.ksballetba.rayplus.data.source.remote.TreatmentVisitDataSource
 
@@ -14,6 +15,14 @@ TreatmentVisitViewModel constructor(private var treatmentVisitDataSource: Treatm
     fun getNavigation(sampleId: Int): LiveData<MutableList<NavigationBean.Data>> {
         val result = MutableLiveData<MutableList<NavigationBean.Data>>()
         treatmentVisitDataSource.getNavigation(sampleId) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun getVisitTime(sampleId: Int, cycleNumber: Int): LiveData<VisitTimeBean> {
+        val result = MutableLiveData<VisitTimeBean>()
+        treatmentVisitDataSource.getVisitTime(sampleId, cycleNumber) {
             result.postValue(it)
         }
         return result

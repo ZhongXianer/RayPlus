@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.apkfuns.logutils.LogUtils
 import com.ksballetba.rayplus.R
+import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.CYCLE_NUMBER
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.ImagingEvaluationActivity.Companion.REFRESH_IMAGING_EVALUATION_PAGE
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.PhysicalExaminationActivity
@@ -19,6 +20,7 @@ import com.ksballetba.rayplus.ui.activity.survival_visit_activity.SurvivalVisitA
 import com.ksballetba.rayplus.ui.activity.treatment_visit_activity.MainPhysicalSignActivity.Companion.REFRESH_MAIN_PHYSICAL_SIGN_PAGE
 import com.ksballetba.rayplus.ui.adapter.ViewPagerAdapter
 import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment
+import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.CYCLE_NUMBER_KEY
 import com.ksballetba.rayplus.ui.fragment.ProjectSummaryFragment
 import com.ksballetba.rayplus.ui.fragment.SurvivalVisitFragment
 import com.ksballetba.rayplus.ui.fragment.TreatmentVisitFragment
@@ -29,11 +31,11 @@ import kotlinx.android.synthetic.main.activity_crf.*
 
 class CRFActivity : AppCompatActivity() {
 
-    lateinit var mBaselineVisitFragment:BaselineVisitFragment
-    lateinit var mTreatmentVisitFragment:TreatmentVisitFragment
-    lateinit var mSurvivalVisitFragment:SurvivalVisitFragment
-    lateinit var mProjectSummaryFragment: ProjectSummaryFragment
-    lateinit var mViewPagerAdapter: ViewPagerAdapter
+    private lateinit var mBaselineVisitFragment: BaselineVisitFragment
+    private lateinit var mTreatmentVisitFragment: TreatmentVisitFragment
+    private lateinit var mSurvivalVisitFragment: SurvivalVisitFragment
+    private lateinit var mProjectSummaryFragment: ProjectSummaryFragment
+    private lateinit var mViewPagerAdapter: ViewPagerAdapter
 
     private val mFragmentList = ArrayList<Fragment>()
 
@@ -42,9 +44,10 @@ class CRFActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        window.decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.statusBarColor = ContextCompat.getColor(this,R.color.colorPrimary)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimary)
         setContentView(R.layout.activity_crf)
         initUI()
         initFragment()
@@ -52,32 +55,41 @@ class CRFActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        when(intent?.action){
-            REFRESH_PHYSICAL_EXAMINATION_PAGE->{
-                val peFragment = (mViewPagerAdapter.getFragmentByIdx(0) as BaselineVisitFragment).mViewPagerAdapter.getFragmentByIdx(2) as PhysicalExaminationFragment
+        when (intent?.action) {
+            REFRESH_PHYSICAL_EXAMINATION_PAGE -> {
+                val peFragment =
+                    (mViewPagerAdapter.getFragmentByIdx(0) as BaselineVisitFragment).mViewPagerAdapter.getFragmentByIdx(
+                        2
+                    ) as PhysicalExaminationFragment
                 peFragment.loadData()
             }
-            REFRESH_IMAGING_EVALUATION_PAGE->{
-                val ieFragment = (mViewPagerAdapter.getFragmentByIdx(0) as BaselineVisitFragment).mViewPagerAdapter.getFragmentByIdx(7) as ImagingEvaluationFragment
+            REFRESH_IMAGING_EVALUATION_PAGE -> {
+                val ieFragment =
+                    (mViewPagerAdapter.getFragmentByIdx(0) as BaselineVisitFragment).mViewPagerAdapter.getFragmentByIdx(
+                        7
+                    ) as ImagingEvaluationFragment
                 ieFragment.loadData()
             }
-            REFRESH_SURVIVAL_VISIT_PAGE->{
+            REFRESH_SURVIVAL_VISIT_PAGE -> {
                 val svFragment = mViewPagerAdapter.getFragmentByIdx(2) as SurvivalVisitFragment
                 svFragment.loadData()
             }
-            REFRESH_TREATMENT_HISTORY_PAGE->{
-                val thFragment = (mViewPagerAdapter.getFragmentByIdx(0) as BaselineVisitFragment).mViewPagerAdapter.getFragmentByIdx(5) as TreatmentHistoryFragment
+            REFRESH_TREATMENT_HISTORY_PAGE -> {
+                val thFragment =
+                    (mViewPagerAdapter.getFragmentByIdx(0) as BaselineVisitFragment).mViewPagerAdapter.getFragmentByIdx(
+                        5
+                    ) as TreatmentHistoryFragment
                 thFragment.loadData()
             }
         }
     }
 
-    private fun initUI(){
+    private fun initUI() {
         setSupportActionBar(tb_crf)
         supportActionBar?.title = "基线资料"
-        mSampleId = intent.getIntExtra(SAMPLE_ID,0)
+        mSampleId = intent.getIntExtra(SAMPLE_ID, 0)
         bnv_crf.setOnNavigationItemSelectedListener {
-            when(it.itemId){
+            when (it.itemId) {
                 R.id.menu_baseline_visit -> {
                     supportActionBar?.title = "基线资料"
                     nsvp_crf.currentItem = 0
@@ -90,7 +102,7 @@ class CRFActivity : AppCompatActivity() {
                     supportActionBar?.title = "生存期随访"
                     nsvp_crf.currentItem = 2
                 }
-                R.id.menu_project_summary->{
+                R.id.menu_project_summary -> {
                     supportActionBar?.title = "项目总结"
                     nsvp_crf.currentItem = 3
                 }
@@ -99,9 +111,10 @@ class CRFActivity : AppCompatActivity() {
         }
     }
 
-    private fun initFragment(){
+    private fun initFragment() {
         val sampleIdArgs = Bundle()
         sampleIdArgs.putInt(SAMPLE_ID, mSampleId)
+        sampleIdArgs.putInt(CYCLE_NUMBER_KEY, 1)
         LogUtils.tag("sampleID").d(mSampleId)
         mBaselineVisitFragment = BaselineVisitFragment()
         mTreatmentVisitFragment = TreatmentVisitFragment()
@@ -116,7 +129,7 @@ class CRFActivity : AppCompatActivity() {
         mFragmentList.add(mSurvivalVisitFragment)
         mFragmentList.add(mProjectSummaryFragment)
         nsvp_crf.offscreenPageLimit = 4
-        mViewPagerAdapter = ViewPagerAdapter(mFragmentList,supportFragmentManager)
+        mViewPagerAdapter = ViewPagerAdapter(mFragmentList, supportFragmentManager)
         nsvp_crf.adapter = mViewPagerAdapter
     }
 

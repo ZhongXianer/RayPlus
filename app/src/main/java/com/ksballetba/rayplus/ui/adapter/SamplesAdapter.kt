@@ -48,14 +48,15 @@ class SamplesAdapter(layoutResId: Int, data: List<SampleListBean.Data>) :
                 }
             }
         }
-        val submitStatusDatils =
+        val survivalStatus=if (item.status.interviewStatus.isEmpty()) "未提交" else "${item.status.interviewStatus.size}条"
+        val submitStatusDetails =
             mutableListOf(
                 "",
                 "基线资料：${getSurvivalSubmitStatus()[item.status.cycleStatus[0].isSubmit]}",
                 "治疗期访视：${treatment}",
-                "生存期访视：${item.status.interviewStatus.size}条"
+                "生存期访视：${survivalStatus}"
             )
-        helper.getView<NiceSpinner>(R.id.submit_status_details).attachDataSource(submitStatusDatils)
+        helper.getView<NiceSpinner>(R.id.submit_status_details).attachDataSource(submitStatusDetails)
         if (judgeUnlockSample() && (item.submitStatus == 1 || item.submitStatus == 2)) {
             helper.setBackgroundColor(R.id.btn_sample_unlock, Color.parseColor("#03A9F4"))
         } else {

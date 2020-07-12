@@ -122,22 +122,6 @@ class BaselineVisitViewModel constructor(private var baselineVisitDataSource: Ba
         return result
     }
 
-    fun getSubmitStatus(sampleId: Int): LiveData<MutableList<TreatmentVisitSubmitResponseBean.Data>> {
-        val result = MutableLiveData<MutableList<TreatmentVisitSubmitResponseBean.Data>>()
-        baselineVisitDataSource.getSubmitStatus(sampleId) {
-            result.postValue(it)
-        }
-        return result
-    }
-
-    fun submitBaseline(sampleId: Int): LiveData<BaseResponseBean> {
-        val result = MutableLiveData<BaseResponseBean>()
-        baselineVisitDataSource.submitCycle(sampleId, 1) {
-            result.postValue(it)
-        }
-        return result
-    }
-
     fun getLoadStatus() = baselineVisitDataSource.mLoadStatus
 
 }

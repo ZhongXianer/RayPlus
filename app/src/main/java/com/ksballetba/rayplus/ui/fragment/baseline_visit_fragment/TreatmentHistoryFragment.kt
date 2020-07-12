@@ -22,6 +22,7 @@ import com.ksballetba.rayplus.util.getBaselineVisitViewModel
 import com.ksballetba.rayplus.viewmodel.BaselineVisitViewModel
 import com.lxj.xpopup.XPopup
 import kotlinx.android.synthetic.main.fragment_treatment_history.*
+import kotlin.math.log
 
 /**
  * A simple [Fragment] subclass.
@@ -91,6 +92,7 @@ class TreatmentHistoryFragment : Fragment() {
         mViewModel.getTreatmentHistoryList(mSampleId).observe(viewLifecycleOwner, Observer {
             mList = it
             mAdapter.setNewData(mList)
+
         })
 //        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
 //            if(it.status == Status.FAILED){
@@ -119,7 +121,7 @@ class TreatmentHistoryFragment : Fragment() {
                     ToastUtils.showShort("删除成功")
                     mAdapter.remove(pos)
                 } else {
-                    ToastUtils.showShort("删除失败")
+                    ToastUtils.showShort(it.msg)
                 }
             })
     }

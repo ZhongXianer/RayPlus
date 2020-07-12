@@ -243,6 +243,7 @@ data class TreatmentHistoryListBean(
             writeString(startTime)
             writeString(tmb)
             writeString(tmbOther)
+            writeInt(id)
         }
 
         companion object {

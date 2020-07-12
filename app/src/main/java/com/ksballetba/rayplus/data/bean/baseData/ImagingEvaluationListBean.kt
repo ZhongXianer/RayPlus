@@ -1,4 +1,4 @@
-package com.ksballetba.rayplus.data.bean
+package com.ksballetba.rayplus.data.bean.baseData
 
 
 import com.google.gson.annotations.SerializedName
@@ -14,16 +14,22 @@ data class ImagingEvaluationListBean(
         val cycleId: Int, // 5
         @SerializedName("evaluate_id")
         val evaluateId: Int, // 6
-        val method: String, // 神奇的方法
-        val part: String, // 腹部
+        @SerializedName("is_delete")
+        val isDelete: Int,
+        var method: String?, // 神奇的方法
+        var part: String?, // 腹部
         @SerializedName("photo_src")
         val photoSrc: Any?, // null
         @SerializedName("sample_id")
         val sampleId: Int, // 5
-        val time: String, // 2019-12-25
+        var time: String?, // 2019-12-25
+        @SerializedName("tumor_desc")
+        var tumorDesc: String?,
         @SerializedName("tumor_long")
-        val tumorLong: Float, // 11
+        var tumorLong: Float?, // 11
         @SerializedName("tumor_short")
-        val tumorShort: Float // 15
+        var tumorShort: Float?, // 15
+        @SerializedName("upload_file_address")
+        val UpLoadFileAddress: Any?
     )
 }

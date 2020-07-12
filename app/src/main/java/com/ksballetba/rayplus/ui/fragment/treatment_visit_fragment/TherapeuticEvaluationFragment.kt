@@ -70,6 +70,8 @@ class TherapeuticEvaluationFragment : Fragment() {
                 if (it.data.evaluation != null) {
                     tv_therapeutic_evaluation.text =
                         getTherapeuticEvaluationList()[it.data.evaluation]
+                } else {
+                    tv_therapeutic_evaluation.text = ""
                 }
             })
 //        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {

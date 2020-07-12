@@ -2,10 +2,9 @@ package com.ksballetba.rayplus.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Layout
 import android.util.Log
-import android.view.MenuItem
-import android.view.View
-import android.view.WindowManager
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -13,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.ksballetba.rayplus.R
+import com.ksballetba.rayplus.data.bean.SampleQueryBodyBean
+import com.ksballetba.rayplus.data.bean.SelectTypeShowBodyBean
 import com.ksballetba.rayplus.data.bean.sampleData.SampleEditBodyBean
 import com.ksballetba.rayplus.data.bean.sampleData.SampleListBean
 import com.ksballetba.rayplus.data.bean.sampleData.SampleSubmitBodyBean
@@ -20,6 +21,7 @@ import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.MainActivity.Companion.PROJECT_ID
 import com.ksballetba.rayplus.ui.activity.SampleEditActivity.Companion.REFRESH_LAST_PAGE
 import com.ksballetba.rayplus.ui.adapter.SamplesAdapter
+import com.ksballetba.rayplus.ui.adapter.SelectTypeAdapter
 import com.ksballetba.rayplus.util.getSamplesViewModel
 import com.ksballetba.rayplus.util.getUserId
 import com.ksballetba.rayplus.util.judgeUnlockSample
@@ -27,7 +29,10 @@ import com.ksballetba.rayplus.util.reLogin
 import com.ksballetba.rayplus.viewmodel.SamplesViewModel
 import com.lxj.xpopup.XPopup
 import kotlinx.android.synthetic.main.activity_sample.*
+import kotlinx.android.synthetic.main.widget_sample_head.*
+import org.angmarch.views.NiceSpinner
 import org.jetbrains.anko.toast
+import kotlin.math.log
 
 class SampleActivity : AppCompatActivity() {
 
@@ -35,14 +40,20 @@ class SampleActivity : AppCompatActivity() {
         const val TAG = "SampleActivity"
         const val SAMPLE_ID = "SAMPLE_ID"
         const val SAMPLE_BODY = "SAMPLE_BODY"
+        const val CYCLE_NUMBER = "CYCLE_NUMBER"
     }
 
-    var mProjectId = 0
+    private var mProjectId = 0
 
     private lateinit var mViewModel: SamplesViewModel
     private lateinit var mSamplesAdapter: SamplesAdapter
-    var mSampleList = mutableListOf<SampleListBean.Data>()
+    private lateinit var mSelectTypeAdapter: SelectTypeAdapter
+    private var mSampleList = mutableListOf<SampleListBean.Data>()
+    private var mSampleTypeList = mutableListOf<SelectTypeShowBodyBean>()
 
+    private var mSearchType: Int = 0
+    private var mSampleQueryBodyBean =
+        SampleQueryBodyBean(null, null, null, null, null, null, null, null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,21 +78,92 @@ class SampleActivity : AppCompatActivity() {
             android.R.id.home -> {
                 finish()
             }
+            R.id.item_select_samples -> {
+                dl_Sample.openDrawer(Gravity.RIGHT)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.sample_menu, menu)
+        return true
+    }
+
 
     private fun initUI() {
         setSupportActionBar(tb_sample)
         initRefresh()
         mProjectId = intent.getIntExtra(PROJECT_ID, 0)
+        val searchType = mutableListOf("姓名", "身份证号", "编号")
+        val spinner = findViewById<NiceSpinner>(R.id.choose_search_type)
+        spinner.attachDataSource(searchType)
+        spinner.setOnSpinnerItemSelectedListener { _, _, position, _ ->
+            mSearchType = position
+        }
+        search_button.setOnClickListener {
+            val searchContent = search_input.text.toString()
+            when (mSearchType) {
+                0 -> {
+                    initSampleQueryBodyBean()
+                    if (searchContent != "") mSampleQueryBodyBean.name = searchContent
+                }
+                1 -> {
+                    initSampleQueryBodyBean()
+                    if (searchContent != "") mSampleQueryBodyBean.idCard = searchContent
+                }
+                2 -> {
+                    initSampleQueryBodyBean()
+                    if (searchContent != "") mSampleQueryBodyBean.patientIds = searchContent
+                }
+            }
+            srl_sample.autoRefresh()
+        }
+
+        fab_refresh_sample.setOnClickListener {
+            search_input.setText("")
+            initSampleQueryBodyBean()
+            srl_sample.autoRefresh()
+        }
+
         fab_add_sample.setOnClickListener {
             navigateToSampleEditActivity(-1, null)
         }
     }
 
+    private fun initSampleQueryBodyBean() {
+        mSampleQueryBodyBean = SampleQueryBodyBean(null, null, null, null, null, null, null, null)
+    }
+
     private fun initList() {
         mViewModel = getSamplesViewModel(this)
+        initSampleListView()
+        initSampleSelectListView()
+        mViewModel.fetchLoadStatus().observe(this, Observer {
+            when (it.status) {
+                Status.RUNNING -> {
+                    srl_sample.autoRefresh()
+                }
+                Status.SUCCESS -> {
+                    srl_sample.finishRefresh()
+                }
+                Status.FAILED -> {
+                    toast(it.msg.toString())
+                    Log.d(TAG, it.msg.toString())
+                }
+            }
+        })
+        srl_sample.autoRefresh()
+        srl_sample.setOnRefreshListener {
+            getSearchCenters()
+            loadInitial(mSampleQueryBodyBean)
+        }
+        srl_sample.setOnLoadMoreListener {
+            loadMore(mSampleQueryBodyBean)
+        }
+    }
+
+    private fun initSampleListView() {
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = RecyclerView.VERTICAL
         rv_sample.layoutManager = layoutManager
@@ -104,7 +186,6 @@ class SampleActivity : AppCompatActivity() {
                                 sample.inGroupTime,
                                 sample.patientIds,
                                 sample.patientName,
-//                            sample.projectId,
                                 sample.researchCenterId,
                                 sample.sampleId,
                                 if (sample.sex == "男") 0 else 1,
@@ -141,34 +222,32 @@ class SampleActivity : AppCompatActivity() {
                 }
             }
         }
-
-        mViewModel.fetchLoadStatus().observe(this, Observer {
-            when (it.status) {
-                Status.RUNNING -> {
-                    srl_sample.autoRefresh()
-                }
-                Status.SUCCESS -> {
-                    srl_sample.finishRefresh()
-                }
-                Status.FAILED -> {
-//                    Log.d(TAG, "获取失败")
-//                    reLogin(this)
-                    toast(it.msg.toString())
-                    Log.d(TAG, it.msg.toString())
-                }
-            }
-        })
-        srl_sample.autoRefresh()
-        srl_sample.setOnRefreshListener {
-            loadInitial()
-        }
-        srl_sample.setOnLoadMoreListener {
-            loadMore()
-        }
     }
 
-    private fun loadInitial() {
-        mViewModel.fetchData().observe(this, Observer {
+    private fun initSampleSelectListView() {
+        val layoutManager = LinearLayoutManager(this)
+        layoutManager.orientation = RecyclerView.VERTICAL
+        val itemView = View.inflate(this, R.layout.widget_sample_head, null)
+        val slTypeList = itemView.findViewById<RecyclerView>(R.id.sl_type_list)
+        slTypeList.layoutManager = layoutManager
+        mSelectTypeAdapter = SelectTypeAdapter(mSampleTypeList, this)
+        slTypeList.adapter = mSelectTypeAdapter
+    }
+
+    private fun getSearchCenters() {
+        mViewModel.fetchAllResearchCenter(mProjectId).observe(this, Observer {
+            val researchCenters = mutableListOf<String>()
+            researchCenters.add(0, "全部")
+            it.forEach { data ->
+                researchCenters.add(data.name)
+            }
+            mSampleTypeList.add(0, SelectTypeShowBodyBean("研究中心", researchCenters))
+            mSelectTypeAdapter.notifyDataSetChanged()
+        })
+    }
+
+    private fun loadInitial(sampleQueryBodyBean: SampleQueryBodyBean) {
+        mViewModel.fetchData(sampleQueryBodyBean).observe(this, Observer {
             mSampleList = it
             if (mSampleList.size == 0)
                 Log.d(TAG, "样本为空")
@@ -176,8 +255,8 @@ class SampleActivity : AppCompatActivity() {
         })
     }
 
-    private fun loadMore() {
-        mViewModel.fetchMore().observe(this, Observer {
+    private fun loadMore(sampleQueryBodyBean: SampleQueryBodyBean) {
+        mViewModel.fetchMore(sampleQueryBodyBean).observe(this, Observer {
             mSamplesAdapter.addData(it)
             srl_sample.finishLoadMore()
         })
@@ -210,7 +289,7 @@ class SampleActivity : AppCompatActivity() {
             } else if (it.code == 10031 || it.code == 10032) {
                 reLogin(this)
             } else {
-                toast("样本提交失败")
+                toast(it.msg)
             }
         })
     }

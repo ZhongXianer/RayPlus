@@ -8,12 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
-import com.apkfuns.logutils.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.VisitEditBean
-import com.ksballetba.rayplus.data.bean.VisitTimeBean
 import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.TreatmentVisitDetailActivity
@@ -21,9 +19,7 @@ import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.CYCLE_
 import com.ksballetba.rayplus.util.getBaseVisitViewModel
 import com.ksballetba.rayplus.util.showDatePickerDialog
 import com.ksballetba.rayplus.viewmodel.BaseVisitViewModel
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.android.synthetic.main.fragment_visit_time.*
-import java.util.Calendar
 
 /**
  * A simple [Fragment] subclass.

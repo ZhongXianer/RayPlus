@@ -3,6 +3,7 @@ package com.ksballetba.rayplus.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,7 @@ import com.ksballetba.rayplus.data.bean.treatmentVisitData.NavigationBean
 import com.ksballetba.rayplus.data.bean.treatmentVisitData.TreatmentVisitShowDataBean
 import com.ksballetba.rayplus.data.bean.treatmentVisitData.TreatmentVisitSubmitResponseBean
 import com.ksballetba.rayplus.network.Status
+import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.CYCLE_NUMBER
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.TreatmentVisitDetailActivity
 import com.ksballetba.rayplus.ui.adapter.VisitsAdapter
@@ -25,6 +27,7 @@ import com.ksballetba.rayplus.util.getTreatmentVisitViewModel
 import com.ksballetba.rayplus.viewmodel.TreatmentVisitViewModel
 import com.lxj.xpopup.XPopup
 import kotlinx.android.synthetic.main.fragment_treatment_visit.*
+import kotlin.math.log
 
 /**
  * A simple [Fragment] subclass.
@@ -38,7 +41,11 @@ class TreatmentVisitFragment : Fragment() {
 
     private lateinit var mViewModel: TreatmentVisitViewModel
     private lateinit var mVisitsAdapter: VisitsAdapter
-    var mVisitList = mutableListOf<TreatmentVisitShowDataBean>()
+
+    private var mVisitList = mutableListOf<TreatmentVisitShowDataBean>()
+    private var dataList = mutableListOf<NavigationBean.Data>()
+    private var submitMap = mapOf<Int, Int>()
+
     var mSampleId = 0
 
     override fun onCreateView(
@@ -109,28 +116,40 @@ class TreatmentVisitFragment : Fragment() {
     }
 
     private fun loadData() {
-        //TODO
-        var dataList = mutableListOf<NavigationBean.Data>()
-        var submitStatusList = mutableListOf<TreatmentVisitSubmitResponseBean.Data>()
-        var map = mapOf<Int, Int>()
+        getNavigation()
+    }
+
+    private fun getNavigation() {
         mViewModel.getNavigation(mSampleId).observe(viewLifecycleOwner, Observer {
             dataList = it.toMutableList()
-            mVisitList.clear()
-            dataList.forEach {
-                val treatmentVisitShowDataBean =
-                    TreatmentVisitShowDataBean(
-                        it,
-                        map.get(it.cycleNumber) ?: 0
-                    )
-                mVisitList.add(treatmentVisitShowDataBean)
-            }
-            mVisitsAdapter.setNewData(mVisitList)
+            getSubmitStatus()
         })
-        mViewModel.getSubmitStatus(mSampleId).observe(viewLifecycleOwner, Observer {
-            submitStatusList = it.toMutableList()
-            map = submitStatusList.associateBy({ it.cycleNumber }, { it.submitStatus })
-        })
+    }
 
+    private fun getSubmitStatus() {
+        mViewModel.getSubmitStatus(mSampleId).observe(viewLifecycleOwner, Observer { it ->
+            val submitStatusList = it.toMutableList()
+            submitMap = submitStatusList.associateBy({ it.cycleNumber }, { it.submitStatus })
+            getTimeAndList()
+        })
+    }
+
+    private fun getTimeAndList() {
+        mVisitList.clear()
+        dataList.forEach { data ->
+            mViewModel.getVisitTime(mSampleId, data.cycleNumber)
+                .observe(viewLifecycleOwner, Observer { visitTime ->
+                    Log.d("hello", "执行了")
+                    val treatmentVisitShowDataBean = TreatmentVisitShowDataBean(
+                        data,
+                        visitTime.data?.cycleTime,
+                        submitMap[data.cycleNumber] ?: 0
+                    )
+                    mVisitList.add(treatmentVisitShowDataBean)
+                    mVisitList.sortBy { it.data.cycleNumber }
+                    mVisitsAdapter.notifyDataSetChanged()
+                })
+        }
     }
 
     private fun addCycle() {
@@ -139,7 +158,7 @@ class TreatmentVisitFragment : Fragment() {
                 ToastUtils.showShort("添加治疗期随访成功")
                 srl_treatment_visit.autoRefresh()
             } else {
-                ToastUtils.showShort("添加治疗期随访失败")
+                ToastUtils.showShort(it.msg)
             }
         })
     }
@@ -160,7 +179,6 @@ class TreatmentVisitFragment : Fragment() {
             if (it.code == 200) {
                 srl_treatment_visit.autoRefresh()
                 ToastUtils.showShort("提交治疗期随访成功")
-                //TODO
             } else {
                 ToastUtils.showShort("提交治疗期随访失败")
             }
@@ -172,6 +190,7 @@ class TreatmentVisitFragment : Fragment() {
         intent.putExtra(TREATMENT_CYCLE_NUMBER_KEY, cycleNumber)
         intent.putExtra(VISIT_TITLE, title)
         intent.putExtra(SAMPLE_ID, mSampleId)
+        intent.putExtra(CYCLE_NUMBER, cycleNumber)
         activity?.startActivity(intent)
     }
 

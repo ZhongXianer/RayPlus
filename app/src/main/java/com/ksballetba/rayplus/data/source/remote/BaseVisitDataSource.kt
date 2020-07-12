@@ -4,6 +4,10 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.apkfuns.logutils.LogUtils
 import com.ksballetba.rayplus.data.bean.*
+import com.ksballetba.rayplus.data.bean.baseData.ImagingEvaluationBodyBean
+import com.ksballetba.rayplus.data.bean.baseData.ImagingEvaluationListBean
+import com.ksballetba.rayplus.data.bean.baseData.VisitTimeBean
+import com.ksballetba.rayplus.data.bean.treatmentVisitData.TreatmentVisitSubmitResponseBean
 import com.ksballetba.rayplus.network.ApiService
 import com.ksballetba.rayplus.network.NetworkState
 import com.ksballetba.rayplus.network.NetworkType
@@ -19,6 +23,47 @@ class BaseVisitDataSource(context: Context){
 
     private val mToken=getToken()
 //    private val mToken = "Bearer ${context.getSharedPreferences(SHARED_PREFERENCE_NAME,Context.MODE_PRIVATE).getString(LOGIN_TOKEN,"")}"
+
+    fun getSubmitStatus(
+        sampleId: Int,
+        callBack: (MutableList<TreatmentVisitSubmitResponseBean.Data>) -> Unit
+    ) {
+        RetrofitClient.getInstance(NetworkType.PROJECT)
+            .create(ApiService::class.java)
+            .getTreatmentCycleSubmitStatus(mToken, sampleId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it.data.toMutableList())
+                },
+                onComplete = {
+                    LogUtils.d("completed")
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                }
+            )
+    }
+
+    fun submitCycle(sampleId: Int, cycleNumber: Int, callBack: (BaseResponseBean) -> Unit) {
+        RetrofitClient.getInstance(NetworkType.PROJECT)
+            .create(ApiService::class.java)
+            .submitCycle(mToken, sampleId, cycleNumber)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                }
+            )
+    }
 
     fun getVisitTime(sampleId:Int,cycleNumber:Int,callBack: (VisitTimeBean) -> Unit) {
         mLoadStatus.postValue(NetworkState.LOADING)
@@ -124,7 +169,7 @@ class BaseVisitDataSource(context: Context){
             )
     }
 
-    fun editImagingEvaluation(sampleId:Int,cycleNumber:Int,imagingEvaluationBodyBean: ImagingEvaluationBodyBean,callBack: (BaseResponseBean) -> Unit){
+    fun editImagingEvaluation(sampleId:Int, cycleNumber:Int, imagingEvaluationBodyBean: ImagingEvaluationBodyBean, callBack: (BaseResponseBean) -> Unit){
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
             .editImagingEvaluation(mToken,sampleId,cycleNumber,imagingEvaluationBodyBean)

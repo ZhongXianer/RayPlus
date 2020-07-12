@@ -82,7 +82,7 @@ class MainPhysicalSignFragment : Fragment() {
                     if (it.code == 200) {
                         ToastUtils.showShort("ECOG评分保存成功")
                     } else {
-                        ToastUtils.showShort("ECOG评分保存失败")
+                        ToastUtils.showShort(it.msg)
                     }
                 })
         }

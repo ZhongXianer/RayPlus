@@ -1,5 +1,4 @@
-package com.ksballetba.rayplus.data.bean
-
+package com.ksballetba.rayplus.data.bean.baseData
 
 import android.os.Parcel
 import android.os.Parcelable
@@ -7,16 +6,18 @@ import com.google.gson.annotations.SerializedName
 
 data class ImagingEvaluationBodyBean(
     @SerializedName("evaluate_id")
-    val evaluateId: Int?,
-    val method: String?, // 其他
+    var evaluateId: Int?,
+    var method: String?,
     @SerializedName("method_other")
-    val methodOther: String?, // 切片
-    val part: String?, // 西瓜
-    val time: String?, // 2019-12-25
+    var methodOther: String?,
+    var part: String?,
+    var time: String?,
+    @SerializedName("tumor_desc")
+    var tumorDesc: String?,
     @SerializedName("tumor_long")
-    val tumorLong: Float?, // 10
+    var tumorLong: String?,
     @SerializedName("tumor_short")
-    val tumorShort: Float? // 22
+    var tumorShort: String?
 ) : Parcelable {
     constructor(source: Parcel) : this(
         source.readValue(Int::class.java.classLoader) as Int?,
@@ -24,8 +25,9 @@ data class ImagingEvaluationBodyBean(
         source.readString(),
         source.readString(),
         source.readString(),
-        source.readValue(Float::class.java.classLoader) as Float?,
-        source.readValue(Float::class.java.classLoader) as Float?
+        source.readString(),
+        source.readString(),
+        source.readString()
     )
 
     override fun describeContents() = 0
@@ -36,8 +38,9 @@ data class ImagingEvaluationBodyBean(
         writeString(methodOther)
         writeString(part)
         writeString(time)
-        writeValue(tumorLong)
-        writeValue(tumorShort)
+        writeString(tumorDesc)
+        writeString(tumorLong)
+        writeString(tumorShort)
     }
 
     companion object {
@@ -45,7 +48,9 @@ data class ImagingEvaluationBodyBean(
         val CREATOR: Parcelable.Creator<ImagingEvaluationBodyBean> =
             object : Parcelable.Creator<ImagingEvaluationBodyBean> {
                 override fun createFromParcel(source: Parcel): ImagingEvaluationBodyBean =
-                    ImagingEvaluationBodyBean(source)
+                    ImagingEvaluationBodyBean(
+                        source
+                    )
 
                 override fun newArray(size: Int): Array<ImagingEvaluationBodyBean?> =
                     arrayOfNulls(size)

@@ -28,11 +28,12 @@ fun asCheckboxList(
     )
 }
 
-fun showDatePickerDialog(textView: TextView, fragmentManager: FragmentManager) {
+fun showDatePickerDialog(textView: TextView, fragmentManager: FragmentManager){
     val now = Calendar.getInstance()
+    var date = ""
     val dpd = DatePickerDialog.newInstance(
         { _, year, monthOfYear, dayOfMonth ->
-            val date = "$year-${monthOfYear + 1}-$dayOfMonth"
+            date = "$year-${monthOfYear + 1}-$dayOfMonth"
             val formatter = SimpleDateFormat("yyyy-MM-dd")
             val selectedDate = formatter.parse(date)
             if (selectedDate.before(now.time)) {
@@ -168,7 +169,7 @@ fun getAdverseEventMedicineMeasure() = arrayOf("继续用药", "减少剂量", "
 
 fun getAdverseEventMedicineRelation() = arrayOf("肯定有关", "很可能有关", "可能有关", "可能无关", "肯定无关")
 
-fun getAdverseEventSAERecover() = arrayOf("症状消失后无后遗症", "症状消失后有后遗症", "症状持续")
+fun getAdverseEventSAERecover() = arrayOf("症状消失无后遗症", "症状消失有后遗症", "症状持续")
 
 fun getAdverseEventReportType() = arrayOf("首次报告", "随访报告", "总结报告")
 
@@ -177,7 +178,7 @@ fun getAdverseEventToxicityClassify() = arrayOf("1级", "2级", "3级", "4级", 
 fun getAdverseEventSAEState() =
     arrayOf("死亡", "导致住院", "延长住院时间", "伤残", "功能障碍", "导致先天畸形", "危及生命", "怀孕")
 
-fun getExistenceStatus() = arrayOf("存活", "消失")
+fun getExistenceStatus() = arrayOf("存在", "消失")
 
 fun getTreatmentVisitSubmitStatus() = arrayOf("未提交", "已提交")
 
@@ -185,7 +186,7 @@ fun getSurvivalStatus() = arrayOf("死亡", "存活", "失联")
 
 fun getSurvivalSubmitStatus() = arrayOf("未提交", "已提交")
 
-fun getSubmitRemind()= arrayOf("提交后将会锁定该访视至不可编辑状态，请确认访视数据完善后提交。","已提交的访视处于锁定状态，如需修改请联系总中心")
+fun getSubmitRemind() = arrayOf("提交后将会锁定该访视至不可编辑状态，请确认访视数据完善后提交。", "已提交的访视处于锁定状态，如需修改请联系总中心")
 
 fun getInterviewWay() = arrayOf("电话", "门诊", "住院")
 

@@ -301,45 +301,4 @@ class BaselineVisitDataSource(context: Context) {
                 }
             )
     }
-
-    fun getSubmitStatus(
-        sampleId: Int,
-        callBack: (MutableList<TreatmentVisitSubmitResponseBean.Data>) -> Unit
-    ) {
-        RetrofitClient.getInstance(NetworkType.PROJECT)
-            .create(ApiService::class.java)
-            .getTreatmentCycleSubmitStatus(mToken, sampleId)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(
-                onNext = {
-                    callBack(it.data.toMutableList())
-                },
-                onComplete = {
-                    LogUtils.d("completed")
-                },
-                onError = {
-                    LogUtils.d(it.message)
-                }
-            )
-    }
-
-    fun submitCycle(sampleId: Int, cycleNumber: Int, callBack: (BaseResponseBean) -> Unit) {
-        RetrofitClient.getInstance(NetworkType.PROJECT)
-            .create(ApiService::class.java)
-            .submitCycle(mToken, sampleId, cycleNumber)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(
-                onNext = {
-                    callBack(it)
-                },
-                onComplete = {
-                    LogUtils.d("Completed")
-                },
-                onError = {
-                    LogUtils.d(it.message)
-                }
-            )
-    }
 }

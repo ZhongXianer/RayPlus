@@ -10,20 +10,17 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.apkfuns.logutils.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 import com.ksballetba.rayplus.R
-import com.ksballetba.rayplus.data.bean.ImagingEvaluationBodyBean
-import com.ksballetba.rayplus.data.bean.ImagingEvaluationListBean
-import com.ksballetba.rayplus.network.Status
+import com.ksballetba.rayplus.data.bean.baseData.ImagingEvaluationBodyBean
+import com.ksballetba.rayplus.data.bean.baseData.ImagingEvaluationListBean
 import com.ksballetba.rayplus.ui.activity.CRFActivity
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.TreatmentVisitDetailActivity
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.ImagingEvaluationActivity
 import com.ksballetba.rayplus.ui.adapter.ImagingEvaluationAdapter
-import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment
 import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.CYCLE_NUMBER_KEY
 import com.ksballetba.rayplus.util.getBaseVisitViewModel
 import com.ksballetba.rayplus.viewmodel.BaseVisitViewModel
@@ -45,10 +42,10 @@ class ImagingEvaluationFragment : Fragment() {
 
     private lateinit var mViewModel: BaseVisitViewModel
     private lateinit var mAdapter: ImagingEvaluationAdapter
-    var mList = mutableListOf<ImagingEvaluationListBean.Data>()
+    private var mList = mutableListOf<ImagingEvaluationListBean.Data>()
     var mSampleId = 0
-    var mCycleNumber = 0
-    var mCurrentPage = ""
+    private var mCycleNumber = 0
+    private var mCurrentPage = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,7 +65,7 @@ class ImagingEvaluationFragment : Fragment() {
 
     private fun initUI() {
         fab_imaging_evaluation.setOnClickListener {
-            navigateToImagingEvaluationEditPage(mSampleId, mCycleNumber,mCurrentPage ,null)
+            navigateToImagingEvaluationEditPage(mSampleId, mCycleNumber, mCurrentPage, null)
         }
     }
 
@@ -76,11 +73,11 @@ class ImagingEvaluationFragment : Fragment() {
         mSampleId = (arguments as Bundle).getInt(SAMPLE_ID)
         mCycleNumber = (arguments as Bundle).getInt(CYCLE_NUMBER_KEY)
         mViewModel = getBaseVisitViewModel(this)
-        when(activity){
-            is CRFActivity->{
+        when (activity) {
+            is CRFActivity -> {
                 mCurrentPage = CRF_PAGE
             }
-            is TreatmentVisitDetailActivity->{
+            is TreatmentVisitDetailActivity -> {
                 mCurrentPage = TREATMENT_VISIT_DETAIL_PAGE
             }
         }
@@ -95,15 +92,17 @@ class ImagingEvaluationFragment : Fragment() {
         mAdapter.bindToRecyclerView(rv_imaging_evaluation)
         mAdapter.setOnItemClickListener { _, _, position ->
             val imagingEvaluation = mList[position]
-            val imagingEvaluationBody = ImagingEvaluationBodyBean(
-                imagingEvaluation.evaluateId,
-                imagingEvaluation.method,
-                imagingEvaluation.method,
-                imagingEvaluation.part,
-                imagingEvaluation.time,
-                imagingEvaluation.tumorLong,
-                imagingEvaluation.tumorShort
-            )
+            val imagingEvaluationBody =
+                ImagingEvaluationBodyBean(
+                    imagingEvaluation.evaluateId,
+                    imagingEvaluation.method,
+                    imagingEvaluation.method,
+                    imagingEvaluation.part,
+                    imagingEvaluation.time,
+                    imagingEvaluation.tumorDesc,
+                    imagingEvaluation.tumorLong?.toString(),
+                    imagingEvaluation.tumorShort?.toString()
+                )
             navigateToImagingEvaluationEditPage(
                 mSampleId,
                 mCycleNumber,
@@ -111,11 +110,10 @@ class ImagingEvaluationFragment : Fragment() {
                 imagingEvaluationBody
             )
         }
-        mAdapter.setOnItemChildClickListener { adapter, view, position ->
+        mAdapter.setOnItemChildClickListener { _, _, position ->
             XPopup.Builder(context).asConfirm("信息", "请问是否确认删除") {
                 deleteImagingEvaluation(mList[position].evaluateId, position)
             }.show()
-
         }
     }
 
@@ -125,23 +123,18 @@ class ImagingEvaluationFragment : Fragment() {
                 mList = it
                 mAdapter.setNewData(mList)
             })
-//        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
-//            if (it.status == Status.FAILED) {
-//                ToastUtils.showShort(it.msg)
-//            }
-//        })
     }
 
     private fun navigateToImagingEvaluationEditPage(
         sampleId: Int,
         cycleNumber: Int,
-        refreshPage:String,
+        refreshPage: String,
         imagingEvaluationBodyBean: ImagingEvaluationBodyBean?
     ) {
         val intent = Intent(activity, ImagingEvaluationActivity::class.java)
         intent.putExtra(SAMPLE_ID, sampleId)
         intent.putExtra(CYCLE_NUMBER_KEY, cycleNumber)
-        intent.putExtra(REFRESH_PAGE,refreshPage)
+        intent.putExtra(REFRESH_PAGE, refreshPage)
         if (imagingEvaluationBodyBean?.evaluateId != null) {
             intent.putExtra(IMAGING_EVALUATION_BODY, imagingEvaluationBodyBean)
         }
@@ -156,7 +149,7 @@ class ImagingEvaluationFragment : Fragment() {
                         ToastUtils.showShort("删除成功")
                         mAdapter.remove(pos)
                     } else {
-                        ToastUtils.showShort("删除失败")
+                        ToastUtils.showShort(it.msg)
                     }
                 })
     }

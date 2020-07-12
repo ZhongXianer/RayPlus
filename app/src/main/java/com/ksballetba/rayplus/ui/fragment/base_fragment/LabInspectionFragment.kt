@@ -114,19 +114,23 @@ class LabInspectionFragment : Fragment() {
                 R.id.ns_lab_inspection
             ) as NiceSpinner).selectedIndex = it.data?.pTRank ?: 0
             (mUrineRoutineAdapter.getViewByPosition(0, R.id.tv_lab_inspection) as TextView).text =
-                "${it.data?.wBCPVal ?: ""}"
+                "${it.data?.rBCPVal ?: ""}"
             (mUrineRoutineAdapter.getViewByPosition(
                 0,
                 R.id.ns_lab_inspection
-            ) as NiceSpinner).selectedIndex = it.data?.wBCPRank ?: 0
+            ) as NiceSpinner).selectedIndex = it.data?.rBCPRank ?: 0
             (mUrineRoutineAdapter.getViewByPosition(1, R.id.tv_lab_inspection) as TextView).text =
-                "${it.data?.rBCPVal ?: ""}"
+                "${it.data?.wBCPVal ?: ""}"
             (mUrineRoutineAdapter.getViewByPosition(
                 1,
                 R.id.ns_lab_inspection
-            ) as NiceSpinner).selectedIndex = it.data?.rBCPRank ?: 0
-            (mUrineRoutineAdapter.getViewByPosition(2, R.id.tv_lab_inspection) as TextView).text =
-                if (it.data?.pROVal == 1.0f) "+" else "-"
+            ) as NiceSpinner).selectedIndex = it.data?.wBCPRank ?: 0
+            if (it.data?.pROVal == null) (mUrineRoutineAdapter.getViewByPosition(
+                2,
+                R.id.tv_lab_inspection
+            ) as TextView).text=""
+            else (mUrineRoutineAdapter.getViewByPosition(2, R.id.tv_lab_inspection) as TextView).text =
+                if (it.data.pROVal == 1.0f) "+" else "-"
             (mUrineRoutineAdapter.getViewByPosition(
                 2,
                 R.id.ns_lab_inspection
@@ -305,21 +309,21 @@ class LabInspectionFragment : Fragment() {
                 R.id.ns_lab_inspection
             ) as NiceSpinner).selectedIndex
         )
-        val wBCPVal = (mUrineRoutineAdapter.getViewByPosition(
+        val rBCPVal = (mUrineRoutineAdapter.getViewByPosition(
             0,
             R.id.tv_lab_inspection
         ) as TextView).text.toString().toFloatOrNull()
-        val wBCPRank = parseLabInspectionRank(
+        val rBCPRank = parseLabInspectionRank(
             (mUrineRoutineAdapter.getViewByPosition(
                 0,
                 R.id.ns_lab_inspection
             ) as NiceSpinner).selectedIndex
         )
-        val rBCPVal = (mUrineRoutineAdapter.getViewByPosition(
+        val wBCPVal = (mUrineRoutineAdapter.getViewByPosition(
             1,
             R.id.tv_lab_inspection
         ) as TextView).text.toString().toFloatOrNull()
-        val rBCPRank = parseLabInspectionRank(
+        val wBCPRank = parseLabInspectionRank(
             (mUrineRoutineAdapter.getViewByPosition(
                 1,
                 R.id.ns_lab_inspection
@@ -515,8 +519,8 @@ class LabInspectionFragment : Fragment() {
             pltVal,
             rBCBRank,
             rBCBVal,
-            rBCPRank,
-            rBCPVal,
+            wBCPRank,
+            wBCPVal,
             sCCRank,
             sCCVal,
             tBILRank,
@@ -524,8 +528,8 @@ class LabInspectionFragment : Fragment() {
             time,
             wBCBRank,
             wBCBVal,
-            wBCPRank,
-            wBCPVal,
+            rBCPRank,
+            rBCPVal,
             kRank,
             kVal,
             naRank,
@@ -541,7 +545,7 @@ class LabInspectionFragment : Fragment() {
                     if (it.code == 200) {
                         ToastUtils.showShort("实验室检查表单修改成功")
                     } else {
-                        ToastUtils.showShort("实验室检查表单修改失败")
+                        ToastUtils.showShort(it.msg)
                     }
                 })
     }
@@ -565,7 +569,7 @@ class LabInspectionFragment : Fragment() {
         )
         mUrineRoutineAdapter = LabInspectionAdapter(
             R.layout.item_lab_inspection,
-            listOf("白细胞(个/HP)", "红细胞(个/HP)", "尿蛋白(＋/－)")
+            listOf("红细胞(个/HP)", "白细胞(个/HP)", "尿蛋白(＋/－)")
         )
         mBloodBiochemistryAdapter = LabInspectionAdapter(
             R.layout.item_lab_inspection,

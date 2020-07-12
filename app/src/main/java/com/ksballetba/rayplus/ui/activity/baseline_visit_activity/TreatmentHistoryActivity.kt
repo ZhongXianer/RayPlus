@@ -3,6 +3,7 @@ package com.ksballetba.rayplus.ui.activity.baseline_visit_activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import com.apkfuns.logutils.LogUtils
@@ -18,6 +19,7 @@ import com.ksballetba.rayplus.viewmodel.BaselineVisitViewModel
 import com.lxj.xpopup.XPopup
 import kotlinx.android.synthetic.main.activity_treatment_history.*
 import org.jetbrains.anko.toast
+import kotlin.math.log
 
 class TreatmentHistoryActivity : AppCompatActivity() {
 
@@ -34,6 +36,15 @@ class TreatmentHistoryActivity : AppCompatActivity() {
     private var mOtherGeneMutationTypeEGFR: String? = ""
     private var mOtherGeneMutationTypeALK: String? = ""
     private var mOtherLastFrontPart: String? = ""
+    private var mId: Int? = null
+
+    private var biopsyMethodIsSet: Boolean = false
+    private var biopsyTypeIsSet: Boolean = false
+    private var geneticSpecimenIsSet: Boolean = false
+    private var tmbIsSet: Boolean = false
+    private var isNull: Boolean = false
+
+    private lateinit var mTreatmentHistoryBean: TreatmentHistoryListBean.Data
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,9 +67,12 @@ class TreatmentHistoryActivity : AppCompatActivity() {
         val treatmentHistoryBody =
             intent.getParcelableExtra<TreatmentHistoryListBean.Data>(TREATMENT_HISTORY_BODY)
         if (treatmentHistoryBody != null) {
+            mId = treatmentHistoryBody.id
+            mTreatmentHistoryBean = treatmentHistoryBody
             loadData(treatmentHistoryBody)
         } else {
             //初始表格设置为不可见
+            isNull = true
             ll_treatment_history_detail.visibility = View.GONE
             initEmptyLastFrontPart()
             initEmptyGeneMutationType()
@@ -77,7 +91,7 @@ class TreatmentHistoryActivity : AppCompatActivity() {
                         tv_last_best_treatment_title.text = "一线治疗最佳疗效"
                         tv_last_treatment_growth_date_title.text = "一线治疗进展时间"
                         tv_last_treatment_growth_part.text = "一线治疗进展部位"
-                        tv_treatment_date_title.text="二线治疗开始时间"
+                        tv_treatment_date_title.text = "二线治疗开始时间"
                     }
                     2 -> {
                         ll_not_first_line_treatment.visibility = View.VISIBLE
@@ -85,7 +99,7 @@ class TreatmentHistoryActivity : AppCompatActivity() {
                         tv_last_best_treatment_title.text = "二线治疗最佳疗效"
                         tv_last_treatment_growth_date_title.text = "二线治疗进展时间"
                         tv_last_treatment_growth_part_title.text = "二线治疗进展部位"
-                        tv_treatment_date_title.text="三线治疗开始时间"
+                        tv_treatment_date_title.text = "三线治疗开始时间"
                     }
                     3 -> {
                         ll_not_first_line_treatment.visibility = View.VISIBLE
@@ -93,7 +107,7 @@ class TreatmentHistoryActivity : AppCompatActivity() {
                         tv_last_best_treatment_title.text = "三线治疗最佳疗效"
                         tv_last_treatment_growth_date_title.text = "三线治疗进展时间"
                         tv_last_treatment_growth_part_title.text = "三线治疗进展部位"
-                        tv_treatment_date_title.text="四线治疗开始"
+                        tv_treatment_date_title.text = "四线治疗开始时间"
                     }
                     4 -> {
                         ll_not_first_line_treatment.visibility = View.VISIBLE
@@ -101,6 +115,7 @@ class TreatmentHistoryActivity : AppCompatActivity() {
                         tv_last_best_treatment_title.text = "四线治疗最佳疗效"
                         tv_last_treatment_growth_date_title.text = "四线治疗进展时间"
                         tv_last_treatment_growth_part_title.text = "四线治疗进展部位"
+                        tv_treatment_date_title.text = "五线治疗开始时间"
                     }
                 }
             }.show()
@@ -154,6 +169,7 @@ class TreatmentHistoryActivity : AppCompatActivity() {
                 }.show()
         }
         cl_biopsy_way.setOnClickListener {
+            biopsyMethodIsSet = true
             XPopup.Builder(this).asCenterList(
                 getString(R.string.biopsy_way),
                 arrayOf("无", "手术", "胸腔镜", "纵膈镜", "经皮肺穿刺", "纤支镜", "E-BUS", "EUS-FNA", "淋巴结活检", "其他")
@@ -169,6 +185,7 @@ class TreatmentHistoryActivity : AppCompatActivity() {
             }.show()
         }
         cl_biopsy_pathological_type.setOnClickListener {
+            biopsyTypeIsSet = true
             XPopup.Builder(this).asCenterList(
                 getString(R.string.biopsy_pathological_type),
                 arrayOf("无", "与第1次活检病理类型一致", "与第1次活检病理类型不一致")
@@ -184,6 +201,7 @@ class TreatmentHistoryActivity : AppCompatActivity() {
             }.show()
         }
         cl_genetic_test_sample.setOnClickListener {
+            geneticSpecimenIsSet = true
             XPopup.Builder(this).asCenterList(
                 getString(R.string.genetic_test_sample),
                 arrayOf("无", "外周血", "原发灶组织", "转移灶组织")
@@ -246,6 +264,7 @@ class TreatmentHistoryActivity : AppCompatActivity() {
                 }.show()
         }
         cl_tumor_mutation_load.setOnClickListener {
+            tmbIsSet = true
             XPopup.Builder(this)
                 .asCenterList("肿瘤突变负荷(TMB)", arrayOf("未测", "不详", "数量（个突变/Mb）")) { pos, text ->
                     if (pos < 2) {
@@ -377,28 +396,48 @@ class TreatmentHistoryActivity : AppCompatActivity() {
         val isBiopsyAgainStr = parseDefaultContent(tv_is_biopsy_again.text.toString())
         val isBiopsyAgain =
             if (isBiopsyAgainStr.isEmpty()) null else if (isBiopsyAgainStr == "是") 1 else 0
-        var biopsyMethod: String? = parseDefaultContent(tv_biopsy_way.text.toString())
-        var biopsyMethodOther: String? = parseDefaultContent(tv_biopsy_way.text.toString())
-        if (getBiopsyMethod().contains(biopsyMethod)) {
+        var biopsyMethod: String? = mTreatmentHistoryBean.biopsyMethod
+        var biopsyMethodOther: String? = mTreatmentHistoryBean.biopsyMethodOther
+        if (isNull && !biopsyMethodIsSet) {
+            biopsyMethod = null
             biopsyMethodOther = null
-        } else {
-            biopsyMethod = "其他"
+        } else if (biopsyMethodIsSet) {
+            biopsyMethod = parseDefaultContent(tv_biopsy_way.text.toString())
+            biopsyMethodOther = parseDefaultContent(tv_biopsy_way.text.toString())
+            if (getBiopsyMethod().contains(biopsyMethod)) {
+                biopsyMethodOther = null
+            } else {
+                biopsyMethod = "其他"
+            }
         }
-        var biopsyType: String? = parseDefaultContent(tv_biopsy_pathological_type.text.toString())
-        var biopsyTypeOther: String? =
-            parseDefaultContent(tv_biopsy_pathological_type.text.toString())
-        if (getBiopsyType().contains(biopsyType)) {
+        var biopsyType: String? = mTreatmentHistoryBean.biopsyType
+        var biopsyTypeOther: String? = mTreatmentHistoryBean.biopsyTypeOther
+        if (isNull && !biopsyTypeIsSet) {
+            biopsyType = null
             biopsyTypeOther = null
-        } else {
-            biopsyType = "与第1次活检病理类型不一致"
+        } else if (biopsyTypeIsSet) {
+            biopsyType = parseDefaultContent(tv_biopsy_pathological_type.text.toString())
+            biopsyTypeOther = parseDefaultContent(tv_biopsy_pathological_type.text.toString())
+            if (getBiopsyType().contains(biopsyType)) {
+                biopsyType = getBiopsyType().indexOf(biopsyType).toString()
+                biopsyTypeOther = null
+            } else {
+                biopsyType = "与第1次活检病理类型不一致"
+            }
         }
-        var geneticSpecimen: String? = parseDefaultContent(tv_genetic_test_sample.text.toString())
-        var geneticSpecimenOther: String? =
-            parseDefaultContent(tv_genetic_test_sample.text.toString())
-        if (getGeneticTestingSpecimen().contains(geneticSpecimen)) {
+        var geneticSpecimen: String? = mTreatmentHistoryBean.geneticSpecimen
+        var geneticSpecimenOther: String? = mTreatmentHistoryBean.geneticSpecimenOther
+        if (isNull && !geneticSpecimenIsSet) {
+            geneticSpecimen = null
             geneticSpecimenOther = null
-        } else {
-            geneticSpecimen = "转移灶组织"
+        } else if (geneticSpecimenIsSet) {
+            geneticSpecimen = parseDefaultContent(tv_genetic_test_sample.text.toString())
+            geneticSpecimenOther = parseDefaultContent(tv_genetic_test_sample.text.toString())
+            if (getGeneticTestingSpecimen().contains(geneticSpecimen)) {
+                geneticSpecimenOther = null
+            } else {
+                geneticSpecimen = "转移灶组织"
+            }
         }
         val geneticMethodStr = parseDefaultContent(tv_genetic_test_way.text.toString())
         val geneticMethod =
@@ -439,12 +478,19 @@ class TreatmentHistoryActivity : AppCompatActivity() {
         )
         val pdl1Str = parseDefaultContent(tv_PD_L1_expression.text.toString())
         val pdl1 = if (pdl1Str.isEmpty()) null else getPD_L1Expression().indexOf(pdl1Str)
-        var tmb: String? = parseDefaultContent(tv_tumor_mutation_load.text.toString())
-        var tmbOther: String? = parseDefaultContent(tv_tumor_mutation_load.text.toString())
-        if (getTMB().contains(tmb)) {
+        var tmb: String? = mTreatmentHistoryBean.tmb
+        var tmbOther: String? = mTreatmentHistoryBean.tmbOther
+        if (isNull && !tmbIsSet) {
+            tmb = null
             tmbOther = null
-        } else {
-            tmb = "其他"
+        } else if (tmbIsSet) {
+            tmb = parseDefaultContent(tv_tumor_mutation_load.text.toString())
+            tmbOther = parseDefaultContent(tv_tumor_mutation_load.text.toString())
+            if (getTMB().contains(tmb)) {
+                tmbOther = null
+            } else {
+                tmb = "其他"
+            }
         }
         val msiStr = parseDefaultContent(tv_microsatellite_instability.text.toString())
         val msi = if (msiStr.isEmpty()) null else getMSI().indexOf(msiStr)
@@ -476,6 +522,8 @@ class TreatmentHistoryActivity : AppCompatActivity() {
             diagnoseMethodtargetedtherapy,
             diagnoseMethodtargetedtherapyOther
         )
+        Log.d("hello", "type:${biopsyType ?: "未设置"}")
+        Log.d("hello", "other:${biopsyTypeOther ?: "未设置"}")
         val treatmentHistoryBodyBean =
             TreatmentHistoryBodyBean(
                 biopsyMethod,
@@ -489,6 +537,7 @@ class TreatmentHistoryActivity : AppCompatActivity() {
                 geneticMutationType,
                 geneticSpecimen,
                 geneticSpecimenOther,
+                mId,
                 isBiopsyAgain,
                 lastFrontBestEfficacy,
                 lastFrontPart,
@@ -508,7 +557,7 @@ class TreatmentHistoryActivity : AppCompatActivity() {
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                     startActivity(intent)
                 } else {
-                    toast("治疗史操作失败")
+                    toast(it.msg)
                 }
             })
     }
@@ -558,11 +607,14 @@ class TreatmentHistoryActivity : AppCompatActivity() {
             }
         }
         if (bean.diagnoseExistence != null) {
-            tv_first_line_treatment.text = getDiagnoseExistence()[bean.diagnoseExistence]
-            if (bean.diagnoseExistence < 2) {
-                ll_treatment_history_detail.visibility = View.GONE
-            } else {
-                ll_treatment_history_detail.visibility = View.VISIBLE
+            if (bean.diagnoseExistence == -1) ll_treatment_detail.visibility = View.GONE
+            else {
+                tv_first_line_treatment.text = getDiagnoseExistence()[bean.diagnoseExistence]
+                if (bean.diagnoseExistence < 2) {
+                    ll_treatment_history_detail.visibility = View.GONE
+                } else {
+                    ll_treatment_history_detail.visibility = View.VISIBLE
+                }
             }
         }
         if (bean.lastFrontBestEfficacy != null) {
@@ -576,7 +628,8 @@ class TreatmentHistoryActivity : AppCompatActivity() {
         tv_biopsy_way.text =
             if (bean.biopsyMethod == "其他") bean.biopsyMethodOther else bean.biopsyMethod
         tv_biopsy_pathological_type.text =
-            if (bean.biopsyType == "与第1次活检病理类型不一致") bean.biopsyTypeOther else bean.biopsyType
+            if (bean.biopsyType == "与第1次活检病理类型不一致") bean.biopsyTypeOther
+            else getBiopsyType()[bean.biopsyType!!.toInt()]
         tv_genetic_test_sample.text =
             if (bean.geneticSpecimen == "转移灶组织") bean.geneticSpecimenOther else bean.geneticSpecimen
         if (bean.geneticMethod != null) {

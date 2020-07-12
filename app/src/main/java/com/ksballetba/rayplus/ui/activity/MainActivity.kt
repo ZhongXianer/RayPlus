@@ -32,8 +32,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mViewModel: ProjectsViewModel
     private lateinit var mProjectsAdapter: ProjectsAdapter
-    var mBackDownTime = 0.toLong()
-    var mProjectList = mutableListOf<ProjectListBean.Data>()
+    private var mBackDownTime = 0.toLong()
+    private var mProjectList = mutableListOf<ProjectListBean.Data>()
 
     private val mProjectId = 1  //暂时使用
 

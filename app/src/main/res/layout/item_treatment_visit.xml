@@ -30,6 +30,16 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/tv_visit_list_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textSize="15sp"
+            android:text="访视时间："
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_visit_name"/>
+
+        <TextView
             android:id="@+id/tv_visit_submit_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -37,7 +47,7 @@
             android:text="提交状态："
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_visit_name" />
+            app:layout_constraintTop_toBottomOf="@id/tv_visit_list_date" />
 
         <Button
             android:id="@+id/tv_visit_submit"
