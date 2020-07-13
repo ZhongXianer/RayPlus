@@ -6,6 +6,7 @@ import com.apkfuns.logutils.LogUtils
 import com.ksballetba.rayplus.data.bean.*
 import com.ksballetba.rayplus.data.bean.baseData.ImagingEvaluationBodyBean
 import com.ksballetba.rayplus.data.bean.baseData.ImagingEvaluationListBean
+import com.ksballetba.rayplus.data.bean.baseData.InvestigatorSignatureBodyBean
 import com.ksballetba.rayplus.data.bean.baseData.VisitTimeBean
 import com.ksballetba.rayplus.data.bean.treatmentVisitData.TreatmentVisitSubmitResponseBean
 import com.ksballetba.rayplus.network.ApiService
@@ -102,6 +103,27 @@ class BaseVisitDataSource(context: Context){
                 },
                 onError = {
                     LogUtils.d(it.message)
+                }
+            )
+    }
+
+    fun getBaselineInvestigatorSignature(sampleId: Int,callBack:(InvestigatorSignatureBodyBean)->Unit){
+        RetrofitClient.getInstance(NetworkType.PROJECT)
+            .create(ApiService::class.java)
+            .getBaselineInvestigatorSignature(mToken,sampleId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy (
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                    mLoadStatus.postValue(NetworkState.LOADED)
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                    mLoadStatus.postValue(NetworkState.error(it.message))
                 }
             )
     }

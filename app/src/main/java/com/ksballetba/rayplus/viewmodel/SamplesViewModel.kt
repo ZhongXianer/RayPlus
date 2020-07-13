@@ -28,9 +28,17 @@ class SamplesViewModel constructor(private var sampleDataSource: SampleDataSourc
         return result
     }
 
-    fun fetchAllResearchCenter(projectId: Int): LiveData<MutableList<SampleSelectBodyBean.Data>> {
+    fun getAllResearchCenter(projectId: Int): LiveData<MutableList<SampleSelectBodyBean.Data>> {
         val result = MutableLiveData<MutableList<SampleSelectBodyBean.Data>>()
-        sampleDataSource.loadAllResearchCenter(projectId) {
+        sampleDataSource.getResearchCenters(projectId) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun getGroupIds(): LiveData<MutableList<SampleSelectBodyBean.Data>> {
+        val result = MutableLiveData<MutableList<SampleSelectBodyBean.Data>>()
+        sampleDataSource.getGroupIds() {
             result.postValue(it)
         }
         return result

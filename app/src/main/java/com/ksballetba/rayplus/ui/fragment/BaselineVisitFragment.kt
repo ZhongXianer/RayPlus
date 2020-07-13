@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 
 import com.ksballetba.rayplus.R
+import com.ksballetba.rayplus.data.bean.baseData.InvestigatorSignatureBodyBean
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.adapter.ViewPagerAdapter
 import com.ksballetba.rayplus.ui.fragment.base_fragment.*
@@ -55,6 +56,7 @@ class BaselineVisitFragment : Fragment() {
         val treatmentHistoryFragment = TreatmentHistoryFragment()
         val labInspectionFragment = LabInspectionFragment()
         val imagingEvaluationFragment = ImagingEvaluationFragment()
+        val investigatorSignatureFragment = InvestigatorSignatureFragment()
         val visitSubmitFragment = VisitSubmitFragment()
         visitTimeFragment.arguments = baselineArgs
         demographicsFragment.arguments = baselineArgs
@@ -64,6 +66,7 @@ class BaselineVisitFragment : Fragment() {
         treatmentHistoryFragment.arguments = baselineArgs
         labInspectionFragment.arguments = baselineArgs
         imagingEvaluationFragment.arguments = baselineArgs
+        investigatorSignatureFragment.arguments = baselineArgs
         visitSubmitFragment.arguments = baselineArgs
         mFragmentList.add(visitTimeFragment)
         mFragmentList.add(demographicsFragment)
@@ -73,7 +76,7 @@ class BaselineVisitFragment : Fragment() {
         mFragmentList.add(treatmentHistoryFragment)
         mFragmentList.add(labInspectionFragment)
         mFragmentList.add(imagingEvaluationFragment)
-        mFragmentList.add(InvestigatorSignatureFragment())
+        mFragmentList.add(investigatorSignatureFragment)
         mFragmentList.add(visitSubmitFragment)
         mViewPagerAdapter = ViewPagerAdapter(mFragmentList, childFragmentManager)
         vp_baseline_visit.adapter = mViewPagerAdapter

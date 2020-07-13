@@ -4,6 +4,7 @@ import com.ksballetba.rayplus.data.bean.AuthorizationResponseBean
 import com.ksballetba.rayplus.data.bean.*
 import com.ksballetba.rayplus.data.bean.baseData.ImagingEvaluationBodyBean
 import com.ksballetba.rayplus.data.bean.baseData.ImagingEvaluationListBean
+import com.ksballetba.rayplus.data.bean.baseData.InvestigatorSignatureBodyBean
 import com.ksballetba.rayplus.data.bean.baseData.VisitTimeBean
 import com.ksballetba.rayplus.data.bean.baseLineData.*
 import com.ksballetba.rayplus.data.bean.loginData.LoginBodyBean
@@ -44,8 +45,12 @@ interface ApiService {
     @GET("/v1/research_centers")
     fun getResearchCenters(
         @Header("Authorization") token: String?,
-        @Query("project_id")projectId: Int
-    ):Observable<SampleSelectBodyBean>
+        @Query("project_id") projectId: Int
+    ): Observable<SampleSelectBodyBean>
+
+    @Headers("Content-Type: application/json")
+    @GET("/group_ids")
+    fun getGroupIds(@Header("Authorization") token: String): Observable<SampleSelectBodyBean>
 
     @Headers("Content-Type:application/json")
     @GET("/sample")
@@ -91,9 +96,6 @@ interface ApiService {
         @Path("sample_id") sampleId: Int
     ): Observable<BaseResponseBean>
 
-    @Headers("Content-Type:application/json")
-    @GET("/research_center_all")
-    fun getAllResearchCenterList(): Observable<List<ResearchCenterBean>>
 
     @Headers("Content-Type:application/json")
     @GET("/cycle_time/{sample_id}/{cycle_number}")
@@ -110,6 +112,13 @@ interface ApiService {
             "cycle_number"
         ) cycleNumber: Int, @Body visitEditBean: VisitEditBean
     ): Observable<BaseResponseBean>
+
+    @Headers("Content-Type:application/json")
+    @GET("/sample/signature/{sample_id}")
+    fun getBaselineInvestigatorSignature(
+        @Header("Authorization") token: String?,
+        @Path("sample_id") sampleId: Int
+    ):Observable<InvestigatorSignatureBodyBean>
 
     @Headers("Content-Type:application/json")
     @GET("/patient/{sample_id}")

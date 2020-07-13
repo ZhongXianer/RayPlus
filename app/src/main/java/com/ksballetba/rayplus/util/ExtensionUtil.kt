@@ -65,7 +65,7 @@ fun parseLabInspectionRank(idx: Int): Int? {
     }
 }
 
-fun getSampleSubmitStatus() = arrayOf("未提交", "部分提交", "全部提交", "已解锁")
+fun getSampleSubmitStatus() = arrayOf("未提交", "部分提交", "已提交", "已解锁")
 
 fun getResearchCenterList() =
     arrayOf("同济医院", "襄阳市第一人民医院", "襄阳市中医医院", "孝感市中心医院", "荆州中心医院", "宜昌市中心医院", "恩施州中心医院", "十堰市太和医院")

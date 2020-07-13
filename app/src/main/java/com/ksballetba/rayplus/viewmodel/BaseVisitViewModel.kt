@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.ksballetba.rayplus.data.bean.*
 import com.ksballetba.rayplus.data.bean.baseData.ImagingEvaluationBodyBean
 import com.ksballetba.rayplus.data.bean.baseData.ImagingEvaluationListBean
+import com.ksballetba.rayplus.data.bean.baseData.InvestigatorSignatureBodyBean
 import com.ksballetba.rayplus.data.bean.baseData.VisitTimeBean
 import com.ksballetba.rayplus.data.bean.treatmentVisitData.TreatmentVisitSubmitResponseBean
 import com.ksballetba.rayplus.data.source.remote.BaseVisitDataSource
@@ -40,6 +41,14 @@ class BaseVisitViewModel constructor(private var baseVisitDataSource: BaseVisitD
         val result = MutableLiveData<BaseResponseBean>()
         baseVisitDataSource.editVisitTime(sampleId,cycleNumber,visitEditBean) {
             result.postValue(it)
+        }
+        return result
+    }
+
+    fun getBaselineInvestigatorSignature(sampleId: Int):LiveData<InvestigatorSignatureBodyBean.Data>{
+        val result=MutableLiveData<InvestigatorSignatureBodyBean.Data>()
+        baseVisitDataSource.getBaselineInvestigatorSignature(sampleId){
+            result.postValue(it.data)
         }
         return result
     }
@@ -83,6 +92,7 @@ class BaseVisitViewModel constructor(private var baseVisitDataSource: BaseVisitD
         }
         return result
     }
+
 
     fun getLoadStatus() = baseVisitDataSource.mLoadStatus
 

@@ -43,7 +43,6 @@ class VisitSubmitFragment : Fragment() {
     private fun initData() {
         mSampleId = (arguments as Bundle).getInt(SampleActivity.SAMPLE_ID)
         mCycleNumber = (arguments as Bundle).getInt(CYCLE_NUMBER_KEY)
-        Log.d("hello", mCycleNumber.toString())
         mViewModel = getBaseVisitViewModel(this)
     }
 

@@ -22,9 +22,8 @@
             android:id="@+id/baseline_submit_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
             android:textColor="@color/primary_text"
-            android:textSize="@dimen/dp_40"
+            android:textSize="40sp"
             android:text="已提交"
             android:layout_above="@id/remind"
             android:textAlignment="center"/>
@@ -37,7 +36,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
             android:textAlignment="center"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"/>
 
@@ -46,7 +45,7 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:text="提 交"
-            android:textSize="25dp"
+            android:textSize="25sp"
             android:background="@color/footer_color"
             android:textColor="@color/background"
             android:layout_below="@id/remind"

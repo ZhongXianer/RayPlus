@@ -1,38 +1,36 @@
 package com.ksballetba.rayplus.ui.activity
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
-import android.text.Layout
 import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.SampleQueryBodyBean
-import com.ksballetba.rayplus.data.bean.SelectTypeShowBodyBean
-import com.ksballetba.rayplus.data.bean.sampleData.SampleEditBodyBean
-import com.ksballetba.rayplus.data.bean.sampleData.SampleListBean
-import com.ksballetba.rayplus.data.bean.sampleData.SampleSubmitBodyBean
+import com.ksballetba.rayplus.data.bean.sampleData.*
 import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.MainActivity.Companion.PROJECT_ID
 import com.ksballetba.rayplus.ui.activity.SampleEditActivity.Companion.REFRESH_LAST_PAGE
 import com.ksballetba.rayplus.ui.adapter.SamplesAdapter
-import com.ksballetba.rayplus.ui.adapter.SelectTypeAdapter
-import com.ksballetba.rayplus.util.getSamplesViewModel
-import com.ksballetba.rayplus.util.getUserId
-import com.ksballetba.rayplus.util.judgeUnlockSample
-import com.ksballetba.rayplus.util.reLogin
+import com.ksballetba.rayplus.ui.adapter.TypeAdapter
+import com.ksballetba.rayplus.ui.adapter.TypeAdapter.Companion.ITEM_FIRST_LEVEL
+import com.ksballetba.rayplus.ui.adapter.TypeAdapter.Companion.ITEM_SECOND_LEVEL
+import com.ksballetba.rayplus.util.*
 import com.ksballetba.rayplus.viewmodel.SamplesViewModel
 import com.lxj.xpopup.XPopup
 import kotlinx.android.synthetic.main.activity_sample.*
-import kotlinx.android.synthetic.main.widget_sample_head.*
 import org.angmarch.views.NiceSpinner
 import org.jetbrains.anko.toast
-import kotlin.math.log
 
 class SampleActivity : AppCompatActivity() {
 
@@ -47,9 +45,9 @@ class SampleActivity : AppCompatActivity() {
 
     private lateinit var mViewModel: SamplesViewModel
     private lateinit var mSamplesAdapter: SamplesAdapter
-    private lateinit var mSelectTypeAdapter: SelectTypeAdapter
+    private lateinit var mTypeAdapter: TypeAdapter
     private var mSampleList = mutableListOf<SampleListBean.Data>()
-    private var mSampleTypeList = mutableListOf<SelectTypeShowBodyBean>()
+    private var mTypeList = mutableListOf<MultiItemEntity>()
 
     private var mSearchType: Int = 0
     private var mSampleQueryBodyBean =
@@ -105,24 +103,26 @@ class SampleActivity : AppCompatActivity() {
             val searchContent = search_input.text.toString()
             when (mSearchType) {
                 0 -> {
-                    initSampleQueryBodyBean()
+                    initPartQueryBodyBean()
                     if (searchContent != "") mSampleQueryBodyBean.name = searchContent
                 }
                 1 -> {
-                    initSampleQueryBodyBean()
+                    initPartQueryBodyBean()
                     if (searchContent != "") mSampleQueryBodyBean.idCard = searchContent
                 }
                 2 -> {
-                    initSampleQueryBodyBean()
+                    initPartQueryBodyBean()
                     if (searchContent != "") mSampleQueryBodyBean.patientIds = searchContent
                 }
             }
-            srl_sample.autoRefresh()
+            loadInitial(mSampleQueryBodyBean)
         }
 
         fab_refresh_sample.setOnClickListener {
             search_input.setText("")
             initSampleQueryBodyBean()
+            mTypeList.clear()
+            getSearchCenters()
             srl_sample.autoRefresh()
         }
 
@@ -133,6 +133,12 @@ class SampleActivity : AppCompatActivity() {
 
     private fun initSampleQueryBodyBean() {
         mSampleQueryBodyBean = SampleQueryBodyBean(null, null, null, null, null, null, null, null)
+    }
+
+    private fun initPartQueryBodyBean() {
+        mSampleQueryBodyBean.name = null
+        mSampleQueryBodyBean.idCard = null
+        mSampleQueryBodyBean.patientIds = null
     }
 
     private fun initList() {
@@ -155,12 +161,13 @@ class SampleActivity : AppCompatActivity() {
         })
         srl_sample.autoRefresh()
         srl_sample.setOnRefreshListener {
-            getSearchCenters()
             loadInitial(mSampleQueryBodyBean)
         }
         srl_sample.setOnLoadMoreListener {
             loadMore(mSampleQueryBodyBean)
         }
+        mTypeList.clear()
+        getSearchCenters()
     }
 
     private fun initSampleListView() {
@@ -225,24 +232,126 @@ class SampleActivity : AppCompatActivity() {
     }
 
     private fun initSampleSelectListView() {
-        val layoutManager = LinearLayoutManager(this)
-        layoutManager.orientation = RecyclerView.VERTICAL
-        val itemView = View.inflate(this, R.layout.widget_sample_head, null)
-        val slTypeList = itemView.findViewById<RecyclerView>(R.id.sl_type_list)
-        slTypeList.layoutManager = layoutManager
-        mSelectTypeAdapter = SelectTypeAdapter(mSampleTypeList, this)
-        slTypeList.adapter = mSelectTypeAdapter
+        val gridLayoutManager = GridLayoutManager(this, 2)
+        sl_type_list.layoutManager = gridLayoutManager
+        sl_type_list.itemAnimator = DefaultItemAnimator()
+        mTypeAdapter = TypeAdapter(mTypeList)
+        mTypeAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
+        sl_type_list.adapter = mTypeAdapter
+        gridLayoutManager.spanSizeLookup = object : SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                when (mTypeAdapter.getItemViewType(position)) {
+                    ITEM_FIRST_LEVEL -> {
+                        return 2
+                    }
+                    ITEM_SECOND_LEVEL -> {
+                        if (mTypeAdapter.getParentPosition(mTypeList[position]) == 0)
+                            return 2
+                        return 1
+                    }
+                }
+                return 2
+            }
+        }
+        mTypeAdapter.setOnItemChildClickListener() { adapter, _, position ->
+            val itemEntity = mTypeList[position] as Level1TypeBean
+            if (!itemEntity.isSelected) {
+                mTypeList.forEach {
+                    if (it is Level1TypeBean
+                        && adapter.getParentPosition(it) == adapter.getParentPosition(itemEntity)
+                    )
+                        it.isSelected = false
+                }
+                itemEntity.isSelected = true
+                adapter.notifyDataSetChanged()
+            }
+            val parent = adapter.getParentPosition(itemEntity)
+            val level0TypeBean = mTypeList[parent] as Level0TypeBean
+            when (level0TypeBean.type) {
+                "研究中心" -> {
+                    if (itemEntity.id == -1)
+                        mSampleQueryBodyBean.researchCenterId = null
+                    else mSampleQueryBodyBean.researchCenterId = itemEntity.id
+                }
+                "患者组别" -> {
+                    if (itemEntity.id == -1)
+                        mSampleQueryBodyBean.groupId = null
+                    else mSampleQueryBodyBean.groupId = itemEntity.id
+                }
+                "肿瘤病理类型" -> {
+                    if (itemEntity.id == -1)
+                        mSampleQueryBodyBean.tumorPathologicalType = null
+                    else mSampleQueryBodyBean.tumorPathologicalType = itemEntity.typeName
+                }
+                "性别" -> {
+                    if (itemEntity.id == -1)
+                        mSampleQueryBodyBean.sex = null
+                    else mSampleQueryBodyBean.sex = itemEntity.id
+                }
+                "样本状态" -> {
+                    if (itemEntity.id == -1)
+                        mSampleQueryBodyBean.submitStatus = null
+                    else mSampleQueryBodyBean.submitStatus = itemEntity.id
+                }
+            }
+            loadInitial(mSampleQueryBodyBean)
+        }
+    }
+
+    private fun initTypeList() {
+        val tumorPathologicalType = Level0TypeBean("肿瘤病理类型")
+        tumorPathologicalType.addSubItem(Level1TypeBean("全部", -1, true))
+        getTumorPathologicalType().forEach {
+            tumorPathologicalType.addSubItem(Level1TypeBean(it, 0, false))
+        }
+        tumorPathologicalType.addSubItem(Level1TypeBean("混合型癌", 0, false))
+        val sex = Level0TypeBean("性别")
+        sex.addSubItem(Level1TypeBean("全部", -1, true))
+        getSexList().forEach {
+            sex.addSubItem(Level1TypeBean(it, getSexList().indexOf(it), false))
+        }
+        val sampleStatus = Level0TypeBean("样本状态")
+        sampleStatus.addSubItem(Level1TypeBean("全部", -1, true))
+        getSampleSubmitStatus().forEach {
+            sampleStatus.addSubItem(
+                Level1TypeBean(
+                    it,
+                    getSampleSubmitStatus().indexOf(it),
+                    false
+                )
+            )
+        }
+        mTypeList.add(tumorPathologicalType)
+        mTypeList.add(sex)
+        mTypeList.add(sampleStatus)
     }
 
     private fun getSearchCenters() {
-        mViewModel.fetchAllResearchCenter(mProjectId).observe(this, Observer {
-            val researchCenters = mutableListOf<String>()
-            researchCenters.add(0, "全部")
-            it.forEach { data ->
-                researchCenters.add(data.name)
+        mViewModel.getAllResearchCenter(mProjectId).observe(this, Observer {
+            val researchCenters = it
+            val level0TypeBean = Level0TypeBean("研究中心")
+            level0TypeBean.addSubItem(Level1TypeBean("全部", -1, true))
+            researchCenters.forEach { data ->
+                val level1TypeBean = Level1TypeBean(data.name, data.id, false)
+                level0TypeBean.addSubItem(level1TypeBean)
             }
-            mSampleTypeList.add(0, SelectTypeShowBodyBean("研究中心", researchCenters))
-            mSelectTypeAdapter.notifyDataSetChanged()
+            mTypeList.add(level0TypeBean)
+            getGroupIds()
+        })
+    }
+
+    private fun getGroupIds() {
+        mViewModel.getGroupIds().observe(this, Observer {
+            val groups = it
+            val level0TypeBean = Level0TypeBean("患者组别")
+            level0TypeBean.addSubItem(Level1TypeBean("全部", -1, true))
+            groups.forEach { data ->
+                val level1TypeBean = Level1TypeBean(data.name, data.id, false)
+                level0TypeBean.addSubItem(level1TypeBean)
+            }
+            mTypeList.add(level0TypeBean)
+            initTypeList()
+            mTypeAdapter.notifyDataSetChanged()
         })
     }
 

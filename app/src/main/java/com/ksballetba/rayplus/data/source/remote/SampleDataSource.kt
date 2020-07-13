@@ -110,10 +110,13 @@ class SampleDataSource(context: Context) {
     }
 
 
-    fun loadAllResearchCenter(projectId: Int, callBack: (MutableList<SampleSelectBodyBean.Data>) -> Unit) {
+    fun getResearchCenters(
+        projectId: Int,
+        callBack: (MutableList<SampleSelectBodyBean.Data>) -> Unit
+    ) {
         RetrofitClient.getInstance(NetworkType.AUTH)
             .create(ApiService::class.java)
-            .getResearchCenters(mToken,projectId)
+            .getResearchCenters(mToken, projectId)
             .subscribeOn(io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -126,6 +129,25 @@ class SampleDataSource(context: Context) {
                 },
                 onError = {
                     LogUtils.d(it.message)
+                }
+            )
+    }
+
+    fun getGroupIds(callBack: (MutableList<SampleSelectBodyBean.Data>) -> Unit) {
+        RetrofitClient.getInstance(NetworkType.PROJECT)
+            .create(ApiService::class.java)
+            .getGroupIds(mToken)
+            .subscribeOn(io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it.data.toMutableList())
+                },
+                onComplete = {
+                    LogUtils.d("completed")
+                },
+                onError = {
+                    LogUtils.tag(TAG).d(it.message)
                 }
             )
     }
