@@ -55,7 +55,7 @@ class TherapeuticEvaluationFragment : Fragment() {
             XPopup.Builder(context).asCenterList(
                 "疗效评价", getTherapeuticEvaluationList()
 
-            ) { pos, text ->
+            ) { _, text ->
                 tv_therapeutic_evaluation.text = text
             }.show()
         }

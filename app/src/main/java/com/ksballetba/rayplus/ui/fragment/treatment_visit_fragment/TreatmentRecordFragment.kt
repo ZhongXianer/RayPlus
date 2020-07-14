@@ -132,7 +132,7 @@ class TreatmentRecordFragment : Fragment() {
                 treatmentRecordBody
             )
         }
-        mAdapter.setOnItemChildClickListener { adapter, view, position ->
+        mAdapter.setOnItemChildClickListener { _, _, position ->
             XPopup.Builder(context).asConfirm("信息", "请问是否确认删除") {
                 deleteTreatmentRecord(mList[position].treatmentRecordId, position)
             }.show()

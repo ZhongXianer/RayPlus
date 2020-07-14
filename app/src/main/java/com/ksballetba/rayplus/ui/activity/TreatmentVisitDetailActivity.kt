@@ -115,7 +115,7 @@ class TreatmentVisitDetailActivity : AppCompatActivity() {
         tl_treatment_visit.getTabAt(4)?.text = "实验室检查"
         tl_treatment_visit.getTabAt(5)?.text = "治疗记录单"
         tl_treatment_visit.getTabAt(6)?.text = "不良事件"
-        tl_treatment_visit.getTabAt(7)?.text = "研究者签字"
+        tl_treatment_visit.getTabAt(7)?.text = "研究者签名"
         tl_treatment_visit.getTabAt(8)?.text = "访视提交"
     }
 }

@@ -7,11 +7,13 @@ import com.ksballetba.rayplus.data.bean.AdverseEventListBean
 import com.ksballetba.rayplus.data.bean.BaseResponseBean
 import com.ksballetba.rayplus.data.bean.projectSummaryData.ProjectSummaryBodyBean
 import com.ksballetba.rayplus.data.bean.projectSummaryData.ProjectSummaryResponseBean
+import com.ksballetba.rayplus.data.bean.projectSummaryData.SummarySignatureBodyBean
 import com.ksballetba.rayplus.data.source.remote.ProjectSummaryDataSource
 
-class ProjectSummaryViewModel constructor(private var projectSummaryDataSource: ProjectSummaryDataSource): ViewModel() {
+class ProjectSummaryViewModel constructor(private var projectSummaryDataSource: ProjectSummaryDataSource) :
+    ViewModel() {
 
-    fun getProjectSummary(sampleId:Int): LiveData<ProjectSummaryResponseBean> {
+    fun getProjectSummary(sampleId: Int): LiveData<ProjectSummaryResponseBean> {
         val result = MutableLiveData<ProjectSummaryResponseBean>()
         projectSummaryDataSource.getProjectSummary(sampleId) {
             result.postValue(it)
@@ -19,15 +21,18 @@ class ProjectSummaryViewModel constructor(private var projectSummaryDataSource: 
         return result
     }
 
-    fun editProjectSummary(sampleId:Int,projectSummaryBodyBean: ProjectSummaryBodyBean): LiveData<BaseResponseBean>{
+    fun editProjectSummary(
+        sampleId: Int,
+        projectSummaryBodyBean: ProjectSummaryBodyBean
+    ): LiveData<BaseResponseBean> {
         val result = MutableLiveData<BaseResponseBean>()
-        projectSummaryDataSource.editProjectSummary(sampleId,projectSummaryBodyBean) {
+        projectSummaryDataSource.editProjectSummary(sampleId, projectSummaryBodyBean) {
             result.postValue(it)
         }
         return result
     }
 
-    fun getAllAdverseEventList(sampleId:Int): LiveData<MutableList<AdverseEventListBean.Data>>{
+    fun getAllAdverseEventList(sampleId: Int): LiveData<MutableList<AdverseEventListBean.Data>> {
         val result = MutableLiveData<MutableList<AdverseEventListBean.Data>>()
         projectSummaryDataSource.getAllAdverseEventList(sampleId) {
             result.postValue(it)

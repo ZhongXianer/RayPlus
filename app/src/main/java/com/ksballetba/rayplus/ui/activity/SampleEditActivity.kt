@@ -45,8 +45,6 @@ class SampleEditActivity : AppCompatActivity() {
     private fun initUI() {
         setSupportActionBar(tb_sample_edit)
         mViewModel = getSamplesViewModel(this)
-//        val sharedPreferences = getSharedPreferences(LoginActivity.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
-//        mToken = sharedPreferences.getString(LoginActivity.LOGIN_TOKEN,"")
         mToken = getToken()
         val sampleBody = intent.getParcelableExtra<SampleEditBodyBean>(SAMPLE_BODY)
         if (sampleBody != null) {

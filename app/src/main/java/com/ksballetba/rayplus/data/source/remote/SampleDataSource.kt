@@ -125,7 +125,6 @@ class SampleDataSource(context: Context) {
                 },
                 onComplete = {
                     LogUtils.d("Completed")
-
                 },
                 onError = {
                     LogUtils.d(it.message)

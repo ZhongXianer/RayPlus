@@ -7,6 +7,7 @@ import com.ksballetba.rayplus.data.bean.AdverseEventListBean
 import com.ksballetba.rayplus.data.bean.BaseResponseBean
 import com.ksballetba.rayplus.data.bean.projectSummaryData.ProjectSummaryBodyBean
 import com.ksballetba.rayplus.data.bean.projectSummaryData.ProjectSummaryResponseBean
+import com.ksballetba.rayplus.data.bean.projectSummaryData.SummarySignatureBodyBean
 import com.ksballetba.rayplus.network.ApiService
 import com.ksballetba.rayplus.network.NetworkState
 import com.ksballetba.rayplus.network.NetworkType
@@ -92,4 +93,5 @@ class ProjectSummaryDataSource(context: Context) {
                 }
             )
     }
+
 }

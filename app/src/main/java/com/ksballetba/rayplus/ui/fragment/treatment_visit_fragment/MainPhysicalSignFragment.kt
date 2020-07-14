@@ -112,7 +112,7 @@ class MainPhysicalSignFragment : Fragment() {
                 mainPhysicalSignBody
             )
         }
-        mAdapter.setOnItemChildClickListener { adapter, view, position ->
+        mAdapter.setOnItemChildClickListener { _, _, position ->
             XPopup.Builder(context).asConfirm("信息", "请问是否确认删除") {
                 deleteMainPhysicalSign(mList[position].mainSymptomId, position)
             }.show()

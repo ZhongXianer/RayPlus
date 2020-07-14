@@ -90,7 +90,7 @@ class BaselineVisitFragment : Fragment() {
         tl_baseline_visit.getTabAt(5)?.text = "治疗史"
         tl_baseline_visit.getTabAt(6)?.text = "实验室检查"
         tl_baseline_visit.getTabAt(7)?.text = "影像学评估"
-        tl_baseline_visit.getTabAt(8)?.text = "研究者签字"
+        tl_baseline_visit.getTabAt(8)?.text = "研究者签名"
         tl_baseline_visit.getTabAt(9)?.text = "访视提交"
     }
 

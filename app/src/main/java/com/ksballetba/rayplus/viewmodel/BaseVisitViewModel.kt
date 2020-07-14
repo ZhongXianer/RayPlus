@@ -4,24 +4,24 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ksballetba.rayplus.data.bean.*
-import com.ksballetba.rayplus.data.bean.baseData.ImagingEvaluationBodyBean
-import com.ksballetba.rayplus.data.bean.baseData.ImagingEvaluationListBean
-import com.ksballetba.rayplus.data.bean.baseData.InvestigatorSignatureBodyBean
-import com.ksballetba.rayplus.data.bean.baseData.VisitTimeBean
+import com.ksballetba.rayplus.data.bean.baseData.*
+import com.ksballetba.rayplus.data.bean.projectSummaryData.SummarySignatureBodyBean
+import com.ksballetba.rayplus.data.bean.sampleData.SampleSelectBodyBean
 import com.ksballetba.rayplus.data.bean.treatmentVisitData.TreatmentVisitSubmitResponseBean
 import com.ksballetba.rayplus.data.source.remote.BaseVisitDataSource
 
-class BaseVisitViewModel constructor(private var baseVisitDataSource: BaseVisitDataSource): ViewModel() {
+class BaseVisitViewModel constructor(private var baseVisitDataSource: BaseVisitDataSource) :
+    ViewModel() {
 
-    fun getVisitTime(sampleId:Int,cycleNumber:Int): LiveData<VisitTimeBean> {
+    fun getVisitTime(sampleId: Int, cycleNumber: Int): LiveData<VisitTimeBean> {
         val result = MutableLiveData<VisitTimeBean>()
-        baseVisitDataSource.getVisitTime(sampleId,cycleNumber) {
+        baseVisitDataSource.getVisitTime(sampleId, cycleNumber) {
             result.postValue(it)
         }
         return result
     }
 
-    fun submitBaseline(sampleId: Int,cycleNumber: Int): LiveData<BaseResponseBean> {
+    fun submitBaseline(sampleId: Int, cycleNumber: Int): LiveData<BaseResponseBean> {
         val result = MutableLiveData<BaseResponseBean>()
         baseVisitDataSource.submitCycle(sampleId, cycleNumber) {
             result.postValue(it)
@@ -37,57 +37,168 @@ class BaseVisitViewModel constructor(private var baseVisitDataSource: BaseVisitD
         return result
     }
 
-    fun editVisitTime(sampleId:Int,cycleNumber:Int,visitEditBean: VisitEditBean): LiveData<BaseResponseBean> {
+    fun editVisitTime(
+        sampleId: Int,
+        cycleNumber: Int,
+        visitEditBean: VisitEditBean
+    ): LiveData<BaseResponseBean> {
         val result = MutableLiveData<BaseResponseBean>()
-        baseVisitDataSource.editVisitTime(sampleId,cycleNumber,visitEditBean) {
+        baseVisitDataSource.editVisitTime(sampleId, cycleNumber, visitEditBean) {
             result.postValue(it)
         }
         return result
     }
 
-    fun getBaselineInvestigatorSignature(sampleId: Int):LiveData<InvestigatorSignatureBodyBean.Data>{
-        val result=MutableLiveData<InvestigatorSignatureBodyBean.Data>()
-        baseVisitDataSource.getBaselineInvestigatorSignature(sampleId){
+    fun getResearchCenters(projectId: Int): LiveData<MutableList<SampleSelectBodyBean.Data>> {
+        val result = MutableLiveData<MutableList<SampleSelectBodyBean.Data>>()
+        baseVisitDataSource.getResearchCenters(projectId) {
+            result.postValue(it.data.toMutableList())
+        }
+        return result
+    }
+
+    fun getBaselineInvestigatorSignature(sampleId: Int): LiveData<InvestigatorSignatureBodyBean.Data> {
+        val result = MutableLiveData<InvestigatorSignatureBodyBean.Data>()
+        baseVisitDataSource.getBaselineInvestigatorSignature(sampleId) {
             result.postValue(it.data)
         }
         return result
     }
 
-    fun getLabInspection(sampleId:Int,cycleNumber:Int): LiveData<LabInspectionResponseBean> {
+    fun addBaselineInvestigatorSignature(
+        sampleId: Int,
+        signatureRequestBodyBean: SignatureRequestBodyBean
+    ): LiveData<SignatureResponseBodyBean> {
+        val result = MutableLiveData<SignatureResponseBodyBean>()
+        baseVisitDataSource.addBaselineInvestigatorSignature(sampleId, signatureRequestBodyBean) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun getCycleInvestigatorSignature(
+        sampleId: Int,
+        cycleNumber: Int
+    ): LiveData<InvestigatorSignatureBodyBean.Data> {
+        val result = MutableLiveData<InvestigatorSignatureBodyBean.Data>()
+        baseVisitDataSource.getCycleInvestigatorSignature(sampleId, cycleNumber) {
+            result.postValue(it.data)
+        }
+        return result
+    }
+
+    fun addCycleInvestigatorSignature(
+        sampleId: Int,
+        cycleNumber: Int,
+        signatureRequestBodyBean: SignatureRequestBodyBean
+    ): LiveData<SignatureResponseBodyBean> {
+        val result = MutableLiveData<SignatureResponseBodyBean>()
+        baseVisitDataSource.addCycleInvestigatorSignature(
+            sampleId,
+            cycleNumber,
+            signatureRequestBodyBean
+        ) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun getLabInspection(sampleId: Int, cycleNumber: Int): LiveData<LabInspectionResponseBean> {
         val result = MutableLiveData<LabInspectionResponseBean>()
-        baseVisitDataSource.getLabInspection(sampleId,cycleNumber) {
+        baseVisitDataSource.getLabInspection(sampleId, cycleNumber) {
             result.postValue(it)
         }
         return result
     }
 
-    fun editLabInspection(sampleId:Int,cycleNumber:Int,labInspectionBodyBean: LabInspectionBodyBean): LiveData<BaseResponseBean> {
+    fun editLabInspection(
+        sampleId: Int,
+        cycleNumber: Int,
+        labInspectionBodyBean: LabInspectionBodyBean
+    ): LiveData<BaseResponseBean> {
         val result = MutableLiveData<BaseResponseBean>()
-        baseVisitDataSource.editLabInspection(sampleId,cycleNumber,labInspectionBodyBean) {
+        baseVisitDataSource.editLabInspection(sampleId, cycleNumber, labInspectionBodyBean) {
             result.postValue(it)
         }
         return result
     }
 
-    fun getImagingEvaluationList(sampleId:Int,cycleNumber:Int):LiveData<MutableList<ImagingEvaluationListBean.Data>>{
+    fun getImagingEvaluationList(
+        sampleId: Int,
+        cycleNumber: Int
+    ): LiveData<MutableList<ImagingEvaluationListBean.Data>> {
         val result = MutableLiveData<MutableList<ImagingEvaluationListBean.Data>>()
-        baseVisitDataSource.getImagingEvaluationList(sampleId,cycleNumber) {
+        baseVisitDataSource.getImagingEvaluationList(sampleId, cycleNumber) {
             result.postValue(it)
         }
         return result
     }
 
-    fun editImagingEvaluation(sampleId:Int,cycleNumber:Int,imagingEvaluationBodyBean: ImagingEvaluationBodyBean): LiveData<BaseResponseBean>{
+    fun editImagingEvaluation(
+        sampleId: Int,
+        cycleNumber: Int,
+        imagingEvaluationBodyBean: ImagingEvaluationBodyBean
+    ): LiveData<BaseResponseBean> {
         val result = MutableLiveData<BaseResponseBean>()
-        baseVisitDataSource.editImagingEvaluation(sampleId,cycleNumber,imagingEvaluationBodyBean) {
+        baseVisitDataSource.editImagingEvaluation(
+            sampleId,
+            cycleNumber,
+            imagingEvaluationBodyBean
+        ) {
             result.postValue(it)
         }
         return result
     }
 
-    fun deleteImagingEvaluation(sampleId:Int,cycleNumber:Int,evaluateId:Int): LiveData<BaseResponseBean>{
+    fun getImagingEvaluationFileList(
+        sampleId: Int,
+        cycleNumber: Int,
+        evaluateId: Int
+    ): LiveData<MutableList<ImagingEvaluationFileBodyBean.Data?>>{
+        val result=MutableLiveData<MutableList<ImagingEvaluationFileBodyBean.Data?>>()
+        baseVisitDataSource.getImagingEvaluationFileList(sampleId,cycleNumber,evaluateId){
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun deleteImagingEvaluation(
+        sampleId: Int,
+        cycleNumber: Int,
+        evaluateId: Int
+    ): LiveData<BaseResponseBean> {
         val result = MutableLiveData<BaseResponseBean>()
-        baseVisitDataSource.deleteImagingEvaluation(sampleId,cycleNumber,evaluateId) {
+        baseVisitDataSource.deleteImagingEvaluation(sampleId, cycleNumber, evaluateId) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun getSummarySignature(sampleId: Int): LiveData<SummarySignatureBodyBean.Data?> {
+        val result = MutableLiveData<SummarySignatureBodyBean.Data?>()
+        baseVisitDataSource.getSummarySignature(sampleId) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun addSummaryInvestigatorSignature(
+        sampleId: Int,
+        signatureRequestBodyBean: SignatureRequestBodyBean
+    ): LiveData<SignatureResponseBodyBean> {
+        val result = MutableLiveData<SignatureResponseBodyBean>()
+        baseVisitDataSource.addSummaryInvestigatorSignature(sampleId, signatureRequestBodyBean) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun addSummaryInspectorSignature(
+        sampleId: Int,
+        signatureRequestBodyBean: SignatureRequestBodyBean
+    ): LiveData<SignatureResponseBodyBean> {
+        val result = MutableLiveData<SignatureResponseBodyBean>()
+        baseVisitDataSource.addSummaryInspectorSignature(sampleId, signatureRequestBodyBean) {
             result.postValue(it)
         }
         return result

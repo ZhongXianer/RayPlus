@@ -2,15 +2,13 @@ package com.ksballetba.rayplus.network
 
 import com.ksballetba.rayplus.data.bean.AuthorizationResponseBean
 import com.ksballetba.rayplus.data.bean.*
-import com.ksballetba.rayplus.data.bean.baseData.ImagingEvaluationBodyBean
-import com.ksballetba.rayplus.data.bean.baseData.ImagingEvaluationListBean
-import com.ksballetba.rayplus.data.bean.baseData.InvestigatorSignatureBodyBean
-import com.ksballetba.rayplus.data.bean.baseData.VisitTimeBean
+import com.ksballetba.rayplus.data.bean.baseData.*
 import com.ksballetba.rayplus.data.bean.baseLineData.*
 import com.ksballetba.rayplus.data.bean.loginData.LoginBodyBean
 import com.ksballetba.rayplus.data.bean.loginData.LoginResponseBean
 import com.ksballetba.rayplus.data.bean.projectSummaryData.ProjectSummaryBodyBean
 import com.ksballetba.rayplus.data.bean.projectSummaryData.ProjectSummaryResponseBean
+import com.ksballetba.rayplus.data.bean.projectSummaryData.SummarySignatureBodyBean
 import com.ksballetba.rayplus.data.bean.sampleData.SampleEditBodyBean
 import com.ksballetba.rayplus.data.bean.sampleData.SampleListBean
 import com.ksballetba.rayplus.data.bean.sampleData.SampleSelectBodyBean
@@ -118,7 +116,32 @@ interface ApiService {
     fun getBaselineInvestigatorSignature(
         @Header("Authorization") token: String?,
         @Path("sample_id") sampleId: Int
-    ):Observable<InvestigatorSignatureBodyBean>
+    ): Observable<InvestigatorSignatureBodyBean>
+
+    @Headers("Content-Type:application/x-www-form-urlencoded")
+    @POST("/sample/signature/{sample_id}")
+    fun addBaselineInvestigatorSignature(
+        @Header("Authorization") token: String?,
+        @Path("sample_id") sampleId: Int,
+        @Body signatureRequestBodyBean: SignatureRequestBodyBean
+    ): Observable<SignatureResponseBodyBean>
+
+    @Headers("Content-Type:application/json")
+    @GET("/cycle/signature/{sample_id}/{cycle_number}")
+    fun getCycleInvestigatorSignature(
+        @Header("Authorization") token: String?,
+        @Path("sample_id") sampleId: Int,
+        @Path("cycle_number") cycleNumber: Int
+    ): Observable<InvestigatorSignatureBodyBean>
+
+    @Headers("Content-Type:application/x-www-form-urlencoded")
+    @POST("/cycle/signature/{sample_id}/{cycle_number}")
+    fun addCycleInvestigatorSignature(
+        @Header("Authorization") token: String?,
+        @Path("sample_id") sampleId: Int,
+        @Path("cycle_number") cycleNumber: Int,
+        @Body signatureRequestBodyBean: SignatureRequestBodyBean
+    ): Observable<SignatureResponseBodyBean>
 
     @Headers("Content-Type:application/json")
     @GET("/patient/{sample_id}")
@@ -242,6 +265,15 @@ interface ApiService {
             "cycle_number"
         ) cycleNumber: Int, @Body imagingEvaluationBodyBean: ImagingEvaluationBodyBean
     ): Observable<BaseResponseBean>
+
+    @Headers("Content-Type:application/json")
+    @GET("/photo_evaluate/file/{sample_id}/{cycle_number}/{evaluate_id}")
+    fun getImagingEvaluationFileList(
+        @Header("Authorization") token: String?,
+        @Path("sample_id") sampleId: Int,
+        @Path("cycle_number") cycleNumber: Int,
+        @Path("evaluate_id")evaluateId: Int
+    ):Observable<ImagingEvaluationFileBodyBean>
 
     @Headers("Content-Type:application/x-www-form-urlencoded")
     @DELETE("/photo_evaluate/{sample_id}/{cycle_number}/{evaluate_id}")
@@ -458,4 +490,27 @@ interface ApiService {
         @Header("Authorization") token: String?,
         @Path("sample_id") sampleId: Int
     ): Observable<AdverseEventListBean>
+
+    @Headers("Content-Type: application/json")
+    @GET("/summary/signature/{sample_id}")
+    fun getSummarySignature(
+        @Header("Authorization") token: String?,
+        @Path("sample_id") sampleId: Int
+    ): Observable<SummarySignatureBodyBean>
+
+    @Headers("Content-Type:application/x-www-form-urlencoded")
+    @POST("/summary/signature/{sample_id}")
+    fun addSummaryInvestigatorSignature(
+        @Header("Authorization") token: String?,
+        @Path("sample_id") sampleId: Int,
+        @Body signatureRequestBodyBean: SignatureRequestBodyBean
+    ): Observable<SignatureResponseBodyBean>
+
+    @Headers("Content-Type:application/x-www-form-urlencoded")
+    @POST("/summary/cra_signature/{sample_id}")
+    fun addSummaryInspectorSignature(
+        @Header("Authorization") token: String?,
+        @Path("sample_id") sampleId: Int,
+        @Body signatureRequestBodyBean: SignatureRequestBodyBean
+    ): Observable<SignatureResponseBodyBean>
 }

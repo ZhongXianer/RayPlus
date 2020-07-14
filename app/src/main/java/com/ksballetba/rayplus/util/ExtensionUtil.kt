@@ -30,7 +30,7 @@ fun asCheckboxList(
 
 fun showDatePickerDialog(textView: TextView, fragmentManager: FragmentManager){
     val now = Calendar.getInstance()
-    var date = ""
+    var date: String
     val dpd = DatePickerDialog.newInstance(
         { _, year, monthOfYear, dayOfMonth ->
             date = "$year-${monthOfYear + 1}-$dayOfMonth"

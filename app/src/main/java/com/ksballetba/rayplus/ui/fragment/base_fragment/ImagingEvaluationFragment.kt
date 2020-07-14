@@ -110,10 +110,18 @@ class ImagingEvaluationFragment : Fragment() {
                 imagingEvaluationBody
             )
         }
-        mAdapter.setOnItemChildClickListener { _, _, position ->
-            XPopup.Builder(context).asConfirm("信息", "请问是否确认删除") {
-                deleteImagingEvaluation(mList[position].evaluateId, position)
-            }.show()
+        mAdapter.setOnItemChildClickListener { _, view, position ->
+            when(view.id){
+                R.id.iv_delete_item_imaging_evaluation->{
+                    XPopup.Builder(context).asConfirm("信息", "请问是否确认删除") {
+                        deleteImagingEvaluation(mList[position].evaluateId, position)
+                    }.show()
+                }
+                R.id.file_btn->{
+
+                }
+            }
+
         }
     }
 
@@ -139,6 +147,10 @@ class ImagingEvaluationFragment : Fragment() {
             intent.putExtra(IMAGING_EVALUATION_BODY, imagingEvaluationBodyBean)
         }
         startActivity(intent)
+    }
+
+    private fun navigateToFilePage(sampleId: Int,cycleNumber: Int,evaluateId: Int,refreshPage: String){
+
     }
 
     private fun deleteImagingEvaluation(evaluateId: Int, pos: Int) {

@@ -96,6 +96,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_date"/>
 
+        <Button
+            android:id="@+id/file_btn"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            android:text="文 件"
+            android:background="@color/footer_color"
+            android:textColor="@color/cardview_light_background"
+            app:layout_constraintTop_toBottomOf="@id/tumor_describe"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

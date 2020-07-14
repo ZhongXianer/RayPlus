@@ -15,12 +15,14 @@ const val LOGIN_TOKEN: String = "token"
 const val USER_NAME: String = "USER_NAME"
 const val USER_ID: String = "USER_ID"
 private lateinit var token: String
+private var mProjectId: Int = 0
 
 fun setToken(context: Context, projectId: Int) {
     token = "Bearer ${context.getSharedPreferences(
         SHARED_PREFERENCE_NAME,
         Context.MODE_PRIVATE
     ).getString("${LOGIN_TOKEN}${projectId}", "")}"
+    mProjectId = projectId
 }
 
 fun getToken(): String {
@@ -82,6 +84,8 @@ fun getUserId(context: Context): Int {
         context.getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
     return sharedPreferences.getInt(USER_ID, -1)
 }
+
+fun getProjectId(): Int = mProjectId
 
 private fun popDialog(context: Context) {
     XPopup.Builder(context).asLoading("登录过期,请重新登录...").show()

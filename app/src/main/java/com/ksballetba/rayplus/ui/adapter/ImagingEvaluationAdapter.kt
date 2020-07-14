@@ -20,5 +20,6 @@ class ImagingEvaluationAdapter(layoutResId: Int, data: List<ImagingEvaluationLis
             .setText(R.id.tv_date, "时间:${item?.time ?: ""}")
             .setText(R.id.tumor_describe, "肿瘤描述:${item?.tumorDesc ?: ""}")
             .addOnClickListener(R.id.iv_delete_item_imaging_evaluation)
+            .addOnClickListener(R.id.file_btn)
     }
 }

@@ -139,7 +139,6 @@ class TreatmentVisitFragment : Fragment() {
         dataList.forEach { data ->
             mViewModel.getVisitTime(mSampleId, data.cycleNumber)
                 .observe(viewLifecycleOwner, Observer { visitTime ->
-                    Log.d("hello", "执行了")
                     val treatmentVisitShowDataBean = TreatmentVisitShowDataBean(
                         data,
                         visitTime.data?.cycleTime,
