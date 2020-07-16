@@ -14,12 +14,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.gyf.immersionbar.ImmersionBar
 import com.ksballetba.rayplus.R
-import com.ksballetba.rayplus.data.bean.ProjectListBean
+import com.ksballetba.rayplus.data.bean.projectData.ProjectListBean
 import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.adapter.ProjectsAdapter
 import com.ksballetba.rayplus.util.*
 import com.ksballetba.rayplus.viewmodel.ProjectsViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.collections.forEachByIndex
 import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity() {
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val TAG = "MainActivity"
         const val PROJECT_ID = "PROJECT_ID"
+        const val RESEARCH_CENTER_ID = "RESEARCH_CENTER_ID"
         const val EXIT_APP_ACTION = "EXIT_APP_ACTION"
     }
 
@@ -93,9 +95,11 @@ class MainActivity : AppCompatActivity() {
         mProjectsAdapter = ProjectsAdapter(R.layout.item_project, mProjectList)
         mProjectsAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
         rv_project.adapter = mProjectsAdapter
+//        val view = layoutInflater.inflate(R.layout.empty, null)
+//        mProjectsAdapter.emptyView = view
         /*设置点击事件，跳转到对应的活动*/
         mProjectsAdapter.setOnItemClickListener { _, _, position ->
-            navigateToSamplePage(mProjectList[position].projectId)
+            navigateToSamplePage(position)
         }
         mViewModel.fetchLoadStatus().observe(this, Observer {
             when (it.status) {
@@ -126,7 +130,18 @@ class MainActivity : AppCompatActivity() {
         mViewModel.fetchData(projectId).observe(this, Observer {
             mProjectList.clear()
             mProjectList.add(it)
-            mProjectsAdapter.setNewData(mProjectList)
+            mProjectList.forEachIndexed { index, data ->
+                getProjectProcess(index, data.projectId)
+            }
+            mProjectsAdapter.notifyDataSetChanged()
+        })
+    }
+
+    private fun getProjectProcess(position: Int, projectId: Int) {
+        mViewModel.getProjectProcess(projectId).observe(this, Observer {
+            mProjectList[position].now = it.data?.now
+            mProjectList[position].total = it.data?.total
+            mProjectsAdapter.notifyDataSetChanged()
         })
     }
 
@@ -158,9 +173,11 @@ class MainActivity : AppCompatActivity() {
     /**
      * 跳转到相应的活动
      */
-    private fun navigateToSamplePage(projectId: Int) {
+    private fun navigateToSamplePage(position: Int) {
+        val projectId = mProjectList[position].projectId
         val intent = Intent(this, SampleActivity::class.java)
         intent.putExtra(PROJECT_ID, projectId)
+        intent.putExtra(RESEARCH_CENTER_ID, mProjectList[position].researchCenterId)
         getProjectAuthorization(projectId)
         setToken(this, projectId)
         startActivity(intent)

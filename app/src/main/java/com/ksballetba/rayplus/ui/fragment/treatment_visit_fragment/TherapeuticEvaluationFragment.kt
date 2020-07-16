@@ -71,7 +71,7 @@ class TherapeuticEvaluationFragment : Fragment() {
                     tv_therapeutic_evaluation.text =
                         getTherapeuticEvaluationList()[it.data.evaluation]
                 } else {
-                    tv_therapeutic_evaluation.text = ""
+                    tv_therapeutic_evaluation.text = "请设置"
                 }
             })
 //        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
@@ -84,14 +84,14 @@ class TherapeuticEvaluationFragment : Fragment() {
     private fun saveData() {
         val evaluation = getTherapeuticEvaluationList().indexOf(tv_therapeutic_evaluation.text)
         val therapeuticEvaluation =
-            TherapeuticEvaluationBean.Data(if (evaluation > 0) evaluation.toInt() else 4)
+            TherapeuticEvaluationBean.Data(if (evaluation > 0) evaluation else 4)
         mViewModel.editTherapeuticEvaluation(mSampleId, mCycleNumber, therapeuticEvaluation)
             .observe(viewLifecycleOwner,
                 Observer {
                     if (it.code == 200) {
                         ToastUtils.showShort("疗效评价修改成功")
                     } else {
-                        ToastUtils.showShort("疗效评价修改失败")
+                        ToastUtils.showShort(it.msg)
                     }
                 })
     }

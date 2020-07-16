@@ -75,6 +75,8 @@ class SurvivalVisitFragment : Fragment() {
         mAdapter = SurvivalVisitAdapter(R.layout.item_survival_visit, mList)
         mAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
         mAdapter.bindToRecyclerView(rv_survival_visit)
+        val view = layoutInflater.inflate(R.layout.empty, null)
+        mAdapter.emptyView = view
         mAdapter.setOnItemClickListener { _, _, position ->
             val survivalVisit = mList[position]
             if (survivalVisit.isSubmit == 1) {
@@ -206,10 +208,10 @@ class SurvivalVisitFragment : Fragment() {
         srl_survival_visit.setEnableLoadMoreWhenContentNotFull(true)
     }
 
-    private fun invalidToken(){
+    private fun invalidToken() {
 
         XPopup.Builder(context).asLoading("操作失败！请尝试重新登录...").show()
-        val intent=Intent(activity,LoginActivity::class.java)
+        val intent = Intent(activity, LoginActivity::class.java)
         startActivity(intent)
         activity?.finish()
     }

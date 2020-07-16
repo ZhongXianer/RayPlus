@@ -20,6 +20,7 @@ import com.ksballetba.rayplus.data.bean.SampleQueryBodyBean
 import com.ksballetba.rayplus.data.bean.sampleData.*
 import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.MainActivity.Companion.PROJECT_ID
+import com.ksballetba.rayplus.ui.activity.MainActivity.Companion.RESEARCH_CENTER_ID
 import com.ksballetba.rayplus.ui.activity.SampleEditActivity.Companion.REFRESH_LAST_PAGE
 import com.ksballetba.rayplus.ui.adapter.SamplesAdapter
 import com.ksballetba.rayplus.ui.adapter.TypeAdapter
@@ -38,10 +39,10 @@ class SampleActivity : AppCompatActivity() {
         const val TAG = "SampleActivity"
         const val SAMPLE_ID = "SAMPLE_ID"
         const val SAMPLE_BODY = "SAMPLE_BODY"
-        const val CYCLE_NUMBER = "CYCLE_NUMBER"
     }
 
     private var mProjectId = 0
+    private var mResearchCenterId = 0
 
     private lateinit var mViewModel: SamplesViewModel
     private lateinit var mSamplesAdapter: SamplesAdapter
@@ -93,6 +94,7 @@ class SampleActivity : AppCompatActivity() {
         setSupportActionBar(tb_sample)
         initRefresh()
         mProjectId = intent.getIntExtra(PROJECT_ID, 0)
+        mResearchCenterId = intent.getIntExtra(RESEARCH_CENTER_ID, 0)
         val searchType = mutableListOf("姓名", "身份证号", "编号")
         val spinner = findViewById<NiceSpinner>(R.id.choose_search_type)
         spinner.attachDataSource(searchType)

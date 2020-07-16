@@ -36,8 +36,9 @@ class RetrofitClient(val networkType: NetworkType){
     }
 
     companion object {
-        val AUTH_BASE_URL = "http://39.106.111.52:81/"
-        val PROJECT_BASE_URL = "http://39.106.111.52:82/"
+        const val BASE_URL="http://39.106.111.52/"
+        const val AUTH_BASE_URL = "http://39.106.111.52:81/"
+        const val PROJECT_BASE_URL = "http://39.106.111.52:82/"
         @Volatile
         var sRetrofitClient:RetrofitClient? = null
         private fun initRetrofitClient(networkType: NetworkType):RetrofitClient{

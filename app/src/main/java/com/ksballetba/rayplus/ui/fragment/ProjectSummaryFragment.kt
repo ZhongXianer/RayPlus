@@ -2,13 +2,11 @@ package com.ksballetba.rayplus.ui.fragment
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import androidx.fragment.app.Fragment
 import com.ksballetba.rayplus.R
-import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.CYCLE_NUMBER
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.adapter.ViewPagerAdapter
 import com.ksballetba.rayplus.ui.fragment.base_fragment.InvestigatorSignatureFragment

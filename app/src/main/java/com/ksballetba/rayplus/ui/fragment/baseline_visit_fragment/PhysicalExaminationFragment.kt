@@ -92,7 +92,7 @@ class PhysicalExaminationFragment : Fragment() {
                 physicalExaminationBody
             )
         }
-        mAdapter.setOnItemChildClickListener { adapter, view, position ->
+        mAdapter.setOnItemChildClickListener { _, _, position ->
             XPopup.Builder(context).asConfirm("信息", "请问是否确认删除") {
                 deletePhysicalExamination(mList[position].reportId, position)
             }.show()
@@ -133,7 +133,7 @@ class PhysicalExaminationFragment : Fragment() {
                     ToastUtils.showShort("删除成功")
                     mAdapter.remove(pos)
                 } else {
-                    ToastUtils.showShort("删除失败")
+                    ToastUtils.showShort(it.msg)
                 }
             })
     }

@@ -396,8 +396,8 @@ class TreatmentHistoryActivity : AppCompatActivity() {
         val isBiopsyAgainStr = parseDefaultContent(tv_is_biopsy_again.text.toString())
         val isBiopsyAgain =
             if (isBiopsyAgainStr.isEmpty()) null else if (isBiopsyAgainStr == "是") 1 else 0
-        var biopsyMethod: String? = mTreatmentHistoryBean.biopsyMethod
-        var biopsyMethodOther: String? = mTreatmentHistoryBean.biopsyMethodOther
+        var biopsyMethod: String?
+        var biopsyMethodOther: String?
         if (isNull && !biopsyMethodIsSet) {
             biopsyMethod = null
             biopsyMethodOther = null
@@ -409,9 +409,12 @@ class TreatmentHistoryActivity : AppCompatActivity() {
             } else {
                 biopsyMethod = "其他"
             }
+        } else {
+            biopsyMethod = mTreatmentHistoryBean.biopsyMethod
+            biopsyMethodOther = mTreatmentHistoryBean.biopsyMethodOther
         }
-        var biopsyType: String? = mTreatmentHistoryBean.biopsyType
-        var biopsyTypeOther: String? = mTreatmentHistoryBean.biopsyTypeOther
+        var biopsyType: String?
+        var biopsyTypeOther: String?
         if (isNull && !biopsyTypeIsSet) {
             biopsyType = null
             biopsyTypeOther = null
@@ -424,9 +427,12 @@ class TreatmentHistoryActivity : AppCompatActivity() {
             } else {
                 biopsyType = "与第1次活检病理类型不一致"
             }
+        } else {
+            biopsyType = mTreatmentHistoryBean.biopsyType
+            biopsyTypeOther = mTreatmentHistoryBean.biopsyTypeOther
         }
-        var geneticSpecimen: String? = mTreatmentHistoryBean.geneticSpecimen
-        var geneticSpecimenOther: String? = mTreatmentHistoryBean.geneticSpecimenOther
+        var geneticSpecimen: String?
+        var geneticSpecimenOther: String?
         if (isNull && !geneticSpecimenIsSet) {
             geneticSpecimen = null
             geneticSpecimenOther = null
@@ -438,6 +444,9 @@ class TreatmentHistoryActivity : AppCompatActivity() {
             } else {
                 geneticSpecimen = "转移灶组织"
             }
+        } else {
+            geneticSpecimen = mTreatmentHistoryBean.geneticSpecimen
+            geneticSpecimenOther = mTreatmentHistoryBean.geneticSpecimenOther
         }
         val geneticMethodStr = parseDefaultContent(tv_genetic_test_way.text.toString())
         val geneticMethod =
@@ -478,8 +487,8 @@ class TreatmentHistoryActivity : AppCompatActivity() {
         )
         val pdl1Str = parseDefaultContent(tv_PD_L1_expression.text.toString())
         val pdl1 = if (pdl1Str.isEmpty()) null else getPD_L1Expression().indexOf(pdl1Str)
-        var tmb: String? = mTreatmentHistoryBean.tmb
-        var tmbOther: String? = mTreatmentHistoryBean.tmbOther
+        var tmb: String?
+        var tmbOther: String?
         if (isNull && !tmbIsSet) {
             tmb = null
             tmbOther = null
@@ -491,6 +500,9 @@ class TreatmentHistoryActivity : AppCompatActivity() {
             } else {
                 tmb = "其他"
             }
+        } else {
+            tmb = mTreatmentHistoryBean.tmb
+            tmbOther = mTreatmentHistoryBean.tmbOther
         }
         val msiStr = parseDefaultContent(tv_microsatellite_instability.text.toString())
         val msi = if (msiStr.isEmpty()) null else getMSI().indexOf(msiStr)
@@ -522,8 +534,6 @@ class TreatmentHistoryActivity : AppCompatActivity() {
             diagnoseMethodtargetedtherapy,
             diagnoseMethodtargetedtherapyOther
         )
-        Log.d("hello", "type:${biopsyType ?: "未设置"}")
-        Log.d("hello", "other:${biopsyTypeOther ?: "未设置"}")
         val treatmentHistoryBodyBean =
             TreatmentHistoryBodyBean(
                 biopsyMethod,
@@ -627,9 +637,10 @@ class TreatmentHistoryActivity : AppCompatActivity() {
         }
         tv_biopsy_way.text =
             if (bean.biopsyMethod == "其他") bean.biopsyMethodOther else bean.biopsyMethod
-        tv_biopsy_pathological_type.text =
-            if (bean.biopsyType == "与第1次活检病理类型不一致") bean.biopsyTypeOther
-            else getBiopsyType()[bean.biopsyType!!.toInt()]
+        if (bean.biopsyType == "与第1次活检病理类型不一致")
+            tv_biopsy_pathological_type.text = bean.biopsyTypeOther
+        else if (bean.biopsyType != null) tv_biopsy_pathological_type.text =
+            getBiopsyType()[bean.biopsyType.toInt()]
         tv_genetic_test_sample.text =
             if (bean.geneticSpecimen == "转移灶组织") bean.geneticSpecimenOther else bean.geneticSpecimen
         if (bean.geneticMethod != null) {

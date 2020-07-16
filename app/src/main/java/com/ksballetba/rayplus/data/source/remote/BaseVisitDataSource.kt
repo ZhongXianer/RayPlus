@@ -1,7 +1,6 @@
 package com.ksballetba.rayplus.data.source.remote
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.apkfuns.logutils.LogUtils
 import com.ksballetba.rayplus.data.bean.*
@@ -13,11 +12,11 @@ import com.ksballetba.rayplus.network.ApiService
 import com.ksballetba.rayplus.network.NetworkState
 import com.ksballetba.rayplus.network.NetworkType
 import com.ksballetba.rayplus.network.RetrofitClient
-import com.ksballetba.rayplus.util.getProjectId
 import com.ksballetba.rayplus.util.getToken
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import okhttp3.MultipartBody
 
 class BaseVisitDataSource(context: Context) {
 
@@ -161,7 +160,7 @@ class BaseVisitDataSource(context: Context) {
     fun addBaselineInvestigatorSignature(
         sampleId: Int,
         signatureRequestBodyBean: SignatureRequestBodyBean,
-        callBack: (SignatureResponseBodyBean) -> Unit
+        callBack: (PartResponseBodyBean) -> Unit
     ) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
@@ -210,7 +209,7 @@ class BaseVisitDataSource(context: Context) {
         sampleId: Int,
         cycleNumber: Int,
         signatureRequestBodyBean: SignatureRequestBodyBean,
-        callBack: (SignatureResponseBodyBean) -> Unit
+        callBack: (PartResponseBodyBean) -> Unit
     ) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
@@ -331,11 +330,35 @@ class BaseVisitDataSource(context: Context) {
             )
     }
 
+    fun deleteImagingEvaluation(
+        sampleId: Int,
+        cycleNumber: Int,
+        evaluateId: Int,
+        callBack: (BaseResponseBean) -> Unit
+    ) {
+        RetrofitClient.getInstance(NetworkType.PROJECT)
+            .create(ApiService::class.java)
+            .deleteImagingEvaluation(mToken, sampleId, cycleNumber, evaluateId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                }
+            )
+    }
+
     fun getImagingEvaluationFileList(
         sampleId: Int,
         cycleNumber: Int,
         evaluateId: Int,
-        callBack: (MutableList<ImagingEvaluationFileBodyBean.Data?>) -> Unit
+        callBack: (MutableList<ImagingEvaluationFileListBean.Data?>) -> Unit
     ) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
@@ -357,15 +380,38 @@ class BaseVisitDataSource(context: Context) {
             )
     }
 
-    fun deleteImagingEvaluation(
+    fun uploadImagingEvaluationFile(
         sampleId: Int,
         cycleNumber: Int,
         evaluateId: Int,
-        callBack: (BaseResponseBean) -> Unit
+//        fileBodyBean: FileBodyBean,
+        file: MultipartBody.Part,
+        callBack: (PartResponseBodyBean) -> Unit
     ) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
-            .deleteImagingEvaluation(mToken, sampleId, cycleNumber, evaluateId)
+            .uploadImagingEvaluationFile(mToken, sampleId, cycleNumber, evaluateId, file)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                    mLoadStatus.postValue(NetworkState.LOADED)
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                    mLoadStatus.postValue(NetworkState.error(it.message))
+                }
+            )
+    }
+
+    fun deleteImagingEvaluationFile(filePath: String, callBack: (BaseResponseBean) -> Unit) {
+        RetrofitClient.getInstance(NetworkType.PROJECT)
+            .create(ApiService::class.java)
+            .deleteImagingEvaluationFile(mToken, filePath)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
@@ -405,7 +451,7 @@ class BaseVisitDataSource(context: Context) {
     fun addSummaryInvestigatorSignature(
         sampleId: Int,
         signatureRequestBodyBean: SignatureRequestBodyBean,
-        callBack: (SignatureResponseBodyBean) -> Unit
+        callBack: (PartResponseBodyBean) -> Unit
     ) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)
@@ -428,7 +474,7 @@ class BaseVisitDataSource(context: Context) {
     fun addSummaryInspectorSignature(
         sampleId: Int,
         signatureRequestBodyBean: SignatureRequestBodyBean,
-        callBack: (SignatureResponseBodyBean) -> Unit
+        callBack: (PartResponseBodyBean) -> Unit
     ) {
         RetrofitClient.getInstance(NetworkType.PROJECT)
             .create(ApiService::class.java)

@@ -42,6 +42,12 @@ class FirstVisitProcessFragment : Fragment() {
     private var mOtherTransferSite: String? = ""
     private var mOtherClinicalSymptoms: String? = ""
 
+    private var biopsyMethodIsSet = false
+    private var tumorPathologicalTypeIsSet = false
+    private var geneticTestingSpecimenIsSet = false
+    private var tmbIsSet = false
+    private lateinit var mFirstVisitProcessResponseBean: FirstVisitProcessResponseBean
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -64,6 +70,7 @@ class FirstVisitProcessFragment : Fragment() {
 
     private fun loadData() {
         mViewModel.getFirstVisitProcess(mSampleId).observe(viewLifecycleOwner, Observer {
+            mFirstVisitProcessResponseBean = it
             initClinicalSymptoms(it)
             tv_lesion.text =
                 if (it.data.tumorPart == null) "" else getTumorPart()[it.data.tumorPart]
@@ -176,27 +183,50 @@ class FirstVisitProcessFragment : Fragment() {
                 transferSite2
             )
         }
-        var biopsyMethod: String? = parseDefaultContent(tv_biopsy_way.text.toString())
-        var biopsyMethodOther: String? = parseDefaultContent(tv_biopsy_way.text.toString())
-        if (getBiopsyMethod().contains(biopsyMethod)) {
-            biopsyMethodOther = null
+        var biopsyMethod: String?
+        var biopsyMethodOther: String?
+        if (biopsyMethodIsSet) {
+            biopsyMethod = parseDefaultContent(tv_biopsy_way.text.toString())
+            biopsyMethodOther = parseDefaultContent(tv_biopsy_way.text.toString())
+            if (getBiopsyMethod().contains(biopsyMethod)) {
+                biopsyMethodOther = null
+            } else {
+                biopsyMethod = "其他"
+            }
         } else {
-            biopsyMethod = "其他"
+            biopsyMethod = mFirstVisitProcessResponseBean.data.biopsyMethod
+            biopsyMethodOther = mFirstVisitProcessResponseBean.data.biopsyMethodOther
         }
-        var tumorPathologicalType: String? = parseDefaultContent(tv_tumor_type.text.toString())
-        var tumorPathologicalTypeOther: String? = parseDefaultContent(tv_tumor_type.text.toString())
-        if (getTumorPathologicalType().contains(tumorPathologicalType)) {
-            tumorPathologicalTypeOther = null
+        var tumorPathologicalType: String?
+        var tumorPathologicalTypeOther: String?
+        if (tumorPathologicalTypeIsSet) {
+            tumorPathologicalType = parseDefaultContent(tv_tumor_type.text.toString())
+            tumorPathologicalTypeOther = parseDefaultContent(tv_tumor_type.text.toString())
+            if (getTumorPathologicalType().contains(tumorPathologicalType)) {
+                tumorPathologicalTypeOther = null
+            } else {
+                tumorPathologicalType = "混合型癌"
+            }
         } else {
-            tumorPathologicalType = "混合型癌"
+            tumorPathologicalType = mFirstVisitProcessResponseBean.data.tumorPathologicalType
+            tumorPathologicalTypeOther =
+                mFirstVisitProcessResponseBean.data.tumorPathologicalTypeOther
         }
-        var geneticTestingSpecimen: String? = parseDefaultContent(tv_biopsy_way.text.toString())
-        var geneticTestingSpecimenOther: String? =
-            parseDefaultContent(tv_biopsy_way.text.toString())
-        if (getGeneticTestingSpecimen().contains(geneticTestingSpecimen)) {
-            geneticTestingSpecimenOther = null
+        var geneticTestingSpecimen: String?
+        var geneticTestingSpecimenOther: String?
+        if (geneticTestingSpecimenIsSet) {
+            geneticTestingSpecimen = parseDefaultContent(tv_genetic_test_sample.text.toString())
+            geneticTestingSpecimenOther =
+                parseDefaultContent(tv_genetic_test_sample.text.toString())
+            if (getGeneticTestingSpecimen().contains(geneticTestingSpecimen)) {
+                geneticTestingSpecimenOther = null
+            } else {
+                geneticTestingSpecimen = "转移灶组织"
+            }
         } else {
-            geneticTestingSpecimen = "转移灶组织"
+            geneticTestingSpecimen = mFirstVisitProcessResponseBean.data.geneticTestingSpecimen
+            geneticTestingSpecimenOther =
+                mFirstVisitProcessResponseBean.data.geneticTestingSpecimenOther
         }
         val geneticTestingMethodStr = parseDefaultContent(tv_genetic_test_way.text.toString())
         val geneticTestingMethod =
@@ -256,13 +286,21 @@ class FirstVisitProcessFragment : Fragment() {
         }
         val pdl1Str = parseDefaultContent(tv_PD_L1_expression.text.toString())
         val pdl1 = if (pdl1Str.isEmpty()) null else getPD_L1Expression().indexOf(pdl1Str)
-        var tmb: String? = parseDefaultContent(tv_tumor_mutation_load.text.toString())
-        var tmbOther: String? = parseDefaultContent(tv_tumor_mutation_load.text.toString())
-        if (tmb == "未测" || tmb == "不详") {
-            tmbOther = null
+        var tmb: String?
+        var tmbOther: String?
+        if (tmbIsSet) {
+            tmb = parseDefaultContent(tv_tumor_mutation_load.text.toString())
+            tmbOther = parseDefaultContent(tv_tumor_mutation_load.text.toString())
+            if (tmb == "未测" || tmb == "不详") {
+                tmbOther = null
+            } else {
+                tmb = "其他"
+            }
         } else {
-            tmb = "其他"
+            tmb = mFirstVisitProcessResponseBean.data.tmb
+            tmbOther = mFirstVisitProcessResponseBean.data.tmbOther
         }
+
         val msiStr = parseDefaultContent(tv_microsatellite_instability.text.toString())
         val msi = if (msiStr.isEmpty()) null else getMSI().indexOf(msiStr)
         val firstVisitProcessBodyBean =
@@ -289,7 +327,7 @@ class FirstVisitProcessFragment : Fragment() {
                     if (it.code == 200) {
                         ToastUtils.showShort("初诊过程表单修改成功")
                     } else {
-                        ToastUtils.showShort("初诊过程表单修改失败")
+                        ToastUtils.showShort(it.msg)
                     }
                 })
     }
@@ -669,7 +707,7 @@ class FirstVisitProcessFragment : Fragment() {
         cl_diseases_history.setOnClickListener {
             val title = "初诊临床症状"
             val diseases = StringBuffer()
-            asCheckboxList(context, title, mClinicalSymptomsList, { data, pos ->
+            asCheckboxList(context, title, mClinicalSymptomsList, { data, _ ->
                 if (data.name == "其他") {
                     XPopup.Builder(context).asInputConfirm("初诊临床症状", "请输入其他初诊临床症状") {
                         mOtherClinicalSymptoms = it
@@ -696,7 +734,7 @@ class FirstVisitProcessFragment : Fragment() {
         }
         cl_transfer_area.setOnClickListener {
             val transferSite = StringBuffer()
-            asCheckboxList(context, "转移部位", mTransferSiteList, { data, pos ->
+            asCheckboxList(context, "转移部位", mTransferSiteList, { data, _ ->
                 if (data.name == "其他") {
                     XPopup.Builder(context).asInputConfirm("转移部位", "请输入其他转移部位") {
                         mOtherTransferSite = it
@@ -720,6 +758,7 @@ class FirstVisitProcessFragment : Fragment() {
                 "活检方式",
                 arrayOf("无", "手术", "胸腔镜", "纵膈镜", "经皮肺穿刺", "纤支镜", "E-BUS", "EUS-FNA", "淋巴结活检", "其他")
             ) { pos, text ->
+                biopsyMethodIsSet = true
                 if (pos < 9) {
                     tv_biopsy_way.text = text
                 } else {
@@ -734,6 +773,7 @@ class FirstVisitProcessFragment : Fragment() {
                 "肿瘤病理类型",
                 arrayOf("腺癌", "鳞癌", "小细胞肺癌", "大细胞癌", "神经内分泌癌", "肉瘤", "分化差的癌", "混合型癌")
             ) { pos, text ->
+                tumorPathologicalTypeIsSet = true
                 if (pos < 7) {
                     tv_tumor_type.text = text
                 } else {
@@ -746,6 +786,7 @@ class FirstVisitProcessFragment : Fragment() {
         cl_genetic_test_sample.setOnClickListener {
             XPopup.Builder(context)
                 .asCenterList("基因检测标本", arrayOf("无", "外周血", "原发灶组织", "转移灶组织")) { pos, text ->
+                    geneticTestingSpecimenIsSet = true
                     if (pos < 3) {
                         tv_genetic_test_sample.text = text
                     } else {
@@ -757,13 +798,13 @@ class FirstVisitProcessFragment : Fragment() {
         }
         cl_genetic_test_way.setOnClickListener {
             XPopup.Builder(context)
-                .asCenterList("基因检测方法", getGeneticTestingMethod()) { pos, text ->
+                .asCenterList("基因检测方法", getGeneticTestingMethod()) { _, text ->
                     tv_genetic_test_way.text = text
                 }.show()
         }
         cl_genetic_mutation_type.setOnClickListener {
             val geneMutationType = StringBuffer()
-            asCheckboxList(context, "基因突变类型", mGeneMutationTypeList, { data, pos ->
+            asCheckboxList(context, "基因突变类型", mGeneMutationTypeList, { data, _ ->
                 if (data.name == "EGFR" || data.name == "ALK") {
                     XPopup.Builder(context).asInputConfirm("基因突变类型", "请输入${data.name}描述") {
                         when (data.name) {
@@ -800,6 +841,7 @@ class FirstVisitProcessFragment : Fragment() {
         cl_tumor_mutation_load.setOnClickListener {
             XPopup.Builder(context)
                 .asCenterList("肿瘤突变负荷(TMB)", arrayOf("未测", "不详", "数量（个突变/Mb）")) { pos, text ->
+                    tmbIsSet = true
                     if (pos < 2) {
                         tv_tumor_mutation_load.text = text
                     } else {
@@ -811,7 +853,7 @@ class FirstVisitProcessFragment : Fragment() {
         }
         cl_microsatellite_instability.setOnClickListener {
             XPopup.Builder(context)
-                .asCenterList("微卫星不稳定性(MSI)", getMSI()) { pos, text ->
+                .asCenterList("微卫星不稳定性(MSI)", getMSI()) { _, text ->
                     tv_microsatellite_instability.text = text
                 }.show()
         }

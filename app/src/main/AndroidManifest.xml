@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.ksballetba.rayplus">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -12,22 +16,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activity.SampleEditActivity"></activity>
+        <activity android:name=".ui.activity.SampleEditActivity" />
         <activity android:name=".ui.activity.survival_visit_activity.SurvivalVisitActivity" />
         <activity android:name=".ui.activity.treatment_visit_activity.AdverseEventActivity" />
         <activity android:name=".ui.activity.treatment_visit_activity.TreatmentRecordActivity" />
         <activity android:name=".ui.activity.treatment_visit_activity.MainPhysicalSignActivity" />
-        <activity android:name=".ui.activity.InvestigatorSignatureActivity" />
+        <activity android:name=".ui.activity.baseline_visit_activity.ImagingEvaluationFileActivity" />
         <activity android:name=".ui.activity.baseline_visit_activity.ImagingEvaluationActivity" />
         <activity android:name=".ui.activity.baseline_visit_activity.TreatmentHistoryActivity" />
         <activity android:name=".ui.activity.baseline_visit_activity.PhysicalExaminationActivity" />
-        <activity android:name=".ui.activity.TreatmentVisitDetailActivity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".ui.activity.CRFActivity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".ui.activity.SampleActivity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".ui.activity.LoginActivity"
+        <activity
+            android:name=".ui.activity.TreatmentVisitDetailActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".ui.activity.CRFActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".ui.activity.SampleActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".ui.activity.LoginActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,6 +44,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.MainActivity" />
+
     </application>
 
+
+
 </manifest>
+

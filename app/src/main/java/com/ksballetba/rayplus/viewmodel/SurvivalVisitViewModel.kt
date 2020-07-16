@@ -3,7 +3,7 @@ package com.ksballetba.rayplus.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.ksballetba.rayplus.data.bean.BaseResponseBean
+import com.ksballetba.rayplus.data.bean.baseData.BaseResponseBean
 import com.ksballetba.rayplus.data.bean.survivalVisitData.SurvivalVisitBodyBean
 import com.ksballetba.rayplus.data.bean.survivalVisitData.SurvivalVisitListBean
 import com.ksballetba.rayplus.data.source.remote.SurvivalVisitDataSource

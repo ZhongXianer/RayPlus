@@ -230,7 +230,11 @@ class SurvivalVisitActivity : AppCompatActivity() {
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 startActivity(intent)
             } else {
-                toast("生存期随访操作失败")
+                toast(it.msg)
+                val intent = Intent(this, CRFActivity::class.java)
+                intent.action = REFRESH_SURVIVAL_VISIT_PAGE
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                startActivity(intent)
             }
         })
     }

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.treatmentVisitData.MainPhysicalSignBodyBean
@@ -51,7 +52,7 @@ class MainPhysicalSignActivity : AppCompatActivity() {
             intent.getParcelableExtra<MainPhysicalSignBodyBean>(MAIN_PHYSICAL_SIGN_BODY)
         if (mainPhysicalSignBody != null) {
             loadData(mainPhysicalSignBody)
-        }
+        } else cl_end_date.isVisible = false
         cl_physical_sign.setOnClickListener {
             XPopup.Builder(this).asCenterList(
                 "症状体征和描述",
@@ -67,10 +68,10 @@ class MainPhysicalSignActivity : AppCompatActivity() {
             }.show()
         }
         cl_start_date.setOnClickListener {
-            showDatePickerDialog(tv_start_date,supportFragmentManager)
+            showDatePickerDialog(tv_start_date, supportFragmentManager)
         }
         cl_end_date.setOnClickListener {
-            showDatePickerDialog(tv_end_date,supportFragmentManager)
+            showDatePickerDialog(tv_end_date, supportFragmentManager)
         }
         cl_exist_status.setOnClickListener {
             XPopup.Builder(this).asCenterList("存在状态", arrayOf("存在", "消失")) { pos, text ->
@@ -117,14 +118,14 @@ class MainPhysicalSignActivity : AppCompatActivity() {
             )
         mViewModel.editMainPhysicalSign(sampleId, cycleNumber, mainPhysicalSignBody).observe(this,
             Observer {
-                if(it.code==200){
+                if (it.code == 200) {
                     toast("主要症状体征操作成功")
                     val intent = Intent(this, TreatmentVisitDetailActivity::class.java)
                     intent.action = REFRESH_MAIN_PHYSICAL_SIGN_PAGE
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                     startActivity(intent)
-                }else{
-                    toast("主要症状体征操作失败")
+                } else {
+                    toast(it.msg)
                 }
             })
     }
@@ -133,14 +134,14 @@ class MainPhysicalSignActivity : AppCompatActivity() {
         tv_physical_sign.text =
             if (mainPhysicalSignBody.symptomDescription == "其他") mainPhysicalSignBody.symptomDescription else mainPhysicalSignBody.symptomDescriptionOther
         tv_start_date.text = mainPhysicalSignBody.startTime
-        if(mainPhysicalSignBody.existence == "1"){
+        if (mainPhysicalSignBody.existence == "1") {
             cl_end_date.visibility = View.VISIBLE
             tv_exist_status.text = "消失"
-        }else{
+        } else {
             cl_end_date.visibility = View.GONE
             tv_exist_status.text = "存在"
         }
-        if(cl_end_date.visibility == View.VISIBLE){
+        if (cl_end_date.visibility == View.VISIBLE) {
             tv_end_date.text = mainPhysicalSignBody.endTime
         }
     }

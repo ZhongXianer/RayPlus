@@ -2,6 +2,7 @@ package com.ksballetba.rayplus.ui.fragment.base_fragment
 
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,16 +15,14 @@ import com.blankj.utilcode.util.ToastUtils
 import com.bumptech.glide.Glide
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.baseData.SignatureRequestBodyBean
+import com.ksballetba.rayplus.network.RetrofitClient.Companion.BASE_URL
 import com.ksballetba.rayplus.ui.activity.CRFActivity
 import com.ksballetba.rayplus.ui.activity.SampleActivity
 import com.ksballetba.rayplus.ui.activity.TreatmentVisitDetailActivity
 import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.CYCLE_NUMBER_KEY
 import com.ksballetba.rayplus.ui.fragment.ProjectSummaryFragment.Companion.INSPECTOR
 import com.ksballetba.rayplus.ui.fragment.ProjectSummaryFragment.Companion.INVESTIGATOR
-import com.ksballetba.rayplus.util.getBaseVisitViewModel
-import com.ksballetba.rayplus.util.getProjectId
-import com.ksballetba.rayplus.util.getUserId
-import com.ksballetba.rayplus.util.getUserName
+import com.ksballetba.rayplus.util.*
 import com.ksballetba.rayplus.viewmodel.BaseVisitViewModel
 import kotlinx.android.synthetic.main.fragment_investigator_signature.*
 
@@ -37,7 +36,7 @@ class InvestigatorSignatureFragment : Fragment() {
     var mSampleId = 0
     var mCycleNumber = 0
 
-    private val picturePath = "http://39.106.111.52/p1/api/static/tempFiles"
+    private val picturePath = "${BASE_URL}p1/api/static/tempFiles"
 
     private lateinit var researchCenterMap: Map<Int, String>
 
@@ -54,17 +53,6 @@ class InvestigatorSignatureFragment : Fragment() {
         initData()
         initUI()
         getResearchCenters()
-        when (activity) {
-            is CRFActivity -> {
-                if (mCycleNumber == 1)
-                    getBaselineSignature()
-                else
-                    getSummarySignature()
-            }
-            is TreatmentVisitDetailActivity -> {
-                getCycleSignature()
-            }
-        }
     }
 
     private fun initData() {
@@ -128,6 +116,17 @@ class InvestigatorSignatureFragment : Fragment() {
         mViewModel.getResearchCenters(getProjectId())
             .observe(viewLifecycleOwner, Observer { result ->
                 researchCenterMap = result.associateBy({ it.id }, { it.name })
+                when (activity) {
+                    is CRFActivity -> {
+                        if (mCycleNumber == 1)
+                            getBaselineSignature()
+                        else
+                            getSummarySignature()
+                    }
+                    is TreatmentVisitDetailActivity -> {
+                        getCycleSignature()
+                    }
+                }
             })
     }
 
@@ -138,6 +137,7 @@ class InvestigatorSignatureFragment : Fragment() {
                 if (it == null) {
                     signature_status.text = "使用当前账户对基线资料进行签名"
                     account_info.text = "当前账户:${getUserName(this.context!!)}"
+                    research_center_info.text = "所属中心:${getResearchCenterName(this.context!!)}"
                     signature_picture.setImageResource(R.drawable.remind)
                     confirm_signature.isVisible = true
                 } else {
@@ -159,6 +159,7 @@ class InvestigatorSignatureFragment : Fragment() {
                     if (it == null) {
                         signature_status.text = "使用当前账户对访视${mCycleNumber}进行签名"
                         account_info.text = "当前账户:${getUserName(this.context!!)}"
+                        research_center_info.text = "所属中心:${getResearchCenterName(this.context!!)}"
                         signature_picture.setImageResource(R.drawable.remind)
                         confirm_signature.isVisible = true
                     } else {
@@ -180,6 +181,7 @@ class InvestigatorSignatureFragment : Fragment() {
                     if (it?.si?.filePath == null) {
                         signature_status.text = "使用当前研究员账户进行项目总结签名"
                         account_info.text = "当前账户:${getUserName(this.context!!)}"
+                        research_center_info.text = "所属中心:${getResearchCenterName(this.context!!)}"
                         signature_picture.setImageResource(R.drawable.remind)
                         confirm_signature.isVisible = true
                     } else {
@@ -195,6 +197,7 @@ class InvestigatorSignatureFragment : Fragment() {
                     if (it?.inspector?.filePath == null) {
                         signature_status.text = "使用当前监察员账户进行项目总结签名"
                         account_info.text = "当前账户:${getUserName(this.context!!)}"
+                        research_center_info.text = "所属中心:${getResearchCenterName(this.context!!)}"
                         signature_picture.setImageResource(R.drawable.remind)
                         confirm_signature.isVisible = true
                     } else {

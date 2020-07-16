@@ -61,10 +61,10 @@ class TreatmentRecordActivity : AppCompatActivity() {
             }.show()
         }
         cl_treatment_start_date.setOnClickListener {
-            showDatePickerDialog(tv_treatment_start_date,supportFragmentManager)
+            showDatePickerDialog(tv_treatment_start_date, supportFragmentManager)
         }
         cl_treatment_end_date.setOnClickListener {
-            showDatePickerDialog(tv_treatment_end_date,supportFragmentManager)
+            showDatePickerDialog(tv_treatment_end_date, supportFragmentManager)
         }
         cl_dose_usage.setOnClickListener {
             XPopup.Builder(this).asInputConfirm("剂量及用法", "请输入剂量及用法") {
@@ -102,14 +102,18 @@ class TreatmentRecordActivity : AppCompatActivity() {
             )
         mViewModel.editTreatmentRecord(sampleId, cycleNumber, treatmentRecordBody).observe(this,
             Observer {
-                if(it.code==200){
+                if (it.code == 200) {
                     toast("治疗记录单操作成功")
                     val intent = Intent(this, TreatmentVisitDetailActivity::class.java)
                     intent.action = REFRESH_TREATMENT_RECORD_PAGE
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                     startActivity(intent)
-                }else{
-                    toast("治疗记录单操作失败")
+                } else {
+                    toast(it.msg)
+                    val intent = Intent(this, TreatmentVisitDetailActivity::class.java)
+                    intent.action = REFRESH_TREATMENT_RECORD_PAGE
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
                 }
             })
     }

@@ -20,6 +20,7 @@ import com.ksballetba.rayplus.ui.activity.CRFActivity
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.TreatmentVisitDetailActivity
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.ImagingEvaluationActivity
+import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.ImagingEvaluationFileActivity
 import com.ksballetba.rayplus.ui.adapter.ImagingEvaluationAdapter
 import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.CYCLE_NUMBER_KEY
 import com.ksballetba.rayplus.util.getBaseVisitViewModel
@@ -38,6 +39,7 @@ class ImagingEvaluationFragment : Fragment() {
         const val REFRESH_PAGE = "REFRESH_PAGE"
         const val CRF_PAGE = "CRF_PAGE"
         const val TREATMENT_VISIT_DETAIL_PAGE = "TREATMENT_VISIT_DETAIL_PAGE"
+        const val EVALUATE_ID = "EVALUATE_ID"
     }
 
     private lateinit var mViewModel: BaseVisitViewModel
@@ -111,14 +113,19 @@ class ImagingEvaluationFragment : Fragment() {
             )
         }
         mAdapter.setOnItemChildClickListener { _, view, position ->
-            when(view.id){
-                R.id.iv_delete_item_imaging_evaluation->{
+            when (view.id) {
+                R.id.iv_delete_item_imaging_evaluation -> {
                     XPopup.Builder(context).asConfirm("信息", "请问是否确认删除") {
                         deleteImagingEvaluation(mList[position].evaluateId, position)
                     }.show()
                 }
-                R.id.file_btn->{
-
+                R.id.file_btn -> {
+                    navigateToFilePage(
+                        mSampleId,
+                        mCycleNumber,
+                        mList[position].evaluateId,
+                        mCurrentPage
+                    )
                 }
             }
 
@@ -149,8 +156,18 @@ class ImagingEvaluationFragment : Fragment() {
         startActivity(intent)
     }
 
-    private fun navigateToFilePage(sampleId: Int,cycleNumber: Int,evaluateId: Int,refreshPage: String){
-
+    private fun navigateToFilePage(
+        sampleId: Int,
+        cycleNumber: Int,
+        evaluateId: Int,
+        refreshPage: String
+    ) {
+        val intent = Intent(activity, ImagingEvaluationFileActivity::class.java)
+        intent.putExtra(SAMPLE_ID, sampleId)
+        intent.putExtra(CYCLE_NUMBER_KEY, cycleNumber)
+        intent.putExtra(EVALUATE_ID, evaluateId)
+        intent.putExtra(REFRESH_PAGE, refreshPage)
+        startActivity(intent)
     }
 
     private fun deleteImagingEvaluation(evaluateId: Int, pos: Int) {

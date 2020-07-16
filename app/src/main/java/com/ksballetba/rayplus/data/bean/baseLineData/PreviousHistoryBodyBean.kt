@@ -16,11 +16,11 @@ data class PreviousHistoryBodyBean(
     @SerializedName("drug_use_other")
     val drugUseOther: String?, // 板蓝根
     @SerializedName("ECOG")
-    val eCOG: Int?, // 2
-    val height: Int?, // 180
+    val eCOG: String?, // 2
+    val height: String?, // 180
     val smoke: Smoke?,
     @SerializedName("surface_area")
-    val surfaceArea: Int?, // 200
+    val surfaceArea: String?, // 200
     val surgery: String?, // 其他
     @SerializedName("surgery_other")
     val surgeryOther: String?,
@@ -28,7 +28,7 @@ data class PreviousHistoryBodyBean(
     val tumorIll: String?, // 其他
     @SerializedName("tumor_ill_other")
     val tumorIllOther: String?, // 脑
-    val weight: Int? // 80
+    val weight: String? // 80
 ) {
     data class BaseIll(
         @SerializedName("base_ill_other")

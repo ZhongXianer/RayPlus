@@ -20,11 +20,11 @@ import org.jetbrains.anko.toast
 
 class PhysicalExaminationActivity : AppCompatActivity() {
 
-    companion object{
+    companion object {
         const val REFRESH_PHYSICAL_EXAMINATION_PAGE = "REFRESH_PHYSICAL_EXAMINATION_PAGE"
     }
 
-    lateinit var mViewModel:BaselineVisitViewModel
+    lateinit var mViewModel: BaselineVisitViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,54 +41,55 @@ class PhysicalExaminationActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun initUI(){
+    private fun initUI() {
         setSupportActionBar(tb_physical_examination)
         mViewModel = getBaselineVisitViewModel(this)
-        val physicalExaminationBody = intent.getParcelableExtra<PhysicalExaminationBodyBean>(PHYSICAL_EXAMINATION_BODY)
-        if(physicalExaminationBody!=null){
+        val physicalExaminationBody =
+            intent.getParcelableExtra<PhysicalExaminationBodyBean>(PHYSICAL_EXAMINATION_BODY)
+        if (physicalExaminationBody != null) {
             loadData(physicalExaminationBody)
         }
         cl_date.setOnClickListener {
-            showDatePickerDialog(tv_date,supportFragmentManager)
+            showDatePickerDialog(tv_date, supportFragmentManager)
         }
         cl_body_temperature.setOnClickListener {
-            XPopup.Builder(this).asInputConfirm("体温（℃）","请输入体温"){
+            XPopup.Builder(this).asInputConfirm("体温（℃）", "请输入体温") {
                 tv_body_temperature.text = it
             }.show()
         }
         cl_breathe.setOnClickListener {
-            XPopup.Builder(this).asInputConfirm("呼吸（次/分）","请输入呼吸"){
+            XPopup.Builder(this).asInputConfirm("呼吸（次/分）", "请输入呼吸") {
                 tv_breathe.text = it
             }.show()
         }
         cl_blood_systolic_pressure.setOnClickListener {
-            XPopup.Builder(this).asInputConfirm("血压（mmHg ）","请输入收缩压"){
+            XPopup.Builder(this).asInputConfirm("血压（mmHg ）", "请输入收缩压") {
                 tv_blood_systolic_pressure.text = it
             }.show()
         }
         cl_blood_diastolic_pressure.setOnClickListener {
-            XPopup.Builder(this).asInputConfirm("血压（mmHg ）","请输入舒张压"){
+            XPopup.Builder(this).asInputConfirm("血压（mmHg ）", "请输入舒张压") {
                 tv_blood_diastolic_pressure.text = it
             }.show()
         }
         cl_heart_rate.setOnClickListener {
-            XPopup.Builder(this).asInputConfirm("心率（次/分）","请输入心率"){
+            XPopup.Builder(this).asInputConfirm("心率（次/分）", "请输入心率") {
                 tv_heart_rate.text = it
             }.show()
         }
         fab_save_physical_examination.setOnClickListener {
-            val sampleId = intent.getIntExtra(SAMPLE_ID,-1)
-            val reportId = intent.getIntExtra(REPORT_ID,-1)
-            if(reportId==-1){
-                addOrEditPhysicalExamination(sampleId,null)
-            }else{
-                addOrEditPhysicalExamination(sampleId,reportId)
+            val sampleId = intent.getIntExtra(SAMPLE_ID, -1)
+            val reportId = intent.getIntExtra(REPORT_ID, -1)
+            if (reportId == -1) {
+                addOrEditPhysicalExamination(sampleId, null)
+            } else {
+                addOrEditPhysicalExamination(sampleId, reportId)
             }
 
         }
     }
 
-    private fun loadData(physicalExaminationBody: PhysicalExaminationBodyBean){
+    private fun loadData(physicalExaminationBody: PhysicalExaminationBodyBean) {
         tv_date.text = physicalExaminationBody.time
         tv_body_temperature.text = physicalExaminationBody.temperature.toString()
         tv_breathe.text = physicalExaminationBody.breathFrequency.toString()
@@ -97,7 +98,7 @@ class PhysicalExaminationActivity : AppCompatActivity() {
         tv_heart_rate.text = physicalExaminationBody.heartRate.toString()
     }
 
-    private fun addOrEditPhysicalExamination(sampleId:Int,reportId:Int?){
+    private fun addOrEditPhysicalExamination(sampleId: Int, reportId: Int?) {
         val time = parseDefaultContent(tv_date.text.toString())
         val temperature = tv_body_temperature.text.toString().toFloatOrNull()
         val breathFrequency = tv_breathe.text.toString().toIntOrNull()
@@ -114,16 +115,21 @@ class PhysicalExaminationActivity : AppCompatActivity() {
                 temperature,
                 time
             )
-        mViewModel.editPhysicalExamination(sampleId,physicalExaminationBodyBean).observe(this,androidx.lifecycle.Observer {
-            if(it.code==200){
-                toast("体格报告单操作成功")
-                val intent = Intent(this,CRFActivity::class.java)
-                intent.action = REFRESH_PHYSICAL_EXAMINATION_PAGE
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                startActivity(intent)
-            }else{
-                toast("体格报告单操作失败")
-            }
-        })
+        mViewModel.editPhysicalExamination(sampleId, physicalExaminationBodyBean)
+            .observe(this, androidx.lifecycle.Observer {
+                if (it.code == 200) {
+                    toast("体格报告单操作成功")
+                    val intent = Intent(this, CRFActivity::class.java)
+                    intent.action = REFRESH_PHYSICAL_EXAMINATION_PAGE
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
+                } else {
+                    toast(it.msg)
+                    val intent = Intent(this, CRFActivity::class.java)
+                    intent.action = REFRESH_PHYSICAL_EXAMINATION_PAGE
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
+                }
+            })
     }
 }

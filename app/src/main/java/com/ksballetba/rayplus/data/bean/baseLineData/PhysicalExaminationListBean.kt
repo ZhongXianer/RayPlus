@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class PhysicalExaminationListBean(
     val code: Int, // 0
-    val count: Int, // 200000
+    val count: Int?, // 200000
     val `data`: List<Data>,
     val msg: String
 ) {

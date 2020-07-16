@@ -35,11 +35,13 @@ class AdverseEventFragment : Fragment() {
     companion object {
         const val TAG = "AdverseEventFragment"
         const val ADVERSE_EVENT_BODY = "ADVERSE_EVENT_BODY"
+        const val FRAGMENT_FLAG = "FRAGMENT_FLAG"
+        const val ADVERSE_EVENT_FRAGMENT = "ADVERSE_EVENT_FRAGMENT"
     }
 
     private lateinit var mViewModel: TreatmentVisitViewModel
     private lateinit var mAdapter: AdverseEventAdapter
-    var mList = mutableListOf<AdverseEventListBean.Data>()
+    var mList = mutableListOf<AdverseEventListBean.Data?>()
     var mSampleId = 0
     var mCycleNumber = 0
 
@@ -81,26 +83,26 @@ class AdverseEventFragment : Fragment() {
         mAdapter.setOnItemClickListener { _, _, position ->
             val adverseEvent = mList[position]
             val adverseEventBody = AdverseEventBodyBean(
-                adverseEvent.adverseEventId,
-                adverseEvent.adverseEventName,
-                adverseEvent.dieTime,
-                getAdverseEventServer().indexOf(adverseEvent.isServerEvent),
-                adverseEvent.isUsingMedicine,
-                getAdverseEventMeasure().indexOf(adverseEvent.measure),
-                adverseEvent.medicineMeasure,
-                getAdverseEventMedicineRelation().indexOf(adverseEvent.medicineRelation),
-                adverseEvent.otherSAEState,
-                adverseEvent.recover,
-                adverseEvent.recoverTime,
-                adverseEvent.reportTime,
-                adverseEvent.reportType,
-                adverseEvent.sAEDiagnose,
-                adverseEvent.sAERecover,
-                adverseEvent.sAERelations,
-                adverseEvent.sAEStartTime,
-                adverseEvent.sAEState,
-                adverseEvent.startTime,
-                adverseEvent.toxicityClassification
+                adverseEvent?.adverseEventId,
+                adverseEvent?.adverseEventName,
+                adverseEvent?.dieTime,
+                getAdverseEventServer().indexOf(adverseEvent?.isServerEvent),
+                adverseEvent?.isUsingMedicine,
+                getAdverseEventMeasure().indexOf(adverseEvent?.measure),
+                adverseEvent?.medicineMeasure,
+                getAdverseEventMedicineRelation().indexOf(adverseEvent?.medicineRelation),
+                adverseEvent?.otherSAEState,
+                adverseEvent?.recover,
+                adverseEvent?.recoverTime,
+                adverseEvent?.reportTime,
+                adverseEvent?.reportType,
+                adverseEvent?.sAEDiagnose,
+                adverseEvent?.sAERecover,
+                adverseEvent?.sAERelations,
+                adverseEvent?.sAEStartTime,
+                adverseEvent?.sAEState,
+                adverseEvent?.startTime,
+                adverseEvent?.toxicityClassification
             )
             navigateToAdverseEventEditPage(
                 mSampleId,
@@ -110,7 +112,7 @@ class AdverseEventFragment : Fragment() {
         }
         mAdapter.setOnItemChildClickListener { _, _, position ->
             XPopup.Builder(context).asConfirm("信息", "请问是否确认删除") {
-                mList[position].adverseEventId?.let { deleteAdverseEvent(it, position) }
+                mList[position]?.adverseEventId?.let { deleteAdverseEvent(it, position) }
             }.show()
         }
     }
@@ -119,8 +121,8 @@ class AdverseEventFragment : Fragment() {
         mViewModel.getAdverseEventList(mSampleId, mCycleNumber)
             .observe(viewLifecycleOwner, Observer {
                 mList = it.toMutableList()
-                mList.forEach {item->
-                    item.needDeleted = true
+                mList.forEach { item ->
+                    item?.needDeleted = true
                 }
                 mAdapter.setNewData(mList)
             })
@@ -139,6 +141,7 @@ class AdverseEventFragment : Fragment() {
         val intent = Intent(activity, AdverseEventActivity::class.java)
         intent.putExtra(SAMPLE_ID, sampleId)
         intent.putExtra(CYCLE_NUMBER_KEY, cycleNumber)
+        intent.putExtra(FRAGMENT_FLAG, ADVERSE_EVENT_FRAGMENT)
         if (adverseEventBody?.adverseEventId != null) {
             intent.putExtra(ADVERSE_EVENT_BODY, adverseEventBody)
         }

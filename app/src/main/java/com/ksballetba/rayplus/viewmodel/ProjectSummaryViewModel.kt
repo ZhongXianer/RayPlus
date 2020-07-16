@@ -4,10 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ksballetba.rayplus.data.bean.AdverseEventListBean
-import com.ksballetba.rayplus.data.bean.BaseResponseBean
+import com.ksballetba.rayplus.data.bean.baseData.BaseResponseBean
 import com.ksballetba.rayplus.data.bean.projectSummaryData.ProjectSummaryBodyBean
 import com.ksballetba.rayplus.data.bean.projectSummaryData.ProjectSummaryResponseBean
-import com.ksballetba.rayplus.data.bean.projectSummaryData.SummarySignatureBodyBean
 import com.ksballetba.rayplus.data.source.remote.ProjectSummaryDataSource
 
 class ProjectSummaryViewModel constructor(private var projectSummaryDataSource: ProjectSummaryDataSource) :
@@ -32,8 +31,8 @@ class ProjectSummaryViewModel constructor(private var projectSummaryDataSource: 
         return result
     }
 
-    fun getAllAdverseEventList(sampleId: Int): LiveData<MutableList<AdverseEventListBean.Data>> {
-        val result = MutableLiveData<MutableList<AdverseEventListBean.Data>>()
+    fun getAllAdverseEventList(sampleId: Int): LiveData<MutableList<AdverseEventListBean.Data?>> {
+        val result = MutableLiveData<MutableList<AdverseEventListBean.Data?>>()
         projectSummaryDataSource.getAllAdverseEventList(sampleId) {
             result.postValue(it)
         }

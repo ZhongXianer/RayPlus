@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.apkfuns.logutils.LogUtils
 import com.ksballetba.rayplus.data.bean.*
+import com.ksballetba.rayplus.data.bean.baseData.BaseResponseBean
 import com.ksballetba.rayplus.data.bean.baseData.VisitTimeBean
 import com.ksballetba.rayplus.data.bean.treatmentVisitData.*
 import com.ksballetba.rayplus.network.*
@@ -435,7 +436,7 @@ class TreatmentVisitDataSource(context: Context) {
     fun getAdverseEventList(
         sampleId: Int,
         cycleNumber: Int,
-        callBack: (MutableList<AdverseEventListBean.Data>) -> Unit
+        callBack: (MutableList<AdverseEventListBean.Data?>) -> Unit
     ) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.getInstance(NetworkType.PROJECT)

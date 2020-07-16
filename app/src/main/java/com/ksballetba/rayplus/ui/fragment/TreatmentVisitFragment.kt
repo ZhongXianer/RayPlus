@@ -3,23 +3,19 @@ package com.ksballetba.rayplus.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
-
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.treatmentVisitData.NavigationBean
 import com.ksballetba.rayplus.data.bean.treatmentVisitData.TreatmentVisitShowDataBean
-import com.ksballetba.rayplus.data.bean.treatmentVisitData.TreatmentVisitSubmitResponseBean
 import com.ksballetba.rayplus.network.Status
-import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.CYCLE_NUMBER
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.TreatmentVisitDetailActivity
 import com.ksballetba.rayplus.ui.adapter.VisitsAdapter
@@ -27,7 +23,6 @@ import com.ksballetba.rayplus.util.getTreatmentVisitViewModel
 import com.ksballetba.rayplus.viewmodel.TreatmentVisitViewModel
 import com.lxj.xpopup.XPopup
 import kotlinx.android.synthetic.main.fragment_treatment_visit.*
-import kotlin.math.log
 
 /**
  * A simple [Fragment] subclass.
@@ -189,7 +184,6 @@ class TreatmentVisitFragment : Fragment() {
         intent.putExtra(TREATMENT_CYCLE_NUMBER_KEY, cycleNumber)
         intent.putExtra(VISIT_TITLE, title)
         intent.putExtra(SAMPLE_ID, mSampleId)
-        intent.putExtra(CYCLE_NUMBER, cycleNumber)
         activity?.startActivity(intent)
     }
 

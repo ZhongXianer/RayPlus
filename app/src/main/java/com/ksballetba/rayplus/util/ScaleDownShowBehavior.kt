@@ -1,19 +1,18 @@
 package com.ksballetba.rayplus.util
 
 import android.content.Context
+import android.os.Build
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.ViewPropertyAnimatorListener
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import javax.sql.StatementEventListener
 
 class ScaleDownShowBehavior(context: Context?, attrs: AttributeSet?) :
     FloatingActionButton.Behavior(context, attrs) {
-
-    private var isAnimateIng: Boolean = false
-    private var isShow: Boolean = true
 
     @Override
     override fun onStartNestedScroll(
@@ -48,34 +47,67 @@ class ScaleDownShowBehavior(context: Context?, attrs: AttributeSet?) :
         type: Int,
         consumed: IntArray
     ) {
-        if ((dyConsumed > 0 || dyUnconsumed > 0) && !isAnimateIng && isShow) {
-            translateHide(child, object : StateListener() {
-                override fun onAnimationStart(view: View?) {
-                    super.onAnimationStart(view)
-                    isShow = false
+        super.onNestedScroll(
+            coordinatorLayout,
+            child,
+            target,
+            dxConsumed,
+            dyConsumed,
+            dxUnconsumed,
+            dyUnconsumed,
+            type,
+            consumed
+        )
+        if (dyConsumed > 0 && child.visibility == View.VISIBLE) {
+            child.hide(object : FloatingActionButton.OnVisibilityChangedListener() {
+                override fun onShown(fab: FloatingActionButton?) {
+                    super.onShown(fab)
+                }
+
+                override fun onHidden(fab: FloatingActionButton?) {
+                    super.onHidden(fab)
+                    fab?.visibility = View.INVISIBLE
                 }
             })
-        } else if ((dyConsumed < 0 || dyUnconsumed < 0) && !isAnimateIng && !isShow) {
-            translateShow(child, object : StateListener() {
-                override fun onAnimationStart(view: View?) {
-                    super.onAnimationStart(view)
-                    isShow = true
-                }
-            })
+        } else if (dyConsumed <= 0 && child.visibility != View.VISIBLE) {
+            // User scrolled up and the FAB is currently not visible -> show the FAB
+            child.show()
         }
     }
 
-    open inner class StateListener : ViewPropertyAnimatorListener {
-        override fun onAnimationStart(view: View?) {
-            isAnimateIng = true
-        }
-
-        override fun onAnimationEnd(view: View?) {
-            isAnimateIng = false
-        }
-
-        override fun onAnimationCancel(view: View?) {
-            isAnimateIng = false
-        }
-    }
+//    private fun animateOut(button: FloatingActionButton) {
+////        ViewCompat.animate(button)
+////            .translationY((button.height + getMarginBottom(button)).toFloat())
+////            .setInterpolator(INTERPOLATOR).withLayer()
+////            .setListener(object : ViewPropertyAnimatorListener {
+////                override fun onAnimationEnd(view: View?) {
+////                    mIsAnimatingOut = false
+////                    view?.visibility = View.GONE
+////                }
+////
+////                override fun onAnimationCancel(view: View?) {
+////                    mIsAnimatingOut = false
+////                }
+////
+////                override fun onAnimationStart(view: View?) {
+////                    mIsAnimatingOut = true
+////                }
+////            }).start();
+////    }
+////
+////    private fun animateIn(button: FloatingActionButton) {
+////        button.visibility = View.VISIBLE
+////        ViewCompat.animate(button).translationY(0F)
+////            .setInterpolator(INTERPOLATOR).withLayer().setListener(null)
+////            .start()
+////    }
+////
+////    private fun getMarginBottom(v: View): Int {
+////        var marginBottom = 0
+////        val layoutParams = v.layoutParams
+////        if (layoutParams is ViewGroup.MarginLayoutParams) {
+////            marginBottom = layoutParams.bottomMargin
+////        }
+////        return marginBottom
+////    }
 }

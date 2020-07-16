@@ -4,10 +4,9 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.apkfuns.logutils.LogUtils
 import com.ksballetba.rayplus.data.bean.AdverseEventListBean
-import com.ksballetba.rayplus.data.bean.BaseResponseBean
+import com.ksballetba.rayplus.data.bean.baseData.BaseResponseBean
 import com.ksballetba.rayplus.data.bean.projectSummaryData.ProjectSummaryBodyBean
 import com.ksballetba.rayplus.data.bean.projectSummaryData.ProjectSummaryResponseBean
-import com.ksballetba.rayplus.data.bean.projectSummaryData.SummarySignatureBodyBean
 import com.ksballetba.rayplus.network.ApiService
 import com.ksballetba.rayplus.network.NetworkState
 import com.ksballetba.rayplus.network.NetworkType
@@ -71,7 +70,7 @@ class ProjectSummaryDataSource(context: Context) {
 
     fun getAllAdverseEventList(
         sampleId: Int,
-        callBack: (MutableList<AdverseEventListBean.Data>) -> Unit
+        callBack: (MutableList<AdverseEventListBean.Data?>) -> Unit
     ) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.getInstance(NetworkType.PROJECT)

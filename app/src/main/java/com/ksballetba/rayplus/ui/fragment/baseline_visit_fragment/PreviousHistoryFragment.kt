@@ -212,10 +212,10 @@ class PreviousHistoryFragment : Fragment() {
             drinkingQuitTime,
             drinkingSize
         )
-        val height = parseDefaultContent(tv_patient_height.text.toString()).toIntOrNull()
-        val weight = parseDefaultContent(tv_patient_weight.text.toString()).toIntOrNull()
-        val surfaceArea = parseDefaultContent(tv_patient_body_area.text.toString()).toIntOrNull()
-        val eCOG = parseDefaultContent(tv_ECOG_score.text.toString()).toIntOrNull()
+        val height = parseDefaultContent(tv_patient_height.text.toString())
+        val weight = parseDefaultContent(tv_patient_weight.text.toString())
+        val surfaceArea = parseDefaultContent(tv_patient_body_area.text.toString())
+        val eCOG = parseDefaultContent(tv_ECOG_score.text.toString())
         val previousHistoryBody =
             PreviousHistoryBodyBean(
                 baseIll,
@@ -239,7 +239,7 @@ class PreviousHistoryFragment : Fragment() {
                 if (it.code == 200) {
                     ToastUtils.showShort("既往史表单修改成功")
                 } else {
-                    ToastUtils.showShort("既往史表单修改失败")
+                    ToastUtils.showShort(it.msg)
                 }
             })
     }
@@ -309,7 +309,7 @@ class PreviousHistoryFragment : Fragment() {
         cl_diseases_history.setOnClickListener {
             val title = "基础疾病史"
             val diseases = StringBuffer()
-            asCheckboxList(context, title, mBaseIllList, { data, pos ->
+            asCheckboxList(context, title, mBaseIllList, { data, _ ->
                 if (data.name == "其他，请描述") {
                     XPopup.Builder(context).asInputConfirm("基础疾病史", "请输入基础疾病史") {
                         mOtherIll = it
@@ -367,7 +367,7 @@ class PreviousHistoryFragment : Fragment() {
         cl_smoke_history.setOnClickListener {
             switch_smoke_history.isChecked = !switch_smoke_history.isChecked
         }
-        switch_smoke_history.setOnCheckedChangeListener { compoundButton, isChecked ->
+        switch_smoke_history.setOnCheckedChangeListener { _, isChecked ->
             switch_smoke_history.setSwitchTextAppearance(
                 context,
                 if (isChecked) R.style.s_on else R.style.s_off
@@ -387,7 +387,7 @@ class PreviousHistoryFragment : Fragment() {
         cl_is_quit_smoke.setOnClickListener {
             switch_is_quit_smoke.isChecked = !switch_is_quit_smoke.isChecked
         }
-        switch_is_quit_smoke.setOnCheckedChangeListener { button, isChecked ->
+        switch_is_quit_smoke.setOnCheckedChangeListener { _, isChecked ->
             switch_is_quit_smoke.setSwitchTextAppearance(
                 context,
                 if (isChecked) R.style.s_on else R.style.s_off
@@ -402,7 +402,7 @@ class PreviousHistoryFragment : Fragment() {
         cl_is_relapse_smoke.setOnClickListener {
             switch_is_relapse_smoke.isChecked = !switch_is_relapse_smoke.isChecked
         }
-        switch_is_relapse_smoke.setOnCheckedChangeListener { button, isChecked ->
+        switch_is_relapse_smoke.setOnCheckedChangeListener { _, isChecked ->
             switch_is_relapse_smoke.setSwitchTextAppearance(
                 context,
                 if (isChecked) R.style.s_on else R.style.s_off
@@ -411,7 +411,7 @@ class PreviousHistoryFragment : Fragment() {
         cl_drink_history.setOnClickListener {
             switch_drink_history.isChecked = !switch_drink_history.isChecked
         }
-        switch_drink_history.setOnCheckedChangeListener { button, isChecked ->
+        switch_drink_history.setOnCheckedChangeListener { _, isChecked ->
             switch_drink_history.setSwitchTextAppearance(
                 context,
                 if (isChecked) R.style.s_on else R.style.s_off
@@ -423,7 +423,7 @@ class PreviousHistoryFragment : Fragment() {
                 .asCenterList(
                     "饮酒频率",
                     arrayOf("请设置", "几乎不", "每周1-2次", "每周3-4次", "每周5-7次")
-                ) { pos, text ->
+                ) { _, text ->
                     tv_drink_frequency.text = text
                 }.show()
         }

@@ -3,13 +3,14 @@ package com.ksballetba.rayplus.data.source.remote
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.apkfuns.logutils.LogUtils
-import com.ksballetba.rayplus.data.bean.ProjectListBean
-import com.ksballetba.rayplus.data.bean.UserNameBean
+import com.ksballetba.rayplus.data.bean.projectData.ProjectListBean
+import com.ksballetba.rayplus.data.bean.projectData.ProjectProcessBean
 import com.ksballetba.rayplus.network.ApiService
 import com.ksballetba.rayplus.network.NetworkState
 import com.ksballetba.rayplus.network.NetworkType
 import com.ksballetba.rayplus.network.RetrofitClient
 import com.ksballetba.rayplus.util.getToken
+import com.ksballetba.rayplus.util.getTokenByProjectId
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -60,6 +61,25 @@ class ProjectDataSource(context: Context) {
                 },
                 onError = {
                     mLoadStatus.postValue(NetworkState.error(it.message))
+                }
+            )
+    }
+
+    fun getProjectProcess(projectId: Int, callBack: (ProjectProcessBean) -> Unit) {
+        RetrofitClient.getInstance(NetworkType.PROJECT)
+            .create(ApiService::class.java)
+            .getProjectProcess(getTokenByProjectId(mContext, projectId))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("completed")
+                },
+                onError = {
+                    LogUtils.d(it.message)
                 }
             )
     }

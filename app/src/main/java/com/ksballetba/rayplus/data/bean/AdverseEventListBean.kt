@@ -4,10 +4,10 @@ package com.ksballetba.rayplus.data.bean
 import com.google.gson.annotations.SerializedName
 
 data class AdverseEventListBean(
-    val code: Int?, // 0
+    val code: Int, // 0
     val count: Int?, // 200000
-    val `data`: List<Data>?,
-    val msg: String?
+    val `data`: List<Data?>?,
+    val msg: String
 ) {
     data class Data(
         @SerializedName("adverse_event_id")

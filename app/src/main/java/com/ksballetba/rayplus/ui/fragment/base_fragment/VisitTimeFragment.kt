@@ -97,7 +97,7 @@ class VisitTimeFragment : Fragment() {
                 if (it.code == 200) {
                     ToastUtils.showShort("访视时间修改成功")
                 } else {
-                    ToastUtils.showShort("访视时间修改失败")
+                    ToastUtils.showShort(it.msg)
                 }
             })
     }

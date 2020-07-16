@@ -6,6 +6,8 @@ import com.ksballetba.rayplus.data.bean.baseData.*
 import com.ksballetba.rayplus.data.bean.baseLineData.*
 import com.ksballetba.rayplus.data.bean.loginData.LoginBodyBean
 import com.ksballetba.rayplus.data.bean.loginData.LoginResponseBean
+import com.ksballetba.rayplus.data.bean.projectData.ProjectListBean
+import com.ksballetba.rayplus.data.bean.projectData.ProjectProcessBean
 import com.ksballetba.rayplus.data.bean.projectSummaryData.ProjectSummaryBodyBean
 import com.ksballetba.rayplus.data.bean.projectSummaryData.ProjectSummaryResponseBean
 import com.ksballetba.rayplus.data.bean.projectSummaryData.SummarySignatureBodyBean
@@ -17,6 +19,7 @@ import com.ksballetba.rayplus.data.bean.survivalVisitData.SurvivalVisitBodyBean
 import com.ksballetba.rayplus.data.bean.survivalVisitData.SurvivalVisitListBean
 import com.ksballetba.rayplus.data.bean.treatmentVisitData.*
 import io.reactivex.Observable
+import okhttp3.MultipartBody
 import retrofit2.http.*
 
 
@@ -32,6 +35,10 @@ interface ApiService {
         @Header("Authorization") token: String?,
         @Path("project_id") projectId: Int
     ): Observable<ProjectListBean>
+
+    @Headers("Content-Type:application/json")
+    @GET("/project/process")
+    fun getProjectProcess(@Header("Authorization") token: String?): Observable<ProjectProcessBean>
 
     @Headers("Content-Type:application/json")
     @GET("/v1/user/auths")
@@ -124,7 +131,7 @@ interface ApiService {
         @Header("Authorization") token: String?,
         @Path("sample_id") sampleId: Int,
         @Body signatureRequestBodyBean: SignatureRequestBodyBean
-    ): Observable<SignatureResponseBodyBean>
+    ): Observable<PartResponseBodyBean>
 
     @Headers("Content-Type:application/json")
     @GET("/cycle/signature/{sample_id}/{cycle_number}")
@@ -141,7 +148,7 @@ interface ApiService {
         @Path("sample_id") sampleId: Int,
         @Path("cycle_number") cycleNumber: Int,
         @Body signatureRequestBodyBean: SignatureRequestBodyBean
-    ): Observable<SignatureResponseBodyBean>
+    ): Observable<PartResponseBodyBean>
 
     @Headers("Content-Type:application/json")
     @GET("/patient/{sample_id}")
@@ -272,8 +279,25 @@ interface ApiService {
         @Header("Authorization") token: String?,
         @Path("sample_id") sampleId: Int,
         @Path("cycle_number") cycleNumber: Int,
-        @Path("evaluate_id")evaluateId: Int
-    ):Observable<ImagingEvaluationFileBodyBean>
+        @Path("evaluate_id") evaluateId: Int
+    ): Observable<ImagingEvaluationFileListBean>
+
+    @Multipart
+    @POST("/photo_evaluate/file/{sample_id}/{cycle_number}/{evaluate_id}")
+    fun uploadImagingEvaluationFile(
+        @Header("Authorization") token: String?,
+        @Path("sample_id") sampleId: Int,
+        @Path("cycle_number") cycleNumber: Int,
+        @Path("evaluate_id") evaluateId: Int,
+        @Part file: MultipartBody.Part
+    ): Observable<PartResponseBodyBean>
+
+    @Headers("Content-Type:application/x-www-form-urlencoded")
+    @DELETE("/static_file")
+    fun deleteImagingEvaluationFile(
+        @Header("Authorization") token: String?,
+        @Query("file_path") filePath: String
+    ): Observable<BaseResponseBean>
 
     @Headers("Content-Type:application/x-www-form-urlencoded")
     @DELETE("/photo_evaluate/{sample_id}/{cycle_number}/{evaluate_id}")
@@ -504,7 +528,7 @@ interface ApiService {
         @Header("Authorization") token: String?,
         @Path("sample_id") sampleId: Int,
         @Body signatureRequestBodyBean: SignatureRequestBodyBean
-    ): Observable<SignatureResponseBodyBean>
+    ): Observable<PartResponseBodyBean>
 
     @Headers("Content-Type:application/x-www-form-urlencoded")
     @POST("/summary/cra_signature/{sample_id}")
@@ -512,5 +536,5 @@ interface ApiService {
         @Header("Authorization") token: String?,
         @Path("sample_id") sampleId: Int,
         @Body signatureRequestBodyBean: SignatureRequestBodyBean
-    ): Observable<SignatureResponseBodyBean>
+    ): Observable<PartResponseBodyBean>
 }

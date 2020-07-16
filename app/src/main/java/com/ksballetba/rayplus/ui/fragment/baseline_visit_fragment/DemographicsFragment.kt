@@ -134,7 +134,7 @@ class DemographicsFragment : Fragment() {
                 if (it.code == 200) {
                     ToastUtils.showShort("人口统计学表单修改成功")
                 } else {
-                    ToastUtils.showShort("人口统计学表单修改失败")
+                    ToastUtils.showShort(it.msg)
                 }
             })
     }

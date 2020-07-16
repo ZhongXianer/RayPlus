@@ -89,7 +89,8 @@ class LoginActivity : AppCompatActivity() {
                         this,
                         it.data.tokens,
                         it.data.userInfo.name,
-                        it.data.userInfo.id
+                        it.data.userInfo.id,
+                        it.data.userInfo.research_center_name
                     )
 //                    saveLoginToken(it.data.tokens, it.data.userInfo.name)
                     val intent = Intent(this, MainActivity::class.java)

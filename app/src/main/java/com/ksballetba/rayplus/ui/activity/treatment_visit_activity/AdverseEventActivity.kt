@@ -3,8 +3,10 @@ package com.ksballetba.rayplus.ui.activity.treatment_visit_activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.apkfuns.logutils.LogUtils
 import com.ksballetba.rayplus.R
@@ -12,7 +14,10 @@ import com.ksballetba.rayplus.data.bean.AdverseEventBodyBean
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.TreatmentVisitDetailActivity
 import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.CYCLE_NUMBER_KEY
+import com.ksballetba.rayplus.ui.fragment.project_summary.AdverseEventSummaryFragment.Companion.ADVERSE_EVENT_SUMMARY_FRAGMENT
 import com.ksballetba.rayplus.ui.fragment.treatment_visit_fragment.AdverseEventFragment.Companion.ADVERSE_EVENT_BODY
+import com.ksballetba.rayplus.ui.fragment.treatment_visit_fragment.AdverseEventFragment.Companion.ADVERSE_EVENT_FRAGMENT
+import com.ksballetba.rayplus.ui.fragment.treatment_visit_fragment.AdverseEventFragment.Companion.FRAGMENT_FLAG
 import com.ksballetba.rayplus.util.*
 import com.ksballetba.rayplus.viewmodel.TreatmentVisitViewModel
 import com.lxj.xpopup.XPopup
@@ -49,125 +54,147 @@ class AdverseEventActivity : AppCompatActivity() {
         setSupportActionBar(tb_adverse_event)
         mViewModel = getTreatmentVisitViewModel(this)
         val adverseEventBody = intent.getParcelableExtra<AdverseEventBodyBean>(ADVERSE_EVENT_BODY)
+        val flag = intent.getStringExtra(FRAGMENT_FLAG)
         if (adverseEventBody != null) {
             loadData(adverseEventBody)
         }
-        cl_adverse_event_name.setOnClickListener {
-            XPopup.Builder(this).asInputConfirm("不良事件名称", "请输入不良事件名称") {
-                tv_adverse_event_name.text = it
-            }.show()
-        }
-        cl_is_serious.setOnClickListener {
-            XPopup.Builder(this).asCenterList("是否为严重不良事件", arrayOf("是", "否")) { _, text ->
-                tv_is_serious.text = text
-                if (text == "是") {
-                    ll_server_event.visibility = View.VISIBLE
-                } else {
-                    ll_server_event.visibility = View.GONE
+        when (flag) {
+            ADVERSE_EVENT_FRAGMENT -> {
+                cl_adverse_event_name.setOnClickListener {
+                    XPopup.Builder(this).asInputConfirm("不良事件名称", "请输入不良事件名称") {
+                        tv_adverse_event_name.text = it
+                    }.show()
                 }
-            }.show()
-        }
-        cl_toxicity_grading.setOnClickListener {
-            XPopup.Builder(this)
-                .asCenterList("毒性分级", getAdverseEventToxicityClassify()) { _, text ->
-                    tv_toxicity_grading.text = text
-                }.show()
-        }
-        cl_start_date.setOnClickListener {
-            showDatePickerDialog(tv_start_date,supportFragmentManager)
-        }
-        cl_drug_relationship.setOnClickListener {
-            XPopup.Builder(this).asCenterList(
-                "与药物关系",
-                arrayOf("肯定有关", "很可能有关", "可能有关", "可能无关", "肯定无关")
-            ) { _, text ->
-                tv_drug_relationship.text = text
-            }.show()
-        }
-        cl_take_measure.setOnClickListener {
-            XPopup.Builder(this).asCenterList("采取措施", getAdverseEventMeasure()) { _, text ->
-                tv_take_measure.text = text
-            }.show()
-        }
-        cl_is_drug_treat.setOnClickListener {
-            XPopup.Builder(this).asCenterList("是否进行药物治疗", arrayOf("是", "否")) { _, text ->
-                tv_is_drug_treat.text = text
-            }.show()
-        }
-        cl_return.setOnClickListener {
-            XPopup.Builder(this)
-                .asCenterList("转归", arrayOf("症状消失", "缓解", "持续", "加重", "恢复伴后遗症", "死亡")) { _, text ->
-                    tv_return.text = text
-                }.show()
-        }
-        cl_return_date.setOnClickListener {
-            showDatePickerDialog(tv_return_date,supportFragmentManager)
-        }
-        cl_report_date.setOnClickListener {
-            showDatePickerDialog(tv_report_date,supportFragmentManager)
-        }
-        cl_report_type.setOnClickListener {
-            XPopup.Builder(this).asCenterList("报告类型", getAdverseEventReportType()) { _, text ->
-                tv_report_type.text = text
-            }.show()
-        }
-        cl_SAE_diagnose.setOnClickListener {
-            XPopup.Builder(this).asInputConfirm(getString(R.string.SAE_diagnose), "请输入诊断") {
-                tv_SAE_diagnose.text = it
-            }.show()
-        }
-        cl_SAE_state.setOnClickListener {
-            XPopup.Builder(this).asCenterList(
-                getString(R.string.SAE_state),
-                arrayOf("死亡", "导致住院", "延长住院时间", "伤残", "功能障碍", "导致先天畸形", "危及生命", "怀孕", "其他情况")
-            ) { pos, text ->
-                if (pos < 8) {
-                    tv_SAE_state.text = text
-                } else {
+                cl_is_serious.setOnClickListener {
+                    XPopup.Builder(this).asCenterList("是否为严重不良事件", arrayOf("是", "否")) { _, text ->
+                        tv_is_serious.text = text
+                        if (text == "是") {
+                            ll_server_event.visibility = View.VISIBLE
+                        } else {
+                            ll_server_event.visibility = View.GONE
+                        }
+                    }.show()
+                }
+                cl_toxicity_grading.setOnClickListener {
                     XPopup.Builder(this)
-                        .asInputConfirm(getString(R.string.SAE_diagnose), "请输入其他情况") {
-                            tv_SAE_state.text = it
+                        .asCenterList("毒性分级", getAdverseEventToxicityClassify()) { _, text ->
+                            tv_toxicity_grading.text = text
                         }.show()
                 }
-            }.show()
-        }
-        cl_die_time.setOnClickListener {
-            showDatePickerDialog(tv_die_time,supportFragmentManager)
-        }
-        cl_SAE_start_time.setOnClickListener {
-            showDatePickerDialog(tv_SAE_start_time,supportFragmentManager)
-        }
-        cl_medicine_measure.setOnClickListener {
-            XPopup.Builder(this).asCenterList(
-                getString(R.string.medicine_measure),
-                getAdverseEventMedicineMeasure()
-            ) { _, text ->
-                tv_medicine_measure.text = text
-            }.show()
-        }
-        cl_SAE_recover.setOnClickListener {
-            XPopup.Builder(this).asCenterList(
-                getString(R.string.SAE_recover),
-                getAdverseEventSAERecover()
-            ) { _, text ->
-                tv_SAE_recover.text = text
-            }.show()
-        }
-        cl_SAE_relation.setOnClickListener {
-            XPopup.Builder(this).asCenterList(
-                getString(R.string.SAE_relation),
-                getAdverseEventMedicineRelation()
-            ) { _, text ->
-                tv_SAE_relation.text = text
-            }.show()
-        }
-        fab_save_adverse_event.setOnClickListener {
-            val sampleId = intent.getIntExtra(SAMPLE_ID, -1)
-            val cycleNumber = intent.getIntExtra(CYCLE_NUMBER_KEY, -1)
-            if (adverseEventBody == null) {
-                addOrEditData(sampleId, cycleNumber, null)
-            } else {
-                addOrEditData(sampleId, cycleNumber, adverseEventBody.adverseEventId)
+                cl_start_date.setOnClickListener {
+                    showDatePickerDialog(tv_start_date, supportFragmentManager)
+                }
+                cl_drug_relationship.setOnClickListener {
+                    XPopup.Builder(this).asCenterList(
+                        "与药物关系",
+                        arrayOf("肯定有关", "很可能有关", "可能有关", "可能无关", "肯定无关")
+                    ) { _, text ->
+                        tv_drug_relationship.text = text
+                    }.show()
+                }
+                cl_take_measure.setOnClickListener {
+                    XPopup.Builder(this).asCenterList("采取措施", getAdverseEventMeasure()) { _, text ->
+                        tv_take_measure.text = text
+                    }.show()
+                }
+                cl_is_drug_treat.setOnClickListener {
+                    XPopup.Builder(this).asCenterList("是否进行药物治疗", arrayOf("是", "否")) { _, text ->
+                        tv_is_drug_treat.text = text
+                    }.show()
+                }
+                cl_return.setOnClickListener {
+                    XPopup.Builder(this)
+                        .asCenterList(
+                            "转归",
+                            arrayOf("症状消失", "缓解", "持续", "加重", "恢复伴后遗症", "死亡")
+                        ) { _, text ->
+                            tv_return.text = text
+                        }.show()
+                }
+                cl_return_date.setOnClickListener {
+                    showDatePickerDialog(tv_return_date, supportFragmentManager)
+                }
+                cl_report_date.setOnClickListener {
+                    showDatePickerDialog(tv_report_date, supportFragmentManager)
+                }
+                cl_report_type.setOnClickListener {
+                    XPopup.Builder(this)
+                        .asCenterList("报告类型", getAdverseEventReportType()) { _, text ->
+                            tv_report_type.text = text
+                        }.show()
+                }
+                cl_SAE_diagnose.setOnClickListener {
+                    XPopup.Builder(this).asInputConfirm(getString(R.string.SAE_diagnose), "请输入诊断") {
+                        tv_SAE_diagnose.text = it
+                    }.show()
+                }
+                cl_SAE_state.setOnClickListener {
+                    XPopup.Builder(this).asCenterList(
+                        getString(R.string.SAE_state),
+                        arrayOf(
+                            "死亡",
+                            "导致住院",
+                            "延长住院时间",
+                            "伤残",
+                            "功能障碍",
+                            "导致先天畸形",
+                            "危及生命",
+                            "怀孕",
+                            "其他情况"
+                        )
+                    ) { pos, text ->
+                        if (pos < 8) {
+                            tv_SAE_state.text = text
+                        } else {
+                            XPopup.Builder(this)
+                                .asInputConfirm(getString(R.string.SAE_diagnose), "请输入其他情况") {
+                                    tv_SAE_state.text = it
+                                }.show()
+                        }
+                    }.show()
+                }
+                cl_die_time.setOnClickListener {
+                    showDatePickerDialog(tv_die_time, supportFragmentManager)
+                }
+                cl_SAE_start_time.setOnClickListener {
+                    showDatePickerDialog(tv_SAE_start_time, supportFragmentManager)
+                }
+                cl_medicine_measure.setOnClickListener {
+                    XPopup.Builder(this).asCenterList(
+                        getString(R.string.medicine_measure),
+                        getAdverseEventMedicineMeasure()
+                    ) { _, text ->
+                        tv_medicine_measure.text = text
+                    }.show()
+                }
+                cl_SAE_recover.setOnClickListener {
+                    XPopup.Builder(this).asCenterList(
+                        getString(R.string.SAE_recover),
+                        getAdverseEventSAERecover()
+                    ) { _, text ->
+                        tv_SAE_recover.text = text
+                    }.show()
+                }
+                cl_SAE_relation.setOnClickListener {
+                    XPopup.Builder(this).asCenterList(
+                        getString(R.string.SAE_relation),
+                        getAdverseEventMedicineRelation()
+                    ) { _, text ->
+                        tv_SAE_relation.text = text
+                    }.show()
+                }
+                fab_save_adverse_event.setOnClickListener {
+                    val sampleId = intent.getIntExtra(SAMPLE_ID, -1)
+                    val cycleNumber = intent.getIntExtra(CYCLE_NUMBER_KEY, -1)
+                    if (adverseEventBody == null) {
+                        addOrEditData(sampleId, cycleNumber, null)
+                    } else {
+                        addOrEditData(sampleId, cycleNumber, adverseEventBody.adverseEventId)
+                    }
+                }
+            }
+            ADVERSE_EVENT_SUMMARY_FRAGMENT -> {
+                fab_save_adverse_event.isVisible = false
             }
         }
     }
@@ -258,7 +285,11 @@ class AdverseEventActivity : AppCompatActivity() {
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                     startActivity(intent)
                 } else {
-                    toast("不良事件操作失败")
+                    toast(it.msg)
+                    val intent = Intent(this, TreatmentVisitDetailActivity::class.java)
+                    intent.action = REFRESH_ADVERSE_EVENT_PAGE
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
                 }
             })
     }

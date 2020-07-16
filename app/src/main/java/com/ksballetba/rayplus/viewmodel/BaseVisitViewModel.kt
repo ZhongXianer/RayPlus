@@ -9,6 +9,7 @@ import com.ksballetba.rayplus.data.bean.projectSummaryData.SummarySignatureBodyB
 import com.ksballetba.rayplus.data.bean.sampleData.SampleSelectBodyBean
 import com.ksballetba.rayplus.data.bean.treatmentVisitData.TreatmentVisitSubmitResponseBean
 import com.ksballetba.rayplus.data.source.remote.BaseVisitDataSource
+import okhttp3.MultipartBody
 
 class BaseVisitViewModel constructor(private var baseVisitDataSource: BaseVisitDataSource) :
     ViewModel() {
@@ -68,8 +69,8 @@ class BaseVisitViewModel constructor(private var baseVisitDataSource: BaseVisitD
     fun addBaselineInvestigatorSignature(
         sampleId: Int,
         signatureRequestBodyBean: SignatureRequestBodyBean
-    ): LiveData<SignatureResponseBodyBean> {
-        val result = MutableLiveData<SignatureResponseBodyBean>()
+    ): LiveData<PartResponseBodyBean> {
+        val result = MutableLiveData<PartResponseBodyBean>()
         baseVisitDataSource.addBaselineInvestigatorSignature(sampleId, signatureRequestBodyBean) {
             result.postValue(it)
         }
@@ -91,8 +92,8 @@ class BaseVisitViewModel constructor(private var baseVisitDataSource: BaseVisitD
         sampleId: Int,
         cycleNumber: Int,
         signatureRequestBodyBean: SignatureRequestBodyBean
-    ): LiveData<SignatureResponseBodyBean> {
-        val result = MutableLiveData<SignatureResponseBodyBean>()
+    ): LiveData<PartResponseBodyBean> {
+        val result = MutableLiveData<PartResponseBodyBean>()
         baseVisitDataSource.addCycleInvestigatorSignature(
             sampleId,
             cycleNumber,
@@ -150,18 +151,6 @@ class BaseVisitViewModel constructor(private var baseVisitDataSource: BaseVisitD
         return result
     }
 
-    fun getImagingEvaluationFileList(
-        sampleId: Int,
-        cycleNumber: Int,
-        evaluateId: Int
-    ): LiveData<MutableList<ImagingEvaluationFileBodyBean.Data?>>{
-        val result=MutableLiveData<MutableList<ImagingEvaluationFileBodyBean.Data?>>()
-        baseVisitDataSource.getImagingEvaluationFileList(sampleId,cycleNumber,evaluateId){
-            result.postValue(it)
-        }
-        return result
-    }
-
     fun deleteImagingEvaluation(
         sampleId: Int,
         cycleNumber: Int,
@@ -169,6 +158,45 @@ class BaseVisitViewModel constructor(private var baseVisitDataSource: BaseVisitD
     ): LiveData<BaseResponseBean> {
         val result = MutableLiveData<BaseResponseBean>()
         baseVisitDataSource.deleteImagingEvaluation(sampleId, cycleNumber, evaluateId) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun getImagingEvaluationFileList(
+        sampleId: Int,
+        cycleNumber: Int,
+        evaluateId: Int
+    ): LiveData<MutableList<ImagingEvaluationFileListBean.Data?>> {
+        val result = MutableLiveData<MutableList<ImagingEvaluationFileListBean.Data?>>()
+        baseVisitDataSource.getImagingEvaluationFileList(sampleId, cycleNumber, evaluateId) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun uploadImagingEvaluationFile(
+        sampleId: Int,
+        cycleNumber: Int,
+        evaluateId: Int,
+//        fileBodyBean: FileBodyBean
+        file: MultipartBody.Part
+    ): LiveData<PartResponseBodyBean> {
+        val result = MutableLiveData<PartResponseBodyBean>()
+        baseVisitDataSource.uploadImagingEvaluationFile(
+            sampleId,
+            cycleNumber,
+            evaluateId,
+            file
+        ) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun deleteImagingEvaluationFile(filePath: String): LiveData<BaseResponseBean> {
+        val result = MutableLiveData<BaseResponseBean>()
+        baseVisitDataSource.deleteImagingEvaluationFile(filePath) {
             result.postValue(it)
         }
         return result
@@ -185,8 +213,8 @@ class BaseVisitViewModel constructor(private var baseVisitDataSource: BaseVisitD
     fun addSummaryInvestigatorSignature(
         sampleId: Int,
         signatureRequestBodyBean: SignatureRequestBodyBean
-    ): LiveData<SignatureResponseBodyBean> {
-        val result = MutableLiveData<SignatureResponseBodyBean>()
+    ): LiveData<PartResponseBodyBean> {
+        val result = MutableLiveData<PartResponseBodyBean>()
         baseVisitDataSource.addSummaryInvestigatorSignature(sampleId, signatureRequestBodyBean) {
             result.postValue(it)
         }
@@ -196,8 +224,8 @@ class BaseVisitViewModel constructor(private var baseVisitDataSource: BaseVisitD
     fun addSummaryInspectorSignature(
         sampleId: Int,
         signatureRequestBodyBean: SignatureRequestBodyBean
-    ): LiveData<SignatureResponseBodyBean> {
-        val result = MutableLiveData<SignatureResponseBodyBean>()
+    ): LiveData<PartResponseBodyBean> {
+        val result = MutableLiveData<PartResponseBodyBean>()
         baseVisitDataSource.addSummaryInspectorSignature(sampleId, signatureRequestBodyBean) {
             result.postValue(it)
         }

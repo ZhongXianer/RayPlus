@@ -7,7 +7,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.AdverseEventListBean
 
-class AdverseEventAdapter(layoutResId:Int,data:List<AdverseEventListBean.Data>): BaseQuickAdapter<AdverseEventListBean.Data, BaseViewHolder>(layoutResId,data) {
+class AdverseEventAdapter(layoutResId:Int,data:List<AdverseEventListBean.Data?>): BaseQuickAdapter<AdverseEventListBean.Data?, BaseViewHolder>(layoutResId,data) {
 
     companion object {
         const val TAG = "TreatmentRecordAdapter"

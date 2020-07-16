@@ -1,6 +1,7 @@
 package com.ksballetba.rayplus.ui.fragment.project_summary
 
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,10 +15,17 @@ import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 
 import com.ksballetba.rayplus.R
+import com.ksballetba.rayplus.data.bean.AdverseEventBodyBean
 import com.ksballetba.rayplus.data.bean.AdverseEventListBean
 import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
+import com.ksballetba.rayplus.ui.activity.treatment_visit_activity.AdverseEventActivity
 import com.ksballetba.rayplus.ui.adapter.AdverseEventAdapter
+import com.ksballetba.rayplus.ui.fragment.treatment_visit_fragment.AdverseEventFragment.Companion.ADVERSE_EVENT_BODY
+import com.ksballetba.rayplus.ui.fragment.treatment_visit_fragment.AdverseEventFragment.Companion.FRAGMENT_FLAG
+import com.ksballetba.rayplus.util.getAdverseEventMeasure
+import com.ksballetba.rayplus.util.getAdverseEventMedicineRelation
+import com.ksballetba.rayplus.util.getAdverseEventServer
 import com.ksballetba.rayplus.util.getProjectSummaryViewModel
 import com.ksballetba.rayplus.viewmodel.ProjectSummaryViewModel
 import kotlinx.android.synthetic.main.fragment_adverse_event_summary.*
@@ -27,9 +35,13 @@ import kotlinx.android.synthetic.main.fragment_adverse_event_summary.*
  */
 class AdverseEventSummaryFragment : Fragment() {
 
+    companion object {
+        const val ADVERSE_EVENT_SUMMARY_FRAGMENT = "ADVERSE_EVENT_SUMMARY_FRAGMENT"
+    }
+
     private lateinit var mViewModel: ProjectSummaryViewModel
     private lateinit var mAdapter: AdverseEventAdapter
-    var mList = mutableListOf<AdverseEventListBean.Data>()
+    var mList = mutableListOf<AdverseEventListBean.Data?>()
     var mSampleId = 0
 
     override fun onCreateView(
@@ -60,8 +72,36 @@ class AdverseEventSummaryFragment : Fragment() {
         mAdapter = AdverseEventAdapter(R.layout.item_adverse_event, mList)
         mAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
         mAdapter.bindToRecyclerView(rv_adverse_event_summary)
+        val view = layoutInflater.inflate(R.layout.empty, null)
+        mAdapter.emptyView = view
+        mAdapter.setOnItemClickListener { _, _, position ->
+            val adverseEvent = mList[position]
+            val adverseEventBody = AdverseEventBodyBean(
+                adverseEvent?.adverseEventId,
+                adverseEvent?.adverseEventName,
+                adverseEvent?.dieTime,
+                getAdverseEventServer().indexOf(adverseEvent?.isServerEvent),
+                adverseEvent?.isUsingMedicine,
+                getAdverseEventMeasure().indexOf(adverseEvent?.measure),
+                adverseEvent?.medicineMeasure,
+                getAdverseEventMedicineRelation().indexOf(adverseEvent?.medicineRelation),
+                adverseEvent?.otherSAEState,
+                adverseEvent?.recover,
+                adverseEvent?.recoverTime,
+                adverseEvent?.reportTime,
+                adverseEvent?.reportType,
+                adverseEvent?.sAEDiagnose,
+                adverseEvent?.sAERecover,
+                adverseEvent?.sAERelations,
+                adverseEvent?.sAEStartTime,
+                adverseEvent?.sAEState,
+                adverseEvent?.startTime,
+                adverseEvent?.toxicityClassification
+            )
+            navigateToAdverseEventEditPage(adverseEventBody)
+        }
         mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
-            when(it.status){
+            when (it.status) {
                 Status.RUNNING -> {
                     srl_adverse_event_summary.autoRefresh()
                 }
@@ -83,16 +123,20 @@ class AdverseEventSummaryFragment : Fragment() {
         mViewModel.getAllAdverseEventList(mSampleId)
             .observe(viewLifecycleOwner, Observer {
                 mList = it.toMutableList()
-                mList.forEach {item->
-                    item.needDeleted = false
+                mList.forEach { item ->
+                    item?.needDeleted = false
                 }
                 mAdapter.setNewData(mList)
             })
-//        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
-//            if(it.status == Status.FAILED){
-//                ToastUtils.showShort(it.msg)
-//            }
-//        })
+    }
+
+    private fun navigateToAdverseEventEditPage(adverseEventBody: AdverseEventBodyBean?) {
+        val intent = Intent(activity, AdverseEventActivity::class.java)
+        if (adverseEventBody?.adverseEventId != null) {
+            intent.putExtra(ADVERSE_EVENT_BODY, adverseEventBody)
+        }
+        intent.putExtra(FRAGMENT_FLAG, ADVERSE_EVENT_SUMMARY_FRAGMENT)
+        startActivity(intent)
     }
 
     private fun initRefresh() {

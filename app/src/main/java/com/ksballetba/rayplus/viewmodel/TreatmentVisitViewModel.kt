@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ksballetba.rayplus.data.bean.*
+import com.ksballetba.rayplus.data.bean.baseData.BaseResponseBean
 import com.ksballetba.rayplus.data.bean.baseData.VisitTimeBean
 import com.ksballetba.rayplus.data.bean.treatmentVisitData.*
 import com.ksballetba.rayplus.data.source.remote.TreatmentVisitDataSource
@@ -209,8 +210,8 @@ TreatmentVisitViewModel constructor(private var treatmentVisitDataSource: Treatm
     fun getAdverseEventList(
         sampleId: Int,
         cycleNumber: Int
-    ): LiveData<List<AdverseEventListBean.Data>> {
-        val result = MutableLiveData<List<AdverseEventListBean.Data>>()
+    ): LiveData<List<AdverseEventListBean.Data?>> {
+        val result = MutableLiveData<List<AdverseEventListBean.Data?>>()
         treatmentVisitDataSource.getAdverseEventList(sampleId, cycleNumber) {
             result.postValue(it)
         }

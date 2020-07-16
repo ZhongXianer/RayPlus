@@ -3,7 +3,7 @@ package com.ksballetba.rayplus.ui.adapter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.ksballetba.rayplus.R
-import com.ksballetba.rayplus.data.bean.ProjectListBean
+import com.ksballetba.rayplus.data.bean.projectData.ProjectListBean
 
 class ProjectsAdapter(layoutResId:Int,data:List<ProjectListBean.Data>): BaseQuickAdapter<ProjectListBean.Data, BaseViewHolder>(layoutResId,data) {
 

@@ -2,10 +2,10 @@ package com.ksballetba.rayplus.data.bean.baseData
 
 import com.google.gson.annotations.SerializedName
 
-data class ImagingEvaluationFileBodyBean(
-    val code: Int,
+data class ImagingEvaluationFileListBean(
+    val code: Int?,
     val `data`: List<Data?>,
-    val msg: String
+    val msg: String?
 ) {
     data class Data(
         @SerializedName("evaluate_id")

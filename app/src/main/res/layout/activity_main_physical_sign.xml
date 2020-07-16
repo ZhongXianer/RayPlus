@@ -131,8 +131,8 @@
                     android:id="@+id/tv_exist_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/disappear"
                     android:layout_marginEnd="@dimen/item_left_margin"
+                    android:text="@string/input_visit_time"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

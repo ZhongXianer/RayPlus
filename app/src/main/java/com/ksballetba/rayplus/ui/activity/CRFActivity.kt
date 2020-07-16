@@ -1,23 +1,20 @@
 package com.ksballetba.rayplus.ui.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.apkfuns.logutils.LogUtils
 import com.ksballetba.rayplus.R
-import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.CYCLE_NUMBER
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.ImagingEvaluationActivity.Companion.REFRESH_IMAGING_EVALUATION_PAGE
-import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.PhysicalExaminationActivity
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.PhysicalExaminationActivity.Companion.REFRESH_PHYSICAL_EXAMINATION_PAGE
 import com.ksballetba.rayplus.ui.activity.baseline_visit_activity.TreatmentHistoryActivity.Companion.REFRESH_TREATMENT_HISTORY_PAGE
 import com.ksballetba.rayplus.ui.activity.survival_visit_activity.SurvivalVisitActivity.Companion.REFRESH_SURVIVAL_VISIT_PAGE
-import com.ksballetba.rayplus.ui.activity.treatment_visit_activity.MainPhysicalSignActivity.Companion.REFRESH_MAIN_PHYSICAL_SIGN_PAGE
 import com.ksballetba.rayplus.ui.adapter.ViewPagerAdapter
 import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment
 import com.ksballetba.rayplus.ui.fragment.BaselineVisitFragment.Companion.CYCLE_NUMBER_KEY

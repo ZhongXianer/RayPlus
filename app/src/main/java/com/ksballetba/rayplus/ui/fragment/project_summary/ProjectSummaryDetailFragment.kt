@@ -29,6 +29,9 @@ class ProjectSummaryDetailFragment : Fragment() {
 
     var mSampleId = 0
 
+    private var reasonStopDrugIsSet = false
+    private var mReasonStopDrug: Int? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,10 +54,11 @@ class ProjectSummaryDetailFragment : Fragment() {
 
     private fun loadData() {
         mViewModel.getProjectSummary(mSampleId).observe(viewLifecycleOwner, Observer {
+            mReasonStopDrug = it.data?.reasonStopDrug
             if (it.data?.isStop == null) tv_is_stop_treat.text == "请设置"
             else {
                 if (it.data.isStop == 1) tv_is_stop_treat.text = "是"
-                else tv_is_stop_treat.text="否"
+                else tv_is_stop_treat.text = "否"
             }
             tv_clinic_terminal.text = it.data?.relay
             tv_last_take_medicine_date.text = it.data?.lastTimeDrug
@@ -65,7 +69,7 @@ class ProjectSummaryDetailFragment : Fragment() {
                 if (it.data.reasonStopDrug < 7) getReasonStopDrug()[it.data.reasonStopDrug] else it.data.otherReasons
             tv_curative_effect_summary_pfs.text = it.data?.pFS
             tv_curative_effect_summary_os.text = it.data?.oS
-            if (it.data?.bestEffect==null) tv_best_treat.text="请设置"
+            if (it.data?.bestEffect == null) tv_best_treat.text = "请设置"
             else tv_best_treat.text = getBestEffect()[it.data.bestEffect]
         })
 //        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
@@ -77,19 +81,23 @@ class ProjectSummaryDetailFragment : Fragment() {
 
     private fun saveData() {
         val isStopStr = parseDefaultContent(tv_is_stop_treat.text.toString())
-        val isStop = if (isStopStr == "是") 1 else 0
+        var isStop: Int?
+        if (isStopStr == "") isStop = null
+        else isStop = if (isStopStr == "是") 1 else 0
         val relay = parseDefaultContent(tv_clinic_terminal.text.toString())
         val lastTimeDrug = parseDefaultContent(tv_last_take_medicine_date.text.toString())
         val treatmentTimes = parseDefaultContent(tv_take_medicine_num.text.toString()).toIntOrNull()
         val reasonStopDrugStr = parseDefaultContent(tv_stop_treat_cause.text.toString())
         var otherReasons = parseDefaultContent(tv_stop_treat_cause.text.toString())
-        var reasonStopDrug = 0
-        if (getReasonStopDrug().contains(reasonStopDrugStr)) {
-            reasonStopDrug = getReasonStopDrug().indexOf(reasonStopDrugStr)
-            otherReasons = ""
-        } else {
-            reasonStopDrug = 7
-        }
+        val reasonStopDrug: Int?
+        if (reasonStopDrugIsSet) {
+            if (getReasonStopDrug().contains(reasonStopDrugStr)) {
+                reasonStopDrug = getReasonStopDrug().indexOf(reasonStopDrugStr)
+                otherReasons = ""
+            } else {
+                reasonStopDrug = 7
+            }
+        } else reasonStopDrug = mReasonStopDrug
         val pFS = parseDefaultContent(tv_curative_effect_summary_pfs.text.toString())
         val oS = parseDefaultContent(tv_curative_effect_summary_os.text.toString())
         val bestEffectStr = parseDefaultContent(tv_best_treat.text.toString())
@@ -112,7 +120,7 @@ class ProjectSummaryDetailFragment : Fragment() {
                 if (it.code == 200) {
                     ToastUtils.showShort("项目总结修改成功")
                 } else {
-                    ToastUtils.showShort("项目总结修改失败")
+                    ToastUtils.showShort(it.msg)
                 }
             })
     }
@@ -125,7 +133,7 @@ class ProjectSummaryDetailFragment : Fragment() {
             XPopup.Builder(context).asCenterList(
                 getString(R.string.is_stop_treat),
                 arrayOf("是", "否")
-            ) { position, text ->
+            ) { _, text ->
                 tv_is_stop_treat.text = text
             }.show()
         }
@@ -157,6 +165,7 @@ class ProjectSummaryDetailFragment : Fragment() {
                         "其他"
                     )
                 ) { pos, text ->
+                    reasonStopDrugIsSet = true
                     if (pos < 7) {
                         tv_stop_treat_cause.text = text
                     } else {
@@ -189,7 +198,7 @@ class ProjectSummaryDetailFragment : Fragment() {
             XPopup.Builder(context).asCenterList(
                 getString(R.string.best_treat),
                 arrayOf("完全缓解(CR)", "部分缓解(PR)", "疾病稳定(SD)", "疾病进展(SD)", "不能评价(NE)")
-            ) { position, text ->
+            ) { _, text ->
                 tv_best_treat.text = text
             }.show()
         }
