@@ -32,6 +32,12 @@ class DemographicsFragment : Fragment() {
 
     var mSampleId = 0
 
+    private var raceIsSet = false
+    private var marriageIsSet = false
+    private var vocationIsSet = false
+
+    private lateinit var mDemographyBean: DemographyBean
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,23 +60,30 @@ class DemographicsFragment : Fragment() {
 
     private fun loadData() {
         mViewModel.getDemography(mSampleId).observe(viewLifecycleOwner, Observer {
+            mDemographyBean = it
             tv_sex.text = if (it.data.sex == 0) "男" else "女"
             tv_birthday.text = it.data.date
-            tv_race.text = if (it.data.race == "其他") it.data.raceOther else it.data.race
-            tv_marital_status.text =
-                if (it.data.marriage == "其他") it.data.marriageOther else it.data.marriage
+            if (it.data.race != null)
+                tv_race.text = if (it.data.race == "其他") it.data.raceOther else it.data.race
+            if (it.data.marriage != null)
+                tv_marital_status.text =
+                    if (it.data.marriage == "其他") it.data.marriageOther else it.data.marriage
             if (it.data.degree != null) {
                 tv_degree.text = getDegreeList()[it.data.degree]
             }
-            tv_occupation.text =
-                if (it.data.vocation == "其他") it.data.vocationOther else it.data.vocation
+            if (it.data.vocation != null)
+                tv_occupation.text =
+                    if (it.data.vocation == "其他") it.data.vocationOther else it.data.vocation
             if (it.data.zone != null) {
                 tv_area.text = getZoneList()[it.data.zone]
             }
             tv_id_num.text = it.data.idNum
-            tv_admission_number.text = it.data.hospitalIds
-            tv_patient_phone.text = it.data.phone
-            tv_relation_phone.text = it.data.familyPhone
+            if (it.data.hospitalIds != null)
+                tv_admission_number.text = it.data.hospitalIds
+            if (it.data.phone != null)
+                tv_patient_phone.text = it.data.phone
+            if (it.data.familyPhone != null)
+                tv_relation_phone.text = it.data.familyPhone
         })
 //        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
 //            if(it.status == Status.FAILED){
@@ -82,30 +95,42 @@ class DemographicsFragment : Fragment() {
     private fun saveData() {
         val sex = getSexList().indexOf(tv_sex.text)
         val date = tv_birthday.text.toString()
-        var race = tv_race.text.toString()
-        var raceOther = tv_race.text.toString()
-        if (!getRaceList().contains(race)) {
-            race = "其他"
-        } else {
-            raceOther = ""
+        var race = mDemographyBean.data.race
+        var raceOther = mDemographyBean.data.raceOther
+        if (raceIsSet) {
+            race = tv_race.text.toString()
+            raceOther = tv_race.text.toString()
+            if (!getRaceList().contains(race)) {
+                race = "其他"
+            } else {
+                raceOther = ""
+            }
         }
-        var marriage = tv_marital_status.text.toString()
-        var marriageOther = tv_marital_status.text.toString()
-        if (!getMarriageList().contains(marriage)) {
-            marriage = "其他"
-        } else {
-            marriageOther = ""
+        var marriage = mDemographyBean.data.marriage
+        var marriageOther = mDemographyBean.data.marriageOther
+        if (marriageIsSet) {
+            marriage = tv_marital_status.text.toString()
+            marriageOther = tv_marital_status.text.toString()
+            if (!getMarriageList().contains(marriage)) {
+                marriage = "其他"
+            } else {
+                marriageOther = ""
+            }
         }
         val degree =
             if (getDegreeList().indexOf(tv_degree.text) == -1) null else getDegreeList().indexOf(
                 tv_degree.text
             )
-        var vocation = tv_occupation.text.toString()
-        var vocationOther = tv_occupation.text.toString()
-        if (!getVocationList().contains(vocation)) {
-            vocation = "其他"
-        } else {
-            vocationOther = ""
+        var vocation = mDemographyBean.data.vocation
+        var vocationOther = mDemographyBean.data.vocationOther
+        if (vocationIsSet) {
+            vocation = tv_occupation.text.toString()
+            vocationOther = tv_occupation.text.toString()
+            if (!getVocationList().contains(vocation)) {
+                vocation = "其他"
+            } else {
+                vocationOther = ""
+            }
         }
         val zone =
             if (getZoneList().indexOf(tv_area.text) == -1) null else getZoneList().indexOf(tv_area.text)
@@ -154,6 +179,7 @@ class DemographicsFragment : Fragment() {
         cl_race.setOnClickListener {
             XPopup.Builder(context)
                 .asCenterList("人种", arrayOf("白人", "黑人", "东方人", "其他")) { pos, text ->
+                    raceIsSet = true
                     if (pos < 3) {
                         tv_race.text = text
                     } else {
@@ -165,6 +191,7 @@ class DemographicsFragment : Fragment() {
         }
         cl_marital_status.setOnClickListener {
             XPopup.Builder(context).asCenterList("婚姻状况", arrayOf("已婚", "未婚", "其他")) { pos, text ->
+                marriageIsSet = true
                 if (pos < 2) {
                     tv_marital_status.text = text
                 } else {
@@ -184,6 +211,7 @@ class DemographicsFragment : Fragment() {
                 "职业",
                 arrayOf("脑力劳动者", "体力劳动者", "学生", "离退休", "无业或失业", "其他，请描述")
             ) { pos, text ->
+                vocationIsSet = true
                 if (pos < 5) {
                     tv_occupation.text = text
                 } else {

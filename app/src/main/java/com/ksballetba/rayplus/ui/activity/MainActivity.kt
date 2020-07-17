@@ -113,7 +113,7 @@ class MainActivity : AppCompatActivity() {
                     Log.d(TAG, it.msg.toString())
                     if (it.msg == "HTTP 401 UNAUTHORIZED") {
                         toast("登录已过期，请重新登录")
-//                        reLogin(this)
+                        logOut()
                     } else {
                         toast(it.msg.toString())
                     }
@@ -180,6 +180,7 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra(RESEARCH_CENTER_ID, mProjectList[position].researchCenterId)
         getProjectAuthorization(projectId)
         setToken(this, projectId)
+        setResearchCenterId(mProjectList[position].researchCenterId)
         startActivity(intent)
     }
 

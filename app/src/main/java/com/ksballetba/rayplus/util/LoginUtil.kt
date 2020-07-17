@@ -17,6 +17,7 @@ const val USER_ID: String = "USER_ID"
 const val RESEARCH_CENTER_NAME = "RESEARCH_CENTER_NAME"
 private var token: String = ""
 private var mProjectId: Int = 0
+private var mResearchCenterId: Int = 0
 
 fun setToken(context: Context, projectId: Int) {
     token = "Bearer ${context.getSharedPreferences(
@@ -29,6 +30,12 @@ fun setToken(context: Context, projectId: Int) {
 fun getToken(): String {
     return token
 }
+
+fun setResearchCenterId(researchCenterId: Int) {
+    mResearchCenterId = researchCenterId
+}
+
+fun getResearchCenterId(): Int = mResearchCenterId
 
 fun getTokenByProjectId(context: Context, projectId: Int): String {
     return "Bearer ${context.getSharedPreferences(

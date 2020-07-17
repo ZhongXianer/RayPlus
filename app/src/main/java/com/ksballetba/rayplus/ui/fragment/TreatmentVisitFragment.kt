@@ -76,6 +76,8 @@ class TreatmentVisitFragment : Fragment() {
         mVisitsAdapter = VisitsAdapter(R.layout.item_treatment_visit, mVisitList)
         mVisitsAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
         mVisitsAdapter.bindToRecyclerView(rv_treatment_visit)
+        val view = layoutInflater.inflate(R.layout.empty, null)
+        mVisitsAdapter.emptyView = view
         mVisitsAdapter.setOnItemClickListener { _, _, position ->
             navigateToDetailPage(
                 mVisitList[position].data.cycleNumber,
@@ -163,7 +165,7 @@ class TreatmentVisitFragment : Fragment() {
                 ToastUtils.showShort("删除治疗期随访成功")
                 srl_treatment_visit.autoRefresh()
             } else {
-                ToastUtils.showShort("删除治疗期随访失败")
+                ToastUtils.showShort(it.msg)
             }
         })
     }
@@ -174,7 +176,7 @@ class TreatmentVisitFragment : Fragment() {
                 srl_treatment_visit.autoRefresh()
                 ToastUtils.showShort("提交治疗期随访成功")
             } else {
-                ToastUtils.showShort("提交治疗期随访失败")
+                ToastUtils.showShort(it.msg)
             }
         })
     }

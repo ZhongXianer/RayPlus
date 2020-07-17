@@ -2,11 +2,10 @@ package com.ksballetba.rayplus.ui.fragment.baseline_visit_fragment
 
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.blankj.utilcode.util.ToastUtils
 import com.ksballetba.rayplus.R
@@ -16,9 +15,9 @@ import com.ksballetba.rayplus.data.bean.baseLineData.PreviousHistoryResponseBean
 import com.ksballetba.rayplus.network.Status
 import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.util.*
+import com.ksballetba.rayplus.viewmodel.BaselineVisitViewModel
 import com.lxj.xpopup.XPopup
 import kotlinx.android.synthetic.main.fragment_previous_history.*
-import com.ksballetba.rayplus.viewmodel.BaselineVisitViewModel
 
 /**
  * A simple [Fragment] subclass.
@@ -36,6 +35,14 @@ class PreviousHistoryFragment : Fragment() {
     private var mBaseIllList = mutableListOf<BaseCheckBean>()
 
     private var mOtherIll: String? = ""
+
+    private var surgeryIsSet = false
+    private var tumorIllIsSet = false
+    private var drugAllergyIsSet = false
+    private var drugUseIsSet = false
+
+    private lateinit var mPreviousHistoryResponseBean: PreviousHistoryResponseBean
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,6 +66,7 @@ class PreviousHistoryFragment : Fragment() {
 
     private fun loadData() {
         mViewModel.getPreviousHistory(mSampleId).observe(viewLifecycleOwner, Observer {
+            mPreviousHistoryResponseBean = it
             tv_operation_history.text =
                 if (it.data.surgery != "其他") it.data.surgery else it.data.surgeryOther
             initBaseIllList(it)
@@ -107,12 +115,16 @@ class PreviousHistoryFragment : Fragment() {
     }
 
     private fun saveData() {
-        var surgery: String? = parseDefaultContent(tv_operation_history.text.toString())
-        var surgeryOther: String? = parseDefaultContent(tv_operation_history.text.toString())
-        if (surgery == "无" || surgery == "不详") {
-            surgeryOther = null
-        } else {
-            surgery = "其他"
+        var surgery: String? = mPreviousHistoryResponseBean.data.surgery
+        var surgeryOther: String? = mPreviousHistoryResponseBean.data.surgeryOther
+        if (surgeryIsSet) {
+            surgery = parseDefaultContent(tv_operation_history.text.toString())
+            surgeryOther = parseDefaultContent(tv_operation_history.text.toString())
+            if (surgery == "无" || surgery == "不详") {
+                surgeryOther = null
+            } else {
+                surgery = "其他"
+            }
         }
         var baseIll = PreviousHistoryBodyBean.BaseIll(
             null,
@@ -165,26 +177,38 @@ class PreviousHistoryFragment : Fragment() {
                 baseIll2
             )
         }
-        var tumorIll: String? = parseDefaultContent(tv_phymatosis_history.text.toString())
-        var tumorIllOther: String? = parseDefaultContent(tv_phymatosis_history.text.toString())
-        if (tumorIll == "无" || tumorIll == "不详") {
-            tumorIllOther = null
-        } else {
-            tumorIll = "其他"
+        var tumorIll: String? = mPreviousHistoryResponseBean.data.tumorIll
+        var tumorIllOther: String? = mPreviousHistoryResponseBean.data.tumorIllOther
+        if (tumorIllIsSet) {
+            tumorIll = parseDefaultContent(tv_phymatosis_history.text.toString())
+            tumorIllOther = parseDefaultContent(tv_phymatosis_history.text.toString())
+            if (tumorIll == "无" || tumorIll == "不详") {
+                tumorIllOther = null
+            } else {
+                tumorIll = "其他"
+            }
         }
-        var drugAllergy: String? = parseDefaultContent(tv_allergy_history.text.toString())
-        var drugAllergyOther: String? = parseDefaultContent(tv_allergy_history.text.toString())
-        if (drugAllergy == "无" || drugAllergy == "不详") {
-            drugAllergyOther = null
-        } else {
-            drugAllergy = "其他"
+        var drugAllergy: String? = mPreviousHistoryResponseBean.data.drugAllergy
+        var drugAllergyOther: String? = mPreviousHistoryResponseBean.data.drugAllergyOther
+        if (drugAllergyIsSet) {
+            drugAllergy = parseDefaultContent(tv_allergy_history.text.toString())
+            drugAllergyOther = parseDefaultContent(tv_allergy_history.text.toString())
+            if (drugAllergy == "无" || drugAllergy == "不详") {
+                drugAllergyOther = null
+            } else {
+                drugAllergy = "其他"
+            }
         }
-        var drugUse: String? = parseDefaultContent(tv_medication_use_history.text.toString())
-        var drugUseOther: String? = parseDefaultContent(tv_medication_use_history.text.toString())
-        if (drugUse == "无" || drugUse == "不详") {
-            drugUseOther = null
-        } else {
-            drugUse = "其他"
+        var drugUse: String? = mPreviousHistoryResponseBean.data.drugUse
+        var drugUseOther: String? = mPreviousHistoryResponseBean.data.drugUseOther
+        if (drugUseIsSet) {
+            drugUse = parseDefaultContent(tv_medication_use_history.text.toString())
+            drugUseOther = parseDefaultContent(tv_medication_use_history.text.toString())
+            if (drugUse == "无" || drugUse == "不详") {
+                drugUseOther = null
+            } else {
+                drugUse = "其他"
+            }
         }
         val smoke = if (switch_smoke_history.isChecked) "on" else null
         val smokeSize = parseDefaultContent(tv_average_cigarette.text.toString())
@@ -192,7 +216,7 @@ class PreviousHistoryFragment : Fragment() {
         val smokeIsQuit = if (switch_is_quit_smoke.isChecked) "on" else null
         val smokeQuitTime = parseDefaultContent(tv_quit_smoke_date.text.toString())
         val smokeChemotherapy = if (switch_is_relapse_smoke.isChecked) "on" else null
-        var smokeBean: PreviousHistoryBodyBean.Smoke? = PreviousHistoryBodyBean.Smoke(
+        val smokeBean: PreviousHistoryBodyBean.Smoke? = PreviousHistoryBodyBean.Smoke(
             smoke, smokeChemotherapy, smokeIsQuit, smokeQuitTime, smokeSize, smokeYear
         )
         val drinking = if (switch_drink_history.isChecked) "on" else null
@@ -204,7 +228,7 @@ class PreviousHistoryFragment : Fragment() {
         val drinkingIsQuit = if (switch_is_quit_drink.isChecked) "on" else null
         val drinkingQuitTime = parseDefaultContent(tv_quit_drink_date.text.toString())
         val drinkingChemotherapy = if (switch_is_relapse_drink.isChecked) "on" else null
-        var drinkingBean: PreviousHistoryBodyBean.Drinking? = PreviousHistoryBodyBean.Drinking(
+        val drinkingBean: PreviousHistoryBodyBean.Drinking? = PreviousHistoryBodyBean.Drinking(
             drinking,
             drinkingChemotherapy,
             drinkingFrequence,
@@ -212,10 +236,14 @@ class PreviousHistoryFragment : Fragment() {
             drinkingQuitTime,
             drinkingSize
         )
-        val height = parseDefaultContent(tv_patient_height.text.toString())
-        val weight = parseDefaultContent(tv_patient_weight.text.toString())
-        val surfaceArea = parseDefaultContent(tv_patient_body_area.text.toString())
-        val eCOG = parseDefaultContent(tv_ECOG_score.text.toString())
+        var height: String? = parseDefaultContent(tv_patient_height.text.toString())
+        if (height == "") height = null
+        var weight: String? = parseDefaultContent(tv_patient_weight.text.toString())
+        if (weight == "") weight = null
+        var surfaceArea: String? = parseDefaultContent(tv_patient_body_area.text.toString())
+        if (surfaceArea == "") surfaceArea = null
+        var eCOG: String? = parseDefaultContent(tv_ECOG_score.text.toString())
+        if (eCOG == "") eCOG = null
         val previousHistoryBody =
             PreviousHistoryBodyBean(
                 baseIll,
@@ -297,6 +325,7 @@ class PreviousHistoryFragment : Fragment() {
         cl_operation_history.setOnClickListener {
             XPopup.Builder(context)
                 .asCenterList("外伤及手术史", arrayOf("无", "不详", "有，请详述")) { pos, text ->
+                    surgeryIsSet = true
                     if (pos < 2) {
                         tv_operation_history.text = text
                     } else {
@@ -331,6 +360,7 @@ class PreviousHistoryFragment : Fragment() {
         cl_phymatosis_history.setOnClickListener {
             XPopup.Builder(context)
                 .asCenterList("肿瘤病史", arrayOf("无", "不详", "有，请详述")) { pos, text ->
+                    tumorIllIsSet = true
                     if (pos < 2) {
                         tv_phymatosis_history.text = text
                     } else {
@@ -343,6 +373,7 @@ class PreviousHistoryFragment : Fragment() {
         cl_allergy_history.setOnClickListener {
             XPopup.Builder(context)
                 .asCenterList("药物过敏史", arrayOf("无", "不详", "有，请详述")) { pos, text ->
+                    drugAllergyIsSet = true
                     if (pos < 2) {
                         tv_allergy_history.text = text
                     } else {
@@ -355,6 +386,7 @@ class PreviousHistoryFragment : Fragment() {
         cl_medication_use_history.setOnClickListener {
             XPopup.Builder(context)
                 .asCenterList("药物使用史", arrayOf("无", "不详", "有，请详述")) { pos, text ->
+                    drugUseIsSet = true
                     if (pos < 2) {
                         tv_medication_use_history.text = text
                     } else {

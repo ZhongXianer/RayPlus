@@ -185,7 +185,7 @@ class SampleActivity : AppCompatActivity() {
         mSamplesAdapter.setOnItemChildClickListener { _, view, position ->
             when (view.id) {
                 R.id.btn_sample_edit -> {
-                    if (mSampleList[position].submitStatus != 2) {
+                    if (mSampleList[position].submitStatus != 2 && mSampleList[position].researchCenterId == getResearchCenterId()) {
                         val sample = mSampleList[position]
                         val sampleBody =
                             SampleEditBodyBean(
@@ -204,20 +204,22 @@ class SampleActivity : AppCompatActivity() {
                     }
                 }
                 R.id.btn_sample_submit -> {
-                    if (mSampleList[position].submitStatus != 2) {
-                        XPopup.Builder(this).asConfirm("信息", "请问是否确认提交到总中心") {
-                            submitSample(mSampleList[position].sampleId)
-                        }.show()
-                    }
+                    if (mSampleList[position].researchCenterId == getResearchCenterId())
+                        if (mSampleList[position].submitStatus != 2 && mSampleList[position].researchCenterId != getResearchCenterId()) {
+                            XPopup.Builder(this).asConfirm("信息", "请问是否确认提交到总中心") {
+                                submitSample(mSampleList[position].sampleId)
+                            }.show()
+                        }
                 }
                 R.id.iv_delete_item_sample -> {
-                    if (mSampleList[position].submitStatus == 2) {
-                        toast("已全部提交，不能删除！")
-                    } else {
-                        XPopup.Builder(this).asConfirm("信息", "请问是否确认删除") {
-                            deleteSample(mSampleList[position].sampleId, position)
-                        }.show()
-                    }
+                    if (mSampleList[position].researchCenterId == getResearchCenterId())
+                        if (mSampleList[position].submitStatus == 2) {
+                            toast("已全部提交，不能删除！")
+                        } else {
+                            XPopup.Builder(this).asConfirm("信息", "请问是否确认删除") {
+                                deleteSample(mSampleList[position].sampleId, position)
+                            }.show()
+                        }
                 }
                 R.id.btn_sample_unlock -> {
                     if (judgeUnlockSample() &&

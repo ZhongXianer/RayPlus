@@ -29,6 +29,7 @@ fun asCheckboxList(
 }
 
 fun showDatePickerDialog(textView: TextView, fragmentManager: FragmentManager){
+    ToastUtils.showShort("点击左上方年份数字，可以快速选择年份")
     val now = Calendar.getInstance()
     var date: String
     val dpd = DatePickerDialog.newInstance(

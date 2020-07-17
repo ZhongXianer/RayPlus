@@ -169,7 +169,7 @@ class SurvivalVisitFragment : Fragment() {
                         ToastUtils.showShort("删除成功")
                         mAdapter.remove(pos)
                     } else {
-                        invalidToken()
+                        ToastUtils.showShort(it.msg)
                     }
                 })
     }
@@ -193,7 +193,7 @@ class SurvivalVisitFragment : Fragment() {
                         ToastUtils.showShort("提交成功")
                         initList()
                     } else {
-                        invalidToken()
+                        ToastUtils.showShort(it.msg)
                     }
                 })
     }

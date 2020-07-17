@@ -55,20 +55,20 @@ class ProjectSummaryDetailFragment : Fragment() {
     private fun loadData() {
         mViewModel.getProjectSummary(mSampleId).observe(viewLifecycleOwner, Observer {
             mReasonStopDrug = it.data?.reasonStopDrug
-            if (it.data?.isStop == null) tv_is_stop_treat.text == "请设置"
+            if (it.data?.isStop == null) tv_is_stop_treat.text = "请设置"
             else {
                 if (it.data.isStop == 1) tv_is_stop_treat.text = "是"
                 else tv_is_stop_treat.text = "否"
             }
-            tv_clinic_terminal.text = it.data?.relay
-            tv_last_take_medicine_date.text = it.data?.lastTimeDrug
+            tv_clinic_terminal.text = it.data?.relay ?: "请设置"
+            tv_last_take_medicine_date.text = it.data?.lastTimeDrug ?: "请设置"
             if (it.data?.treatmentTimes == null) tv_take_medicine_num.text = "请设置"
             else tv_take_medicine_num.text = it.data.treatmentTimes.toString()
             if (it.data?.reasonStopDrug == null) tv_stop_treat_cause.text = "请设置"
             else tv_stop_treat_cause.text =
                 if (it.data.reasonStopDrug < 7) getReasonStopDrug()[it.data.reasonStopDrug] else it.data.otherReasons
-            tv_curative_effect_summary_pfs.text = it.data?.pFS
-            tv_curative_effect_summary_os.text = it.data?.oS
+            tv_curative_effect_summary_pfs.text = it.data?.pFS ?: "请设置"
+            tv_curative_effect_summary_os.text = it.data?.oS ?: "请设置"
             if (it.data?.bestEffect == null) tv_best_treat.text = "请设置"
             else tv_best_treat.text = getBestEffect()[it.data.bestEffect]
         })

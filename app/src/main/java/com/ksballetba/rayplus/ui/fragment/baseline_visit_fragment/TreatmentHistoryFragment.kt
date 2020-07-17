@@ -73,6 +73,8 @@ class TreatmentHistoryFragment : Fragment() {
         mAdapter = TreatmentHistoryAdapter(R.layout.item_treatment_history, mList)
         mAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
         mAdapter.bindToRecyclerView(rv_treatment_history)
+        val view = layoutInflater.inflate(R.layout.empty, null)
+        mAdapter.emptyView = view
         mAdapter.setOnItemClickListener { _, _, position ->
             val treatmentHistory = mList[position]
             navigateToTreatmentHistoryEditPage(

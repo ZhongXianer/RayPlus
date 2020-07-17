@@ -92,6 +92,8 @@ class ImagingEvaluationFragment : Fragment() {
         mAdapter = ImagingEvaluationAdapter(R.layout.item_imaging_evaluation, mList)
         mAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
         mAdapter.bindToRecyclerView(rv_imaging_evaluation)
+        val view = layoutInflater.inflate(R.layout.empty, null)
+        mAdapter.emptyView = view
         mAdapter.setOnItemClickListener { _, _, position ->
             val imagingEvaluation = mList[position]
             val imagingEvaluationBody =

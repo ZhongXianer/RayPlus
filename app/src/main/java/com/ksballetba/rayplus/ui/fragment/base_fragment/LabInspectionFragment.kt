@@ -600,7 +600,7 @@ class LabInspectionFragment : Fragment() {
         mUrineRoutineAdapter.bindToRecyclerView(rv_urine_routine)
         mBloodBiochemistryAdapter.bindToRecyclerView(rv_blood_biochemistry)
         mTumorMarkerAdapter.bindToRecyclerView(rv_tumor_marker)
-        mBloodRoutineAdapter.setOnItemClickListener { adapter, view, position ->
+        mBloodRoutineAdapter.setOnItemClickListener { _, view, _ ->
             XPopup.Builder(context).asInputConfirm(
                 view.findViewById<TextView>(R.id.tv_lab_inspection_title).text.toString(),
                 "请输入监测值"
@@ -608,7 +608,7 @@ class LabInspectionFragment : Fragment() {
                 view.findViewById<TextView>(R.id.tv_lab_inspection).text = it
             }.show()
         }
-        mUrineRoutineAdapter.setOnItemClickListener { adapter, view, position ->
+        mUrineRoutineAdapter.setOnItemClickListener { _, view, position ->
             if (position < 2) {
                 XPopup.Builder(context).asInputConfirm(
                     view.findViewById<TextView>(R.id.tv_lab_inspection_title).text.toString(),
@@ -622,7 +622,7 @@ class LabInspectionFragment : Fragment() {
                 }.show()
             }
         }
-        mBloodBiochemistryAdapter.setOnItemClickListener { adapter, view, position ->
+        mBloodBiochemistryAdapter.setOnItemClickListener { _, view, _ ->
             XPopup.Builder(context).asInputConfirm(
                 view.findViewById<TextView>(R.id.tv_lab_inspection_title).text.toString(),
                 "请输入监测值"
@@ -630,7 +630,7 @@ class LabInspectionFragment : Fragment() {
                 view.findViewById<TextView>(R.id.tv_lab_inspection).text = it
             }.show()
         }
-        mTumorMarkerAdapter.setOnItemClickListener { adapter, view, position ->
+        mTumorMarkerAdapter.setOnItemClickListener { _, view, _ ->
             XPopup.Builder(context).asInputConfirm(
                 view.findViewById<TextView>(R.id.tv_lab_inspection_title).text.toString(),
                 "请输入监测值"

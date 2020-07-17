@@ -73,6 +73,8 @@ class PhysicalExaminationFragment : Fragment() {
         rv_physical_examination.layoutManager = layoutManager
         mAdapter = PhysicalExaminationAdapter(R.layout.item_physical_examination, mList)
         mAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
+        val view = layoutInflater.inflate(R.layout.empty, null)
+        mAdapter.emptyView = view
         rv_physical_examination.adapter = mAdapter
         mAdapter.setOnItemClickListener { _, _, position ->
             val physicalExamination = mList[position]

@@ -21,11 +21,10 @@ import kotlinx.android.synthetic.main.fragment_project_summary.*
 class ProjectSummaryFragment : Fragment() {
 
     private val mFragmentList = mutableListOf<Fragment>()
-    lateinit var mVisitTimeFragment: VisitTimeFragment
 
     companion object {
-        val INVESTIGATOR = -1
-        val INSPECTOR = -2
+        const val INVESTIGATOR = -1
+        const val INSPECTOR = -2
     }
 
     var mSampleId = 0

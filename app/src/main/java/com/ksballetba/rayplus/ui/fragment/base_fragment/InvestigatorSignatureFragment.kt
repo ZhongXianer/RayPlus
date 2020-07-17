@@ -177,7 +177,6 @@ class InvestigatorSignatureFragment : Fragment() {
         mViewModel.getSummarySignature(mSampleId).observe(viewLifecycleOwner, Observer {
             when (mCycleNumber) {
                 INVESTIGATOR -> {
-                    Log.d("hello", "执行了")
                     if (it?.si?.filePath == null) {
                         signature_status.text = "使用当前研究员账户进行项目总结签名"
                         account_info.text = "当前账户:${getUserName(this.context!!)}"

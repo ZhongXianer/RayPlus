@@ -48,7 +48,8 @@ class SamplesAdapter(layoutResId: Int, data: List<SampleListBean.Data>) :
                 }
             }
         }
-        val survivalStatus=if (item.status.interviewStatus.isEmpty()) "未提交" else "${item.status.interviewStatus.size}条"
+        val survivalStatus =
+            if (item.status.interviewStatus.isEmpty()) "未提交" else "${item.status.interviewStatus.size}条"
         val submitStatusDetails =
             mutableListOf(
                 "",
@@ -56,7 +57,8 @@ class SamplesAdapter(layoutResId: Int, data: List<SampleListBean.Data>) :
                 "治疗期访视：${treatment}",
                 "生存期访视：${survivalStatus}"
             )
-        helper.getView<NiceSpinner>(R.id.submit_status_details).attachDataSource(submitStatusDetails)
+        helper.getView<NiceSpinner>(R.id.submit_status_details)
+            .attachDataSource(submitStatusDetails)
         if (judgeUnlockSample() && (item.submitStatus == 1 || item.submitStatus == 2)) {
             helper.setBackgroundColor(R.id.btn_sample_unlock, Color.parseColor("#03A9F4"))
         } else {
@@ -71,7 +73,13 @@ class SamplesAdapter(layoutResId: Int, data: List<SampleListBean.Data>) :
             helper.setBackgroundColor(R.id.btn_sample_edit, Color.parseColor("#03A9F4"))
         }
 
-
+        if (item.researchCenterId != getResearchCenterId()) {
+            helper.setBackgroundColor(R.id.btn_sample_submit, Color.parseColor("#94D3E6"))
+            helper.setBackgroundColor(R.id.btn_sample_edit, Color.parseColor("#94D3E6"))
+        } else {
+            helper.setBackgroundColor(R.id.btn_sample_submit, Color.parseColor("#03A9F4"))
+            helper.setBackgroundColor(R.id.btn_sample_edit, Color.parseColor("#03A9F4"))
+        }
     }
 
 }
