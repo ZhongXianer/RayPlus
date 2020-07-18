@@ -1,9 +1,8 @@
 package com.ksballetba.rayplus.ui.activity.baseline_visit_activity
 
+import android.Manifest
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +23,7 @@ import com.qw.photo.CoCo
 import com.qw.photo.callback.SimpleGetImageAdapter
 import com.qw.photo.pojo.PickResult
 import com.qw.photo.pojo.TakeResult
+import com.tbruyelle.rxpermissions.RxPermissions
 import kotlinx.android.synthetic.main.activity_imaging_evaluation_file.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -137,30 +137,54 @@ class ImagingEvaluationFileActivity : AppCompatActivity() {
         XPopup.Builder(this).asBottomList("选择文件来源", choice) { position, _ ->
             when (position) {
                 0 -> {
-                    CoCo.with(this@ImagingEvaluationFileActivity)
-                        .take(createSDCardFile())
-                        .applyWithDispose()
-                        .start(object : SimpleGetImageAdapter<TakeResult>() {
-                            override fun onSuccess(data: TakeResult) {
-                                uploadFile(data.targetFile!!.path)
-                            }
-                        })
+                    RxPermissions.getInstance(this).request(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ).subscribe { t ->
+                        if (t!!) {
+                            CoCo.with(this@ImagingEvaluationFileActivity)
+                                .take(createSDCardFile())
+                                .applyWithDispose()
+                                .start(object : SimpleGetImageAdapter<TakeResult>() {
+                                    override fun onSuccess(data: TakeResult) {
+                                        uploadFile(data.targetFile!!.path)
+                                    }
+                                })
+                        } else {
+                            toast("没有权限")
+                        }
+                    }
+
                 }
                 1 -> {
-                    CoCo.with(this@ImagingEvaluationFileActivity)
-                        .pick(createSDCardFile())
-                        .apply()
-                        .start(object : SimpleGetImageAdapter<PickResult>() {
-                            override fun onSuccess(data: PickResult) {
-                                try {
-                                    val uri = data.originUri
-                                    val filePath = getPath(this@ImagingEvaluationFileActivity, uri)
-                                    uploadFile(filePath!!)
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
-                                }
-                            }
-                        })
+                    RxPermissions.getInstance(this).request(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ).subscribe { t ->
+                        if (t!!) {
+                            XPopup.Builder(this).asConfirm("提示", "上传过大图片将无法在移动端显示,请在网页端查看") {
+                                CoCo.with(this@ImagingEvaluationFileActivity)
+                                    .pick(createSDCardFile())
+                                    .apply()
+                                    .start(object : SimpleGetImageAdapter<PickResult>() {
+                                        override fun onSuccess(data: PickResult) {
+                                            try {
+                                                val uri = data.originUri
+                                                val filePath =
+                                                    getPath(this@ImagingEvaluationFileActivity, uri)
+                                                uploadFile(filePath!!)
+                                            } catch (e: Exception) {
+                                                e.printStackTrace()
+                                            }
+                                        }
+                                    })
+                            }.show()
+                        } else {
+                            toast("没有权限")
+                        }
+                    }
                 }
             }
         }.show()
@@ -174,4 +198,5 @@ class ImagingEvaluationFileActivity : AppCompatActivity() {
             storageDir.mkdir()
         return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir)
     }
+
 }
