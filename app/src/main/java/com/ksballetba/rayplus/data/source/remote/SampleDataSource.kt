@@ -32,7 +32,7 @@ class SampleDataSource(context: Context) {
 
     fun loadInitial(
         sampleQueryBodyBean: SampleQueryBodyBean,
-        callBack: (MutableList<SampleListBean.Data>) -> Unit
+        callBack: (SampleListBean) -> Unit
     ) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.getInstance(NetworkType.PROJECT)
@@ -53,7 +53,7 @@ class SampleDataSource(context: Context) {
             .subscribeBy(
                 onNext = {
                     if (it.msg == "获取样本成功") {
-                        callBack(it.data.toMutableList())
+                        callBack(it)
                         mLoadStatus.postValue(NetworkState.LOADED)
                         CURRENT_PAGE = 2
                     } else {
@@ -72,7 +72,7 @@ class SampleDataSource(context: Context) {
 
     fun loadMore(
         sampleQueryBodyBean: SampleQueryBodyBean,
-        callBack: (MutableList<SampleListBean.Data>) -> Unit
+        callBack: (SampleListBean) -> Unit
     ) {
         mLoadStatus.postValue(NetworkState.LOADING)
         RetrofitClient.getInstance(NetworkType.PROJECT)
@@ -93,7 +93,7 @@ class SampleDataSource(context: Context) {
             .subscribeBy(
                 onNext = {
                     if (it.msg == "获取样本成功") {
-                        callBack(it.data.toMutableList())
+                        callBack(it)
                         mLoadStatus.postValue(NetworkState.LOADED)
                         CURRENT_PAGE++
                     } else {

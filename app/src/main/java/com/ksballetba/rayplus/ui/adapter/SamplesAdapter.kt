@@ -1,5 +1,6 @@
 package com.ksballetba.rayplus.ui.adapter
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -59,26 +60,28 @@ class SamplesAdapter(layoutResId: Int, data: List<SampleListBean.Data>) :
             )
         helper.getView<NiceSpinner>(R.id.submit_status_details)
             .attachDataSource(submitStatusDetails)
-        if (judgeUnlockSample() && (item.submitStatus == 1 || item.submitStatus == 2)) {
+
+        //获取是否有解锁样本的权限
+        if (judgeUnlockSample() && (item.submitStatus == 1 || item.submitStatus == 2))
             helper.setBackgroundColor(R.id.btn_sample_unlock, Color.parseColor("#03A9F4"))
-        } else {
-            helper.setBackgroundColor(R.id.btn_sample_unlock, Color.parseColor("#94D3E6"))
-        }
+        else helper.setBackgroundColor(R.id.btn_sample_unlock, Color.parseColor("#BDBDBD"))
 
-        if (item.submitStatus == 2) {
-            helper.setBackgroundColor(R.id.btn_sample_submit, Color.parseColor("#94D3E6"))
-            helper.setBackgroundColor(R.id.btn_sample_edit, Color.parseColor("#94D3E6"))
-        } else {
-            helper.setBackgroundColor(R.id.btn_sample_submit, Color.parseColor("#03A9F4"))
+        //只有在未提交和已解锁的状态下，才能编辑样本的内容
+        if (item.submitStatus == 0 || item.submitStatus == 3)
             helper.setBackgroundColor(R.id.btn_sample_edit, Color.parseColor("#03A9F4"))
-        }
+        else helper.setBackgroundColor(R.id.btn_sample_edit, Color.parseColor("#BDBDBD"))
 
+        //在已提交的状态下，样本不能再被提交
+        if (item.submitStatus == 2)
+            helper.setBackgroundColor(
+                R.id.btn_sample_submit, Color.parseColor("#BDBDBD")
+            )
+        else helper.setBackgroundColor(R.id.btn_sample_submit, Color.parseColor("#03A9F4"))
+
+        //对于非本中心的样本，编辑、提交和删除按钮全部锁定
         if (item.researchCenterId != getResearchCenterId()) {
-            helper.setBackgroundColor(R.id.btn_sample_submit, Color.parseColor("#94D3E6"))
-            helper.setBackgroundColor(R.id.btn_sample_edit, Color.parseColor("#94D3E6"))
-        } else {
-            helper.setBackgroundColor(R.id.btn_sample_submit, Color.parseColor("#03A9F4"))
-            helper.setBackgroundColor(R.id.btn_sample_edit, Color.parseColor("#03A9F4"))
+            helper.setBackgroundColor(R.id.btn_sample_submit, Color.parseColor("#BDBDBD"))
+                .setBackgroundColor(R.id.btn_sample_edit, Color.parseColor("#03A9F4"))
         }
     }
 

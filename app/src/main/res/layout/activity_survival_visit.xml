@@ -10,14 +10,14 @@
         android:id="@+id/tb_survival_visit"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark"
         android:background="@color/colorPrimary"
-        app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
-        app:popupTheme="@style/Base.ThemeOverlay.AppCompat.Light"
-        app:title="生存期随访"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+        app:popupTheme="@style/Base.ThemeOverlay.AppCompat.Light"
+        app:title="生存期随访" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -59,8 +59,8 @@
                     android:id="@+id/tv_visit_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/input_visit_time"
                     android:layout_marginEnd="16dp"
+                    android:text="@string/input_visit_time"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -95,8 +95,8 @@
                     android:id="@+id/tv_visit_way"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/input_visit_time"
                     android:layout_marginEnd="16dp"
+                    android:text="@string/input_visit_time"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -131,8 +131,8 @@
                     android:id="@+id/tv_anti_tumor_treat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/input_visit_time"
                     android:layout_marginEnd="16dp"
+                    android:text="@string/input_visit_time"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -167,8 +167,8 @@
                     android:id="@+id/tv_live_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/input_visit_time"
                     android:layout_marginEnd="16dp"
+                    android:text="@string/input_visit_time"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -177,13 +177,13 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_death_date"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:padding="@dimen/material_component_cards_left_and_right_padding"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -204,8 +204,8 @@
                     android:id="@+id/tv_death_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/input_visit_time"
                     android:layout_marginEnd="@dimen/item_left_margin"
+                    android:text="@string/input_visit_time"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -216,11 +216,11 @@
                 android:id="@+id/cl_death_cause"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:padding="@dimen/material_component_cards_left_and_right_padding"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -241,8 +241,8 @@
                     android:id="@+id/tv_death_cause"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="疾病进展"
                     android:layout_marginEnd="@dimen/item_left_margin"
+                    android:text="@string/input_visit_time"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -257,6 +257,7 @@
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:padding="@dimen/material_component_cards_left_and_right_padding"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -278,9 +279,9 @@
                     android:id="@+id/tv_gather_way"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/input_visit_time"
-                    android:maxEms="8"
                     android:layout_marginEnd="16dp"
+                    android:maxEms="8"
+                    android:text="@string/input_visit_time"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -340,9 +341,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:text="@string/last_contact_date"
                     android:maxEms="8"
                     android:maxLines="2"
+                    android:text="@string/last_contact_date"
                     android:textColor="@color/primary_text"
                     android:textSize="@dimen/material_typography_subheading"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -353,8 +354,8 @@
                     android:id="@+id/tv_last_contact_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/input_visit_time"
                     android:layout_marginEnd="16dp"
+                    android:text="@string/input_visit_time"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -369,8 +370,8 @@
         android:id="@+id/fab_save_survival_visit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_save_white_24dp"
         android:layout_margin="@dimen/material_component_floating_action_button_margin"
+        android:src="@drawable/ic_save_white_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

@@ -1,5 +1,6 @@
 package com.ksballetba.rayplus.ui.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -72,6 +73,7 @@ class SampleActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("RtlHardcoded")
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             android.R.id.home -> {
@@ -172,6 +174,10 @@ class SampleActivity : AppCompatActivity() {
         getSearchCenters()
     }
 
+    /**
+     * 初始化样本列表
+     * 初始化点击事件
+     */
     private fun initSampleListView() {
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = RecyclerView.VERTICAL
@@ -185,7 +191,11 @@ class SampleActivity : AppCompatActivity() {
         mSamplesAdapter.setOnItemChildClickListener { _, view, position ->
             when (view.id) {
                 R.id.btn_sample_edit -> {
-                    if (mSampleList[position].submitStatus != 2 && mSampleList[position].researchCenterId == getResearchCenterId()) {
+                    //当样本在部分提交、已提交或者非本中心样本的状态下，都不能编辑
+                    if (mSampleList[position].submitStatus != 2 &&
+                        mSampleList[position].submitStatus != 1 &&
+                        mSampleList[position].researchCenterId == getResearchCenterId()
+                    ) {
                         val sample = mSampleList[position]
                         val sampleBody =
                             SampleEditBodyBean(
@@ -203,14 +213,17 @@ class SampleActivity : AppCompatActivity() {
                         navigateToSampleEditActivity(mSampleList[position].sampleId, sampleBody)
                     }
                 }
+                //对于非本中心样本或者已提交的样本，都不能进行提交
                 R.id.btn_sample_submit -> {
-                    if (mSampleList[position].researchCenterId == getResearchCenterId())
-                        if (mSampleList[position].submitStatus != 2 && mSampleList[position].researchCenterId != getResearchCenterId()) {
-                            XPopup.Builder(this).asConfirm("信息", "请问是否确认提交到总中心") {
-                                submitSample(mSampleList[position].sampleId)
-                            }.show()
-                        }
+                    if (mSampleList[position].researchCenterId == getResearchCenterId() &&
+                        mSampleList[position].submitStatus != 2
+                    ) {
+                        XPopup.Builder(this).asConfirm("信息", "请问是否确认提交到总中心") {
+                            submitSample(mSampleList[position].sampleId)
+                        }.show()
+                    }
                 }
+                //对于非本中心样本，或者已提交的样本，都不能删除
                 R.id.iv_delete_item_sample -> {
                     if (mSampleList[position].researchCenterId == getResearchCenterId())
                         if (mSampleList[position].submitStatus == 2) {
@@ -221,6 +234,7 @@ class SampleActivity : AppCompatActivity() {
                             }.show()
                         }
                 }
+                //对于没有权限、未提交和已解锁的样本，不能进行解锁操作
                 R.id.btn_sample_unlock -> {
                     if (judgeUnlockSample() &&
                         (mSampleList[position].submitStatus == 1 || mSampleList[position].submitStatus == 2)
@@ -235,6 +249,10 @@ class SampleActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * 初始化样本筛选列表的所有选项
+     * 初始化点击事件
+     */
     private fun initSampleSelectListView() {
         val gridLayoutManager = GridLayoutManager(this, 2)
         sl_type_list.layoutManager = gridLayoutManager
@@ -302,6 +320,9 @@ class SampleActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * 初始化右侧筛选列表
+     */
     private fun initTypeList() {
         val tumorPathologicalType = Level0TypeBean("肿瘤病理类型")
         tumorPathologicalType.addSubItem(Level1TypeBean("全部", -1, true))
@@ -330,6 +351,9 @@ class SampleActivity : AppCompatActivity() {
         mTypeList.add(sampleStatus)
     }
 
+    /**
+     * 获取所有的研究中心名称作样本筛选选项使用
+     */
     private fun getSearchCenters() {
         mViewModel.getAllResearchCenter(mProjectId).observe(this, Observer {
             val researchCenters = it
@@ -344,6 +368,9 @@ class SampleActivity : AppCompatActivity() {
         })
     }
 
+    /**
+     * 获取所有患者组别的名称作样本筛选选项使用
+     */
     private fun getGroupIds() {
         mViewModel.getGroupIds().observe(this, Observer {
             val groups = it
@@ -361,20 +388,24 @@ class SampleActivity : AppCompatActivity() {
 
     private fun loadInitial(sampleQueryBodyBean: SampleQueryBodyBean) {
         mViewModel.fetchData(sampleQueryBodyBean).observe(this, Observer {
-            mSampleList = it
+            mSampleList = it.data.toMutableList()
             if (mSampleList.size == 0)
                 Log.d(TAG, "样本为空")
+            sample_total.text = "共${it.total}个样本"
             mSamplesAdapter.setNewData(mSampleList)
         })
     }
 
     private fun loadMore(sampleQueryBodyBean: SampleQueryBodyBean) {
         mViewModel.fetchMore(sampleQueryBodyBean).observe(this, Observer {
-            mSamplesAdapter.addData(it)
+            mSamplesAdapter.addData(it.data.toMutableList())
             srl_sample.finishLoadMore()
         })
     }
 
+    /**
+     * 跳转样本编辑页面
+     */
     private fun navigateToSampleEditActivity(sampleId: Int, sampleBody: SampleEditBodyBean?) {
         val intent = Intent(this, SampleEditActivity::class.java)
         intent.putExtra(SAMPLE_ID, sampleId)
@@ -384,12 +415,18 @@ class SampleActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    /**
+     * 跳转样本详情页面
+     */
     private fun navigateToCRFActivity(sampleId: Int) {
         val intent = Intent(this, CRFActivity::class.java)
         intent.putExtra(SAMPLE_ID, sampleId)
         startActivity(intent)
     }
 
+    /**
+     * 提交样本
+     */
     private fun submitSample(sampleId: Int) {
         mViewModel.submitSample(
             SampleSubmitBodyBean(
@@ -407,6 +444,9 @@ class SampleActivity : AppCompatActivity() {
         })
     }
 
+    /**
+     * 删除样本
+     */
     private fun deleteSample(sampleId: Int, pos: Int) {
         mViewModel.deleteSample(sampleId).observe(this, Observer {
             if (it.code == 200) {
@@ -420,6 +460,9 @@ class SampleActivity : AppCompatActivity() {
         })
     }
 
+    /**
+     * 解锁样本
+     */
     private fun unlockSample(sampleId: Int) {
         mViewModel.unlockSample(sampleId).observe(this, Observer {
             if (it.code == 200) {

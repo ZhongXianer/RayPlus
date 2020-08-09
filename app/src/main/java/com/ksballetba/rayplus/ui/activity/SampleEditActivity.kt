@@ -25,7 +25,6 @@ class SampleEditActivity : AppCompatActivity() {
     lateinit var mViewModel: SamplesViewModel
     var mToken: String? = ""
     var mResearchCenterId: Int? = null
-    var mProjectId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

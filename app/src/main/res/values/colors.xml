@@ -11,4 +11,6 @@
     <color name="footer_color">#03A9F4</color>
     <color name="background">#fafafa</color>
     <color name="delete">#d32f2f</color>
+    <color name="not_clickable">#BDBDBD</color>
+    <color name="clickable">#03A9F4</color>
 </resources>

@@ -6,7 +6,7 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 data class SampleEditBodyBean(
-    val date: String, // 2019-12-02
+    val date: String?, // 2019-12-02
     @SerializedName("group_id")
     val groupId: Int, // 1
     @SerializedName("id_num")

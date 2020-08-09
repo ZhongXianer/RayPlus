@@ -50,7 +50,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_visit_list_date" />
 
         <Button
-            android:id="@+id/tv_visit_submit"
+            android:id="@+id/tv_visit_submit_button"
             android:layout_width="60dp"
             android:layout_height="30dp"
             android:text="提交"

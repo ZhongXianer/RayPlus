@@ -89,9 +89,7 @@ class TreatmentVisitFragment : Fragment() {
                 XPopup.Builder(context).asConfirm("信息", "请问是否确定提交，确定后将不能修改") {
                     submitCycle(mVisitList[position].data.cycleNumber)
                 }.show()
-            } else
-                ToastUtils.showShort("已提交！")
-
+            }
         }
         mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
             when (it.status) {
