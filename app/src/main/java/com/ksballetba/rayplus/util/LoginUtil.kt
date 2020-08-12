@@ -61,6 +61,7 @@ fun saveToken(
     val sharedPreferences =
         context.getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
     val editor = sharedPreferences.edit()
+    editor.putBoolean(LOGIN_TOKEN, true)
     tokens.forEach {
         editor.putString("${LOGIN_TOKEN}${it.project_id}", it.token)
     }

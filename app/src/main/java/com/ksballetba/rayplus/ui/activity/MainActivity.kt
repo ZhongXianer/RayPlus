@@ -1,12 +1,12 @@
 package com.ksballetba.rayplus.ui.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +20,6 @@ import com.ksballetba.rayplus.ui.adapter.ProjectsAdapter
 import com.ksballetba.rayplus.util.*
 import com.ksballetba.rayplus.viewmodel.ProjectsViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.collections.forEachByIndex
 import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity() {
@@ -81,7 +80,6 @@ class MainActivity : AppCompatActivity() {
             logOut()
         }
         initRefresh()
-//        val sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
         val userName = getUserName(this)
         nav_view.getHeaderView(0).findViewById<TextView>(R.id.tv_doctor_name).text =
             "您好，$userName 医生"
@@ -95,8 +93,6 @@ class MainActivity : AppCompatActivity() {
         mProjectsAdapter = ProjectsAdapter(R.layout.item_project, mProjectList)
         mProjectsAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
         rv_project.adapter = mProjectsAdapter
-//        val view = layoutInflater.inflate(R.layout.empty, null)
-//        mProjectsAdapter.emptyView = view
         /*设置点击事件，跳转到对应的活动*/
         mProjectsAdapter.setOnItemClickListener { _, _, position ->
             navigateToSamplePage(position)
@@ -137,6 +133,9 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    /**
+     * 获取项目当前进度
+     */
     private fun getProjectProcess(position: Int, projectId: Int) {
         mViewModel.getProjectProcess(projectId).observe(this, Observer {
             mProjectList[position].now = it.data?.now
@@ -145,6 +144,9 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    /**
+     * 获取该账户在该项目下的权限
+     */
     private fun getProjectAuthorization(projectId: Int) {
         mViewModel.getAuthorization(projectId, getUserId(this)).observe(this, Observer {
             setAuthorization(it.toMutableList())
@@ -171,7 +173,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * 跳转到相应的活动
+     * 跳转到样本列表界面
      */
     private fun navigateToSamplePage(position: Int) {
         val projectId = mProjectList[position].projectId
@@ -184,15 +186,4 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    /**
-     * 删除账号密码数据
-     * 退出登录
-     */
-//    private fun deleteLoginToken() {
-//        val sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
-//        val editor = sharedPreferences.edit()
-//        editor.remove(LOGIN_TOKEN)
-//        editor.remove(USER_NAME)
-//        editor.apply()
-//    }
 }

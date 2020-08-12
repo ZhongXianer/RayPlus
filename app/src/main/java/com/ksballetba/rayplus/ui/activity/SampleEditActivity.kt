@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.sampleData.SampleEditBodyBean
@@ -78,7 +79,23 @@ class SampleEditActivity : AppCompatActivity() {
                 getString(R.string.patient_id),
                 "请输入${getString(R.string.patient_id)}"
             ) {
-                tv_patient_id.text = it
+                if (it.length != 18)
+                    toast("请输入合法的身份证号码！")
+                else {
+                    val year: Int = it.substring(6, 10).toInt()
+                    val month: Int = it.substring(10, 12).toInt()
+                    val day: Int = it.substring(12, 14).toInt()
+                    if (year == 0)
+                        toast("请输入合法的身份证号码！")
+                    else if (month == 0 || month > 12)
+                        toast("请输入合法的身份证号码！")
+                    else if (day == 0 || day > 31)
+                        toast("请输入合法的身份证号码！")
+                    else {
+                        tv_patient_id.text = it
+                        tv_patient_birthday.text = "${year}-${month}-${day}"
+                    }
+                }
             }.show()
         }
         cl_patient_group.setOnClickListener {
@@ -95,9 +112,6 @@ class SampleEditActivity : AppCompatActivity() {
                     tv_patient_sex.text = text
                 }.show()
         }
-        cl_patient_birthday.setOnClickListener {
-            showDatePickerDialog(tv_patient_birthday, supportFragmentManager)
-        }
         cl_patient_sign_date.setOnClickListener {
             showDatePickerDialog(tv_patient_sign_date, supportFragmentManager)
         }
@@ -109,7 +123,6 @@ class SampleEditActivity : AppCompatActivity() {
 
     private fun loadData(sampleBody: SampleEditBodyBean) {
         mResearchCenterId = sampleBody.researchCenterId
-//        mProjectId = sampleBody.projectId
         tv_patient_name.text = sampleBody.patientName
         tv_patient_num.text = sampleBody.patientIds
         tv_patient_id.text = sampleBody.idNum
@@ -127,18 +140,16 @@ class SampleEditActivity : AppCompatActivity() {
         val groupId =
             getPatientGroupList().indexOf(parseDefaultContent(tv_patient_group.text.toString())) + 1
         val sex = getSexList().indexOf(parseDefaultContent(tv_patient_sex.text.toString()))
-        val date = parseDefaultContent(tv_patient_birthday.text.toString())
         val signTime = parseDefaultContent(tv_patient_sign_date.text.toString())
         val inGroupTime = parseDefaultContent(tv_patient_enter_group_date.text.toString())
         val sampleEditBodyBean =
             SampleEditBodyBean(
-                date,
+                null,
                 groupId,
                 idNum,
                 inGroupTime,
                 patientIds,
                 patientName,
-//                mProjectId,
                 mResearchCenterId,
                 sampleId,
                 sex,
@@ -153,7 +164,7 @@ class SampleEditActivity : AppCompatActivity() {
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                     startActivity(intent)
                 } else {
-                    toast("样本操作失败")
+                    toast(it.msg)
                 }
             })
         } else {
@@ -173,7 +184,6 @@ class SampleEditActivity : AppCompatActivity() {
                     idNum.length != 18 ||
                     sampleEditBodyBean.groupId < 0 ||
                     sampleEditBodyBean.sex < 0 ||
-                    sampleEditBodyBean.date.isNullOrEmpty() ||
                     sampleEditBodyBean.signTime.isNullOrEmpty() ||
                     sampleEditBodyBean.inGroupTime.isNullOrEmpty())
         } else {
@@ -183,7 +193,6 @@ class SampleEditActivity : AppCompatActivity() {
                     idNum.length != 18 ||
                     sampleEditBodyBean.groupId < 0 ||
                     sampleEditBodyBean.sex < 0 ||
-                    sampleEditBodyBean.date.isNullOrEmpty() ||
                     sampleEditBodyBean.signTime.isNullOrEmpty() ||
                     sampleEditBodyBean.inGroupTime.isNullOrEmpty())
         }

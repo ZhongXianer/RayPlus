@@ -12,6 +12,7 @@ data class DemographyBean(
     val data: Data
 ) {
     data class Data(
+        @SerializedName("birth_date")
         val date: String, // 2019-10-23
         val degree: Int?, // null
         @SerializedName("family_phone")

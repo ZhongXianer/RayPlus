@@ -173,9 +173,6 @@ class DemographicsFragment : Fragment() {
                 tv_sex.text = text
             }.show()
         }
-        cl_birthday.setOnClickListener {
-            showDatePickerDialog(tv_birthday, parentFragmentManager)
-        }
         cl_race.setOnClickListener {
             XPopup.Builder(context)
                 .asCenterList("人种", arrayOf("白人", "黑人", "东方人", "其他")) { pos, text ->

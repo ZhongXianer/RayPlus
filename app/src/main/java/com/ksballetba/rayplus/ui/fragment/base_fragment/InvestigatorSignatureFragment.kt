@@ -72,7 +72,9 @@ class InvestigatorSignatureFragment : Fragment() {
                         if (it.code == 200) {
                             ToastUtils.showShort("基线资料签名成功")
                             getBaselineSignature()
-                        } else ToastUtils.showShort(it.msg)
+                        } else if (it.code == 999)
+                            ToastUtils.showShort("服务器出错！")
+                        else ToastUtils.showShort(it.msg)
                     })
                 }
                 INVESTIGATOR -> {
@@ -83,7 +85,9 @@ class InvestigatorSignatureFragment : Fragment() {
                         if (it.code == 200) {
                             ToastUtils.showShort("研究者项目总结签名成功")
                             getSummarySignature()
-                        } else ToastUtils.showShort(it.msg)
+                        } else if (it.code == 999)
+                            ToastUtils.showShort("服务器出错！")
+                        else ToastUtils.showShort(it.msg)
                     })
                 }
                 INSPECTOR -> {
@@ -94,7 +98,9 @@ class InvestigatorSignatureFragment : Fragment() {
                         if (it.code == 200) {
                             ToastUtils.showShort("监察员项目总结签名成功")
                             getSummarySignature()
-                        } else ToastUtils.showShort(it.msg)
+                        } else if (it.code == 999)
+                            ToastUtils.showShort("服务器出错！")
+                        else ToastUtils.showShort(it.msg)
                     })
                 }
                 else -> {
@@ -105,7 +111,9 @@ class InvestigatorSignatureFragment : Fragment() {
                         if (it.code == 200) {
                             ToastUtils.showShort("访视${mCycleNumber}签名成功")
                             getCycleSignature()
-                        } else ToastUtils.showShort(it.msg)
+                        } else if (it.code == 999)
+                            ToastUtils.showShort("服务器出错！")
+                        else ToastUtils.showShort(it.msg)
                     })
                 }
             }

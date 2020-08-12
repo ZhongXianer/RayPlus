@@ -64,6 +64,7 @@ class LoginActivity : AppCompatActivity() {
                 Context.MODE_PRIVATE
             ).contains(LOGIN_TOKEN)
         ) {
+            /*跳转到主界面，项目列表展示界面*/
             startActivity(Intent(this, MainActivity::class.java))
         }
     }
@@ -92,7 +93,6 @@ class LoginActivity : AppCompatActivity() {
                         it.data.userInfo.id,
                         it.data.userInfo.research_center_name
                     )
-//                    saveLoginToken(it.data.tokens, it.data.userInfo.name)
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                 } else {
@@ -100,16 +100,4 @@ class LoginActivity : AppCompatActivity() {
                 }
             })
     }
-
-    /**
-     * 存储账号密码数据
-     */
-//    private fun saveLoginToken(token: List<LoginResponseBean.Data.Token>, userName: String) {
-//        LogUtils.tag(TAG).d(token)
-//        val sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
-//        val editor = sharedPreferences.edit()
-//        editor.putString(LOGIN_TOKEN, token[0].token)
-//        editor.putString(USER_NAME, userName)
-//        editor.apply()
-//    }
 }
