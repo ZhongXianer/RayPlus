@@ -19,6 +19,6 @@ class ProjectsAdapter(layoutResId:Int,data:List<ProjectListBean.Data>): BaseQuic
             .setText(R.id.tv_project_phone,"电话：${item?.phone?:""}")
             .setText(R.id.tv_project_current_progress,"当前进度：${item?.now?:""}")
             .setText(R.id.tv_project_capacity,"项目容量：${item?.total?:""}")
-            .setText(R.id.tv_project_state,"状态：")
+            .setText(R.id.tv_project_state,"状态：在研")
     }
 }
