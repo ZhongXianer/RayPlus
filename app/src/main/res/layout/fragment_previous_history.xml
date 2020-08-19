@@ -18,11 +18,12 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_operation_history"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="68dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                android:paddingTop="@dimen/material_component_cards_left_and_right_padding"
+                android:paddingBottom="@dimen/material_component_cards_left_and_right_padding">
 
                 <TextView
                     android:id="@+id/tv_operation_history_title"
@@ -55,7 +56,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                android:paddingTop="@dimen/material_component_cards_left_and_right_padding"
+                android:paddingBottom="@dimen/material_component_cards_left_and_right_padding">
 
                 <TextView
                     android:id="@+id/tv_diseases_history_title"
@@ -90,7 +92,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                android:paddingTop="@dimen/material_component_cards_left_and_right_padding"
+                android:paddingBottom="@dimen/material_component_cards_left_and_right_padding">
 
                 <TextView
                     android:id="@+id/tv_phymatosis_history_title"
@@ -123,7 +126,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                android:paddingTop="@dimen/material_component_cards_left_and_right_padding"
+                android:paddingBottom="@dimen/material_component_cards_left_and_right_padding">
 
                 <TextView
                     android:id="@+id/tv_allergy_history_title"
@@ -156,7 +160,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                android:paddingTop="@dimen/material_component_cards_left_and_right_padding"
+                android:paddingBottom="@dimen/material_component_cards_left_and_right_padding">
 
                 <TextView
                     android:id="@+id/tv_medication_use_history_title"
@@ -190,7 +195,8 @@
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:orientation="vertical"
-                android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                android:paddingTop="@dimen/material_component_cards_left_and_right_padding"
+                android:paddingBottom="@dimen/material_component_cards_left_and_right_padding">
 
                 <TextView
                     android:id="@+id/tv_smoke_history_title"
@@ -238,7 +244,8 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
-                    android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                    android:paddingTop="@dimen/material_component_cards_left_and_right_padding"
+                    android:paddingBottom="@dimen/material_component_cards_left_and_right_padding">
 
                     <TextView
                         android:id="@+id/tv_average_cigarette_title"
@@ -271,7 +278,8 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
-                    android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                    android:paddingTop="@dimen/material_component_cards_left_and_right_padding"
+                    android:paddingBottom="@dimen/material_component_cards_left_and_right_padding">
 
                     <TextView
                         android:id="@+id/tv_smoke_years_title"
@@ -305,7 +313,8 @@
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
                     android:orientation="vertical"
-                    android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                    android:paddingTop="@dimen/material_component_cards_left_and_right_padding"
+                    android:paddingBottom="@dimen/material_component_cards_left_and_right_padding">
 
                     <TextView
                         android:id="@+id/tv_is_quit_smoke_title"
@@ -352,7 +361,8 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?attr/selectableItemBackground"
-                        android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                        android:paddingTop="@dimen/material_component_cards_left_and_right_padding"
+                        android:paddingBottom="@dimen/material_component_cards_left_and_right_padding">
 
                         <TextView
                             android:id="@+id/tv_quit_smoke_date_title"
@@ -386,7 +396,8 @@
                         android:focusable="true"
                         android:foreground="?attr/selectableItemBackground"
                         android:orientation="vertical"
-                        android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                        android:paddingTop="@dimen/material_component_cards_left_and_right_padding"
+                        android:paddingBottom="@dimen/material_component_cards_left_and_right_padding">
 
                         <TextView
                             android:id="@+id/tv_is_relapse_smoke_title"
@@ -431,7 +442,8 @@
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:orientation="vertical"
-                android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                android:paddingTop="@dimen/material_component_cards_left_and_right_padding"
+                android:paddingBottom="@dimen/material_component_cards_left_and_right_padding">
 
                 <TextView
                     android:id="@+id/tv_drink_history_title"
@@ -479,7 +491,8 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
-                    android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                    android:paddingTop="@dimen/material_component_cards_left_and_right_padding"
+                    android:paddingBottom="@dimen/material_component_cards_left_and_right_padding">
 
                     <TextView
                         android:id="@+id/tv_drink_frequency_title"
@@ -512,7 +525,8 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
-                    android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                    android:paddingTop="@dimen/material_component_cards_left_and_right_padding"
+                    android:paddingBottom="@dimen/material_component_cards_left_and_right_padding">
 
                     <TextView
                         android:id="@+id/tv_drink_capacity_title"
@@ -545,7 +559,8 @@
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
                     android:orientation="vertical"
-                    android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                    android:paddingTop="@dimen/material_component_cards_left_and_right_padding"
+                    android:paddingBottom="@dimen/material_component_cards_left_and_right_padding">
 
                     <TextView
                         android:id="@+id/tv_is_quit_drink_title"
@@ -591,7 +606,8 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?attr/selectableItemBackground"
-                        android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                        android:paddingTop="@dimen/material_component_cards_left_and_right_padding"
+                        android:paddingBottom="@dimen/material_component_cards_left_and_right_padding">
 
                         <TextView
                             android:id="@+id/tv_quit_drink_date_title"
@@ -624,7 +640,8 @@
                         android:focusable="true"
                         android:foreground="?attr/selectableItemBackground"
                         android:orientation="vertical"
-                        android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                        android:paddingTop="@dimen/material_component_cards_left_and_right_padding"
+                        android:paddingBottom="@dimen/material_component_cards_left_and_right_padding">
 
                         <TextView
                             android:id="@+id/tv_is_relapse_drink_title"
@@ -671,7 +688,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                android:paddingTop="@dimen/material_component_cards_left_and_right_padding"
+                android:paddingBottom="@dimen/material_component_cards_left_and_right_padding">
 
                 <TextView
                     android:id="@+id/tv_patient_height_title"
@@ -704,7 +722,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                android:paddingTop="@dimen/material_component_cards_left_and_right_padding"
+                android:paddingBottom="@dimen/material_component_cards_left_and_right_padding">
 
                 <TextView
                     android:id="@+id/tv_patient_weight_title"
@@ -736,7 +755,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                android:paddingTop="@dimen/material_component_cards_left_and_right_padding"
+                android:paddingBottom="@dimen/material_component_cards_left_and_right_padding">
 
                 <TextView
                     android:id="@+id/tv_patient_body_area_title"
@@ -768,7 +788,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                android:paddingTop="@dimen/material_component_cards_left_and_right_padding"
+                android:paddingBottom="@dimen/material_component_cards_left_and_right_padding">
 
                 <TextView
                     android:id="@+id/tv_ECOG_score_title"

@@ -18,7 +18,22 @@ import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.util.*
 import com.ksballetba.rayplus.viewmodel.BaselineVisitViewModel
 import com.lxj.xpopup.XPopup
+import kotlinx.android.synthetic.main.activity_treatment_history.*
 import kotlinx.android.synthetic.main.fragment_first_visit_process.*
+import kotlinx.android.synthetic.main.fragment_first_visit_process.cl_PD_L1_expression
+import kotlinx.android.synthetic.main.fragment_first_visit_process.cl_biopsy_way
+import kotlinx.android.synthetic.main.fragment_first_visit_process.cl_genetic_mutation_type
+import kotlinx.android.synthetic.main.fragment_first_visit_process.cl_genetic_test_sample
+import kotlinx.android.synthetic.main.fragment_first_visit_process.cl_genetic_test_way
+import kotlinx.android.synthetic.main.fragment_first_visit_process.cl_microsatellite_instability
+import kotlinx.android.synthetic.main.fragment_first_visit_process.cl_tumor_mutation_load
+import kotlinx.android.synthetic.main.fragment_first_visit_process.tv_PD_L1_expression
+import kotlinx.android.synthetic.main.fragment_first_visit_process.tv_biopsy_way
+import kotlinx.android.synthetic.main.fragment_first_visit_process.tv_genetic_mutation_type
+import kotlinx.android.synthetic.main.fragment_first_visit_process.tv_genetic_test_sample
+import kotlinx.android.synthetic.main.fragment_first_visit_process.tv_genetic_test_way
+import kotlinx.android.synthetic.main.fragment_first_visit_process.tv_microsatellite_instability
+import kotlinx.android.synthetic.main.fragment_first_visit_process.tv_tumor_mutation_load
 
 /**
  * A simple [Fragment] subclass.
@@ -73,22 +88,29 @@ class FirstVisitProcessFragment : Fragment() {
             mFirstVisitProcessResponseBean = it
             initClinicalSymptoms(it)
             tv_lesion.text =
-                if (it.data.tumorPart == null) "" else getTumorPart()[it.data.tumorPart]
+                if (it.data.tumorPart == null) "请设置" else getTumorPart()[it.data.tumorPart]
             initTransferSite(it)
-            tv_biopsy_way.text =
-                if (it.data.biopsyMethod == "其他") it.data.biopsyMethodOther else it.data.biopsyMethod
-            tv_tumor_type.text =
-                if (it.data.tumorPathologicalType == "混合型癌") it.data.tumorPathologicalTypeOther else it.data.tumorPathologicalType
-            tv_genetic_test_sample.text =
-                if (it.data.geneticTestingSpecimen == "转移灶组织") it.data.geneticTestingSpecimenOther else it.data.geneticTestingSpecimen
+            if (it.data.biopsyMethod != null)
+                tv_biopsy_way.text =
+                    if (it.data.biopsyMethod == "其他") it.data.biopsyMethodOther else it.data.biopsyMethod
+            if (it.data.tumorPathologicalType != null)
+                tv_tumor_type.text =
+                    if (it.data.tumorPathologicalType == "混合型癌") it.data.tumorPathologicalTypeOther else it.data.tumorPathologicalType
+            if (it.data.geneticTestingSpecimen != null)
+                tv_genetic_test_sample.text =
+                    if (it.data.geneticTestingSpecimen == "转移灶组织") it.data.geneticTestingSpecimenOther else it.data.geneticTestingSpecimen
             tv_genetic_test_way.text =
-                if (it.data.geneticTestingMethod == null) "" else getGeneticTestingMethod()[it.data.geneticTestingMethod]
+                if (it.data.geneticTestingMethod == null) "请设置" else getGeneticTestingMethod()[it.data.geneticTestingMethod]
             initGeneMutationType(it)
-            tv_PD_L1_expression.text =
-                if (it.data.pdl1 == null) "" else getPD_L1Expression()[it.data.pdl1]
-            tv_tumor_mutation_load.text = if (it.data.tmb == "其他") it.data.tmbOther else it.data.tmb
-            tv_microsatellite_instability.text =
-                if (it.data.msi == null) "" else getMSI()[it.data.msi]
+            if (it.data.pdl1 != null)
+                tv_PD_L1_expression.text =
+                    if (it.data.pdl1 == null) "" else getPD_L1Expression()[it.data.pdl1]
+            if (it.data.tmb != null)
+                tv_tumor_mutation_load.text =
+                    if (it.data.tmb == "其他") it.data.tmbOther else it.data.tmb
+            if (it.data.msi != null)
+                tv_microsatellite_instability.text =
+                    if (it.data.msi == null) "请设置" else getMSI()[it.data.msi]
         })
         mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
             if (it.status == Status.FAILED) {

@@ -46,10 +46,9 @@
             android:text="开始时间：2020-51-10"
             android:textColor="@color/primary_text"
             android:textSize="@dimen/material_typography_body1"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.62"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/tv_treatment_line" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

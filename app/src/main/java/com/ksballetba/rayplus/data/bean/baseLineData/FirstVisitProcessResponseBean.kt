@@ -10,7 +10,7 @@ data class FirstVisitProcessResponseBean(
 ) {
     data class Data(
         @SerializedName("biopsy_method")
-        val biopsyMethod: String, // 其他
+        val biopsyMethod: String?, // 其他
         @SerializedName("biopsy_method_other")
         val biopsyMethodOther: String, // 其他活检
         @SerializedName("clinical_symptoms[不详]")
@@ -70,14 +70,14 @@ data class FirstVisitProcessResponseBean(
         @SerializedName("genetic_testing_method")
         val geneticTestingMethod: Int?, // 1
         @SerializedName("genetic_testing_specimen")
-        val geneticTestingSpecimen: String, // 转移灶组织
+        val geneticTestingSpecimen: String?, // 转移灶组织
         @SerializedName("genetic_testing_specimen_other")
         val geneticTestingSpecimenOther: String, // 其他转移灶
         val msi: Int?, // 3
         val pdl1: Int?, // 5
         @SerializedName("sample_id")
         val sampleId: Int, // 7
-        val tmb: String, // 其他
+        val tmb: String?, // 其他
         @SerializedName("tmb_other")
         val tmbOther: String, // 100
         @SerializedName("transfer_site[其他]")
@@ -105,7 +105,7 @@ data class FirstVisitProcessResponseBean(
         @SerializedName("tumor_part")
         val tumorPart: Int?, // 0
         @SerializedName("tumor_pathological_type")
-        val tumorPathologicalType: String, // 混合型癌
+        val tumorPathologicalType: String?, // 混合型癌
         @SerializedName("tumor_pathological_type_other")
         val tumorPathologicalTypeOther: String // 其他癌
     )

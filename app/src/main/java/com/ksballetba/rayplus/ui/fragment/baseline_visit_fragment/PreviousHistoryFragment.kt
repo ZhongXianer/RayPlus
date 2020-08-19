@@ -67,15 +67,19 @@ class PreviousHistoryFragment : Fragment() {
     private fun loadData() {
         mViewModel.getPreviousHistory(mSampleId).observe(viewLifecycleOwner, Observer {
             mPreviousHistoryResponseBean = it
-            tv_operation_history.text =
-                if (it.data.surgery != "其他") it.data.surgery else it.data.surgeryOther
+            if (it.data.surgery != null)
+                tv_operation_history.text =
+                    if (it.data.surgery != "其他") it.data.surgery else it.data.surgeryOther
             initBaseIllList(it)
-            tv_phymatosis_history.text =
-                if (it.data.tumorIll != "其他") it.data.tumorIll else it.data.tumorIllOther
-            tv_allergy_history.text =
-                if (it.data.drugAllergy != "其他") it.data.drugAllergy else it.data.drugAllergyOther
-            tv_medication_use_history.text =
-                if (it.data.drugUse != "其他") it.data.drugUse else it.data.drugUseOther
+            if (it.data.tumorIll != null)
+                tv_phymatosis_history.text =
+                    if (it.data.tumorIll != "其他") it.data.tumorIll else it.data.tumorIllOther
+            if (it.data.drugAllergy != null)
+                tv_allergy_history.text =
+                    if (it.data.drugAllergy != "其他") it.data.drugAllergy else it.data.drugAllergyOther
+            if (it.data.drugUse != null)
+                tv_medication_use_history.text =
+                    if (it.data.drugUse != "其他") it.data.drugUse else it.data.drugUseOther
             switch_smoke_history.isChecked = it.data.smoke == "on"
             ll_smoke.visibility = if (switch_smoke_history.isChecked) View.VISIBLE else View.GONE
             tv_average_cigarette.text = it.data.smokeSize
@@ -99,13 +103,13 @@ class PreviousHistoryFragment : Fragment() {
             tv_quit_drink_date.text = it.data.drinkingQuitTime
             switch_is_relapse_drink.isChecked = it.data.drinkingChemotherapy == "on"
             tv_patient_height.text =
-                if (it.data.height == null) "" else it.data.height.toString()
+                if (it.data.height == null) "请设置" else it.data.height.toString()
             tv_patient_weight.text =
-                if (it.data.weight == null) "" else it.data.weight.toString()
+                if (it.data.weight == null) "请设置" else it.data.weight.toString()
             tv_patient_body_area.text =
-                if (it.data.surfaceArea == null) "" else it.data.surfaceArea.toString()
+                if (it.data.surfaceArea == null) "请设置" else it.data.surfaceArea.toString()
             tv_ECOG_score.text =
-                if (it.data.eCOG == null) "" else it.data.eCOG.toString()
+                if (it.data.eCOG == null) "请设置" else it.data.eCOG.toString()
         })
         mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
             if (it.status == Status.FAILED) {

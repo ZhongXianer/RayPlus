@@ -14,7 +14,7 @@
 
         <ImageView
             android:id="@+id/signature_picture"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_above="@id/signature_status"
             android:layout_centerHorizontal="true"
@@ -56,11 +56,13 @@
 
         <Button
             android:id="@+id/confirm_signature"
-            android:layout_width="120dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/research_center_info"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
+            android:paddingStart="@dimen/dp_10"
+            android:paddingEnd="@dimen/dp_10"
             android:background="@color/footer_color"
             android:text="确认签名"
             android:textColor="@color/background"

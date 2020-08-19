@@ -22,7 +22,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                android:paddingTop="@dimen/material_component_bottom_sheet_edge_left_right_margins"
+                android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
 
                 <TextView
                     android:id="@+id/tv_diseases_history_title"
@@ -57,7 +58,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                android:paddingTop="@dimen/material_component_bottom_sheet_edge_left_right_margins"
+                android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
 
                 <TextView
                     android:id="@+id/tv_lesion_title"
@@ -90,7 +92,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                android:paddingTop="@dimen/material_component_bottom_sheet_edge_left_right_margins"
+                android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
 
                 <TextView
                     android:id="@+id/tv_transfer_area_title"
@@ -125,7 +128,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                android:paddingTop="@dimen/material_component_bottom_sheet_edge_left_right_margins"
+                android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
 
                 <TextView
                     android:id="@+id/tv_biopsy_way_title"
@@ -158,7 +162,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                android:paddingTop="@dimen/material_component_bottom_sheet_edge_left_right_margins"
+                android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
 
                 <TextView
                     android:id="@+id/tv_tumor_type_title"
@@ -191,7 +196,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                android:paddingTop="@dimen/material_component_bottom_sheet_edge_left_right_margins"
+                android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
 
                 <TextView
                     android:id="@+id/tv_genetic_test_sample_title"
@@ -224,7 +230,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                android:paddingTop="@dimen/material_component_bottom_sheet_edge_left_right_margins"
+                android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
 
                 <TextView
                     android:id="@+id/tv_genetic_test_way_title"
@@ -257,7 +264,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                android:paddingTop="@dimen/material_component_bottom_sheet_edge_left_right_margins"
+                android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
 
                 <TextView
                     android:id="@+id/tv_genetic_mutation_type_title"
@@ -292,7 +300,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                android:paddingTop="@dimen/material_component_bottom_sheet_edge_left_right_margins"
+                android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
 
                 <TextView
                     android:id="@+id/tv_PD_L1_expression_title"
@@ -325,7 +334,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                android:paddingTop="@dimen/material_component_bottom_sheet_edge_left_right_margins"
+                android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
 
                 <TextView
                     android:id="@+id/tv_tumor_mutation_load_title"
@@ -358,7 +368,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                android:paddingTop="@dimen/material_component_bottom_sheet_edge_left_right_margins"
+                android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
 
                 <TextView
                     android:id="@+id/tv_microsatellite_instability_title"
