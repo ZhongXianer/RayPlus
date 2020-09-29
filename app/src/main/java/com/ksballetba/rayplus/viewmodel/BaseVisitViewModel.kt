@@ -124,6 +124,33 @@ class BaseVisitViewModel constructor(private var baseVisitDataSource: BaseVisitD
         return result
     }
 
+    fun getIsImagingEvaluate(
+        sampleId: Int,
+        cycleNumber: Int
+    ): LiveData<IsImagingEvaluateResponseBean> {
+        val result = MutableLiveData<IsImagingEvaluateResponseBean>()
+        baseVisitDataSource.getIsImgingEvaluate(sampleId, cycleNumber) {
+            result.postValue(it)
+        }
+        return result
+    }
+
+    fun editIsImagingEvaluate(
+        sampleId: Int,
+        cycleNumber: Int,
+        isPhotoEvaluate: Int
+    ): LiveData<EditIsImagingEvaluateResponseBody> {
+        val result = MutableLiveData<EditIsImagingEvaluateResponseBody>()
+        baseVisitDataSource.editIsImagingEvaluate(
+            sampleId,
+            cycleNumber,
+            IsImagingEvaluateBodyBean(isPhotoEvaluate)
+        ) {
+            result.postValue(it)
+        }
+        return result
+    }
+
     fun getImagingEvaluationList(
         sampleId: Int,
         cycleNumber: Int

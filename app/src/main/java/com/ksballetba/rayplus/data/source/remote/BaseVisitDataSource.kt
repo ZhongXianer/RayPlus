@@ -280,6 +280,53 @@ class BaseVisitDataSource(context: Context) {
             )
     }
 
+    fun getIsImgingEvaluate(
+        sampleId: Int,
+        cycleNumber: Int,
+        callBack: (IsImagingEvaluateResponseBean) -> Unit
+    ) {
+        RetrofitClient.getInstance(NetworkType.PROJECT)
+            .create(ApiService::class.java)
+            .getIsImagingEvaluate(mToken, sampleId, cycleNumber)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                }
+            )
+    }
+
+    fun editIsImagingEvaluate(
+        sampleId: Int,
+        cycleNumber: Int,
+        isPhotoEvaluate: IsImagingEvaluateBodyBean,
+        callBack: (EditIsImagingEvaluateResponseBody) -> Unit
+    ) {
+        RetrofitClient.getInstance(NetworkType.PROJECT)
+            .create(ApiService::class.java)
+            .editIsImagingEvaluate(mToken, sampleId, cycleNumber, isPhotoEvaluate)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onNext = {
+                    callBack(it)
+                },
+                onComplete = {
+                    LogUtils.d("Completed")
+                },
+                onError = {
+                    LogUtils.d(it.message)
+                }
+            )
+    }
+
     fun getImagingEvaluationList(
         sampleId: Int,
         cycleNumber: Int,

@@ -60,7 +60,9 @@ class ProjectSummaryDetailFragment : Fragment() {
                 if (it.data.isStop == 1) tv_is_stop_treat.text = "是"
                 else tv_is_stop_treat.text = "否"
             }
-            tv_clinic_terminal.text = it.data?.relay ?: "请设置"
+            if (it.data?.relay != null)
+                tv_clinic_terminal.text = getRelays()[it.data.relay.toInt() - 1]
+            else tv_clinic_terminal.text = "请设置"
             tv_last_take_medicine_date.text = it.data?.lastTimeDrug ?: "请设置"
             if (it.data?.treatmentTimes == null) tv_take_medicine_num.text = "请设置"
             else tv_take_medicine_num.text = it.data.treatmentTimes.toString()
@@ -84,7 +86,8 @@ class ProjectSummaryDetailFragment : Fragment() {
         var isStop: Int?
         if (isStopStr == "") isStop = null
         else isStop = if (isStopStr == "是") 1 else 0
-        val relay = parseDefaultContent(tv_clinic_terminal.text.toString())
+        val relayText = parseDefaultContent(tv_clinic_terminal.text.toString())
+        val relay = (getRelays().indexOf(relayText) + 1).toString()
         val lastTimeDrug = parseDefaultContent(tv_last_take_medicine_date.text.toString())
         val treatmentTimes = parseDefaultContent(tv_take_medicine_num.text.toString()).toIntOrNull()
         val reasonStopDrugStr = parseDefaultContent(tv_stop_treat_cause.text.toString())
@@ -138,8 +141,16 @@ class ProjectSummaryDetailFragment : Fragment() {
             }.show()
         }
         cl_clinic_terminal.setOnClickListener {
-            XPopup.Builder(context).asInputConfirm(getString(R.string.clinic_terminal), "请输入内容") {
-                tv_clinic_terminal.text = it
+            XPopup.Builder(context).asCenterList(
+                getString(R.string.clinic_terminal),
+                arrayOf(
+                    "一直按照要求服药",
+                    "偶尔不按照要求服药",
+                    "经常不按照要求服药",
+                    "从不按照要求服药"
+                )
+            ) { position, text ->
+                tv_clinic_terminal.text = text
             }.show()
         }
         cl_last_take_medicine_date.setOnClickListener {

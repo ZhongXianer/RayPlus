@@ -69,6 +69,14 @@ class ImagingEvaluationFragment : Fragment() {
         fab_imaging_evaluation.setOnClickListener {
             navigateToImagingEvaluationEditPage(mSampleId, mCycleNumber, mCurrentPage, null)
         }
+        judge_evaluation_switch.setOnCheckedChangeListener { _, isChecked ->
+            rv_imaging_evaluation.visibility = if (isChecked) View.VISIBLE else View.GONE
+            fab_imaging_evaluation.visibility = if (isChecked) View.VISIBLE else View.GONE
+        }
+        judge_evaluation_save_button.setOnClickListener {
+            val isPhotoEvaluate: Int = if (judge_evaluation_switch.isChecked) 1 else 0
+            editIsImagingEvaluate(isPhotoEvaluate)
+        }
     }
 
     private fun initData() {
@@ -135,6 +143,14 @@ class ImagingEvaluationFragment : Fragment() {
     }
 
     fun loadData() {
+        mViewModel.getIsImagingEvaluate(mSampleId, mCycleNumber)
+            .observe(viewLifecycleOwner, Observer {
+                if (it.data.is_photo_evaluate == 0) {
+                    judge_evaluation_switch.isChecked = false
+                    rv_imaging_evaluation.visibility = View.GONE
+                    fab_imaging_evaluation.visibility = View.GONE
+                } else judge_evaluation_switch.isChecked = true
+            })
         mViewModel.getImagingEvaluationList(mSampleId, mCycleNumber)
             .observe(viewLifecycleOwner, Observer {
                 mList = it
@@ -170,6 +186,18 @@ class ImagingEvaluationFragment : Fragment() {
         intent.putExtra(EVALUATE_ID, evaluateId)
         intent.putExtra(REFRESH_PAGE, refreshPage)
         startActivity(intent)
+    }
+
+    private fun editIsImagingEvaluate(isPhotoEvaluate: Int) {
+        mViewModel.editIsImagingEvaluate(mSampleId, mCycleNumber, isPhotoEvaluate)
+            .observe(viewLifecycleOwner,
+                Observer {
+                    if (it.code == 200) {
+                        ToastUtils.showShort("保存是否影像学检查成功！")
+                    } else {
+                        ToastUtils.showShort(it.msg)
+                    }
+                })
     }
 
     private fun deleteImagingEvaluation(evaluateId: Int, pos: Int) {

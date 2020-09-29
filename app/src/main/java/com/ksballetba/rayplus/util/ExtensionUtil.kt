@@ -195,6 +195,14 @@ fun getDrinkingFrequency() = arrayOf("几乎不", "每周1-2次", "每周3-4次"
 
 fun getDrinkingSize() = arrayOf("每次少量", "每周微醉", "偶尔大醉", "每次大醉")
 
+
+fun getRelays()= arrayOf(
+    "一直按照要求服药",
+    "偶尔不按照要求服药",
+    "经常不按照要求服药",
+    "从不按照要求服药"
+)
+
 fun getOSMethod() = arrayOf(
     "1.街道办开具死亡证明",
     "2.民政局系统出具死亡证明",

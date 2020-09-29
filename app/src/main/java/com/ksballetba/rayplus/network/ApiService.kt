@@ -258,6 +258,23 @@ interface ApiService {
     ): Observable<BaseResponseBean>
 
     @Headers("Content-Type:application/json")
+    @GET("/is_photo_evaluate/{sample_id}/{cycle_number}")
+    fun getIsImagingEvaluate(
+        @Header("Authorization") token: String?,
+        @Path("sample_id") sampleId: Int,
+        @Path("cycle_number") cycleNumber: Int
+    ): Observable<IsImagingEvaluateResponseBean>
+
+    @Headers("Content-Type:application/json")
+    @POST("/is_photo_evaluate/{sample_id}/{cycle_number}")
+    fun editIsImagingEvaluate(
+        @Header("Authorization") token: String?,
+        @Path("sample_id") sampleId: Int,
+        @Path("cycle_number") cycleNumber: Int,
+        @Body isImagingEvaluateBodyBean: IsImagingEvaluateBodyBean
+    ): Observable<EditIsImagingEvaluateResponseBody>
+
+    @Headers("Content-Type:application/json")
     @GET("/photo_evaluate_table/{sample_id}/{cycle_number}")
     fun getImagingEvaluationList(
         @Header("Authorization") token: String?, @Path("sample_id") sampleId: Int, @Path(
