@@ -30,8 +30,8 @@
             android:layout_height="wrap_content"
             android:showText="true"
             android:textColor="@color/secondary_text"
-            android:textOff="关闭"
-            android:textOn="开启"
+            android:textOff="否"
+            android:textOn="是"
             android:textSize="17sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
