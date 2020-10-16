@@ -80,15 +80,15 @@ class LoginActivity : AppCompatActivity() {
             LoginBodyBean(
                 account,
                 pwd,
-                LOGIN_TYPE,
-                SYSTEM_ID
+                mutableListOf(SYSTEM_ID),
+                LOGIN_TYPE
             )
         )
             .observe(this, Observer {
                 if (it.code == 200) {
                     saveToken(
                         this,
-                        it.data.tokens,
+                        it.data!!.tokenInfo[0].tokens,
                         it.data.userInfo.name,
                         it.data.userInfo.id,
                         it.data.userInfo.research_center_name

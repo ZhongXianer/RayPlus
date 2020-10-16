@@ -1,3 +1,5 @@
+@file:Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+
 package com.ksballetba.rayplus.util
 
 import android.content.Context
@@ -53,7 +55,7 @@ fun getToken(context: Context, projectId: Int): String {
 
 fun saveToken(
     context: Context,
-    tokens: List<LoginResponseBean.Data.Token>,
+    tokens: List<LoginResponseBean.Data.TokenInfo.Token>,
     userName: String,
     userId: Int,
     researchCenterName: String
