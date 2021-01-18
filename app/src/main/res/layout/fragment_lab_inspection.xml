@@ -20,96 +20,141 @@
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_sampling_date"
+                android:id="@+id/lab_is_continue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:padding="@dimen/material_component_cards_left_and_right_padding"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:paddingTop="@dimen/material_component_bottom_sheet_edge_left_right_margins"
+                android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
 
                 <TextView
-                    android:id="@+id/tv_sampling_date_title"
+                    android:id="@+id/lab_is_continue_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/item_left_margin"
-                    android:text="@string/sampling_date"
+                    android:text="是否进行实验室检查？"
                     android:textColor="@color/primary_text"
                     android:textSize="@dimen/material_typography_subheading"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_sampling_date"
+                    app:layout_constraintTop_toTopOf="parent"/>
+                <Switch
+                    android:id="@+id/lab_switch_is_continue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/item_left_margin"
-                    android:text="@string/input_visit_time"
+                    android:layout_marginEnd="16dp"
+                    android:showText="true"
+                    android:textColor="@color/secondary_text"
+                    android:textOff="@string/not"
+                    android:textOn="@string/yes"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.375" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/material_component_cards_left_and_right_padding"
-                android:layout_marginTop="@dimen/material_component_bottom_sheet_edge_top_bottom_margins"
-                android:text="@string/blood_routine"
-                android:textColor="@color/primary_text"
-                android:textSize="@dimen/material_typography_title" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_blood_routine"
+            <LinearLayout
+                android:id="@+id/lab_is_continue_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/material_component_cards_left_and_right_padding"
-                android:layout_marginTop="@dimen/material_component_bottom_sheet_edge_top_bottom_margins"
-                android:text="@string/urine_routine"
-                android:textColor="@color/primary_text"
-                android:textSize="@dimen/material_typography_title" />
+                android:orientation="vertical">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_urine_routine"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_sampling_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:padding="@dimen/material_component_cards_left_and_right_padding"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/material_component_cards_left_and_right_padding"
-                android:layout_marginTop="@dimen/material_component_bottom_sheet_edge_top_bottom_margins"
-                android:text="@string/blood_biochemistry"
-                android:textColor="@color/primary_text"
-                android:textSize="@dimen/material_typography_title" />
+                    <TextView
+                        android:id="@+id/tv_sampling_date_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/item_left_margin"
+                        android:text="@string/sampling_date"
+                        android:textColor="@color/primary_text"
+                        android:textSize="@dimen/material_typography_subheading"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_blood_biochemistry"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/tv_sampling_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/item_left_margin"
+                        android:text="@string/input_visit_time"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/material_component_cards_left_and_right_padding"
-                android:layout_marginTop="@dimen/material_component_bottom_sheet_edge_top_bottom_margins"
-                android:text="@string/tumor_marker"
-                android:textColor="@color/primary_text"
-                android:textSize="@dimen/material_typography_title" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_tumor_marker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/material_component_cards_left_and_right_padding"
+                    android:layout_marginTop="@dimen/material_component_bottom_sheet_edge_top_bottom_margins"
+                    android:text="@string/blood_routine"
+                    android:textColor="@color/primary_text"
+                    android:textSize="@dimen/material_typography_title" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_blood_routine"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/material_component_cards_left_and_right_padding"
+                    android:layout_marginTop="@dimen/material_component_bottom_sheet_edge_top_bottom_margins"
+                    android:text="@string/urine_routine"
+                    android:textColor="@color/primary_text"
+                    android:textSize="@dimen/material_typography_title" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_urine_routine"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/material_component_cards_left_and_right_padding"
+                    android:layout_marginTop="@dimen/material_component_bottom_sheet_edge_top_bottom_margins"
+                    android:text="@string/blood_biochemistry"
+                    android:textColor="@color/primary_text"
+                    android:textSize="@dimen/material_typography_title" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_blood_biochemistry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/material_component_cards_left_and_right_padding"
+                    android:layout_marginTop="@dimen/material_component_bottom_sheet_edge_top_bottom_margins"
+                    android:text="@string/tumor_marker"
+                    android:textColor="@color/primary_text"
+                    android:textSize="@dimen/material_typography_title" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_tumor_marker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
 
         </LinearLayout>
 

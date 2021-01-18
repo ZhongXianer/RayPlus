@@ -28,7 +28,7 @@ fun asCheckboxList(
     )
 }
 
-fun showDatePickerDialog(textView: TextView, fragmentManager: FragmentManager){
+fun showDatePickerDialog(textView: TextView, fragmentManager: FragmentManager) {
     ToastUtils.showShort("点击左上方年份数字，可以快速选择年份")
     val now = Calendar.getInstance()
     var date: String
@@ -71,7 +71,7 @@ fun getSampleSubmitStatus() = arrayOf("未提交", "部分提交", "已提交", 
 fun getResearchCenterList() =
     arrayOf("同济医院", "襄阳市第一人民医院", "襄阳市中医医院", "孝感市中心医院", "荆州中心医院", "宜昌市中心医院", "恩施州中心医院", "十堰市太和医院")
 
-fun getPatientGroupList() = arrayOf("安罗替尼", "安罗替尼+TKI", "安罗替尼+化疗", "安罗替尼+免疫", "其他")
+fun getPatientGroupList() = arrayOf("1-安罗替尼", "2-安罗替尼+TKI", "3-安罗替尼+化疗", "4-安罗替尼+免疫", "5-其他")
 
 fun getSexList() = arrayOf("男", "女")
 
@@ -128,7 +128,7 @@ fun getGeneMutationType() = arrayOf(
 )
 
 fun getTransferSite() =
-    arrayOf("无", "对侧肺门淋巴结", "锁骨上淋巴结肺内", "肺内", "脑", "脊柱骨", "四肢骨", "肝", "肾上腺", "其他")
+    arrayOf("无", "对侧肺门淋巴结", "锁骨上淋巴结肺内", "肺内", "脑", "脊柱骨", "四肢骨", "肝", "肾上腺", "其他骨", "其他")
 
 fun getLastFrontPart() =
     arrayOf("原发灶", "对侧肺门淋巴结", "锁骨上淋巴结肺内", "肺内", "脑", "脊柱骨", "四肢骨", "肝", "肾上腺", "其他")
@@ -151,6 +151,14 @@ fun getDiagnoseExistence() = arrayOf("无", "不详", "有，请填下表")
 fun getBiopsyType() = arrayOf("无", "与第1次活检病理类型一致")
 
 fun getTMB() = arrayOf("未测", "不详")
+
+fun getExistence()= arrayOf("症状消失","缓解","持续","加重","恢复伴后遗症","死亡")
+
+fun getToxicityClassification()= arrayOf("1级","1级","3级","4级","5级")
+
+fun getMedicineRelation()= arrayOf("肯定有关","很可能有关","可能有关","可能无关","肯定无关")
+
+fun getMeasure()= arrayOf("剂量不变","减少剂量","暂停用药","停止用药","实验用药已结束")
 
 fun getImagingEvaluationWayListInHistory() = arrayOf("CT", "MRI", "超声", "X线平片", "PET-CT")
 
@@ -196,7 +204,7 @@ fun getDrinkingFrequency() = arrayOf("几乎不", "每周1-2次", "每周3-4次"
 fun getDrinkingSize() = arrayOf("每次少量", "每周微醉", "偶尔大醉", "每次大醉")
 
 
-fun getRelays()= arrayOf(
+fun getRelays() = arrayOf(
     "一直按照要求服药",
     "偶尔不按照要求服药",
     "经常不按照要求服药",

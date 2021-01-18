@@ -38,19 +38,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-        <TextView
-            android:id="@+id/tv_exist_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="存在状态：存在"
-            android:textColor="@color/primary_text"
-            android:textSize="@dimen/material_typography_body1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.714"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/tv_start_date"
             android:layout_width="wrap_content"
@@ -69,9 +56,21 @@
             android:text="结束日期：2019-11-26"
             android:textColor="@color/primary_text"
             android:layout_marginTop="6dp"
+            android:layout_marginStart="20dp"
             android:textSize="@dimen/material_typography_body1"
-            app:layout_constraintStart_toStartOf="@+id/tv_exist_status"
-            app:layout_constraintTop_toBottomOf="@+id/tv_exist_status" />
+            app:layout_constraintStart_toEndOf="@id/tv_start_date"
+            app:layout_constraintTop_toBottomOf="@+id/tv_physical_sign" />
+
+        <TextView
+            android:id="@+id/tv_existence_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="转归："
+            android:textColor="@color/primary_text"
+            android:layout_marginTop="6dp"
+            android:textSize="@dimen/material_typography_body1"
+            app:layout_constraintTop_toBottomOf="@id/tv_start_date"
+            app:layout_constraintStart_toStartOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

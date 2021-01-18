@@ -9,6 +9,8 @@ data class LabInspectionResponseBean(
     val data: Data?
 ) {
     data class Data(
+        @SerializedName("is_continue")
+        val isContinue:Int,
         @SerializedName("ALB_rank")
         val aLBRank: Int?, // 2
         @SerializedName("ALB_val")

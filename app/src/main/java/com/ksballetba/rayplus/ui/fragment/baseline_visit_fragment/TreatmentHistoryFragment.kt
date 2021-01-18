@@ -96,11 +96,6 @@ class TreatmentHistoryFragment : Fragment() {
             mAdapter.setNewData(mList)
 
         })
-//        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
-//            if(it.status == Status.FAILED){
-//                ToastUtils.showShort(it.msg)
-//            }
-//        })
     }
 
 

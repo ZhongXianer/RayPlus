@@ -100,11 +100,15 @@ class MainPhysicalSignFragment : Fragment() {
             val mainPhysicalSignBody =
                 MainPhysicalSignBodyBean(
                     mainPhysicalSign.endTime,
-                    if (mainPhysicalSign.existence == 0) "0" else "1",
+                    mainPhysicalSign.existence,
+                    mainPhysicalSign.isUsingMedicine,
                     mainPhysicalSign.mainSymptomId,
+                    mainPhysicalSign.measure,
+                    mainPhysicalSign.medicineRelation,
                     mainPhysicalSign.startTime,
                     mainPhysicalSign.symptomDescription,
-                    mainPhysicalSign.symptomDescription
+                    mainPhysicalSign.symptomDescriptionOther,
+                    mainPhysicalSign.toxicityClassification
                 )
             navigateToMainPhysicalSignEditPage(
                 mSampleId,

@@ -9,6 +9,8 @@ data class FirstVisitProcessResponseBean(
     val msg: String
 ) {
     data class Data(
+        @SerializedName("is_gene")
+        val isGene: Int,
         @SerializedName("biopsy_method")
         val biopsyMethod: String?, // 其他
         @SerializedName("biopsy_method_other")
@@ -80,8 +82,10 @@ data class FirstVisitProcessResponseBean(
         val tmb: String?, // 其他
         @SerializedName("tmb_other")
         val tmbOther: String, // 100
+        @SerializedName("transfer_site[其他骨]")
+        val transferSite9: String,
         @SerializedName("transfer_site[其他]")
-        val transferSite9: String, // on
+        val transferSite10: String, // on
         @SerializedName("transfer_site[其他]_other")
         val transferSiteOther: String?, // 其他部位
         @SerializedName("transfer_site[四肢骨]")

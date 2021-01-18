@@ -7,35 +7,50 @@ import com.google.gson.annotations.SerializedName
 
 data class MainPhysicalSignBodyBean(
     @SerializedName("end_time")
-    val endTime: String?, // 2019-12-17
-    val existence: String, // 1
+    val endTime: String?,
+    val existence: Int?,
+    @SerializedName("is_using_medicine")
+    val isUsingMedicine: Int?,
     @SerializedName("main_symptom_id")
     val mainSymptomId: Int?,
+    val measure: Int?,
+    @SerializedName("medicine_relation")
+    val medicineRelation: Int?,
     @SerializedName("start_time")
-    val startTime: String?, // 2019-12-11
+    val startTime: String?,
     @SerializedName("symptom_description")
-    val symptomDescription: String?, // 其他
+    val symptomDescription: String?,
     @SerializedName("symptom_description_other")
-    val symptomDescriptionOther: String? // 爆炸
+    val symptomDescriptionOther: String?,
+    @SerializedName("toxicity_classification")
+    val toxicityClassification: Int?
 ) : Parcelable {
     constructor(source: Parcel) : this(
         source.readString(),
-        source.readString(),
+        source.readValue(Int::class.java.classLoader) as Int?,
+        source.readValue(Int::class.java.classLoader) as Int?,
+        source.readValue(Int::class.java.classLoader) as Int?,
+        source.readValue(Int::class.java.classLoader) as Int?,
         source.readValue(Int::class.java.classLoader) as Int?,
         source.readString(),
         source.readString(),
-        source.readString()
+        source.readString(),
+        source.readValue(Int::class.java.classLoader) as Int?
     )
 
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
         writeString(endTime)
-        writeString(existence)
+        writeValue(existence)
+        writeValue(isUsingMedicine)
         writeValue(mainSymptomId)
+        writeValue(measure)
+        writeValue(medicineRelation)
         writeString(startTime)
         writeString(symptomDescription)
         writeString(symptomDescriptionOther)
+        writeValue(toxicityClassification)
     }
 
     companion object {

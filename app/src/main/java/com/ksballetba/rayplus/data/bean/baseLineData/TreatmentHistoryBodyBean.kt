@@ -4,6 +4,10 @@ package com.ksballetba.rayplus.data.bean.baseLineData
 import com.google.gson.annotations.SerializedName
 
 data class TreatmentHistoryBodyBean(
+    @SerializedName("is_change")
+    val isChange:Int?,
+    @SerializedName("is_gene")
+    val isGene: Int?,
     @SerializedName("biopsy_method")
     val biopsyMethod: String?, // 其他
     @SerializedName("biopsy_method_other")

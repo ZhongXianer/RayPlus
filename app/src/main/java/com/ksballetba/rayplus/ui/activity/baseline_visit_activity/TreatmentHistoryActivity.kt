@@ -3,10 +3,11 @@ package com.ksballetba.rayplus.ui.activity.baseline_visit_activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import androidx.core.text.isDigitsOnly
 import com.apkfuns.logutils.LogUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.ksballetba.rayplus.R
 import com.ksballetba.rayplus.data.bean.BaseCheckBean
 import com.ksballetba.rayplus.data.bean.baseLineData.TreatmentHistoryBodyBean
@@ -19,7 +20,6 @@ import com.ksballetba.rayplus.viewmodel.BaselineVisitViewModel
 import com.lxj.xpopup.XPopup
 import kotlinx.android.synthetic.main.activity_treatment_history.*
 import org.jetbrains.anko.toast
-import kotlin.math.log
 
 class TreatmentHistoryActivity : AppCompatActivity() {
 
@@ -76,6 +76,20 @@ class TreatmentHistoryActivity : AppCompatActivity() {
             ll_treatment_history_detail.visibility = View.GONE
             initEmptyLastFrontPart()
             initEmptyGeneMutationType()
+        }
+        th_switch_is_genetic.setOnCheckedChangeListener { _, isChecked ->
+            th_switch_is_genetic.setSwitchTextAppearance(
+                this,
+                if (isChecked) R.style.s_on else R.style.s_off
+            )
+            th_genetic_view.visibility = if (isChecked) View.VISIBLE else View.GONE
+        }
+        th_switch_is_change.setOnCheckedChangeListener { _, isChecked ->
+            th_switch_is_change.setSwitchTextAppearance(
+                this,
+                if (isChecked) R.style.s_on else R.style.s_off
+            )
+            th_is_change_view.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
         cl_treatment_line.setOnClickListener {
             XPopup.Builder(this).asCenterList("几线治疗", getDiagnoseNumber()) { pos, text ->
@@ -139,7 +153,11 @@ class TreatmentHistoryActivity : AppCompatActivity() {
             }.show()
         }
         cl_last_treatment_growth_date.setOnClickListener {
-            showDatePickerDialog(tv_last_treatment_growth_date, supportFragmentManager)
+            XPopup.Builder(this).asInputConfirm("治疗开始时间", "请输入时间，格式YYYY-MM-DD、YYYY-MM、YYYY") {
+                if (checkDate(it))
+                    tv_last_treatment_growth_date.text = it
+                else ToastUtils.showShort("请重新输入！")
+            }.show()
         }
         cl_last_treatment_growth_part.setOnClickListener {
             val transferSite = StringBuffer()
@@ -286,7 +304,10 @@ class TreatmentHistoryActivity : AppCompatActivity() {
                 }.show()
         }
         cl_treatment_date.setOnClickListener {
-            showDatePickerDialog(tv_treatment_date, supportFragmentManager)
+            XPopup.Builder(this).asInputConfirm("一线治疗开始时间", "请输入时间，格式YYYY-MM-DD、YYYY-MM、YYYY") {
+                if (checkDate(it)) tv_treatment_date.text = it
+                else ToastUtils.showShort("请重新输入！")
+            }.show()
         }
         cl_operation.setOnClickListener {
             cb_operation.isChecked = !cb_operation.isChecked
@@ -534,8 +555,12 @@ class TreatmentHistoryActivity : AppCompatActivity() {
             diagnoseMethodtargetedtherapy,
             diagnoseMethodtargetedtherapyOther
         )
+        val isChange = if (th_switch_is_change.isChecked) 1 else 0
+        val isGene = if (th_switch_is_genetic.isChecked) 1 else 0
         val treatmentHistoryBodyBean =
             TreatmentHistoryBodyBean(
+                isChange,
+                isGene,
                 biopsyMethod,
                 biopsyMethodOther,
                 biopsyType,
@@ -616,6 +641,11 @@ class TreatmentHistoryActivity : AppCompatActivity() {
                 }
             }
         }
+        th_switch_is_change.isChecked = bean.isChange == 1
+        th_is_change_view.visibility =
+            if (th_switch_is_change.isChecked) View.VISIBLE else View.GONE
+        th_switch_is_genetic.isChecked = bean.isGene == 1
+        th_genetic_view.visibility = if (th_switch_is_genetic.isChecked) View.VISIBLE else View.GONE
         if (bean.diagnoseExistence != null) {
             if (bean.diagnoseExistence == -1) ll_treatment_detail.visibility = View.GONE
             else {
@@ -691,7 +721,7 @@ class TreatmentHistoryActivity : AppCompatActivity() {
                 lastFrontPartText.append("${it.name},")
             }
         }
-        mOtherLastFrontPart = bean.lastFrontPartOther
+        mOtherLastFrontPart = bean.lastFrontPartOther ?: ""
         if (lastFrontPartText.isNotEmpty() && !mLastFrontPartList[9].isChecked) {
             lastFrontPartText.deleteCharAt(lastFrontPartText.length - 1)
         } else {
@@ -893,5 +923,25 @@ class TreatmentHistoryActivity : AppCompatActivity() {
                 false
             )
         )
+    }
+
+    private fun checkDate(date: String): Boolean {
+        val str = date.split('-')
+        when (str.size) {
+            0 -> {
+                return false
+            }
+            1 -> return str[0].length == 4 && str[0].isDigitsOnly()
+            2 -> {
+                return str[0].length == 4 && str[1].length == 2 && str[0].isDigitsOnly()
+                        && str[1].isDigitsOnly() && str[1].toInt() <= 12
+            }
+            3 -> {
+                return str[0].length == 4 && str[1].length == 2 && str[2].length == 2
+                        && str[0].isDigitsOnly() && str[1].isDigitsOnly() && str[2].isDigitsOnly()
+                        && str[1].toInt() <= 12 && str[2].toInt() <= 31
+            }
+        }
+        return false
     }
 }

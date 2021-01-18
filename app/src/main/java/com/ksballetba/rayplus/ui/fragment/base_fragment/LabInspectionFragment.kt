@@ -66,6 +66,13 @@ class LabInspectionFragment : Fragment() {
     }
 
     private fun initUI() {
+        lab_switch_is_continue.setOnCheckedChangeListener { _, isChecked ->
+            lab_switch_is_continue.setSwitchTextAppearance(
+                context,
+                if (isChecked) R.style.s_on else R.style.s_off
+            )
+            lab_is_continue_view.visibility = if (isChecked) View.VISIBLE else View.GONE
+        }
         cl_sampling_date.setOnClickListener {
             showDatePickerDialog(tv_sampling_date, parentFragmentManager)
         }
@@ -82,6 +89,9 @@ class LabInspectionFragment : Fragment() {
 
     private fun loadData() {
         mViewModel.getLabInspection(mSampleId, mCycleNumber).observe(viewLifecycleOwner, Observer {
+            lab_switch_is_continue.isChecked = it.data?.isContinue == 1
+            lab_is_continue_view.visibility =
+                if (lab_switch_is_continue.isChecked) View.VISIBLE else View.GONE
             tv_sampling_date.text = it.data?.time ?: ""
             (mBloodRoutineAdapter.getViewByPosition(0, R.id.tv_lab_inspection) as TextView).text =
                 "${it.data?.hbVal ?: ""}"
@@ -128,9 +138,16 @@ class LabInspectionFragment : Fragment() {
             if (it.data?.pROVal == null) (mUrineRoutineAdapter.getViewByPosition(
                 2,
                 R.id.tv_lab_inspection
-            ) as TextView).text=""
-            else (mUrineRoutineAdapter.getViewByPosition(2, R.id.tv_lab_inspection) as TextView).text =
-                if (it.data.pROVal == 1.0f) "+" else "-"
+            ) as TextView).text = ""
+            else (mUrineRoutineAdapter.getViewByPosition(
+                2,
+                R.id.tv_lab_inspection
+            ) as TextView).text =
+                when (it.data.pROVal) {
+                    1.0f -> "+"
+                    2.0f -> "-"
+                    else -> "±"
+                }
             (mUrineRoutineAdapter.getViewByPosition(
                 2,
                 R.id.ns_lab_inspection
@@ -258,6 +275,7 @@ class LabInspectionFragment : Fragment() {
     }
 
     private fun saveData() {
+        val isContinue = if (lab_switch_is_continue.isChecked) 1 else 0
         val time = parseDefaultContent(tv_sampling_date.text.toString());
         val hbVal = (mBloodRoutineAdapter.getViewByPosition(
             0,
@@ -329,11 +347,19 @@ class LabInspectionFragment : Fragment() {
                 R.id.ns_lab_inspection
             ) as NiceSpinner).selectedIndex
         )
-        val pROVal = if ((mUrineRoutineAdapter.getViewByPosition(
+        val pROVal: Float = if ((mUrineRoutineAdapter.getViewByPosition(
                 2,
                 R.id.tv_lab_inspection
             ) as TextView).text == "+"
-        ) 1f else 2f
+        )
+            1f
+        else if ((mUrineRoutineAdapter.getViewByPosition(
+                2,
+                R.id.tv_lab_inspection
+            ) as TextView).text == "-"
+        )
+            2f
+        else 3f
         val pRORank = parseLabInspectionRank(
             (mUrineRoutineAdapter.getViewByPosition(
                 2,
@@ -491,6 +517,7 @@ class LabInspectionFragment : Fragment() {
             ) as NiceSpinner).selectedIndex
         )
         val labInspectionBodyBean = LabInspectionBodyBean(
+            isContinue,
             aLBRank,
             aLBVal,
             aLTRank,
@@ -617,7 +644,7 @@ class LabInspectionFragment : Fragment() {
                     view.findViewById<TextView>(R.id.tv_lab_inspection).text = it
                 }.show()
             } else {
-                XPopup.Builder(context).asCenterList("尿蛋白", arrayOf("+", "-")) { _, text ->
+                XPopup.Builder(context).asCenterList("尿蛋白", arrayOf("+", "-", "±")) { _, text ->
                     view.findViewById<TextView>(R.id.tv_lab_inspection).text = text
                 }.show()
             }

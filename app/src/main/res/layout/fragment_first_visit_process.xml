@@ -190,7 +190,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_genetic_test_sample"
+                android:id="@+id/fv_is_genetic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -200,200 +200,245 @@
                 android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
 
                 <TextView
-                    android:id="@+id/tv_genetic_test_sample_title"
+                    android:id="@+id/fv_is_genetic_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/item_left_margin"
-                    android:text="@string/genetic_test_sample"
+                    android:text="是否进行基因检测？"
                     android:textColor="@color/primary_text"
                     android:textSize="@dimen/material_typography_subheading"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_genetic_test_sample"
+                    app:layout_constraintTop_toTopOf="parent"/>
+                <Switch
+                    android:id="@+id/fv_switch_is_genetic"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/item_left_margin"
-                    android:text="@string/input_visit_time"
+                    android:layout_marginEnd="16dp"
+                    android:showText="true"
+                    android:textColor="@color/secondary_text"
+                    android:textOff="@string/not"
+                    android:textOn="@string/yes"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.375" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_genetic_test_way"
+            <LinearLayout
+                android:id="@+id/fv_genetic_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
-                android:paddingTop="@dimen/material_component_bottom_sheet_edge_left_right_margins"
-                android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
-
-                <TextView
-                    android:id="@+id/tv_genetic_test_way_title"
-                    android:layout_width="wrap_content"
+                android:orientation="vertical">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_genetic_test_sample"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/item_left_margin"
-                    android:text="@string/genetic_test_way"
-                    android:textColor="@color/primary_text"
-                    android:textSize="@dimen/material_typography_subheading"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:paddingTop="@dimen/material_component_bottom_sheet_edge_left_right_margins"
+                    android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
 
-                <TextView
-                    android:id="@+id/tv_genetic_test_way"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/tv_genetic_test_sample_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/item_left_margin"
+                        android:text="@string/genetic_test_sample"
+                        android:textColor="@color/primary_text"
+                        android:textSize="@dimen/material_typography_subheading"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_genetic_test_sample"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/item_left_margin"
+                        android:text="@string/input_visit_time"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_genetic_test_way"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/item_left_margin"
-                    android:text="@string/input_visit_time"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:paddingTop="@dimen/material_component_bottom_sheet_edge_left_right_margins"
+                    android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/tv_genetic_test_way_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/item_left_margin"
+                        android:text="@string/genetic_test_way"
+                        android:textColor="@color/primary_text"
+                        android:textSize="@dimen/material_typography_subheading"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_genetic_mutation_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
-                android:paddingTop="@dimen/material_component_bottom_sheet_edge_left_right_margins"
-                android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                    <TextView
+                        android:id="@+id/tv_genetic_test_way"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/item_left_margin"
+                        android:text="@string/input_visit_time"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/tv_genetic_mutation_type_title"
-                    android:layout_width="wrap_content"
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_genetic_mutation_type"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/item_left_margin"
-                    android:text="@string/genetic_mutation_type"
-                    android:textColor="@color/primary_text"
-                    android:textSize="@dimen/material_typography_subheading"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:paddingTop="@dimen/material_component_bottom_sheet_edge_left_right_margins"
+                    android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
 
-                <TextView
-                    android:id="@+id/tv_genetic_mutation_type"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/tv_genetic_mutation_type_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/item_left_margin"
+                        android:text="@string/genetic_mutation_type"
+                        android:textColor="@color/primary_text"
+                        android:textSize="@dimen/material_typography_subheading"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_genetic_mutation_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/item_left_margin"
+                        android:ellipsize="end"
+                        android:maxEms="8"
+                        android:text="@string/input_visit_time"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_PD_L1_expression"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/item_left_margin"
-                    android:ellipsize="end"
-                    android:maxEms="8"
-                    android:text="@string/input_visit_time"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:paddingTop="@dimen/material_component_bottom_sheet_edge_left_right_margins"
+                    android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/tv_PD_L1_expression_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/item_left_margin"
+                        android:text="@string/PD_L1_expression"
+                        android:textColor="@color/primary_text"
+                        android:textSize="@dimen/material_typography_subheading"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_PD_L1_expression"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
-                android:paddingTop="@dimen/material_component_bottom_sheet_edge_left_right_margins"
-                android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                    <TextView
+                        android:id="@+id/tv_PD_L1_expression"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/item_left_margin"
+                        android:text="@string/input_visit_time"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/tv_PD_L1_expression_title"
-                    android:layout_width="wrap_content"
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_tumor_mutation_load"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/item_left_margin"
-                    android:text="@string/PD_L1_expression"
-                    android:textColor="@color/primary_text"
-                    android:textSize="@dimen/material_typography_subheading"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:paddingTop="@dimen/material_component_bottom_sheet_edge_left_right_margins"
+                    android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
 
-                <TextView
-                    android:id="@+id/tv_PD_L1_expression"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/tv_tumor_mutation_load_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/item_left_margin"
+                        android:text="@string/tumor_mutation_load"
+                        android:textColor="@color/primary_text"
+                        android:textSize="@dimen/material_typography_subheading"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_tumor_mutation_load"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/item_left_margin"
+                        android:text="@string/input_visit_time"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_microsatellite_instability"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/item_left_margin"
-                    android:text="@string/input_visit_time"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:paddingTop="@dimen/material_component_bottom_sheet_edge_left_right_margins"
+                    android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/tv_microsatellite_instability_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/item_left_margin"
+                        android:text="@string/microsatellite_instability"
+                        android:textColor="@color/primary_text"
+                        android:textSize="@dimen/material_typography_subheading"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_tumor_mutation_load"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
-                android:paddingTop="@dimen/material_component_bottom_sheet_edge_left_right_margins"
-                android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
+                    <TextView
+                        android:id="@+id/tv_microsatellite_instability"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/item_left_margin"
+                        android:text="@string/input_visit_time"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/tv_tumor_mutation_load_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/item_left_margin"
-                    android:text="@string/tumor_mutation_load"
-                    android:textColor="@color/primary_text"
-                    android:textSize="@dimen/material_typography_subheading"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/tv_tumor_mutation_load"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/item_left_margin"
-                    android:text="@string/input_visit_time"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            </LinearLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_microsatellite_instability"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
-                android:paddingTop="@dimen/material_component_bottom_sheet_edge_left_right_margins"
-                android:paddingBottom="@dimen/material_component_bottom_sheet_edge_left_right_margins">
-
-                <TextView
-                    android:id="@+id/tv_microsatellite_instability_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/item_left_margin"
-                    android:text="@string/microsatellite_instability"
-                    android:textColor="@color/primary_text"
-                    android:textSize="@dimen/material_typography_subheading"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_microsatellite_instability"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/item_left_margin"
-                    android:text="@string/input_visit_time"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
 

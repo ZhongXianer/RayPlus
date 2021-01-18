@@ -18,7 +18,6 @@ import com.ksballetba.rayplus.ui.activity.SampleActivity.Companion.SAMPLE_ID
 import com.ksballetba.rayplus.util.*
 import com.ksballetba.rayplus.viewmodel.BaselineVisitViewModel
 import com.lxj.xpopup.XPopup
-import kotlinx.android.synthetic.main.activity_treatment_history.*
 import kotlinx.android.synthetic.main.fragment_first_visit_process.*
 import kotlinx.android.synthetic.main.fragment_first_visit_process.cl_PD_L1_expression
 import kotlinx.android.synthetic.main.fragment_first_visit_process.cl_biopsy_way
@@ -96,6 +95,8 @@ class FirstVisitProcessFragment : Fragment() {
             if (it.data.tumorPathologicalType != null)
                 tv_tumor_type.text =
                     if (it.data.tumorPathologicalType == "混合型癌") it.data.tumorPathologicalTypeOther else it.data.tumorPathologicalType
+            fv_switch_is_genetic.isChecked = it.data.isGene == 1
+            fv_genetic_view.visibility = if (fv_switch_is_genetic.isChecked) View.VISIBLE else View.GONE
             if (it.data.geneticTestingSpecimen != null)
                 tv_genetic_test_sample.text =
                     if (it.data.geneticTestingSpecimen == "转移灶组织") it.data.geneticTestingSpecimenOther else it.data.geneticTestingSpecimen
@@ -177,6 +178,7 @@ class FirstVisitProcessFragment : Fragment() {
             null,
             null,
             null,
+            null,
             null
         )
         if (mTransferSiteList.size != 0) {
@@ -190,9 +192,11 @@ class FirstVisitProcessFragment : Fragment() {
             val transferSite7 = if (mTransferSiteList[7].isChecked) "on" else null
             val transferSite8 = if (mTransferSiteList[8].isChecked) "on" else null
             val transferSite9 = if (mTransferSiteList[9].isChecked) "on" else null
+            val transferSite10 = if (mTransferSiteList[10].isChecked) "on" else null
             val transferSiteOther = mOtherTransferSite
             transferSite = FirstVisitProcessBodyBean.TransferSite(
                 transferSite9,
+                transferSite10,
                 transferSiteOther,
                 transferSite6,
                 transferSite1,
@@ -234,6 +238,7 @@ class FirstVisitProcessFragment : Fragment() {
             tumorPathologicalTypeOther =
                 mFirstVisitProcessResponseBean.data.tumorPathologicalTypeOther
         }
+        val isGene = if (fv_switch_is_genetic.isChecked) 1 else 0
         var geneticTestingSpecimen: String?
         var geneticTestingSpecimenOther: String?
         if (geneticTestingSpecimenIsSet) {
@@ -327,6 +332,7 @@ class FirstVisitProcessFragment : Fragment() {
         val msi = if (msiStr.isEmpty()) null else getMSI().indexOf(msiStr)
         val firstVisitProcessBodyBean =
             FirstVisitProcessBodyBean(
+                isGene,
                 biopsyMethod,
                 biopsyMethodOther,
                 clinicalSymptoms,
@@ -545,6 +551,12 @@ class FirstVisitProcessFragment : Fragment() {
         mTransferSiteList.add(BaseCheckBean(getTransferSite()[7], bean.data.transferSite7 == "on"))
         mTransferSiteList.add(BaseCheckBean(getTransferSite()[8], bean.data.transferSite8 == "on"))
         mTransferSiteList.add(BaseCheckBean(getTransferSite()[9], bean.data.transferSite9 == "on"))
+        mTransferSiteList.add(
+            BaseCheckBean(
+                getTransferSite()[10],
+                bean.data.transferSite10 == "on"
+            )
+        )
         val transferSiteText = StringBuffer()
         mTransferSiteList.forEach {
             if (it.isChecked && it.name != "其他") {
@@ -554,7 +566,7 @@ class FirstVisitProcessFragment : Fragment() {
         if (bean.data.transferSiteOther != null) {
             mOtherTransferSite = bean.data.transferSiteOther
         }
-        if (transferSiteText.isNotEmpty() && !mTransferSiteList[9].isChecked) {
+        if (transferSiteText.isNotEmpty() && !mTransferSiteList[10].isChecked) {
             transferSiteText.deleteCharAt(transferSiteText.length - 1)
         } else {
             transferSiteText.append(mOtherTransferSite)
@@ -723,6 +735,7 @@ class FirstVisitProcessFragment : Fragment() {
         mTransferSiteList.add(BaseCheckBean(getTransferSite()[7], false))
         mTransferSiteList.add(BaseCheckBean(getTransferSite()[8], false))
         mTransferSiteList.add(BaseCheckBean(getTransferSite()[9], false))
+        mTransferSiteList.add(BaseCheckBean(getTransferSite()[10], false))
     }
 
     private fun initUI() {
@@ -804,6 +817,13 @@ class FirstVisitProcessFragment : Fragment() {
                     }.show()
                 }
             }.show()
+        }
+        fv_switch_is_genetic.setOnCheckedChangeListener { _, isChecked ->
+            fv_switch_is_genetic.setSwitchTextAppearance(
+                context,
+                if (isChecked) R.style.s_on else R.style.s_off
+            )
+            fv_genetic_view.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
         cl_genetic_test_sample.setOnClickListener {
             XPopup.Builder(context)

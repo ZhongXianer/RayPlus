@@ -60,7 +60,7 @@ class ProjectSummaryDetailFragment : Fragment() {
                 if (it.data.isStop == 1) tv_is_stop_treat.text = "是"
                 else tv_is_stop_treat.text = "否"
             }
-            if (it.data?.relay != null)
+            if (it.data?.relay != null && it.data.relay.toInt() != 0)
                 tv_clinic_terminal.text = getRelays()[it.data.relay.toInt() - 1]
             else tv_clinic_terminal.text = "请设置"
             tv_last_take_medicine_date.text = it.data?.lastTimeDrug ?: "请设置"
@@ -69,16 +69,11 @@ class ProjectSummaryDetailFragment : Fragment() {
             if (it.data?.reasonStopDrug == null) tv_stop_treat_cause.text = "请设置"
             else tv_stop_treat_cause.text =
                 if (it.data.reasonStopDrug < 7) getReasonStopDrug()[it.data.reasonStopDrug] else it.data.otherReasons
-            tv_curative_effect_summary_pfs.text = it.data?.pFS ?: "请设置"
-            tv_curative_effect_summary_os.text = it.data?.oS ?: "请设置"
+            tv_curative_effect_summary_pfs.text = it.data?.pFS ?: ""
+            tv_curative_effect_summary_os.text = it.data?.oS ?: ""
             if (it.data?.bestEffect == null) tv_best_treat.text = "请设置"
             else tv_best_treat.text = getBestEffect()[it.data.bestEffect]
         })
-//        mViewModel.getLoadStatus().observe(viewLifecycleOwner, Observer {
-//            if(it.status == Status.FAILED){
-//                ToastUtils.showShort(it.msg)
-//            }
-//        })
     }
 
     private fun saveData() {
@@ -101,8 +96,8 @@ class ProjectSummaryDetailFragment : Fragment() {
                 reasonStopDrug = 7
             }
         } else reasonStopDrug = mReasonStopDrug
-        val pFS = parseDefaultContent(tv_curative_effect_summary_pfs.text.toString())
-        val oS = parseDefaultContent(tv_curative_effect_summary_os.text.toString())
+        val pFS = null
+        val oS = null
         val bestEffectStr = parseDefaultContent(tv_best_treat.text.toString())
         val bestEffect =
             if (bestEffectStr.isEmpty()) null else getBestEffect().indexOf(bestEffectStr)
@@ -185,24 +180,6 @@ class ProjectSummaryDetailFragment : Fragment() {
                                 tv_stop_treat_cause.text = it
                             }.show()
                     }
-                }.show()
-        }
-        cl_curative_effect_summary_pfs.setOnClickListener {
-            XPopup.Builder(context)
-                .asInputConfirm(
-                    getString(R.string.curative_effect_summary_pfs),
-                    "请输入${getString(R.string.curative_effect_summary_pfs)}"
-                ) {
-                    tv_curative_effect_summary_pfs.text = it
-                }.show()
-        }
-        cl_curative_effect_summary_os.setOnClickListener {
-            XPopup.Builder(context)
-                .asInputConfirm(
-                    getString(R.string.curative_effect_summary_os),
-                    "请输入${getString(R.string.curative_effect_summary_os)}"
-                ) {
-                    tv_curative_effect_summary_os.text = it
                 }.show()
         }
         cl_best_treat.setOnClickListener {

@@ -12,6 +12,10 @@ data class TreatmentHistoryListBean(
     val msg: String
 ) {
     data class Data(
+        @SerializedName("is_change")
+        val isChange: Int?,
+        @SerializedName("is_gene")
+        val isGene: Int?,
         @SerializedName("biopsy_method")
         val biopsyMethod: String?, // 其他
         @SerializedName("biopsy_method_other")
@@ -125,6 +129,8 @@ data class TreatmentHistoryListBean(
         val id: Int
     ) : Parcelable {
         constructor(source: Parcel) : this(
+            source.readValue(Int::class.java.classLoader) as Int?,
+            source.readValue(Int::class.java.classLoader) as Int?,
             source.readString(),
             source.readString(),
             source.readString(),
@@ -187,6 +193,8 @@ data class TreatmentHistoryListBean(
         override fun describeContents() = 0
 
         override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+            writeValue(isChange)
+            writeValue(isGene)
             writeString(biopsyMethod)
             writeString(biopsyMethodOther)
             writeString(biopsyType)
@@ -249,11 +257,7 @@ data class TreatmentHistoryListBean(
         companion object {
             @JvmField
             val CREATOR: Parcelable.Creator<Data> = object : Parcelable.Creator<Data> {
-                override fun createFromParcel(source: Parcel): Data =
-                    Data(
-                        source
-                    )
-
+                override fun createFromParcel(source: Parcel): Data = Data(source)
                 override fun newArray(size: Int): Array<Data?> = arrayOfNulls(size)
             }
         }
