@@ -72,6 +72,9 @@ class ImagingEvaluationFragment : Fragment() {
         judge_evaluation_switch.setOnCheckedChangeListener { _, isChecked ->
             rv_imaging_evaluation.visibility = if (isChecked) View.VISIBLE else View.GONE
             fab_imaging_evaluation.visibility = if (isChecked) View.VISIBLE else View.GONE
+            val isPhotoEvaluate: Int = if (judge_evaluation_switch.isChecked) 1 else 0
+            if (isPhotoEvaluate == 1)
+                editIsImagingEvaluate(isPhotoEvaluate)
         }
         judge_evaluation_save_button.setOnClickListener {
             val isPhotoEvaluate: Int = if (judge_evaluation_switch.isChecked) 1 else 0

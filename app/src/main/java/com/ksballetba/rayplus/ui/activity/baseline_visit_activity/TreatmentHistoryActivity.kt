@@ -721,7 +721,7 @@ class TreatmentHistoryActivity : AppCompatActivity() {
                 lastFrontPartText.append("${it.name},")
             }
         }
-        mOtherLastFrontPart = bean.lastFrontPartOther ?: ""
+        mOtherLastFrontPart = bean.lastFrontPartOther ?: "  "
         if (lastFrontPartText.isNotEmpty() && !mLastFrontPartList[9].isChecked) {
             lastFrontPartText.deleteCharAt(lastFrontPartText.length - 1)
         } else {
